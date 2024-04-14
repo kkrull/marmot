@@ -4,14 +4,34 @@ Tools used by this project.
 
 ## EditorConfig
 
-See `.editorconfig`.  Checked by `pre-commit`.
+- Files:
+  - Configuration: `.editorconfig`
+- Interactions:
+  - `pre-commit`: checks files with this check.
 
 ## `make`
 
-See `Makefile`.
+- Files:
+  - Task definition: `Makefile`
+
+## `markdownlint`
+
+- Files:
+  - Configuration: `.markdownlint.json`
+- Interactions:
+  - `pre-commit`: checks files with this check.
 
 ## `pre-commit`
 
-- Install Git hooks: `pre-commit install`
-- Run checks: `pre-commit run --all`
-- Configuration: `.pre-commit.yaml`
+- Files:
+  - Configuration: `.pre-commit.yaml`
+- Usage:
+  - Install Git hooks: `pre-commit install`
+  - Run checks: `pre-commit run --all`
+
+## `shellcheck`
+
+- Files:
+  - Configuration: `.shellheckrc`
+- Interactions:
+  - `pre-commit`: checks files with this check.
