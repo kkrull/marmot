@@ -12,7 +12,7 @@ if [[ "$1" == "--project-file" ]]
 then
   project_file="$2"
   shift 2
-  typeset -a project_repository_paths=("${(@f)"$(<${project_file})"}")
+  project_repository_paths=("${(@f)"$(<${project_file})"}")
 else
   echo "Missing: --project-file <file>"
   exit 1
