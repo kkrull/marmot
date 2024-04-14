@@ -20,8 +20,27 @@ develop on the REPL sometimes store their sessions and search through them later
 
 - [CI/CD Jobs](./doc/cicd-jobs.md)
 - [Commands](./doc/commands.md)
+- [Installation](#installation)
 - [Task Automation](./doc/task-automation.md)
 - [Tools](./doc/tools.md)
+- [Usage](#usage)
+
+## Installation
+
+Installs symlinks in `/usr/local/bin/`.
+
+```sh
+./src/marmot.sh link
+```
+
+## Usage
+
+```sh
+# List available commands
+marmot
+```
+
+See [Commands](./doc/commands.md) for details.
 
 ## Version
 
