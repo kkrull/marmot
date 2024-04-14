@@ -10,12 +10,9 @@ fi
 
 if [[ "$1" == "--project-file" ]]
 then
-  set -x
-  profile_file="$2"
+  project_file="$2"
   shift 2
-
-  typeset -a project_repository_paths=("${(@f)"$(<conf/acb-project.conf)"}")
-  set +x
+  typeset -a project_repository_paths=("${(@f)"$(<${project_file})"}")
 else
   echo "Missing: --project-file <file>"
   exit 1
