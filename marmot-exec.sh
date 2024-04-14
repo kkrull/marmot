@@ -2,10 +2,9 @@
 
 set -e
 
-repository_path="$HOME/ang/acb-lib"
-printf "$repository_path: "
-(cd "$repository_path" && $@)
+project_repository_paths=("$HOME/ang/acb-lib" "$HOME/ang/angServer")
 
-repository_path="$HOME/ang/angServer"
-printf "$repository_path: "
-(cd "$repository_path" && $@)
+for repository_path in $project_repository_paths; do
+  printf "$repository_path: "
+  (cd "$repository_path" && $@)
+done
