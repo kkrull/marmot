@@ -2,8 +2,10 @@
 
 set -e
 
-printf "$HOME/ang/acb-lib: "
-(cd "$HOME/ang/acb-lib" && node --version)
+repository_path="$HOME/ang/acb-lib"
+printf "$repository_path: "
+(cd "$repository_path" && node --version)
 
-printf "$HOME/ang/angServer: "
-(cd "$HOME/ang/angServer" && node --version)
+repository_path="$HOME/ang/angServer"
+printf "$repository_path: "
+(cd "$repository_path" && node --version)
