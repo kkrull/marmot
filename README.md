@@ -22,3 +22,7 @@ develop on the REPL sometimes store their sessions and search through them later
 - [Commands](./doc/commands.md)
 - [Task Automation](./doc/task-automation.md)
 - [Tools](./doc/tools.md)
+
+## Version
+
+0.0.1
