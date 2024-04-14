@@ -18,6 +18,7 @@ develop on the REPL sometimes store their sessions and search through them later
 
 ## Contents
 
+- [CI/CD Jobs](./doc/cicd-jobs.md)
 - [Commands](./doc/commands.md)
 - [Task Automation](./doc/task-automation.md)
 - [Tools](./doc/tools.md)

@@ -9,6 +9,13 @@ Tools used by this project.
 - Interactions:
   - `pre-commit`: checks files with this check.
 
+## GitHub Actions
+
+- Files:
+  - Job definition: `.github/workflows/`
+- Interactions:
+  - `pre-commit`: GitHub Actions runs `pre-commit` to do its checks.
+
 ## `make`
 
 - Files:
