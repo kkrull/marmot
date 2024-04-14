@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh -i
+#!/bin/zsh -i
 
 set -e
 
@@ -12,6 +12,8 @@ if [[ "$1" == "--project-file" ]]
 then
   project_file="$2"
   shift 2
+
+  # shellcheck disable=SC2086,SC2296
   project_repository_paths=("${(@f)"$(<${project_file})"}")
 else
   echo "Missing: --project-file <file>"
@@ -27,7 +29,7 @@ fi
 
 # project_repository_paths=("$HOME/ang/acb-lib" "$HOME/ang/angServer")
 
-for repository_path in $project_repository_paths; do
-  printf "$repository_path: "
-  (cd "$repository_path" && $@)
+for repository_path in "${project_repository_paths[@]}"; do
+  printf "%s: " "$repository_path"
+  (cd "$repository_path" && "$@")
 done
