@@ -42,3 +42,15 @@ $ ./marmot-exec.sh node --version 2>/dev/null
 /Users/kkrull/ang/acb-lib: v14.18.1
 /Users/kkrull/ang/angServer: v20.11.1
 ```
+
+## `direnv`
+
+`direnv` outputs a lot of extra information.  Suppress output by setting `DIRENV_LOG_FORMAT=''`:
+
+```sh
+$ DIRENV_LOG_FORMAT='' ./marmot-exec.sh node --version
+/Users/kkrull/ang/acb-lib: v14.18.1
+/Users/kkrull/ang/angServer: v20.11.1
+```
+
+Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
