@@ -78,3 +78,15 @@ DOTFILES_SILENT='' ./marmot-exec.sh --project-file website.conf wc -l README.md
 /Users/developer/git/website-api: 125 README.md
 /Users/developer/git/website-app: 128 README.md
 ```
+
+## Tools
+
+### EditorConfig
+
+See `.editorconfig`.  Checked by `pre-commit`.
+
+### `pre-commit`
+
+- Install Git hooks: `pre-commit install`
+- Run checks: `pre-commit run --all`
+- Configuration: `.pre-commit.yaml`
