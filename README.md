@@ -31,9 +31,9 @@ repository-specific settings that may affect the command.  For example, tools li
 Example:
 
 ```sh
-$ marmot exec --project-file website.conf node --version
-website-api: v20.11.1 #runs from website-api/; direnv+nvm set Node 20
-website-app: v14.18.1 #runs from website-app/; direnv+nvm set Node 14
+$ ./marmot-exec.sh --project-file website.conf node --version
+/Users/developer/git/website-api: v20.11.1 #runs from website-api/
+/Users/developer/git/website-app: v14.18.1 #runs from website-app/
 ```
 
 #### `--direnv` option
@@ -44,8 +44,8 @@ Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
 ```sh
 $ ./marmot-exec.sh --direnv --project-file website.conf node --version
-website-api: v14.18.1
-website-app: v20.11.1
+/Users/developer/git/website-api: v14.18.1
+/Users/developer/git/website-app: v20.11.1
 ```
 
 #### `--project-file <file>` option
@@ -59,6 +59,14 @@ This is a text file, containing the absolute path to each repository on its own 
 /Users/developer/git/website-app
 ```
 
+#### Example
+
+```sh
+$ ./marmot-exec.sh --direnv --project-file website.conf git branch --show-current
+/Users/developer/git/website-api: main
+/Users/developer/git/website-app: develop
+```
+
 ## Interactions
 
 ### `dotfiles`
@@ -67,6 +75,6 @@ My own `dotfiles` are noisy.  I needed a way to turn that off:
 
 ```sh
 DOTFILES_SILENT='' ./marmot-exec.sh --project-file website.conf wc -l README.md
-website-api: 125 README.md
-website-app: 128 README.md
+/Users/developer/git/website-api: 125 README.md
+/Users/developer/git/website-app: 128 README.md
 ```
