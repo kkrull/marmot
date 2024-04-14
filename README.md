@@ -39,8 +39,8 @@ Another example, where there is some extra output from the interactive shell and
 ```sh
 $ ./marmot-exec.sh node --version 2>/dev/null
 ...output from starting interactive shell...
-/Users/kkrull/ang/acb-lib: v14.18.1
-/Users/kkrull/ang/angServer: v20.11.1
+website-api: v14.18.1
+website-app: v20.11.1
 ```
 
 ## Interactions
@@ -51,8 +51,8 @@ $ ./marmot-exec.sh node --version 2>/dev/null
 
 ```sh
 $ DIRENV_LOG_FORMAT='' ./marmot-exec.sh node --version
-/Users/kkrull/ang/acb-lib: v14.18.1
-/Users/kkrull/ang/angServer: v20.11.1
+website-api: v14.18.1
+website-app: v20.11.1
 ```
 
 Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
@@ -63,6 +63,6 @@ My own `dotfiles` are noisy.  I needed a way to turn that off:
 
 ```sh
 DOTFILES_SILENT='' ./marmot-exec.sh wc -l README.md
-/Users/kkrull/ang/acb-lib:      125 README.md
-/Users/kkrull/ang/angServer:      128 README.md
+website-api:      125 README.md
+website-app:      128 README.md
 ```
