@@ -33,3 +33,12 @@ $ marmot exec node --version
 website-api: v20.11.1
 website-app: v14.18.1
 ```
+
+Another example, where there is some extra output from the interactive shell and from `direnv`.
+
+```sh
+$ ./marmot-exec.sh node --version 2>/dev/null
+...output from starting interactive shell...
+/Users/kkrull/ang/acb-lib: v14.18.1
+/Users/kkrull/ang/angServer: v20.11.1
+```
