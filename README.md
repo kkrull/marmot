@@ -21,7 +21,7 @@ documents.
 
 Marmot is a Command Line Interface with multiple commands, much like Git.
 
-### `marmot exec <command> [args...]`
+### `marmot exec [--direnv] <command> [args...]`
 
 Run the given command in each repository registered for the project, switching to each repository's
 root directory first.
@@ -34,30 +34,19 @@ website-api: v20.11.1
 website-app: v14.18.1
 ```
 
-Another example, where there is some extra output from the interactive shell and from `direnv`.
+#### `--direnv` option
 
-```sh
-$ ./marmot-exec.sh node --version 2>/dev/null
-...output from starting interactive shell...
-website-api: v14.18.1
-website-app: v20.11.1
-```
-
-## Interactions
-
-### `direnv`
-
-`direnv` outputs a lot of extra information.  Suppress output by setting `DIRENV_LOG_FORMAT=''`:
-
-```sh
-$ DIRENV_LOG_FORMAT='' ./marmot-exec.sh node --version
-website-api: v14.18.1
-website-app: v20.11.1
-```
+Suppress `direnv` output by setting `DIRENV_LOG_FORMAT=`.
 
 Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
-### `dotfiles`
+```sh
+$ ./marmot-exec.sh --direnv node --version
+website-api: v14.18.1
+website-app: v20.11.1
+```
+
+#### `dotfiles` interaction
 
 My own `dotfiles` are noisy.  I needed a way to turn that off:
 
