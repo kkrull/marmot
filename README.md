@@ -43,7 +43,9 @@ $ ./marmot-exec.sh node --version 2>/dev/null
 /Users/kkrull/ang/angServer: v20.11.1
 ```
 
-## `direnv`
+## Interactions
+
+### `direnv`
 
 `direnv` outputs a lot of extra information.  Suppress output by setting `DIRENV_LOG_FORMAT=''`:
 
@@ -54,3 +56,13 @@ $ DIRENV_LOG_FORMAT='' ./marmot-exec.sh node --version
 ```
 
 Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
+
+### `dotfiles`
+
+My own `dotfiles` are noisy.  I needed a way to turn that off:
+
+```sh
+DOTFILES_SILENT='' ./marmot-exec.sh wc -l README.md
+/Users/kkrull/ang/acb-lib:      125 README.md
+/Users/kkrull/ang/angServer:      128 README.md
+```
