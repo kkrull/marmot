@@ -12,6 +12,9 @@ trim_trailing_whitespace = false
 [LICENSE]
 indent_size = off
 
+[Makefile]
+indent_style = tab
+
 [*.md]
 indent_size = off
 max_line_length = off

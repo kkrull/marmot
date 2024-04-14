@@ -79,11 +79,29 @@ DOTFILES_SILENT='' ./marmot-exec.sh --project-file website.conf wc -l README.md
 /Users/developer/git/website-app: 128 README.md
 ```
 
+## Task Automation
+
+### Top-level tasks
+
+#### `make check`
+
+Run all checks.
+
+### `pre-commit` tasks
+
+#### `make pre-commit-check`
+
+Check all files with `pre-commit`.
+
 ## Tools
 
 ### EditorConfig
 
 See `.editorconfig`.  Checked by `pre-commit`.
+
+### `make`
+
+See `Makefile`.
 
 ### `pre-commit`
 
