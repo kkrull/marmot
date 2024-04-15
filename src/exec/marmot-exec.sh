@@ -1,6 +1,6 @@
 #!/bin/zsh -i
 
-set -e
+#set -e
 
 if [[ "$1" == "--direnv" ]]
 then
