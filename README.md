@@ -31,6 +31,7 @@ develop on the REPL sometimes store their sessions and search through them later
 - git pager (turning it off automatically, or adding an option)
 - comments in conf files (to disable or ignore)
 - tags for repos because this is getting crazy
+- `getopts` ala <https://github.com/kkrull/shell-sandbox/>
 
 ## Installation
 
