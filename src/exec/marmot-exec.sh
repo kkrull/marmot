@@ -8,7 +8,7 @@ then
   shift 1
 fi
 
-if [[ $1 == "--print" ]]
+if [[ "$1" == "--print" ]]
 then
   print_style="heading"
   shift 1
@@ -33,8 +33,9 @@ then
   exit 1
 fi
 
-for repository_path in "${project_repository_paths[@]}"; do
-  if [[ $print_style == "heading" ]]
+for repository_path in "${project_repository_paths[@]}"
+do
+  if [[ "$print_style" == "heading" ]]
   then
     printf "\n%s:\n" "$repository_path"
   else
