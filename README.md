@@ -25,6 +25,13 @@ develop on the REPL sometimes store their sessions and search through them later
 - [Tools](./doc/tools.md)
 - [Usage](#usage)
 
+## Future work
+
+- Excluded list (whitespace in paths)
+- git pager (turning it off automatically, or adding an option)
+- comments in conf files (to disable or ignore)
+- tags for repos because this is getting crazy
+
 ## Installation
 
 Installs symlinks in `/usr/local/bin/`.
