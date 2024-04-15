@@ -11,6 +11,8 @@ Tools used by this project.
 
 ## GitHub Actions
 
+- Documentation:
+  - [Jobs](./cicd-jobs.md)
 - Files:
   - Job definition: `.github/workflows/`
 - Interactions:

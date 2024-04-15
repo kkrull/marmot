@@ -13,7 +13,7 @@ repository-specific settings that may affect the command.  For example, tools li
 Example:
 
 ```sh
-$ ./marmot-exec.sh --project-file website.conf node --version
+$ marmot exec --project-file website.conf node --version
 /Users/developer/git/website-api: v20.11.1 #runs from website-api/
 /Users/developer/git/website-app: v14.18.1 #runs from website-app/
 ```
@@ -25,7 +25,7 @@ Suppress `direnv` output by setting `DIRENV_LOG_FORMAT=`.
 Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
 ```sh
-$ ./marmot-exec.sh --direnv --project-file website.conf node --version
+$ marmot exec --direnv --project-file website.conf node --version
 /Users/developer/git/website-api: v14.18.1
 /Users/developer/git/website-app: v20.11.1
 ```
@@ -44,7 +44,7 @@ This is a text file, containing the absolute path to each repository on its own 
 ### Example
 
 ```sh
-$ ./marmot-exec.sh --direnv --project-file website.conf git branch --show-current
+$ marmot exec --direnv --project-file website.conf git branch --show-current
 /Users/developer/git/website-api: main
 /Users/developer/git/website-app: develop
 ```
@@ -54,7 +54,7 @@ $ ./marmot-exec.sh --direnv --project-file website.conf git branch --show-curren
 My own `dotfiles` are noisy.  I needed a way to turn that off:
 
 ```sh
-DOTFILES_SILENT='' ./marmot-exec.sh --project-file website.conf wc -l README.md
+DOTFILES_SILENT='' marmot exec --project-file website.conf wc -l README.md
 /Users/developer/git/website-api: 125 README.md
 /Users/developer/git/website-app: 128 README.md
 ```
