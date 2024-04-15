@@ -1,0 +1,27 @@
+# https://pre-commit.com/index.html#adding-pre-commit-plugins-to-your-project
+repos:
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: "2.7.3"
+    hooks:
+      - id: editorconfig-checker
+        alias: ec
+
+  # https://github.com/DavidAnson/markdownlint-cli2#pre-commit
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.13.0
+    hooks:
+      - id: markdownlint-cli2
+
+  # https://pre-commit.com/hooks.html
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+      - id: trailing-whitespace
+
+  # https://github.com/shellcheck-py/shellcheck-py#as-a-pre-commit-hook
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
