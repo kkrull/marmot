@@ -8,6 +8,12 @@ then
   shift 1
 fi
 
+if [[ $1 == "--print" ]]
+then
+  print_style="heading"
+  shift 1
+fi
+
 if [[ "$1" == "--project-file" ]]
 then
   project_file="$2"
@@ -28,6 +34,12 @@ then
 fi
 
 for repository_path in "${project_repository_paths[@]}"; do
-  printf "%s: " "$repository_path"
+  if [[ $print_style == "heading" ]]
+  then
+    printf "\n%s:\n" "$repository_path"
+  else
+    printf "%s: " "$repository_path"
+  fi
+
   (cd "$repository_path" && "$@")
 done
