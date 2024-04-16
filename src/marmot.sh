@@ -2,32 +2,36 @@
 
 set -e
 
-self_name="${0:A}"
-self_dir="$(dirname "$self_name")"
+command_path="${0:A:h}"
+link_path='/usr/local/bin/marmot'
+self_command="${0:t}"
 
 case "$1" in
 'exec')
   shift 1
-  exec "${self_dir}/exec/marmot-exec.sh" "$@"
+  exec "${command_path}/exec/marmot-exec.sh" "$@"
   ;;
 
 'link')
   set -x
-  ln -s "$self_name" /usr/local/bin/marmot
+  ln -s "${0:P}" "$link_path"
   ;;
 
 'unlink')
   set -x
-  rm -f /usr/local/bin/marmoot
+  rm -f "$link_path"
   ;;
 
 *)
   cat >&2 <<-EOF
 Meta Repo Management Tool
-Usage: $0 command [options...]
+Usage: ${self_command} command [options...]
 
+COMMANDS
 exec      Execute a command on a project's repositories
-link      Add symlink for this script to /usr/local/bin
+
+INSTALLATION
+link      Add symlink so you can use this on your path
 unlink    Remove symlink for this script
 EOF
 
