@@ -4,9 +4,7 @@
 # Or ask the user if/when the first failure happens, since you probably don't know in advance.
 #set -e
 
-command_path="${0:A:r}"
 self_command="marmot exec"
-self_dir="${0:A:h}"
 
 function usage() {
   echo "Usage: $0 [--direnv] --project-file <file> <shell command> [args...]"
