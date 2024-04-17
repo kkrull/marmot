@@ -30,7 +30,7 @@ EOF
 zparseopts -D -E \
   -help=help_option
 
-if [[ -n "$help_option" ]]
+if [[ -n "$help_option" || -z "$*" ]]
 then
   usage
   exit 0
