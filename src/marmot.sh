@@ -35,7 +35,7 @@ zparseopts -D -E \
 
 command="$1"
 
-if [[ -n "$help_option" || -z "$*" ]]
+if [[ -n "$help_option" || $# == 0 ]]
 then
   usage
   exit 0
