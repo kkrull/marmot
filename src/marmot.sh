@@ -7,15 +7,15 @@ set -e
 
 base_path="${0:A:h}"
 link_path='/usr/local/bin/marmot'
+self="${0:P}"
 self_name="${0:t}"
 
 function main() {
+  # Parse GNU-style long options
   # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
   # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
   zparseopts -D -E \
     -help=help_option
-
-  command="$1"
 
   if [[ -n "$help_option" || $# == 0 ]]
   then
@@ -23,6 +23,7 @@ function main() {
     exit 0
   fi
 
+  command="$1"
   case "$command" in
   'exec')
     shift 1
@@ -30,11 +31,13 @@ function main() {
     ;;
 
   'link')
-    ln -s "${0:P}" "$link_path" && echo "Added symlink: $link_path"
+    ln -s "$self" "$link_path"
+    echo "Added symlink: $link_path"
     ;;
 
   'unlink')
-    rm -f "$link_path" && echo "Removed symlink: $link_path"
+    rm -f "$link_path"
+    echo "Removed symlink: $link_path"
     ;;
 
   *)
@@ -63,5 +66,6 @@ unlink    Remove symlink for this script
 EOF
 }
 
+# Make sure the script exits, even if main doesn't
 # https://unix.stackexchange.com/a/449508/37734
 main "$@"; exit
