@@ -5,19 +5,19 @@ emulate -LR zsh
 
 set -e
 
-command_path="${0:A:h}"
+base_path="${0:A:h}"
 link_path='/usr/local/bin/marmot'
-self_command="${0:t}"
+self_name="${0:t}"
 
 function usage() {
   cat >&2 <<-EOF
-${self_command} - Meta Repo Management Tool
+${self_name} - Meta Repo Management Tool
 
 SYNOPSIS
-${self_command} command [options...]
+${self_name} command [options...]
 
 OPTIONS
---help    Show help.
+--help    Show help
 
 COMMANDS
 exec      Execute a command on a project's repositories
@@ -43,19 +43,16 @@ fi
 
 case "$command" in
 'exec')
-  set -x
   shift 1
-  exec "${command_path}/exec/marmot-exec.sh" "$@"
+  exec "${base_path}/exec/marmot-exec.sh" "$@"
   ;;
 
 'link')
-  set -x
-  ln -s "${0:P}" "$link_path"
+  ln -s "${0:P}" "$link_path" && echo "Added symlink: $link_path"
   ;;
 
 'unlink')
-  set -x
-  rm -f "$link_path"
+  rm -f "$link_path" && echo "Removed symlink: $link_path"
   ;;
 
 *)
