@@ -8,6 +8,56 @@ emulate -LR zsh
 
 self_invocation="marmot exec"
 
+function main() {
+  if [[ "$1" == "--direnv" ]]
+  then
+    export DIRENV_LOG_FORMAT=''
+    shift 1
+  fi
+
+  if [[ "$1" == "--help" ]]
+  then
+    print_usage
+    exit 0
+  fi
+
+  if [[ "$1" == "--print" ]]
+  then
+    print_style="heading"
+    shift 1
+  fi
+
+  if [[ "$1" == "--project-file" ]]
+  then
+    project_file="$2"
+    shift 2
+
+    # shellcheck disable=SC2086,SC2296
+    project_repository_paths=("${(@f)"$(<${project_file})"}")
+  else
+    echo "Missing: --project-file <file>"
+    exit 1
+  fi
+
+  if (( $# < 1 ))
+  then
+    print_usage
+    exit 1
+  fi
+
+  for repository_path in "${project_repository_paths[@]}"
+  do
+    if [[ "$print_style" == "heading" ]]
+    then
+      printf "\n%s:\n" "$repository_path"
+    else
+      printf "%s: " "$repository_path"
+    fi
+
+    (cd "$repository_path" && "$@")
+  done
+}
+
 function print_usage() {
   cat >&2 <<-EOF
 ${self_invocation} - Execute a command on multiple repositories
@@ -41,50 +91,4 @@ Git repositories.
 EOF
 }
 
-if [[ "$1" == "--direnv" ]]
-then
-  export DIRENV_LOG_FORMAT=''
-  shift 1
-fi
-
-if [[ "$1" == "--help" ]]
-then
-  print_usage
-  exit 0
-fi
-
-if [[ "$1" == "--print" ]]
-then
-  print_style="heading"
-  shift 1
-fi
-
-if [[ "$1" == "--project-file" ]]
-then
-  project_file="$2"
-  shift 2
-
-  # shellcheck disable=SC2086,SC2296
-  project_repository_paths=("${(@f)"$(<${project_file})"}")
-else
-  echo "Missing: --project-file <file>"
-  exit 1
-fi
-
-if (( $# < 1 ))
-then
-  print_usage
-  exit 1
-fi
-
-for repository_path in "${project_repository_paths[@]}"
-do
-  if [[ "$print_style" == "heading" ]]
-  then
-    printf "\n%s:\n" "$repository_path"
-  else
-    printf "%s: " "$repository_path"
-  fi
-
-  (cd "$repository_path" && "$@")
-done
+main "$@"; exit
