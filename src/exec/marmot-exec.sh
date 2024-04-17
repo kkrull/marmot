@@ -6,7 +6,7 @@
 
 self_command="marmot exec"
 
-function usage() {
+function print_usage() {
   cat >&2 <<-EOF
 ${self_command} - Execute a command on multiple repositories
 
@@ -47,7 +47,7 @@ fi
 
 if [[ "$1" == "--help" ]]
 then
-  usage
+  print_usage
   exit 0
 fi
 
@@ -71,7 +71,7 @@ fi
 
 if (( $# < 1 ))
 then
-  usage
+  print_usage
   exit 1
 fi
 
