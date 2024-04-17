@@ -1,36 +1,71 @@
 #!/usr/bin/env zsh
 
+# https://stackoverflow.com/a/56311706/112682
+emulate -LR zsh
+
 set -e
 
-self_name="${0:A}"
-self_dir="$(dirname "$self_name")"
+self="${0:P}"
+self_basename="${0:t}"
+self_dirname="${0:A:h}"
+link_path='/usr/local/bin/marmot'
 
-case "$1" in
-'exec')
-  shift 1
-  exec "${self_dir}/exec/marmot-exec.sh" "$@"
-  ;;
+function main() {
+  # Parse GNU-style long options
+  # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
+  # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
+  zparseopts -D -E \
+    -help=help_option
 
-'link')
-  set -x
-  ln -s "$self_name" /usr/local/bin/marmot
-  ;;
+  if [[ $# == 0 || -n "$help_option" ]]
+  then
+    print_usage
+    exit 0
+  fi
 
-'unlink')
-  set -x
-  rm -f /usr/local/bin/marmoot
-  ;;
+  command="$1"
+  case "$command" in
+  'exec')
+    shift 1
+    exec "${self_dirname}/exec/marmot-exec.sh" "$@"
+    ;;
 
-*)
+  'link')
+    ln -s "$self" "$link_path"
+    echo "Added symlink: $link_path"
+    ;;
+
+  'unlink')
+    rm -f "$link_path"
+    echo "Removed symlink: $link_path"
+    ;;
+
+  *)
+    echo "Unknown command: $command"
+    exit 1
+    ;;
+  esac
+}
+
+function print_usage() {
   cat >&2 <<-EOF
-Meta Repo Management Tool
-Usage: $0 command [options...]
+${self_basename} - Meta Repo Management Tool
 
+SYNOPSIS
+${self_basename} command [options...]
+
+OPTIONS
+--help    Show help
+
+COMMANDS
 exec      Execute a command on a project's repositories
-link      Add symlink for this script to /usr/local/bin
+
+INSTALLATION
+link      Add symlink so you can use this on your path
 unlink    Remove symlink for this script
 EOF
+}
 
-  exit 1
-  ;;
-esac
+# Make sure the script exits, even if main doesn't
+# https://unix.stackexchange.com/a/449508/37734
+main "$@"; exit
