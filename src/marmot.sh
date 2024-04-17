@@ -5,10 +5,10 @@ emulate -LR zsh
 
 set -e
 
-base_path="${0:A:h}"
-link_path='/usr/local/bin/marmot'
 self="${0:P}"
-self_name="${0:t}"
+self_basename="${0:t}"
+self_dirname="${0:A:h}"
+link_path='/usr/local/bin/marmot'
 
 function main() {
   # Parse GNU-style long options
@@ -27,7 +27,7 @@ function main() {
   case "$command" in
   'exec')
     shift 1
-    exec "${base_path}/exec/marmot-exec.sh" "$@"
+    exec "${self_dirname}/exec/marmot-exec.sh" "$@"
     ;;
 
   'link')
@@ -49,10 +49,10 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_name} - Meta Repo Management Tool
+${self_basename} - Meta Repo Management Tool
 
 SYNOPSIS
-${self_name} command [options...]
+${self_basename} command [options...]
 
 OPTIONS
 --help    Show help
