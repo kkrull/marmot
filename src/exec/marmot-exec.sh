@@ -6,14 +6,14 @@ emulate -LR zsh
 # Or ask the user if/when the first failure happens, since you probably don't know in advance.
 #set -e
 
-self_command="marmot exec"
+self_invocation="marmot exec"
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_command} - Execute a command on multiple repositories
+${self_invocation} - Execute a command on multiple repositories
 
 SYNOPSIS
-${self_command}
+${self_invocation}
   [--direnv] [--help] [--print]
   --project-file <file>
   <shell command> [args...]
@@ -30,10 +30,10 @@ git:
 
 EXAMPLES
 • List version of Node.js used in repositories that use direnv+nvm:
-    \$ ${self_command} --direnv --project node-projects.conf node --version
+    \$ ${self_invocation} --direnv --project node-projects.conf node --version
 
 • Grep for matching source code in all repositories:
-    \$ ${self_command} --project project.conf git --no-pager grep someFunction
+    \$ ${self_invocation} --project project.conf git --no-pager grep someFunction
 
 CONFIGURATION
 A project configuration file is a newline-delimited text file containing absolute paths to 1 or more
