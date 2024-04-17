@@ -1,5 +1,7 @@
 #!/bin/zsh -i
 
+emulate -LR zsh
+
 # TODO KDK: Consider adding an option for whether to exit on the first failure, or keep going.
 # Or ask the user if/when the first failure happens, since you probably don't know in advance.
 #set -e
