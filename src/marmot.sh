@@ -17,7 +17,7 @@ function main() {
   zparseopts -D -E \
     -help=help_option
 
-  if [[ -n "$help_option" || $# == 0 ]]
+  if [[ $# == 0 || -n "$help_option" ]]
   then
     print_usage
     exit 0

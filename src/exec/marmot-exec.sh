@@ -39,7 +39,7 @@ function main() {
     exit 1
   fi
 
-  if (( $# < 1 ))
+  if [[ $# == 0 ]]
   then
     print_usage
     exit 1
