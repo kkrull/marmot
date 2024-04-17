@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# https://stackoverflow.com/a/56311706/112682
+emulate -LR zsh
+
 set -e
 
 command_path="${0:A:h}"
@@ -30,14 +33,17 @@ EOF
 zparseopts -D -E \
   -help=help_option
 
+command="$1"
+
 if [[ -n "$help_option" || -z "$*" ]]
 then
   usage
   exit 0
 fi
 
-case "$1" in
+case "$command" in
 'exec')
+  set -x
   shift 1
   exec "${command_path}/exec/marmot-exec.sh" "$@"
   ;;
@@ -53,7 +59,7 @@ case "$1" in
   ;;
 
 *)
-  echo "Unknown command: $1"
+  echo "Unknown command: $command"
   exit 1
   ;;
 esac
