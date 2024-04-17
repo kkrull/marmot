@@ -19,7 +19,7 @@ function main() {
 
   if [[ -n "$help_option" || $# == 0 ]]
   then
-    usage
+    print_usage
     exit 0
   fi
 
@@ -44,7 +44,7 @@ function main() {
   esac
 }
 
-function usage() {
+function print_usage() {
   cat >&2 <<-EOF
 ${self_name} - Meta Repo Management Tool
 
