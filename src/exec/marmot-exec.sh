@@ -32,17 +32,21 @@ function main() {
     print_style="heading"
   fi
 
+  if [[ $# == 0 ]]
+  then
+    echo "Missing: command"
+    exit 1
+  elif [[ -z "$project_file_option" ]]
+  then
+    echo "Missing: --project-file"
+    exit 1
+  fi
+
   # shellcheck disable=SC2154
   project_file="${project_file_option[2]}"
 
   # shellcheck disable=SC2086,SC2296
   project_repository_paths=("${(@f)"$(<${project_file})"}")
-
-  if [[ $# == 0 ]]
-  then
-    echo "Missing: command"
-    exit 1
-  fi
 
   for repository_path in "${project_repository_paths[@]}"
   do
