@@ -25,12 +25,18 @@ unlink    Remove symlink for this script
 EOF
 }
 
-case "$1" in
-'--help')
+# https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
+# https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
+zparseopts -D -E \
+  -help=help_option
+
+if [[ -n "$help_option" ]]
+then
   usage
   exit 0
-  ;;
+fi
 
+case "$1" in
 'exec')
   shift 1
   exec "${command_path}/exec/marmot-exec.sh" "$@"
@@ -47,7 +53,7 @@ case "$1" in
   ;;
 
 *)
-  usage
+  echo "Unknown command: $1"
   exit 1
   ;;
 esac
