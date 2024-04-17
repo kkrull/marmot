@@ -9,39 +9,38 @@ emulate -LR zsh
 self_invocation="marmot exec"
 
 function main() {
-  if [[ "$1" == "--direnv" ]]
+  # TODO KDK: Change it to `--project-file=`, to avoid ambiguity with the command to run
+  zparseopts -D -E \
+    -direnv=direnv_option \
+    -help=help_option \
+    -print=print_option \
+    -project-file:=project_file_option
+
+  if [[ -n "$direnv_option" ]]
   then
     export DIRENV_LOG_FORMAT=''
-    shift 1
   fi
 
-  if [[ "$1" == "--help" ]]
+  if [[ -n "$help_option" ]]
   then
     print_usage
     exit 0
   fi
 
-  if [[ "$1" == "--print" ]]
+  if [[ -n "$print_option" ]]
   then
     print_style="heading"
-    shift 1
   fi
 
-  if [[ "$1" == "--project-file" ]]
-  then
-    project_file="$2"
-    shift 2
+  # shellcheck disable=SC2154
+  project_file="${project_file_option[2]}"
 
-    # shellcheck disable=SC2086,SC2296
-    project_repository_paths=("${(@f)"$(<${project_file})"}")
-  else
-    echo "Missing: --project-file <file>"
-    exit 1
-  fi
+  # shellcheck disable=SC2086,SC2296
+  project_repository_paths=("${(@f)"$(<${project_file})"}")
 
   if [[ $# == 0 ]]
   then
-    print_usage
+    echo "Missing: command"
     exit 1
   fi
 
