@@ -11,13 +11,16 @@ self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
 function main() {
-  # Parse GNU-style long options
-  # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
-  # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
-  zparseopts -D -E \
-    -help=help_option
+  if [[ $# == 0 ]]
+  then
+    print_usage
+    exit 0
+  fi
 
-  if [[ $# == 0 || -n "$help_option" ]]
+  # Distinguish `marmot --help` (top-level usage) from `marmot <command> --help` (command usage)
+  zparseopts -E \
+    -help=help_option
+  if [[ $# == 1 && -n "$help_option" ]]
   then
     print_usage
     exit 0
@@ -25,9 +28,18 @@ function main() {
 
   command="$1"
   case "$command" in
+  'collection')
+    shift 1
+    exec "${self_dirname}/collection/marmot-collection.zsh" "$@"
+    ;;
+
   'exec')
     shift 1
-    exec "${self_dirname}/exec/marmot-exec.sh" "$@"
+    exec "${self_dirname}/exec/marmot-exec.zsh" "$@"
+    ;;
+
+  'init')
+    exec "${self_dirname}/init/marmot-init.zsh" "$@"
     ;;
 
   'link')
@@ -58,7 +70,9 @@ OPTIONS
 --help    Show help
 
 COMMANDS
-exec      Execute a command on a project's repositories
+collection  Work with collections
+exec        Execute a command on a project's repositories
+init        Make a new meta repo in the current directory
 
 INSTALLATION
 link      Add symlink so you can use this on your path

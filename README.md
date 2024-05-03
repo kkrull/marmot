@@ -38,7 +38,7 @@ develop on the REPL sometimes store their sessions and search through them later
 Installs symlinks in `/usr/local/bin/`.
 
 ```sh
-./src/marmot.sh link
+./src/marmot.zsh link
 ```
 
 ## Usage

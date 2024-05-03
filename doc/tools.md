@@ -18,6 +18,35 @@ Tools used by this project.
 - Interactions:
   - `pre-commit`: GitHub Actions runs `pre-commit` to do its checks.
 
+## Homebrew
+
+- Documentation:
+  - <https://github.com/Homebrew/homebrew-bundle>
+- Files:
+  - `Brewfile`
+  - `Brewfile.lock.json`
+
+### Usage
+
+Check:
+
+```sh
+brew bundle check
+```
+
+Update `Brewfile`
+
+```sh
+# Dumps all packages installed on the system; requires editing
+brew dump --file=./Brewfile
+```
+
+Install tools needed by this repository:
+
+```sh
+brew bundle install
+```
+
 ## `make`
 
 - Files:
