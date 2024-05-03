@@ -30,6 +30,10 @@ function main() {
     exec "${self_dirname}/exec/marmot-exec.sh" "$@"
     ;;
 
+  'init')
+    exec "${self_dirname}/init/marmot-init.zsh" "$@"
+    ;;
+
   'link')
     ln -s "$self" "$link_path"
     echo "Added symlink: $link_path"
@@ -59,6 +63,7 @@ OPTIONS
 
 COMMANDS
 exec      Execute a command on a project's repositories
+init      Make a new meta repo in the current directory
 
 INSTALLATION
 link      Add symlink so you can use this on your path
