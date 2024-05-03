@@ -5,6 +5,12 @@ default: check
 .PHONY: check
 check: pre-commit-check
 
+## homebrew
+
+.PHONY: homebrew-install
+homebrew-install:
+	brew bundle install --file=./Brewfile
+
 ## pre-commit
 
 .PHONY: pre-commit-check
