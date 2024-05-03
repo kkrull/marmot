@@ -5,6 +5,10 @@ default: check
 .PHONY: check
 check: pre-commit-check
 
+.NOTPARALLEL: install
+.PHONY: install
+install: homebrew-install pre-commit-install
+
 ## homebrew
 
 .PHONY: homebrew-install
@@ -20,6 +24,10 @@ pre-commit-check:
 .PHONY: pre-commit-clean
 pre-commit-clean:
 	pre-commit gc
+
+.PHONY: pre-commit-install
+pre-commit-install:
+	pre-commit install
 
 .PHONY: pre-commit-update
 pre-commit-update:
