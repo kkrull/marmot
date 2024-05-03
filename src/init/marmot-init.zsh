@@ -31,6 +31,9 @@ function create_meta_repo() {
   local template
   template=$(cat <<'EOF'
 {
+  meta_repo: {
+    collection_types: []
+  },
   version: $version
 }
 EOF
