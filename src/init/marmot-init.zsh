@@ -19,9 +19,9 @@ function main() {
   then
     printf "Meta repo already exists: %s" "$meta_repo_data"
     exit 1
+  else
+    create_meta_repo "$meta_repo_data"
   fi
-
-  create_meta_repo "$meta_repo_data"
 }
 
 function create_meta_repo() {
