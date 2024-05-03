@@ -12,13 +12,29 @@ function main() {
   zparseopts -D -E \
     -help=help_option
 
+  if [[ $# == 0 ]]
+  then
+    print_usage
+    exit 0
+  fi
+
   if [[ -n "$help_option" ]]
   then
     print_usage
     exit 0
   fi
 
-  list_collections
+  sub_command="$1"
+  case "$sub_command" in
+  'list')
+    list_collections
+    ;;
+
+  *)
+    echo "Unknown sub-command: $sub_command"
+    exit 1
+    ;;
+  esac
 }
 
 function list_collections() {
