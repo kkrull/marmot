@@ -28,6 +28,11 @@ function main() {
 
   command="$1"
   case "$command" in
+  'collection')
+    shift 1
+    exec "${self_dirname}/collection/marmot-collection.zsh" "$@"
+    ;;
+
   'exec')
     shift 1
     exec "${self_dirname}/exec/marmot-exec.zsh" "$@"
@@ -65,8 +70,9 @@ OPTIONS
 --help    Show help
 
 COMMANDS
-exec      Execute a command on a project's repositories
-init      Make a new meta repo in the current directory
+collection  Work with collections
+exec        Execute a command on a project's repositories
+init        Make a new meta repo in the current directory
 
 INSTALLATION
 link      Add symlink so you can use this on your path
