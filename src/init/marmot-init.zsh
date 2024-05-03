@@ -29,7 +29,10 @@ function create_meta_repo() {
   mkdir -p "$directory"
 
   local meta_repo_file="$directory/meta-repo.json"
-  echo "Hello World!" > "$meta_repo_file"
+  jq > "$meta_repo_file" \
+    --null-input \
+    --arg version 0.0.1\
+    '{version: $version}'
 
   echo "Initialized meta repository at $working_dirname"
 }
