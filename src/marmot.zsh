@@ -27,7 +27,7 @@ function main() {
   case "$command" in
   'exec')
     shift 1
-    exec "${self_dirname}/exec/marmot-exec.sh" "$@"
+    exec "${self_dirname}/exec/marmot-exec.zsh" "$@"
     ;;
 
   'init')
