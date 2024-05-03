@@ -28,11 +28,19 @@ function create_meta_repo() {
   local directory="$1"
   mkdir -p "$directory"
 
+  local template
+  template=$(cat <<'EOF'
+{
+  version: $version
+}
+EOF
+  )
+
   local meta_repo_file="$directory/meta-repo.json"
   jq > "$meta_repo_file" \
     --null-input \
-    --arg version 0.0.1\
-    '{version: $version}'
+    --arg version 0.0.1 \
+    "$template"
 
   echo "Initialized meta repository at $working_dirname"
 }
