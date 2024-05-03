@@ -11,13 +11,16 @@ self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
 function main() {
-  # Parse GNU-style long options
-  # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
-  # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
-  zparseopts -D -E \
-    -help=help_option
+  if [[ $# == 0 ]]
+  then
+    print_usage
+    exit 0
+  fi
 
-  if [[ $# == 0 || -n "$help_option" ]]
+  # Distinguish `marmot --help` (top-level usage) from `marmot <command> --help` (command usage)
+  zparseopts -E \
+    -help=help_option
+  if [[ $# == 1 && -n "$help_option" ]]
   then
     print_usage
     exit 0

@@ -9,6 +9,10 @@ emulate -LR zsh
 self_invocation="marmot exec"
 
 function main() {
+  # Parse GNU-style long options
+  # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
+  # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
+
   # TODO KDK: Change it to `--project-file=`, to avoid ambiguity with the command to run
   zparseopts -D -E \
     -direnv=direnv_option \
@@ -34,11 +38,11 @@ function main() {
 
   if [[ $# == 0 ]]
   then
-    echo "Missing: command"
+    echo "$self_invocation: Missing command"
     exit 1
   elif [[ -z "$project_file_option" ]]
   then
-    echo "Missing: --project-file"
+    echo "$self_invocation: Missing --project-file"
     exit 1
   fi
 
