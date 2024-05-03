@@ -16,9 +16,7 @@ function main() {
   then
     print_usage
     exit 0
-  fi
-
-  if [[ -n "$help_option" ]]
+  elif [[ -n "$help_option" ]]
   then
     print_usage
     exit 0
