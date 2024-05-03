@@ -1,5 +1,3 @@
 tap "homebrew/bundle"
-#brew "direnv"
-#brew "jo"
 brew "jq"
 brew "pre-commit"
