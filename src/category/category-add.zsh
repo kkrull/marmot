@@ -21,11 +21,11 @@ function main() {
     echo "$self_invocation: Missing category name"
     exit 1
   else
-    add_category "$@"
+    make_category_directories "$@"
   fi
 }
 
-function add_category() {
+function make_category_directories() {
   local name
   name="$1"
   shift 1
