@@ -4,32 +4,37 @@ emulate -LR zsh
 
 self_invocation="marmot category add"
 
-working_dirname="${PWD:A}"
-meta_repo_data="$working_dirname/.marmot"
-meta_repo_config="$meta_repo_data/meta-repo.json"
+#working_dirname="${PWD:A}"
+#meta_repo_data="$working_dirname/.marmot"
+#meta_repo_config="$meta_repo_data/meta-repo.json"
 
 function main() {
-  if [[ $# == 0 ]]
-  then
-    list_categories
-    exit 0
-  fi
-
   zparseopts -D -E \
     -help=help_option
+
   if [[ -n "$help_option" ]]
   then
     print_usage
     exit 0
-  else
-    echo "Unknown option: $1"
+  elif [[ $# == 0 ]]
+  then
+    echo "$self_invocation: Missing category name"
     exit 1
+  else
+    add_category "$@"
   fi
 }
 
-function list_categories() {
-  jq < "$meta_repo_config" \
-    -r '.meta_repo.categories[].name'
+function add_category() {
+  local name
+  name="$1"
+  shift 1
+
+  echo "$name"
+  for value in "$@"
+  do
+    echo "+$value"
+  done
 }
 
 function print_usage() {
@@ -53,4 +58,4 @@ EXAMPLES
 EOF
 }
 
-main "$@"
+main "$@"; exit
