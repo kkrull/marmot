@@ -48,6 +48,7 @@ SYNOPSIS
 ${self_invocation} [--help]
 
 SUB-COMMANDS
+add           Add a category
 list          List categories
 
 OPTIONS

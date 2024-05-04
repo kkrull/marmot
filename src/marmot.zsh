@@ -30,16 +30,16 @@ function main() {
   case "$command" in
   'category')
     shift 1
-    exec "${self_dirname}/category/marmot-category.zsh" "$@"
+    exec "${self_dirname}/category/category.zsh" "$@"
     ;;
 
   'exec')
     shift 1
-    exec "${self_dirname}/exec/marmot-exec.zsh" "$@"
+    exec "${self_dirname}/exec/exec.zsh" "$@"
     ;;
 
   'init')
-    exec "${self_dirname}/init/marmot-init.zsh" "$@"
+    exec "${self_dirname}/init/init.zsh" "$@"
     ;;
 
   'link')
