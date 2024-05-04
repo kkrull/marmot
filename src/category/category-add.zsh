@@ -4,7 +4,7 @@ emulate -LR zsh
 
 self_invocation="marmot category add"
 
-#working_dirname="${PWD:A}"
+working_dirname="${PWD:A}"
 #meta_repo_data="$working_dirname/.marmot"
 #meta_repo_config="$meta_repo_data/meta-repo.json"
 
@@ -30,10 +30,17 @@ function make_category_directories() {
   name="$1"
   shift 1
 
-  echo "$name"
+  local category_path
+  category_path="$working_dirname/$name"
+  echo "+ $category_path (category)"
+  mkdir -p "$category_path"
+
+  local value_path
   for value in "$@"
   do
-    echo "+$value"
+    value_path="$category_path/$value"
+    echo "+ $value_path (category value)"
+    mkdir -p "$value_path"
   done
 }
 
