@@ -11,7 +11,9 @@ documents in Obsidian Notes helped me to organize information, I wondered if som
 be done for Git repositories.
 
 Could I come up with a way to arbitrarily group, query, and operate upon several repositories at
-once?  Could it be simple and powerful like the GitHub CLI, but works across multiple hosts?
+once?  I'll call this a "category" for now, each of which can have 1 or more "values".  For example,
+a `language` category might have values like `java` and `typescript`, or a `project` category might
+have values for each project you have worked on.
 
 Could I find a way to build my own logical structure of somebody else's code and find a way to cope
 with their sprawling architecture, without having to talk them into condensing their code into
