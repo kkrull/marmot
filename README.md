@@ -18,6 +18,7 @@ develop on the REPL sometimes store their sessions and search through them later
 
 ## Contents
 
+- [Architecture and Design Decisions](./doc/decisions.md)
 - [CI/CD Jobs](./doc/cicd-jobs.md)
 - [Commands](./doc/commands.md)
 - [Installation](#installation)
@@ -29,6 +30,7 @@ develop on the REPL sometimes store their sessions and search through them later
 
 - git pager (turning it off automatically, or adding an option)
 - tags for repos because this is getting crazy
+- add `marmot repository migrate --to=github.com`
 
 ## Installation
 
