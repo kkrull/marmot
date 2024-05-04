@@ -24,9 +24,11 @@ developers can still create their own meta repo without needing support or buy-i
 
 ## Future work
 
-- git pager (turning it off automatically, or adding an option)
-- tags for repos because this is getting crazy
-- add `marmot repository migrate --to=github.com`
+- all except init: operate on a known/conventional Meta Repo directory, instead of the working
+  directory.
+- category: add tags for repos
+- exec: git pager (turning it off automatically, or adding an option)
+- repository: add `marmot repository migrate --to=github.com`
 
 ## Installation
 
