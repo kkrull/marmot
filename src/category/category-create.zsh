@@ -2,7 +2,7 @@
 
 emulate -LR zsh
 
-self_invocation="marmot category add"
+self_invocation="marmot category create"
 
 working_dirname="${PWD:A}"
 #meta_repo_data="$working_dirname/.marmot"
@@ -46,7 +46,7 @@ function make_category_directories() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Add a category that will be used to slice repositories into clusters
+${self_invocation} - Create a category
 
 SYNOPSIS
 ${self_invocation} <name> [...value]
