@@ -32,7 +32,7 @@ function create_meta_repo() {
   template=$(cat <<'EOF'
 {
   meta_repo: {
-    collection_types: []
+    categories: []
   },
   version: $version
 }
@@ -56,7 +56,7 @@ SYNOPSIS
 ${self_invocation} [--help]
 
 OPTIONS
---help          Show help.
+--help        Show help
 EOF
 }
 

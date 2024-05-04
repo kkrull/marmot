@@ -76,14 +76,14 @@ ${self_invocation}
   <shell command> [args...]
 
 OPTIONS
---direnv        Suppress distracting direnv output when changing directories.
---help          Show help.
---print         Print the name of each repository on its own line above any command output.
---project-file  The project to operate on.  See CONFIGURATION.
+--direnv        Suppress distracting direnv output when changing directories
+--help          Show help
+--print         Print the name of each repository on its own line above any command output
+--project-file  The project to operate on (see CONFIGURATION)
 
 TIPS
 git:
-• Add --no-pager to git commands that would normally pipe to less (and pause for input).
+• Add --no-pager to git commands that would normally pipe to less (and pause for input)
 
 EXAMPLES
 • List version of Node.js used in repositories that use direnv+nvm:
