@@ -22,6 +22,11 @@ function main() {
 
   sub_command="$1"
   case "$sub_command" in
+  'add')
+    shift 1
+    exec "${self_dirname}/category-add.zsh" "$@"
+    ;;
+
   'create')
     shift 1
     exec "${self_dirname}/category-create.zsh" "$@"
@@ -47,6 +52,7 @@ SYNOPSIS
 ${self_invocation} [--help]
 
 SUB-COMMANDS
+add           Add repositories to a category
 create        Create a new category
 list          List categories
 
