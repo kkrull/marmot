@@ -28,9 +28,9 @@ function main() {
 
   command="$1"
   case "$command" in
-  'collection')
+  'category')
     shift 1
-    exec "${self_dirname}/collection/marmot-collection.zsh" "$@"
+    exec "${self_dirname}/category/marmot-category.zsh" "$@"
     ;;
 
   'exec')
@@ -67,16 +67,16 @@ SYNOPSIS
 ${self_basename} command [options...]
 
 OPTIONS
---help    Show help
+--help        Show help
 
 COMMANDS
-collection  Work with collections
-exec        Execute a command on a project's repositories
-init        Make a new meta repo in the current directory
+category      Work with categories
+exec          Execute a command on a project's repositories
+init          Make a new meta repo in the current directory
 
 INSTALLATION
-link      Add symlink so you can use this on your path
-unlink    Remove symlink for this script
+link          Add symlink so you can use this on your path
+unlink        Remove symlink for this script
 EOF
 }
 

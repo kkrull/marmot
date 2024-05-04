@@ -2,7 +2,7 @@
 
 emulate -LR zsh
 
-self_invocation="marmot collection"
+self_invocation="marmot category"
 
 working_dirname="${PWD:A}"
 meta_repo_data="$working_dirname/.marmot"
@@ -25,7 +25,7 @@ function main() {
   sub_command="$1"
   case "$sub_command" in
   'list')
-    list_collections
+    list_categories
     ;;
 
   *)
@@ -35,23 +35,23 @@ function main() {
   esac
 }
 
-function list_collections() {
+function list_categories() {
   jq < "$meta_repo_config" \
-    -r '.meta_repo.collection_types[].name'
+    -r '.meta_repo.categories[].name'
 }
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Work with collections
+${self_invocation} - Work with categories
 
 SYNOPSIS
 ${self_invocation} [--help]
 
 SUB-COMMANDS
-list      List collections
+list          List categories
 
 OPTIONS
---help          Show help.
+--help        Show help
 EOF
 }
 
