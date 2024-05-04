@@ -22,6 +22,11 @@ function main() {
 
   sub_command="$1"
   case "$sub_command" in
+  'add')
+    shift 1
+    exec "${self_dirname}/category-add.zsh" "$@"
+    ;;
+
   'list')
     shift 1
     exec "${self_dirname}/category-list.zsh" "$@"
