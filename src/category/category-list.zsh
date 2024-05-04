@@ -39,6 +39,9 @@ ${self_invocation} - List categories
 SYNOPSIS
 ${self_invocation} [--help]
 
+DESCRIPTION
+This command lists the categories that are used to group repositories.
+
 OPTIONS
 --help        Show help
 EOF

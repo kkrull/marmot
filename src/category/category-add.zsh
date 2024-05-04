@@ -45,6 +45,9 @@ SYNOPSIS
 ${self_invocation} <name> [...value]
   [--help]
 
+DESCRIPTION
+This command adds a category to the meta repo in the current working directory.
+
 OPTIONS
 --help        Show help
 

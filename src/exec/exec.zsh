@@ -67,13 +67,16 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Execute a command on multiple repositories
+${self_invocation} - Execute a command repeatedly
 
 SYNOPSIS
 ${self_invocation}
   [--direnv] [--help] [--print]
   --project-file <file>
   <shell command> [args...]
+
+DESCRIPTION
+This repeats a given shell command on all repositories that are part of a project.
 
 OPTIONS
 --direnv        Suppress distracting direnv output when changing directories

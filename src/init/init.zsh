@@ -50,10 +50,13 @@ EOF
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Initialize a meta repository in the current directory
+${self_invocation} - Initialize a meta repo
 
 SYNOPSIS
 ${self_invocation} [--help]
+
+DESCRIPTION
+This command initializes a blank meta repo in the current working directory.
 
 OPTIONS
 --help        Show help
