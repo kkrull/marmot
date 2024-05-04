@@ -3,10 +3,7 @@
 emulate -LR zsh
 
 self_invocation="marmot category create"
-
 working_dirname="${PWD:A}"
-#meta_repo_data="$working_dirname/.marmot"
-#meta_repo_config="$meta_repo_data/meta-repo.json"
 
 function main() {
   zparseopts -D -E \
