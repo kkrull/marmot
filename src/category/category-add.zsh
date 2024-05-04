@@ -3,10 +3,7 @@
 emulate -LR zsh
 
 self_invocation="marmot category add"
-
 working_dirname="${PWD:A}"
-#meta_repo_data="$working_dirname/.marmot"
-#meta_repo_config="$meta_repo_data/meta-repo.json"
 
 function main() {
   zparseopts -D -E \
@@ -32,9 +29,7 @@ function link_to_category() {
 
   local category_value_path
   category_value_path="$working_dirname/$category_value_name"
-  # echo "${category_value_name}:"
 
-set -x
   local link_path
   local repository_name
   local repository_path
