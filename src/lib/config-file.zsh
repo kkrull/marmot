@@ -1,4 +1,6 @@
-## Marmot configuration
+# Marmot configuration
+
+## .repositories
 
 function repository_paths() {
   local config_file

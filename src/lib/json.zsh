@@ -1,4 +1,4 @@
-## JSON
+# JSON
 
 function jq_update() {
   local json_file="$1"

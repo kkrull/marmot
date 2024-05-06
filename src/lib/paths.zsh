@@ -1,4 +1,4 @@
-## Marmot paths
+# Marmot paths
 
 function meta_repo_config_file() {
   local meta_home
