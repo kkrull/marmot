@@ -48,7 +48,6 @@ function register_local_repositories() {
   local repositories
   repositories=$(to_marmot_repositories "$@")
 
-  echo "[register_local_repositories] config_file=$config_file repositories=$repositories"
   config_tmp=$(mktemp)
   cp "$config_file" "$config_tmp"
   jq < "$config_tmp" > "$config_file" \
