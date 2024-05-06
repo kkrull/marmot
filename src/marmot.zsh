@@ -10,6 +10,8 @@ self_basename="${0:t}"
 self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
+export _MARMOT_HOME="$self_dirname"
+
 function main() {
   if [[ $# == 0 ]]
   then

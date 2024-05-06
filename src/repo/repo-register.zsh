@@ -2,6 +2,10 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/config-file.zsh"
+source "$_MARMOT_HOME/lib/json.zsh"
+source "$_MARMOT_HOME/lib/paths.zsh"
+
 ## Command
 
 self_invocation="marmot repo register"
@@ -53,56 +57,6 @@ function register_local_repositories() {
   jq < "$config_tmp" > "$config_file" \
     ".meta_repo_next.repositories += ${repositories}"
   rm -f "$config_tmp"
-}
-
-## JSON
-
-function to_json_array() {
-  if [[ $# == 0 ]]
-  then
-    echo "[]"
-  elif [[ $# == 1 ]]
-  then
-    echo "[$1]"
-  else
-    printf "[%s" "$1"
-    for element in "${@:2}"
-    do
-      printf ", %s" "$element"
-    done
-
-    printf ']'
-  fi
-}
-
-## Marmot configuration
-
-function to_marmot_repositories() {
-  local repositories repository
-
-  repositories=()
-  for repository_path in "$@"
-  do
-    repository=$(to_marmot_repository "$repository_path")
-    repositories+=("$repository")
-  done
-
-  to_json_array "${repositories[@]}"
-}
-
-function to_marmot_repository() {
-  local repo_path
-  repo_path="$1"
-  echo "{ \"path\": \"$repo_path\" }"
-}
-
-## Marmot paths
-
-function meta_repo_config_file() {
-  local meta_home
-
-  meta_home="${PWD:A}"
-  echo "$meta_home/.marmot/meta-repo.json"
 }
 
 ## Main
