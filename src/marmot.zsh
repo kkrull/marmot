@@ -39,6 +39,7 @@ function main() {
     ;;
 
   'init')
+    shift 1
     exec "${self_dirname}/init/init.zsh" "$@"
     ;;
 
