@@ -27,6 +27,11 @@ function main() {
     exec "${self_dirname}/repo-list.zsh" "$@"
     ;;
 
+  'register')
+    shift 1
+    exec "${self_dirname}/repo-register.zsh" "$@"
+    ;;
+
   *)
     echo "Unknown sub-command: $sub_command"
     exit 1
@@ -43,6 +48,7 @@ ${self_invocation} [--help]
 
 SUB-COMMANDS
 list          List repositories
+register      Register repositories to manage
 
 OPTIONS
 --help        Show help
