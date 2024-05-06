@@ -35,7 +35,6 @@ function list_local_repositories() {
   shift 1
 
   repository_paths "$config_file"
-
 }
 
 function print_usage() {
@@ -47,7 +46,7 @@ ${self_invocation}
 ${self_invocation} [--help]
 
 DESCRIPTION
-This command lists repositories that exist on the specified host.
+This command lists repositories that are managed by Marmot.
 
 OPTIONS
 --help        Show help
