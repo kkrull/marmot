@@ -2,11 +2,9 @@
 
 emulate -LR zsh
 
-self_invocation="marmot repo register"
+## Command
 
-working_dirname="${PWD:A}"
-meta_repo_data="$working_dirname/.marmot"
-meta_repo_config="$meta_repo_data/meta-repo.json"
+self_invocation="marmot repo register"
 
 function main() {
   zparseopts -D -E \
@@ -21,18 +19,9 @@ function main() {
     echo "$self_invocation: Missing repository path"
     exit 1
   else
-    register_local_repositories "$@"
+    register_local_repositories "$(meta_repo_config_file)" "$@"
     exit 0
   fi
-}
-
-function register_local_repositories() {
-  # TODO KDK: jq < ~/meta/.marmot/meta-repo.json '.meta_repo.repositories |= ["$HOME/git"]'
-  jq < "$meta_repo_config" \
-    '.meta_repo.repositories?[] += ["a"]'
-  echo "Done."
-  # jq < "$meta_repo_config" \
-  #   -r '.meta_repo.repositories[]?.name'
 }
 
 function print_usage() {
@@ -50,5 +39,62 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+function register_local_repositories() {
+  local config_file
+  config_file="$1"
+  shift 1
+
+  local new_repositories new_repository
+  new_repositories=()
+  for repository_path in "$@"
+  do
+    new_repository=$(to_marmot_repository "$repository_path")
+    new_repositories+=("$new_repository")
+  done
+
+  append_stmt=$(to_json_array "${new_repositories[@]}")
+
+  echo "[register_local_repositories] config_file=$config_file append_stmt=$append_stmt"
+}
+
+## JSON
+
+function to_json_array() {
+  if [[ $# == 0 ]]
+  then
+    echo "[]"
+  elif [[ $# == 1 ]]
+  then
+    echo "[$1]"
+  else
+    printf "[%s" "$1"
+    for element in "${@:2}"
+    do
+      printf ", %s" "$element"
+    done
+
+    printf ']'
+  fi
+}
+
+## Marmot configuration
+
+function to_marmot_repository() {
+  local repo_path
+  repo_path="$1"
+  echo "{ \"path\": \"$repo_path\" }"
+}
+
+## Marmot paths
+
+function meta_repo_config_file() {
+  local meta_home
+
+  meta_home="${PWD:A}"
+  echo "$meta_home/.marmot/meta-repo.json"
+}
+
+## Main
 
 main "$@"
