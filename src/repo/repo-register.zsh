@@ -45,17 +45,12 @@ function register_local_repositories() {
   config_file="$1"
   shift 1
 
-  local new_repositories new_repository
-  new_repositories=()
-  for repository_path in "$@"
-  do
-    new_repository=$(to_marmot_repository "$repository_path")
-    new_repositories+=("$new_repository")
-  done
+  local new_repositories
+  new_repositories=$(to_marmot_repositories "$@")
 
-  append_stmt=$(to_json_array "${new_repositories[@]}")
-
-  echo "[register_local_repositories] config_file=$config_file append_stmt=$append_stmt"
+  echo "[register_local_repositories] config_file=$config_file new_repositories=$new_repositories"
+  jq < "$config_file" \
+    ".meta_repo_next.repositories += ${new_repositories}"
 }
 
 ## JSON
@@ -79,6 +74,19 @@ function to_json_array() {
 }
 
 ## Marmot configuration
+
+function to_marmot_repositories() {
+  local new_repositories new_repository
+
+  new_repositories=()
+  for repository_path in "$@"
+  do
+    new_repository=$(to_marmot_repository "$repository_path")
+    new_repositories+=("$new_repository")
+  done
+
+  to_json_array "${new_repositories[@]}"
+}
 
 function to_marmot_repository() {
   local repo_path
