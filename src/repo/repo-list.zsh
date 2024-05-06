@@ -11,7 +11,7 @@ meta_repo_config="$meta_repo_data/meta-repo.json"
 function main() {
   if [[ $# == 0 ]]
   then
-    list_local_repositories "$HOME/git"
+    list_local_repositories
     exit 0
   fi
 
