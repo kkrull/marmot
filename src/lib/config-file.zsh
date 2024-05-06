@@ -1,5 +1,15 @@
 ## Marmot configuration
 
+function repository_paths() {
+  local config_file
+  config_file="$1"
+
+  # Treat lack of JSON fields as empty rather than as an error
+  # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
+  jq < "$config_file" \
+    -r '.meta_repo.repositories[]?.path'
+}
+
 function to_marmot_repositories() {
   local repositories repository
 

@@ -2,16 +2,18 @@
 
 emulate -LR zsh
 
-self_invocation="marmot repo list"
+source "$_MARMOT_HOME/lib/config-file.zsh"
+source "$_MARMOT_HOME/lib/json.zsh"
+source "$_MARMOT_HOME/lib/paths.zsh"
 
-working_dirname="${PWD:A}"
-meta_repo_data="$working_dirname/.marmot"
-meta_repo_config="$meta_repo_data/meta-repo.json"
+## Command
+
+self_invocation="marmot repo list"
 
 function main() {
   if [[ $# == 0 ]]
   then
-    list_local_repositories
+    list_local_repositories "$(meta_repo_config_file)"
     exit 0
   fi
 
@@ -28,10 +30,12 @@ function main() {
 }
 
 function list_local_repositories() {
-  # Treat lack of JSON fields as empty rather than as an error
-  # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
-  jq < "$meta_repo_config" \
-    -r '.meta_repo.repositories[]?.name'
+  local config_file
+  config_file="$1"
+  shift 1
+
+  repository_paths "$config_file"
+
 }
 
 function print_usage() {
@@ -49,5 +53,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"
