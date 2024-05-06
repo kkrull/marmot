@@ -31,6 +31,7 @@ function list_local_repositories() {
   local repository_home
   repository_home="$1"
 
+  # TODO KDK: Query local meta data instead of doing find/exec/sh
   find -s "$repository_home" -name '.git' -print -type d \
     | sed 's/[/][.]git$//g'
 }
