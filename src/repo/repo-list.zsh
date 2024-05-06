@@ -11,7 +11,7 @@ self_invocation="marmot repo list"
 function main() {
   if [[ $# == 0 ]]
   then
-    list_local_repositories
+    list_local_repositories "$HOME/git"
     exit 0
   fi
 
@@ -28,7 +28,10 @@ function main() {
 }
 
 function list_local_repositories() {
-  find -s "$HOME/git" -name '.git' -print -type d \
+  local repository_home
+  repository_home="$1"
+
+  find -s "$repository_home" -name '.git' -print -type d \
     | sed 's/[/][.]git$//g'
 }
 
