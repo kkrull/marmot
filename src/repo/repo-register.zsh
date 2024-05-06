@@ -49,8 +49,11 @@ function register_local_repositories() {
   repositories=$(to_marmot_repositories "$@")
 
   echo "[register_local_repositories] config_file=$config_file repositories=$repositories"
-  jq < "$config_file" \
+  config_tmp=$(mktemp)
+  cp "$config_file" "$config_tmp"
+  jq < "$config_tmp" > "$config_file" \
     ".meta_repo_next.repositories += ${repositories}"
+  rm -f "$config_tmp"
 }
 
 ## JSON
