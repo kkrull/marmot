@@ -51,7 +51,7 @@ function register_local_repositories() {
 
   local repositories
   repositories=$(to_marmot_repositories "$@")
-  jq_update "$config_file" ".meta_repo.repositories += ${repositories}"
+  add_repositories "$config_file" "$repositories"
 }
 
 ## Main

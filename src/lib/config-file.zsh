@@ -2,6 +2,15 @@
 
 ## .repositories
 
+function add_repositories() {
+  local config_file repositories
+  config_file="$1"
+  shift 1
+
+  repositories="$*"
+  jq_update "$config_file" ".meta_repo.repositories += ${repositories}"
+}
+
 function repository_paths() {
   local config_file
   config_file="$1"
