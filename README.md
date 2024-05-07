@@ -53,6 +53,7 @@ See [Commands](./doc/commands.md) for details.
   - [x] Use `_MARMOT_HOME` to find other scripts.
   - [x] Move commands to `src/cmd/`.
   - [x] Standardize command invocation via shared environment.
+  - [x] Standardize use of `lib/paths`.
   - [ ] Move `list_categories` to `src/lib/config-file.zsh`.
   - [ ] Make a new file in `src/lib/` for `link_to_category` and `make_category_directories`.
   - [ ] Separate command and query in `create_meta_repo` and move to `src/lib/`.

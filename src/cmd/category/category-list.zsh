@@ -2,20 +2,18 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/paths.zsh"
+
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 
 ## Command
 
-working_dirname="${PWD:A}"
-meta_repo_data="$working_dirname/.marmot"
-meta_repo_config="$meta_repo_data/meta-repo.json"
-
 function main() {
   if [[ $# == 0 ]]
   then
-    list_categories
+    list_categories "$(meta_repo_config_file)"
     exit 0
   fi
 
@@ -32,6 +30,9 @@ function main() {
 }
 
 function list_categories() {
+  local meta_repo_config
+  meta_repo_config="$1"
+
   jq < "$meta_repo_config" \
     -r '.meta_repo.categories[].name'
 }

@@ -2,13 +2,13 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/paths.zsh"
+
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} create"
 
 ## Command
-
-working_dirname="${PWD:A}"
 
 function main() {
   zparseopts -D -E \
@@ -33,7 +33,7 @@ function make_category_directories() {
   shift 1
 
   local category_path
-  category_path="$working_dirname/$name"
+  category_path="$(meta_repo_home)/$name"
   echo "+ $category_path (category)"
   mkdir -p "$category_path"
 

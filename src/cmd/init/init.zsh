@@ -2,14 +2,13 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/paths.zsh"
+
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} init"
 
 ## Command
-
-working_dirname="${PWD:A}"
-meta_repo_data="$working_dirname/.marmot"
 
 function main() {
   zparseopts -D -E \
@@ -19,12 +18,12 @@ function main() {
   then
     print_usage
     exit 0
-  elif [[ -d "$meta_repo_data" ]]
+  elif [[ -d "$(meta_repo_data)" ]]
   then
-    printf "Meta repo already exists: %s" "$meta_repo_data"
+    printf "Meta repo already exists: %s" "$(meta_repo_data)"
     exit 1
   else
-    create_meta_repo "$meta_repo_data"
+    create_meta_repo "$(meta_repo_data)"
   fi
 }
 
@@ -49,7 +48,7 @@ EOF
     --arg version 0.3.1 \
     "$template"
 
-  echo "Initialized meta repository at $working_dirname"
+  echo "Initialized meta repository at $(meta_repo_home)"
 }
 
 function print_usage() {

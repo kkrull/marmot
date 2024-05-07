@@ -2,13 +2,13 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/paths.zsh"
+
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} add"
 
 ## Command
-
-working_dirname="${PWD:A}"
 
 function main() {
   zparseopts -D -E \
@@ -33,7 +33,7 @@ function link_to_category() {
   shift 1
 
   local category_value_path
-  category_value_path="$working_dirname/$category_value_name"
+  category_value_path="$(meta_repo_home)/$category_value_name"
 
   local link_path
   local repository_name
