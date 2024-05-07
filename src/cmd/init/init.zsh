@@ -2,6 +2,7 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/config-file.zsh"
 source "$_MARMOT_HOME/lib/paths.zsh"
 
 ## Shared environment
@@ -31,24 +32,8 @@ function create_meta_repo() {
   local directory="$1"
   mkdir -p "$directory"
 
-  local template
-  template=$(cat <<'EOF'
-{
-  meta_repo: {
-    categories: []
-  },
-  version: $version
-}
-EOF
-  )
-
-  local meta_repo_file="$directory/meta-repo.json"
-  jq > "$meta_repo_file" \
-    --null-input \
-    --arg version 0.3.1 \
-    "$template"
-
-  echo "Initialized meta repository at $(meta_repo_home)"
+  create_meta_repo_config "$directory"
+  echo "Initialized meta repository at $directory"
 }
 
 function print_usage() {

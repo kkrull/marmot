@@ -1,5 +1,30 @@
 # Marmot configuration
 
+function create_meta_repo_config() {
+  local directory
+  directory="$1"
+
+  local meta_repo_file
+  meta_repo_file="$directory/meta-repo.json"
+
+  local template
+  template=$(cat <<'EOF'
+{
+  meta_repo: {
+    categories: [],
+    repositories: []
+  },
+  version: $version
+}
+EOF
+  )
+
+  jq > "$meta_repo_file" \
+    --arg version 0.3.1 \
+    --null-input \
+    "$template"
+}
+
 ## .categories
 
 function category_names() {
