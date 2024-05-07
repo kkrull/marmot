@@ -33,7 +33,7 @@ function link_to_category() {
   shift 1
 
   local the_category_path
-  the_category_path=$(category_path "$category_name")
+  the_category_path="$(category_path "$category_name")"
 
   local link_path
   local repository_name
