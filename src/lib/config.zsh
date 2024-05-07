@@ -49,39 +49,6 @@ function _config_category_names() {
     -r '.meta_repo.categories[]?.name'
 }
 
-function __config_category_names_to_js() {
-  local categories category_js
-
-set -x
-  categories=()
-  for name in "$@"
-  do
-    category_js="$(__config_category_name_to_js "$name")"
-    categories+=("$category_js")
-  done
-
-  _json_to_array "${categories[@]}"
-}
-
-function __config_category_name_to_js() {
-  local name
-  name="$1"
-  echo "{ name: \"$name\" }"
-}
-
-function __config_category_names_to_json() {
-  local categories category_json
-
-  categories=()
-  for name in "$@"
-  do
-    category_json="$(__config_category_name_to_json "$name")"
-    categories+=("$category_json")
-  done
-
-  _json_to_array "${categories[@]}"
-}
-
 function __config_category_name_to_json() {
   local name
   name="$1"
