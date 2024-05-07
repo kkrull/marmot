@@ -50,6 +50,11 @@ See [Commands](./doc/commands.md) for details.
 ## Versions
 
 - 0.3.1: Move more code to `src/lib/`.
+  - [ ] Use `_MARMOT_HOME` to find other scripts.
+  - [ ] Move commands to `src/cmd/`.
+  - [ ] Move `list_categories` to `src/lib/config-file.zsh`.
+  - [ ] Make a new file in `src/lib/` for `link_to_category` and `make_category_directories`.
+  - [ ] Separate command and query in `create_meta_repo` and move to `src/lib/`.
 - 0.3.0: Add `marmot repo`.
 - 0.2.0: Add `marmot category` and `marmot init`.
 - 0.1.0: Add `marmot exec`.
