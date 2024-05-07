@@ -2,6 +2,8 @@
 
 emulate -LR zsh
 
+## Command
+
 self_invocation="marmot category list"
 
 working_dirname="${PWD:A}"
@@ -46,5 +48,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"

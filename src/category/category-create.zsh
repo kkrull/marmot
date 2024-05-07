@@ -2,6 +2,8 @@
 
 emulate -LR zsh
 
+## Command
+
 self_invocation="marmot category create"
 working_dirname="${PWD:A}"
 
@@ -65,5 +67,7 @@ EXAMPLES
     \$ ${self_invocation} project dotnet-8-migration skunkworks
 EOF
 }
+
+## Main
 
 main "$@"; exit

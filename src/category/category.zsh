@@ -2,7 +2,8 @@
 
 emulate -LR zsh
 
-self_dirname="${0:A:h}"
+## Command
+
 self_invocation="marmot category"
 
 function main() {
@@ -24,17 +25,17 @@ function main() {
   case "$sub_command" in
   'add')
     shift 1
-    exec "${self_dirname}/category-add.zsh" "$@"
+    exec "$_MARMOT_HOME/category/category-add.zsh" "$@"
     ;;
 
   'create')
     shift 1
-    exec "${self_dirname}/category-create.zsh" "$@"
+    exec "$_MARMOT_HOME/category/category-create.zsh" "$@"
     ;;
 
   'list')
     shift 1
-    exec "${self_dirname}/category-list.zsh" "$@"
+    exec "$_MARMOT_HOME/category/category-list.zsh" "$@"
     ;;
 
   *)
@@ -60,5 +61,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"; exit

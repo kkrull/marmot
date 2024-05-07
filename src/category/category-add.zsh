@@ -2,6 +2,8 @@
 
 emulate -LR zsh
 
+## Command
+
 self_invocation="marmot category add"
 working_dirname="${PWD:A}"
 
@@ -65,5 +67,7 @@ EXAMPLES
     \$ ${self_invocation} project/skunkworks ~/git/robot-masters ~/git/evil-castle
 EOF
 }
+
+## Main
 
 main "$@"; exit

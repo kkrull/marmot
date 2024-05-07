@@ -2,6 +2,8 @@
 
 emulate -LR zsh
 
+## Command
+
 self_invocation="marmot init"
 
 working_dirname="${PWD:A}"
@@ -62,5 +64,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"; exit
