@@ -27,12 +27,48 @@ EOF
 
 ## .categories
 
+function _config_add_categories() {
+  local config_file
+  config_file="$1"
+  shift 1
+
+  local category_name category_as_json
+  category_name="$1"
+  category_as_json="$(__config_category_names_to_json "$category_name")"
+  _json_update "$config_file" ".meta_repo.categories += ${category_as_json}"
+
+  local subcategory_names subcategories_as_json
+  subcategory_names=("${@:2}")
+
+  subcategories_as_json=$(__config_category_names_to_json "${subcategory_names[@]}")
+  _json_update "$config_file" ".meta_repo.categories[] | select(.name == \"$category_name\") | .categories += ${subcategories_as_json}"
+}
+
 function _config_category_names() {
   local config_file
   config_file="$1"
 
   jq < "$config_file" \
     -r '.meta_repo.categories[]?.name'
+}
+
+function __config_category_names_to_json() {
+  local categories category_json
+
+  categories=()
+  for name in "$@"
+  do
+    category_json="$(__config_category_name_to_json "$name")"
+    categories+=("$category_json")
+  done
+
+  _json_to_array "${categories[@]}"
+}
+
+function __config_category_name_to_json() {
+  local name
+  name="$1"
+  echo "{ \"name\": \"$name\" }"
 }
 
 ## .repositories
