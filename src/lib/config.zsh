@@ -32,9 +32,19 @@ function _config_add_categories() {
   config_file="$1"
   shift 1
 
-  local category_as_json
-  category_as_json="$(__config_make_category "$@")"
-  _json_update "$config_file" ".meta_repo.categories += [${category_as_json}]"
+  local category_name
+  category_name="$1"
+  shift 1
+
+  local categories
+  categories=("$(__config_category_name_to_json "$category_name")")
+
+  __config_subcategory_names_to_json "$category_name" "$@"
+  categories+=("${reply[@]}")
+
+  local categories_as_json
+  categories_as_json="$(_json_to_array "${categories[@]}")"
+  _json_update "$config_file" ".meta_repo.categories += ${categories_as_json}"
 }
 
 function _config_category_names() {
@@ -59,13 +69,20 @@ function __config_category_names_to_json() {
 }
 
 function __config_category_name_to_json() {
-  local name
+  local name parent_name
   name="$1"
-  echo "{ \"name\": \"$name\" }"
+  parent_name="$2"
+
+  if [[ -n "$parent_name" ]]
+  then
+    echo "{ \"name\": \"$name\", \"parent\": \"$parent_name\" }"
+  else
+    echo "{ \"name\": \"$name\" }"
+  fi
 }
 
 function __config_make_category() {
-  local category_name subcategory_names
+  local category_name
   category_name="$1"
   subcategory_names=("${@:2}")
 
@@ -83,6 +100,22 @@ EOF
     --argjson subcategories "$(__config_category_names_to_json "${subcategory_names[@]}")" \
     --null-input \
     "$template"
+}
+
+function __config_subcategory_names_to_json() {
+  local parent_category_name
+  parent_category_name="$1"
+  shift 1
+
+  local subcategories
+  subcategories=()
+  for name in "$@"
+  do
+    subcategory_json="$(__config_category_name_to_json "$name" "$parent_category_name")"
+    subcategories+=("$subcategory_json")
+  done
+
+  reply=("${subcategories[@]}")
 }
 
 ## .repositories
