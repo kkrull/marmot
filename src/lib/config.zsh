@@ -32,16 +32,13 @@ function _config_add_categories() {
   config_file="$1"
   shift 1
 
-  local category_name category_as_json
+  local category_name subcategory_names
   category_name="$1"
-  category_as_json="$(__config_category_names_to_json "$category_name")"
-  _json_update "$config_file" ".meta_repo.categories += ${category_as_json}"
-
-  local subcategory_names subcategories_as_json
   subcategory_names=("${@:2}")
 
-  subcategories_as_json=$(__config_category_names_to_json "${subcategory_names[@]}")
-  _json_update "$config_file" ".meta_repo.categories[] | select(.name == \"$category_name\") | .categories += ${subcategories_as_json}"
+  local category_as_json
+  category_as_json="$(__config_make_category "$@")"
+  _json_update "$config_file" ".meta_repo.categories += [${category_as_json}]"
 }
 
 function _config_category_names() {
@@ -50,6 +47,26 @@ function _config_category_names() {
 
   jq < "$config_file" \
     -r '.meta_repo.categories[]?.name'
+}
+
+function __config_category_names_to_js() {
+  local categories category_js
+
+set -x
+  categories=()
+  for name in "$@"
+  do
+    category_js="$(__config_category_name_to_js "$name")"
+    categories+=("$category_js")
+  done
+
+  _json_to_array "${categories[@]}"
+}
+
+function __config_category_name_to_js() {
+  local name
+  name="$1"
+  echo "{ name: \"$name\" }"
 }
 
 function __config_category_names_to_json() {
@@ -69,6 +86,27 @@ function __config_category_name_to_json() {
   local name
   name="$1"
   echo "{ \"name\": \"$name\" }"
+}
+
+function __config_make_category() {
+  local category_name subcategory_names
+  category_name="$1"
+  subcategory_names=("${@:2}")
+
+  local template
+  template=$(cat <<'EOF'
+{
+  name: $category_name,
+  categories: $subcategories
+}
+EOF
+  )
+
+  jq \
+    --arg category_name "$category_name" \
+    --argjson subcategories "$(__config_category_names_to_json "${subcategory_names[@]}")" \
+    --null-input \
+    "$template"
 }
 
 ## .repositories

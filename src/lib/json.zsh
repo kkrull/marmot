@@ -13,7 +13,7 @@ function _json_update() {
 function _json_to_array() {
   if [[ $# == 0 ]]
   then
-    echo "[]"
+    echo '[]'
   elif [[ $# == 1 ]]
   then
     echo "[$1]"
