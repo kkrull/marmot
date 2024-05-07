@@ -71,3 +71,57 @@ Using symlinks allows for a tag-like system where each repository can be tagged 
 ways without duplicating data.  For example, `~/meta/lang/java/greeter-java/` and
 `~/meta/kata/greeter/greeter-java/` could both point to the same repository located at
 `~/git/:host/greeter-java/`.
+
+## 04: Versioning
+
+Use a semantic versioning system with fairly objective criteria, to avoid prolonged deliberation
+over what changes merit what kind of version bump:
+
+- Major version: Increment from 0.x to 1.x when there are enough features to be useful.
+- Minor version: Increment when adding a new feature (e.g. a command or sub-command).
+- Patch version: Increment when refactoring to prepare for another feature.
+
+## 05: Apply Single Responsibility Principle (SRP) to scripts
+
+This code is getting more complex, and this is leading to duplication of concepts and algorithms.
+For example, knowledge about the structure of the config file and algorithms for how to find it.
+It's a good time to try co-locating sources that have the same reason to change; e.g. the Single
+Responsibility Principle.
+
+In my experience, focusing on the Single Responsibility Principle often has the effect of driving
+adoption of the other SOLID principles.  For example, gathering together code that has the same
+reason to change tends to accomplish much of the work needed to adhere to the Open-Closed Principle.
+All that aside, the primary focus of this decision is the adopt the SRP.
+
+The Single Responsibility Principle is implemented here, as follows.
+
+### Conventions for shared code
+
+- Write shared code as functions, using a functional style (e.g. command-query separation).
+- Commands: Make separate functions for separate side-effects.
+- Queries:
+  - Pass data in as parameters, using quotes for any variables that may contain whitespace.
+  - Pass arrays as `"${my_array[@]}"` so the whole array is passed instead of just the first word.
+  - Try returning data via `echo` or `printf`, at first.  This incurs a performance penalty of the
+    call site having to fork a sub-shell, but this is not expected to be a concern in practice.
+  - If queries must be invoked without starting a sub-shell, environment variables `REPLY` and
+    `reply` may be used to return conventional data and arrays, respectively.
+
+Source: <https://unix.stackexchange.com/a/365417/37734>
+
+### Location and structure of shared code
+
+- Put shared code in `/src/lib/`.
+- Gather together shared functions that operate on the same bounded context (e.g. the same data).
+  Explore a convention of making that bounded context the first parameter in each function.
+- Name files according to their bounded context.
+
+### Using shared code
+
+- Use `_MARMOT_HOME` set in the top level `marmot.zsh` script to locate shared code and sub-command
+  scripts.
+- Source code from (sub-)command scripts (e.g. the script used to start the process), ala Rails.
+  - Some code in `lib/` may depend upon other code in `lib/`, but it is up to the top-level script
+    to `source` dependencies and transitive dependencies.
+  - This is approach is intended to avoid any complexities in the same code being sourced twice.  I
+    have no idea what could happen then, and I'd rather not have to find out.
