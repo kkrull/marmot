@@ -49,6 +49,7 @@ See [Commands](./doc/commands.md) for details.
 
 ## Versions
 
+- 0.3.1: Standardize use of code in `src/lib/`.
 - 0.3.0: Add `marmot repo`.
 - 0.2.0: Add `marmot category` and `marmot init`.
 - 0.1.0: Add `marmot exec`.

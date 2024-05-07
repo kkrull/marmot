@@ -2,18 +2,20 @@
 
 emulate -LR zsh
 
-source "$_MARMOT_HOME/lib/config-file.zsh"
+source "$_MARMOT_HOME/lib/config.zsh"
+source "$_MARMOT_HOME/lib/fs.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
-source "$_MARMOT_HOME/lib/paths.zsh"
+
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 
 ## Command
-
-self_invocation="marmot repo list"
 
 function main() {
   if [[ $# == 0 ]]
   then
-    list_local_repositories "$(meta_repo_config_file)"
+    list_local_repositories "$(_fs_metadata_file)"
     exit 0
   fi
 
@@ -34,16 +36,16 @@ function list_local_repositories() {
   config_file="$1"
   shift 1
 
-  repository_paths "$config_file"
+  _config_repository_paths "$config_file"
 }
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - List repositories
+$_MARMOT_INVOCATION - List repositories
 
 SYNOPSIS
-${self_invocation}
-${self_invocation} [--help]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION
 
 DESCRIPTION
 This command lists repositories that are managed by Marmot.

@@ -2,8 +2,11 @@
 
 emulate -LR zsh
 
-self_dirname="${0:A:h}"
-self_invocation="marmot category"
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} category"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -24,17 +27,17 @@ function main() {
   case "$sub_command" in
   'add')
     shift 1
-    exec "${self_dirname}/category-add.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-add.zsh" "$@"
     ;;
 
   'create')
     shift 1
-    exec "${self_dirname}/category-create.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-create.zsh" "$@"
     ;;
 
   'list')
     shift 1
-    exec "${self_dirname}/category-list.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-list.zsh" "$@"
     ;;
 
   *)
@@ -46,10 +49,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Work with categories
+$_MARMOT_INVOCATION - Work with categories
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION sub-command [options...]
 
 SUB-COMMANDS
 add           Add repositories to a category
@@ -60,5 +64,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"; exit

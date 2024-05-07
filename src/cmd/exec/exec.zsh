@@ -1,12 +1,16 @@
 #!/bin/zsh -i
 
 emulate -LR zsh
+#set -e
+
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} exec"
+
+## Command
 
 # TODO KDK: Consider adding an option for whether to exit on the first failure, or keep going.
 # Or ask the user if/when the first failure happens, since you probably don't know in advance.
-#set -e
-
-self_invocation="marmot exec"
 
 function main() {
   # Parse GNU-style long options
@@ -38,11 +42,11 @@ function main() {
 
   if [[ $# == 0 ]]
   then
-    echo "$self_invocation: Missing command"
+    echo "$_MARMOT_INVOCATION: Missing command"
     exit 1
   elif [[ -z "$project_file_option" ]]
   then
-    echo "$self_invocation: Missing --project-file"
+    echo "$_MARMOT_INVOCATION: Missing --project-file"
     exit 1
   fi
 
@@ -67,11 +71,12 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Execute a command repeatedly
+$_MARMOT_INVOCATION - Execute a command repeatedly
 
 SYNOPSIS
-${self_invocation}
-  [--direnv] [--help] [--print]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION
+  [--direnv] [--print]
   --project-file <file>
   <shell command> [args...]
 
@@ -90,15 +95,17 @@ git:
 
 EXAMPLES
 • List version of Node.js used in repositories that use direnv+nvm:
-    \$ ${self_invocation} --direnv --project node-projects.conf node --version
+    \$ $_MARMOT_INVOCATION --direnv --project node-projects.conf node --version
 
 • Grep for matching source code in all repositories:
-    \$ ${self_invocation} --project project.conf git --no-pager grep someFunction
+    \$ $_MARMOT_INVOCATION --project project.conf git --no-pager grep someFunction
 
 CONFIGURATION
 A project configuration file is a newline-delimited text file containing absolute paths to 1 or more
 Git repositories.
 EOF
 }
+
+## Main
 
 main "$@"; exit

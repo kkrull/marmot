@@ -2,8 +2,11 @@
 
 emulate -LR zsh
 
-self_dirname="${0:A:h}"
-self_invocation="marmot repo"
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} repo"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -24,12 +27,12 @@ function main() {
   case "$sub_command" in
   'list')
     shift 1
-    exec "${self_dirname}/repo-list.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo-list.zsh" "$@"
     ;;
 
   'register')
     shift 1
-    exec "${self_dirname}/repo-register.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo-register.zsh" "$@"
     ;;
 
   *)
@@ -41,10 +44,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Work with repositories
+$_MARMOT_INVOCATION - Work with repositories
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION sub-command [options...]
 
 SUB-COMMANDS
 list          List repositories
@@ -54,5 +58,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"; exit

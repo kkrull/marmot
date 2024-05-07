@@ -2,15 +2,19 @@
 
 # https://stackoverflow.com/a/56311706/112682
 emulate -LR zsh
-
 set -e
 
-self="${0:P}"
-self_basename="${0:t}"
-self_dirname="${0:A:h}"
-link_path='/usr/local/bin/marmot'
+## Local environment
 
-export _MARMOT_HOME="$self_dirname"
+link_path='/usr/local/bin/marmot'
+self="${0:P}"
+
+## Shared environment
+
+export _MARMOT_HOME="${0:A:h}"
+export _MARMOT_INVOCATION="${0:t}"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -44,22 +48,22 @@ function main() {
   # Commands
   'category')
     shift 1
-    exec "${self_dirname}/category/category.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category.zsh" "$@"
     ;;
 
   'exec')
     shift 1
-    exec "${self_dirname}/exec/exec.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/exec/exec.zsh" "$@"
     ;;
 
   'init')
     shift 1
-    exec "${self_dirname}/init/init.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/init/init.zsh" "$@"
     ;;
 
   'repo')
     shift 1
-    exec "${self_dirname}/repo/repo.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo.zsh" "$@"
     ;;
 
   *)
@@ -71,10 +75,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_basename} - Meta Repo Management Tool
+$_MARMOT_INVOCATION - Meta Repo Management Tool
 
 SYNOPSIS
-${self_basename} command [options...]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION command [options...]
 
 DESCRIPTION
 Marmot creates and maintains a Meta Repository (e.g. "meta repo"), which can
@@ -106,6 +111,8 @@ link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
 EOF
 }
+
+## Main
 
 # Make sure the script exits, even if main doesn't
 # https://unix.stackexchange.com/a/449508/37734
