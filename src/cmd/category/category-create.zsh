@@ -28,21 +28,22 @@ function main() {
 }
 
 function make_category_directories() {
-  local name
-  name="$1"
+  local category_name
+  category_name="$1"
   shift 1
 
+#TODO KDK: Extract functions for the (sub-)category path
   local category_path
-  category_path="$(meta_repo_home)/$name"
+  category_path="$(meta_repo_home)/$category_name"
   echo "+ $category_path (category)"
   mkdir -p "$category_path"
 
-  local value_path
-  for value in "$@"
+  local subcategory_path
+  for subcategory_name in "$@"
   do
-    value_path="$category_path/$value"
-    echo "+ $value_path (category value)"
-    mkdir -p "$value_path"
+    subcategory_path="$category_path/$subcategory_name"
+    echo "+ $subcategory_path (sub-category)"
+    mkdir -p "$subcategory_path"
   done
 }
 
