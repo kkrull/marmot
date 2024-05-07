@@ -2,9 +2,11 @@
 
 emulate -LR zsh
 
-## Command
+## Shared environment
 
-self_invocation="marmot repo"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} repo"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -42,10 +44,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Work with repositories
+$_MARMOT_INVOCATION - Work with repositories
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION sub-command [options...]
 
 SUB-COMMANDS
 list          List repositories

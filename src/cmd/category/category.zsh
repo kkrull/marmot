@@ -2,9 +2,11 @@
 
 emulate -LR zsh
 
-## Command
+## Shared environment
 
-self_invocation="marmot category"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} category"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -47,10 +49,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Work with categories
+$_MARMOT_INVOCATION - Work with categories
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION sub-command [options...]
 
 SUB-COMMANDS
 add           Add repositories to a category

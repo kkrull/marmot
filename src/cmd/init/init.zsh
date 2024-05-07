@@ -2,9 +2,11 @@
 
 emulate -LR zsh
 
-## Command
+## Shared environment
 
-self_invocation="marmot init"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} init"
+
+## Command
 
 working_dirname="${PWD:A}"
 meta_repo_data="$working_dirname/.marmot"
@@ -52,10 +54,11 @@ EOF
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Initialize a meta repo
+$_MARMOT_INVOCATION - Initialize a meta repo
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION
 
 DESCRIPTION
 This command initializes a blank meta repo in the current working directory.
