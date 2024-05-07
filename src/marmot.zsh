@@ -2,15 +2,20 @@
 
 # https://stackoverflow.com/a/56311706/112682
 emulate -LR zsh
-
 set -e
+
+## Local environment
 
 self="${0:P}"
 self_basename="${0:t}"
 self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
+## Shared environment
+
 export _MARMOT_HOME="$self_dirname"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -44,22 +49,22 @@ function main() {
   # Commands
   'category')
     shift 1
-    exec "${self_dirname}/category/category.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category.zsh" "$@"
     ;;
 
   'exec')
     shift 1
-    exec "${self_dirname}/exec/exec.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/exec/exec.zsh" "$@"
     ;;
 
   'init')
     shift 1
-    exec "${self_dirname}/init/init.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/init/init.zsh" "$@"
     ;;
 
   'repo')
     shift 1
-    exec "${self_dirname}/repo/repo.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo.zsh" "$@"
     ;;
 
   *)
@@ -106,6 +111,8 @@ link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
 EOF
 }
+
+## Main
 
 # Make sure the script exits, even if main doesn't
 # https://unix.stackexchange.com/a/449508/37734

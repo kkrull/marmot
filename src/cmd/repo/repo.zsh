@@ -25,12 +25,12 @@ function main() {
   case "$sub_command" in
   'list')
     shift 1
-    exec "$_MARMOT_HOME/repo/repo-list.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo-list.zsh" "$@"
     ;;
 
   'register')
     shift 1
-    exec "$_MARMOT_HOME/repo/repo-register.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/repo/repo-register.zsh" "$@"
     ;;
 
   *)

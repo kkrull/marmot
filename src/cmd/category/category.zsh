@@ -25,17 +25,17 @@ function main() {
   case "$sub_command" in
   'add')
     shift 1
-    exec "$_MARMOT_HOME/category/category-add.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-add.zsh" "$@"
     ;;
 
   'create')
     shift 1
-    exec "$_MARMOT_HOME/category/category-create.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-create.zsh" "$@"
     ;;
 
   'list')
     shift 1
-    exec "$_MARMOT_HOME/category/category-list.zsh" "$@"
+    exec "$_MARMOT_HOME/cmd/category/category-list.zsh" "$@"
     ;;
 
   *)
