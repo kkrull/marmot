@@ -35,7 +35,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Register repositories to manage
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION <Git repository> ...
 
 DESCRIPTION

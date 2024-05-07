@@ -35,7 +35,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - List categories
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
 
 DESCRIPTION

@@ -46,7 +46,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Add repositories to a category
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION <category> <repository> [repository...]
 $_MARMOT_INVOCATION <category>/<sub-category> <repository> [repository...]
 

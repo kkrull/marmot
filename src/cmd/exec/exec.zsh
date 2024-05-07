@@ -74,7 +74,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Execute a command repeatedly
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
   [--direnv] [--print]
   --project-file <file>

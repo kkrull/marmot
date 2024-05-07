@@ -52,7 +52,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Work with categories
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION sub-command [options...]
 
 SUB-COMMANDS

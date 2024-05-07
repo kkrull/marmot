@@ -41,7 +41,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Initialize a meta repo
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
 
 DESCRIPTION

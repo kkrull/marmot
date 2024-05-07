@@ -49,7 +49,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Create a category
 
 SYNOPSIS
-$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION <category> [sub-category...]
 
 DESCRIPTION
