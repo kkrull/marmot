@@ -2,9 +2,11 @@
 
 emulate -LR zsh
 
-## Command
+## Shared environment
 
-self_invocation="marmot category list"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
+
+## Command
 
 working_dirname="${PWD:A}"
 meta_repo_data="$working_dirname/.marmot"
@@ -36,10 +38,11 @@ function list_categories() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - List categories
+$_MARMOT_INVOCATION - List categories
 
 SYNOPSIS
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION
 
 DESCRIPTION
 This command lists the categories that are used to group repositories.

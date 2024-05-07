@@ -2,9 +2,12 @@
 
 emulate -LR zsh
 
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} create"
+
 ## Command
 
-self_invocation="marmot category create"
 working_dirname="${PWD:A}"
 
 function main() {
@@ -17,7 +20,7 @@ function main() {
     exit 0
   elif [[ $# == 0 ]]
   then
-    echo "$self_invocation: Missing category name"
+    echo "$_MARMOT_INVOCATION: Missing category name"
     exit 1
   else
     make_category_directories "$@"
@@ -45,11 +48,11 @@ function make_category_directories() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Create a category
+$_MARMOT_INVOCATION - Create a category
 
 SYNOPSIS
-${self_invocation} <name> [...value]
-  [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION <name> [...value]
 
 DESCRIPTION
 This command creates a new category and adds its directory structure to the
@@ -60,11 +63,11 @@ OPTIONS
 
 EXAMPLES
 • Create a "lang" category with possible values "java" and "typescript":
-    \$ ${self_invocation} lang java typescript
+    \$ $_MARMOT_INVOCATION lang java typescript
 • Create a "platform" category with possible values "beam, "clr", "jvm", and "node":
-    \$ ${self_invocation} platform beam clr jvm node
+    \$ $_MARMOT_INVOCATION platform beam clr jvm node
 • Create a "project" category with possible values "dotnet-8-migration" and "skunkworks":
-    \$ ${self_invocation} project dotnet-8-migration skunkworks
+    \$ $_MARMOT_INVOCATION project dotnet-8-migration skunkworks
 EOF
 }
 

@@ -2,9 +2,12 @@
 
 emulate -LR zsh
 
+## Shared environment
+
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} add"
+
 ## Command
 
-self_invocation="marmot category add"
 working_dirname="${PWD:A}"
 
 function main() {
@@ -17,7 +20,7 @@ function main() {
     exit 0
   elif [[ $# == 0 ]]
   then
-    echo "$self_invocation: Missing category name"
+    echo "$_MARMOT_INVOCATION: Missing category name"
     exit 1
   else
     link_to_category "$@"
@@ -46,12 +49,12 @@ function link_to_category() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Add repositories to a category
+$_MARMOT_INVOCATION - Add repositories to a category
 
 SYNOPSIS
-${self_invocation} <category> <repository> ...repository
-${self_invocation} <category>/<value> <repository> ...repository
-  [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION <category> <repository> ...repository
+$_MARMOT_INVOCATION <category>/<sub-category> <repository> ...repository
 
 DESCRIPTION
 This command adds 1 or more repositories to a category, or to a particular
@@ -62,9 +65,9 @@ OPTIONS
 
 EXAMPLES
 • Add a repository to the "user" category:
-    \$ ${self_invocation} user ~/git/dotfiles
+    \$ $_MARMOT_INVOCATION user ~/git/dotfiles
 • Add some repositories to the "skunkworks" project (something big is about to happen):
-    \$ ${self_invocation} project/skunkworks ~/git/robot-masters ~/git/evil-castle
+    \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/evil-castle
 EOF
 }
 

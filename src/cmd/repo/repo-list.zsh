@@ -6,9 +6,11 @@ source "$_MARMOT_HOME/lib/config-file.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
 source "$_MARMOT_HOME/lib/paths.zsh"
 
-## Command
+## Shared environment
 
-self_invocation="marmot repo list"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
+
+## Command
 
 function main() {
   if [[ $# == 0 ]]
@@ -39,11 +41,11 @@ function list_local_repositories() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - List repositories
+$_MARMOT_INVOCATION - List repositories
 
 SYNOPSIS
-${self_invocation}
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION
 
 DESCRIPTION
 This command lists repositories that are managed by Marmot.

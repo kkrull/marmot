@@ -6,9 +6,11 @@ source "$_MARMOT_HOME/lib/config-file.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
 source "$_MARMOT_HOME/lib/paths.zsh"
 
-## Command
+## Shared environment
 
-self_invocation="marmot repo register"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} register"
+
+## Command
 
 function main() {
   zparseopts -D -E \
@@ -20,7 +22,7 @@ function main() {
     exit 0
   elif [[ $# == 0 ]]
   then
-    echo "$self_invocation: Missing repository path"
+    echo "$_MARMOT_INVOCATION: Missing repository path"
     exit 1
   else
     register_local_repositories "$(meta_repo_config_file)" "$@"
@@ -30,11 +32,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Register repositories to manage
+$_MARMOT_INVOCATION - Register repositories to manage
 
 SYNOPSIS
-${self_invocation} <Git repository> ...
-${self_invocation} [--help]
+$_MARMOT_INVOCATION [--help]
+$_MARMOT_INVOCATION <Git repository> ...
 
 DESCRIPTION
 This command registers 1 or more repositories with Marmot, so it can manage them.
