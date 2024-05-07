@@ -6,16 +6,15 @@ set -e
 
 ## Local environment
 
-self="${0:P}"
-self_basename="${0:t}"
-self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
 ## Shared environment
 
-export _MARMOT_HOME="$self_dirname"
+export _MARMOT_HOME="${0:A:h}"
 
 ## Command
+
+self_invocation="${0:t}"
 
 function main() {
   if [[ $# == 0 ]]
@@ -37,7 +36,7 @@ function main() {
   case "$command" in
   # Installation
   'link')
-    ln -s "$self" "$link_path"
+    ln -s "${0:P}" "$link_path"
     echo "Added symlink: $link_path"
     ;;
 
@@ -76,10 +75,10 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_basename} - Meta Repo Management Tool
+${self_invocation} - Meta Repo Management Tool
 
 SYNOPSIS
-${self_basename} command [options...]
+${self_invocation} command [options...]
 
 DESCRIPTION
 Marmot creates and maintains a Meta Repository (e.g. "meta repo"), which can
