@@ -26,6 +26,7 @@ function main() {
     exit 1
   else
     make_category_directories "$@"
+    _config_add_categories "$(_fs_metadata_file)" "$@"
   fi
 }
 
