@@ -1,4 +1,4 @@
-# Marmot paths
+# Marmot filesystem
 
 ## Categories
 

@@ -1,4 +1,4 @@
-# JSON
+# Marmot JSON processing
 
 function jq_update() {
   local json_file="$1"
