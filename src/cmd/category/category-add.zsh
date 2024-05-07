@@ -53,12 +53,11 @@ $_MARMOT_INVOCATION - Add repositories to a category
 
 SYNOPSIS
 $_MARMOT_INVOCATION [--help]
-$_MARMOT_INVOCATION <category> <repository> ...repository
-$_MARMOT_INVOCATION <category>/<sub-category> <repository> ...repository
+$_MARMOT_INVOCATION <category> <repository> [repository...]
+$_MARMOT_INVOCATION <category>/<sub-category> <repository> [repository...]
 
 DESCRIPTION
-This command adds 1 or more repositories to a category, or to a particular
-value of a category.
+This command adds 1 or more repositories to a (sub-)category.
 
 OPTIONS
 --help        Show help
@@ -66,8 +65,8 @@ OPTIONS
 EXAMPLES
 • Add a repository to the "user" category:
     \$ $_MARMOT_INVOCATION user ~/git/dotfiles
-• Add some repositories to the "skunkworks" project (something big is about to happen):
-    \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/evil-castle
+• Add some repositories to the "skunkworks" project (lookout Dr. Light):
+    \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/skull-fortress
 EOF
 }
 

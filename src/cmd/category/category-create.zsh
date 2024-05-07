@@ -52,21 +52,21 @@ $_MARMOT_INVOCATION - Create a category
 
 SYNOPSIS
 $_MARMOT_INVOCATION [--help]
-$_MARMOT_INVOCATION <name> [...value]
+$_MARMOT_INVOCATION <category> [sub-category...]
 
 DESCRIPTION
 This command creates a new category and adds its directory structure to the
-meta repo in the current working directory.
+meta repo.
 
 OPTIONS
 --help        Show help
 
 EXAMPLES
-• Create a "lang" category with possible values "java" and "typescript":
+• Create a "lang" category with sub-categories "java" and "typescript":
     \$ $_MARMOT_INVOCATION lang java typescript
-• Create a "platform" category with possible values "beam, "clr", "jvm", and "node":
+• Create a "platform" category with sub-categories "beam, "clr", "jvm", and "node":
     \$ $_MARMOT_INVOCATION platform beam clr jvm node
-• Create a "project" category with possible values "dotnet-8-migration" and "skunkworks":
+• Create a "project" category with sub-categories "dotnet-8-migration" and "skunkworks":
     \$ $_MARMOT_INVOCATION project dotnet-8-migration skunkworks
 EOF
 }
