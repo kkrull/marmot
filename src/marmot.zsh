@@ -11,10 +11,9 @@ link_path='/usr/local/bin/marmot'
 ## Shared environment
 
 export _MARMOT_HOME="${0:A:h}"
+export _MARMOT_INVOCATION="${0:t}"
 
 ## Command
-
-self_invocation="${0:t}"
 
 function main() {
   if [[ $# == 0 ]]
@@ -75,10 +74,11 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-${self_invocation} - Meta Repo Management Tool
+$_MARMOT_INVOCATION - Meta Repo Management Tool
 
 SYNOPSIS
-${self_invocation} command [options...]
+$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION command [options...]
 
 DESCRIPTION
 Marmot creates and maintains a Meta Repository (e.g. "meta repo"), which can
