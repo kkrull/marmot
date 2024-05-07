@@ -51,10 +51,7 @@ function register_local_repositories() {
   config_file="$1"
   shift 1
 
-  #TODO KDK: repositories is a JSON array. It inverts dependencies but breaks the abstraction
-  local repositories
-  repositories=$(__config_paths_to_repositories_json "$@")
-  _config_add_repositories "$config_file" "$repositories"
+  _config_add_repositories "$config_file" "$@"
 }
 
 ## Main
