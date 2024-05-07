@@ -2,9 +2,9 @@
 
 emulate -LR zsh
 
-source "$_MARMOT_HOME/lib/config-file.zsh"
+source "$_MARMOT_HOME/lib/config.zsh"
+source "$_MARMOT_HOME/lib/fs.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
-source "$_MARMOT_HOME/lib/paths.zsh"
 
 ## Shared environment
 
