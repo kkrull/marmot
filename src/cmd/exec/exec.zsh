@@ -95,10 +95,10 @@ git:
 
 EXAMPLES
 • List version of Node.js used in repositories that use direnv+nvm:
-    \$ $_MARMOT_INVOCATION --direnv --project node-projects.conf node --version
+  \$ $_MARMOT_INVOCATION --direnv --project node-projects.conf node --version
 
 • Grep for matching source code in all repositories:
-    \$ $_MARMOT_INVOCATION --project project.conf git --no-pager grep someFunction
+  \$ $_MARMOT_INVOCATION --project project.conf git --no-pager grep someFunction
 
 CONFIGURATION
 A project configuration file is a newline-delimited text file containing absolute paths to 1 or more

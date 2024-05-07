@@ -58,9 +58,9 @@ OPTIONS
 
 EXAMPLES
 • Add a repository to the "user" category:
-    \$ $_MARMOT_INVOCATION user ~/git/dotfiles
+  \$ $_MARMOT_INVOCATION user ~/git/dotfiles
 • Add some repositories to the "skunkworks" project (lookout Dr. Light):
-    \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/skull-fortress
+  \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/skull-fortress
 EOF
 }
 
