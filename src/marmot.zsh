@@ -10,6 +10,8 @@ self_basename="${0:t}"
 self_dirname="${0:A:h}"
 link_path='/usr/local/bin/marmot'
 
+export _MARMOT_HOME="$self_dirname"
+
 function main() {
   if [[ $# == 0 ]]
   then
@@ -28,6 +30,18 @@ function main() {
 
   command="$1"
   case "$command" in
+  # Installation
+  'link')
+    ln -s "$self" "$link_path"
+    echo "Added symlink: $link_path"
+    ;;
+
+  'unlink')
+    rm -f "$link_path"
+    echo "Removed symlink: $link_path"
+    ;;
+
+  # Commands
   'category')
     shift 1
     exec "${self_dirname}/category/category.zsh" "$@"
@@ -39,17 +53,13 @@ function main() {
     ;;
 
   'init')
+    shift 1
     exec "${self_dirname}/init/init.zsh" "$@"
     ;;
 
-  'link')
-    ln -s "$self" "$link_path"
-    echo "Added symlink: $link_path"
-    ;;
-
-  'unlink')
-    rm -f "$link_path"
-    echo "Removed symlink: $link_path"
+  'repo')
+    shift 1
+    exec "${self_dirname}/repo/repo.zsh" "$@"
     ;;
 
   *)
@@ -89,6 +99,7 @@ COMMANDS
 category      Work with categories
 exec          Execute a command on a project's repositories
 init          Make a new meta repo in the current directory
+repo          Work with repositories
 
 INSTALLATION
 link          Add symlink so you can use this on your path

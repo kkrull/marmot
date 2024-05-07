@@ -42,7 +42,7 @@ EOF
   local meta_repo_file="$directory/meta-repo.json"
   jq > "$meta_repo_file" \
     --null-input \
-    --arg version 0.0.1 \
+    --arg version 0.3.0 \
     "$template"
 
   echo "Initialized meta repository at $working_dirname"
