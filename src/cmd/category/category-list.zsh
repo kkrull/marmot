@@ -2,6 +2,7 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/config-file.zsh"
 source "$_MARMOT_HOME/lib/paths.zsh"
 
 ## Shared environment
@@ -13,7 +14,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 function main() {
   if [[ $# == 0 ]]
   then
-    list_categories "$(meta_repo_config_file)"
+    category_names "$(meta_repo_config_file)"
     exit 0
   fi
 
@@ -27,14 +28,6 @@ function main() {
     echo "Unknown option: $1"
     exit 1
   fi
-}
-
-function list_categories() {
-  local meta_repo_config
-  meta_repo_config="$1"
-
-  jq < "$meta_repo_config" \
-    -r '.meta_repo.categories[].name'
 }
 
 function print_usage() {

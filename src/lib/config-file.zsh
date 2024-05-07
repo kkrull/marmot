@@ -1,5 +1,15 @@
 # Marmot configuration
 
+## .categories
+
+function category_names() {
+  local config_file
+  config_file="$1"
+
+  jq < "$config_file" \
+    -r '.meta_repo.categories[]?.name'
+}
+
 ## .repositories
 
 function add_repositories() {
