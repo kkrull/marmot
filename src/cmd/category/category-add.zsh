@@ -32,18 +32,12 @@ function link_to_category() {
   category_name="$1"
   shift 1
 
-  local the_category_path
-  the_category_path="$(category_path "$category_name")"
-
   local link_path
-  local repository_name
   local repository_path
   for repository_path in "$@"
   do
-    repository_name="${repository_path:t}"
-    link_path="$category_name/$repository_name"
-    echo "+ ${link_path} -> $repository_path"
-    (cd "$the_category_path" && ln -s "$repository_path" "$repository_name")
+    link_path="$(add_repository_link_to_category "$category_name" "$repository_path")"
+    echo "+ ${link_path} (link)"
   done
 }
 
