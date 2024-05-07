@@ -7,6 +7,7 @@ set -e
 ## Local environment
 
 link_path='/usr/local/bin/marmot'
+self="${0:P}"
 
 ## Shared environment
 
@@ -35,7 +36,7 @@ function main() {
   case "$command" in
   # Installation
   'link')
-    ln -s "${0:P}" "$link_path"
+    ln -s "$self" "$link_path"
     echo "Added symlink: $link_path"
     ;;
 
