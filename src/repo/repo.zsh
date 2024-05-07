@@ -2,7 +2,8 @@
 
 emulate -LR zsh
 
-self_dirname="${0:A:h}"
+## Command
+
 self_invocation="marmot repo"
 
 function main() {
@@ -24,12 +25,12 @@ function main() {
   case "$sub_command" in
   'list')
     shift 1
-    exec "${self_dirname}/repo-list.zsh" "$@"
+    exec "$_MARMOT_HOME/repo/repo-list.zsh" "$@"
     ;;
 
   'register')
     shift 1
-    exec "${self_dirname}/repo-register.zsh" "$@"
+    exec "$_MARMOT_HOME/repo/repo-register.zsh" "$@"
     ;;
 
   *)
@@ -54,5 +55,7 @@ OPTIONS
 --help        Show help
 EOF
 }
+
+## Main
 
 main "$@"; exit
