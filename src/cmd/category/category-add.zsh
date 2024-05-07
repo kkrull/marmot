@@ -28,12 +28,12 @@ function main() {
 }
 
 function link_to_category() {
-  local category_value_name
-  category_value_name="$1"
+  local category_name
+  category_name="$1"
   shift 1
 
-  local category_value_path
-  category_value_path="$(meta_repo_home)/$category_value_name"
+  local the_category_path
+  the_category_path=$(category_path "$category_name")
 
   local link_path
   local repository_name
@@ -41,9 +41,9 @@ function link_to_category() {
   for repository_path in "$@"
   do
     repository_name="${repository_path:t}"
-    link_path="$category_value_name/$repository_name"
+    link_path="$category_name/$repository_name"
     echo "+ ${link_path} -> $repository_path"
-    (cd "$category_value_path" && ln -s "$repository_path" "$repository_name")
+    (cd "$the_category_path" && ln -s "$repository_path" "$repository_name")
   done
 }
 
