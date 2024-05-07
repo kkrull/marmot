@@ -32,14 +32,14 @@ function make_category_directories() {
   category_name="$1"
   shift 1
 
-  local the_category_path
-  the_category_path="$(make_category_path "$category_name")"
-  echo "+ $the_category_path (category)"
+  local category_path
+  category_path="$(_fs_make_category_path "$category_name")"
+  echo "+ $category_path (category)"
 
   local subcategory_path
   for subcategory_name in "$@"
   do
-    subcategory_path="$(make_subcategory_path "$category_name" "$subcategory_name")"
+    subcategory_path="$(_fs_make_subcategory_path "$category_name" "$subcategory_name")"
     echo "+ $subcategory_path (sub-category)"
   done
 }

@@ -25,7 +25,7 @@ function main() {
     echo "$_MARMOT_INVOCATION: Missing repository path"
     exit 1
   else
-    register_local_repositories "$(meta_repo_config_file)" "$@"
+    register_local_repositories "$(_fs_metadata_file)" "$@"
     exit 0
   fi
 }
@@ -51,9 +51,10 @@ function register_local_repositories() {
   config_file="$1"
   shift 1
 
+  #TODO KDK: repositories is a JSON array. It inverts dependencies but breaks the abstraction
   local repositories
-  repositories=$(to_marmot_repositories "$@")
-  add_repositories "$config_file" "$repositories"
+  repositories=$(_config_paths_to_repositories "$@")
+  _config_add_repositories "$config_file" "$repositories"
 }
 
 ## Main

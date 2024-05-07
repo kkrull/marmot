@@ -1,6 +1,6 @@
 # Marmot JSON processing
 
-function jq_update() {
+function _json_update() {
   local json_file="$1"
   shift 1
 
@@ -10,7 +10,7 @@ function jq_update() {
   rm -f "$tmp_file"
 }
 
-function to_json_array() {
+function _json_to_array() {
   if [[ $# == 0 ]]
   then
     echo "[]"

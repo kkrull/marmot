@@ -36,7 +36,7 @@ function link_to_category() {
   local repository_path
   for repository_path in "$@"
   do
-    link_path="$(add_repository_link_to_category "$category_name" "$repository_path")"
+    link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
   done
 }

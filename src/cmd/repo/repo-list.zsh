@@ -15,7 +15,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 function main() {
   if [[ $# == 0 ]]
   then
-    list_local_repositories "$(meta_repo_config_file)"
+    list_local_repositories "$(_fs_metadata_file)"
     exit 0
   fi
 
@@ -36,7 +36,7 @@ function list_local_repositories() {
   config_file="$1"
   shift 1
 
-  repository_paths "$config_file"
+  _config_repository_paths "$config_file"
 }
 
 function print_usage() {

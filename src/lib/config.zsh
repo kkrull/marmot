@@ -1,6 +1,6 @@
 # Marmot configuration
 
-function create_meta_repo_config() {
+function _config_metadata_init() {
   local directory
   directory="$1"
 
@@ -27,7 +27,7 @@ EOF
 
 ## .categories
 
-function category_names() {
+function _config_category_names() {
   local config_file
   config_file="$1"
 
@@ -37,16 +37,16 @@ function category_names() {
 
 ## .repositories
 
-function add_repositories() {
+function _config_add_repositories() {
   local config_file repositories
   config_file="$1"
   shift 1
 
   repositories="$*"
-  jq_update "$config_file" ".meta_repo.repositories += ${repositories}"
+  _json_update "$config_file" ".meta_repo.repositories += ${repositories}"
 }
 
-function repository_paths() {
+function _config_repository_paths() {
   local config_file
   config_file="$1"
 
@@ -56,20 +56,20 @@ function repository_paths() {
     -r '.meta_repo.repositories[]?.path'
 }
 
-function to_marmot_repositories() {
+function _config_paths_to_repositories() {
   local repositories repository
 
   repositories=()
   for repository_path in "$@"
   do
-    repository=$(to_marmot_repository "$repository_path")
+    repository=$(_config_path_to_repository "$repository_path")
     repositories+=("$repository")
   done
 
-  to_json_array "${repositories[@]}"
+  _json_to_array "${repositories[@]}"
 }
 
-function to_marmot_repository() {
+function _config_path_to_repository() {
   local repo_path
   repo_path="$1"
   echo "{ \"path\": \"$repo_path\" }"
