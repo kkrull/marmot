@@ -20,7 +20,7 @@ EOF
   )
 
   jq > "$meta_repo_file" \
-    --arg version 0.3.1 \
+    --arg version 0.3.2 \
     --null-input \
     "$template"
 }
