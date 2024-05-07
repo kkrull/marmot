@@ -47,6 +47,8 @@ marmot
 
 See [Commands](./doc/commands.md) for details.
 
-## Version
+## Versions
 
-0.0.1
+- 0.3.0: Add `marmot repo`.
+- 0.2.0: Add `marmot category` and `marmot init`.
+- 0.1.0: Add `marmot exec`.
