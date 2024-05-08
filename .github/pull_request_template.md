@@ -2,7 +2,7 @@
 
 ## Primary change
 
-_What features were added, expaned, or fixed?_
+_What features were added, expanded, or fixed?_
 
 ## Supporting changes
 
