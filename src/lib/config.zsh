@@ -17,18 +17,14 @@ function _config_metadata_init() {
 ## .categories
 
 function _config_add_categories() {
-  local config_file
+  local config_file category_name subcategory_names
   config_file="$1"
-  shift 1
-
-  local category_name
-  category_name="$1"
-  shift 1
+  category_name="$2"
+  subcategory_names=("${@:3}")
 
   local categories
   categories=("$(__config_category_name_to_json "$category_name")")
-
-  __config_subcategory_names "$category_name" "$@"
+  __config_subcategory_names "$category_name" "${subcategory_names[@]}"
   categories+=("${reply[@]}")
 
   _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
