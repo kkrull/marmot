@@ -102,7 +102,7 @@ function _config_repository_paths_in_category() {
 
   # TODO KDK: Work on query here
   jq < "$config_file" \
-    -r '.meta_repo.repositories[]?.path'
+    -r '.meta_repo.categories[] | select(.full_name == "lang/typescript") | .repository_paths[]?'
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
