@@ -101,16 +101,14 @@ function _config_repository_paths_in_category() {
   category_or_subcategory="$2"
 
   local filter
-  filter=$(cat <<'EOF'
+  filter=$(cat <<EOF
     .meta_repo.categories[]
-      | select(.full_name == $full_name)
+      | select(.full_name == "$category_or_subcategory")
       | .repository_paths[]?
 EOF
   )
 
-  jq < "$config_file" \
-    --arg full_name "$category_or_subcategory" \
-    -r "$filter"
+  jq -r < "$config_file" "$filter"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
