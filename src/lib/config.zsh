@@ -7,11 +7,11 @@ function _config_metadata_init() {
   local meta_repo_file
   meta_repo_file="$directory/meta-repo.json"
 
-jo > "$meta_repo_file" \
-  -p \
-  -- \
-  "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
-  'version=0.3.2'
+  jo > "$meta_repo_file" \
+    -p \
+    -- \
+    "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
+    'version=0.3.2'
 }
 
 ## .categories
@@ -31,9 +31,7 @@ function _config_add_categories() {
   __config_subcategory_names_to_json "$category_name" "$@"
   categories+=("${reply[@]}")
 
-  local categories_as_json
-  categories_as_json="$(_json_to_array "${categories[@]}")"
-  _json_update "$config_file" ".meta_repo.categories += ${categories_as_json}"
+  _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
 }
 
 function _config_category_fullnames() {
@@ -42,19 +40,6 @@ function _config_category_fullnames() {
 
   jq < "$config_file" \
     -r '.meta_repo.categories[]?.full_name'
-}
-
-function __config_category_names_to_json() {
-  local categories category_json
-
-  categories=()
-  for name in "$@"
-  do
-    category_json="$(__config_category_name_to_json "$name")"
-    categories+=("$category_json")
-  done
-
-  _json_to_array "${categories[@]}"
 }
 
 function __config_category_name_to_json() {
@@ -101,7 +86,7 @@ function _config_add_repositories() {
 
   local repositories_as_json
   repositories_as_json=$(__config_repository_paths_to_json "$@")
-  _json_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
+  _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
 }
 
 function _config_repository_paths() {
