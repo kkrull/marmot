@@ -51,8 +51,10 @@ function _fs_metadata_file() {
 ## Home
 
 function _fs_metarepo_home() {
-  local meta_home
-  meta_home="${PWD:A}"
-
-  echo "$meta_home"
+  if [[ -n "$MARMOT_META_REPO" ]]
+  then
+    echo "$MARMOT_META_REPO"
+  else
+    echo "$HOME/meta"
+  fi
 }
