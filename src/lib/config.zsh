@@ -58,13 +58,13 @@ function __config_category_name_to_json() {
 }
 
 function __config_subcategory_names() {
-  local parent_category_name
+  local parent_category_name subcategory_names
   parent_category_name="$1"
-  shift 1
+  subcategory_names=("${@:2}")
 
   local subcategories
   subcategories=()
-  for name in "$@"
+  for name in "${subcategory_names[@]}"
   do
     subcategory_json="$(__config_category_name_to_json "$name" "$parent_category_name")"
     subcategories+=("$subcategory_json")
@@ -76,12 +76,12 @@ function __config_subcategory_names() {
 ## .repositories
 
 function _config_add_repositories() {
-  local config_file
+  local config_file repository_paths
   config_file="$1"
-  shift 1
+  repository_paths=("${@:2}")
 
   local repositories_as_json
-  repositories_as_json=$(__config_repository_paths_to_json "$@")
+  repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
   _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
 }
 
