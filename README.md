@@ -44,12 +44,13 @@ details.
 ## Versions
 
 - 0.5: `marmot exec` operates on repositories in a matching category now, instead of a project list.
-  - [ ] Add a query for repositories matching a (sub-)category.
-  - [ ] Invoke this query with `marmot repo list <category|subcategory>`.
-  - [ ] Update `marmot category add` to store meta data about which repositories are in which
-        (sub-)categories.
   - [ ] Update `exec` to work on those matching repositories.
   - [ ] Update [documentation](./doc/commands.md)
+- 0.4.1: Add `--category` criteria to `marmot repo list`.
+  - [x] Add a query for repositories matching a (sub-)category.
+  - [x] Invoke this query with `marmot repo list <category|subcategory>`.
+  - [ ] Update `marmot category add` to store meta data about which repositories are in which
+        (sub-)categories.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
 - 0.3.2: `marmot category create` adds the category to local metadata.
 - 0.3.1: Standardize use of code in `src/lib/`.
