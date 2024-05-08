@@ -30,6 +30,28 @@ function _config_add_categories() {
   _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
 }
 
+function _config_add_repositories_to_category() {
+  local config_file category_full_name repository_paths
+  config_file="$1"
+  category_full_name="$2"
+
+  repository_paths=()
+  for repo_path in "${@:3}"
+  do
+    repository_paths+=("${repo_path:A}")
+  done
+
+  local filter
+  filter=$(cat <<EOF
+    .meta_repo.categories[]
+      | select(.full_name == "$category_full_name")
+      | .repository_paths[]? += $(jo -a "${repository_paths[@]}")
+EOF
+  )
+
+  _json_jq_update "$config_file" "$filter"
+}
+
 function _config_category_fullnames() {
   local config_file
   config_file="$1"

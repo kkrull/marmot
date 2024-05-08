@@ -3,7 +3,9 @@
 emulate -LR zsh
 set -e
 
+source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
+source "$_MARMOT_HOME/lib/json.zsh"
 
 ## Shared environment
 
@@ -32,7 +34,10 @@ function main() {
   local category_or_subcategory
   category_or_subcategory="$1"
 
-  # _config_add_repositories_to_category "$category_or_subcategory" "${@:2}"
+  _config_add_repositories_to_category \
+    "$(_fs_metadata_file)" \
+    "$category_or_subcategory" \
+    "${@:2}"
   link_to_category "$category_or_subcategory" "${@:2}"
 }
 
