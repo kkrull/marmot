@@ -7,22 +7,11 @@ function _config_metadata_init() {
   local meta_repo_file
   meta_repo_file="$directory/meta-repo.json"
 
-  local template
-  template=$(cat <<'EOF'
-{
-  meta_repo: {
-    categories: [],
-    repositories: []
-  },
-  version: $version
-}
-EOF
-  )
-
-  jq > "$meta_repo_file" \
-    --arg version 0.3.2 \
-    --null-input \
-    "$template"
+jo > "$meta_repo_file" \
+  -p \
+  -- \
+  "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
+  'version=0.3.2'
 }
 
 ## .categories
