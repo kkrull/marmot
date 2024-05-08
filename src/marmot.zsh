@@ -16,8 +16,6 @@ export _MARMOT_INVOCATION="${0:t}"
 
 ## Command
 
-source "$_MARMOT_HOME/lib/fs.zsh"
-
 function main() {
   if [[ $# == 0 ]]
   then
@@ -58,14 +56,14 @@ function main() {
     exec "$_MARMOT_HOME/cmd/exec/exec.zsh" "$@"
     ;;
 
-  'home')
-    shift 1
-    _fs_metarepo_home
-    ;;
-
   'init')
     shift 1
     exec "$_MARMOT_HOME/cmd/init/init.zsh" "$@"
+    ;;
+
+  'meta')
+    shift 1
+    exec "$_MARMOT_HOME/cmd/meta/meta.zsh" "$@"
     ;;
 
   'repo')
@@ -111,6 +109,7 @@ COMMANDS
 category      Work with categories
 exec          Execute a command on a project's repositories
 init          Make a new meta repo in the current directory
+meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 
 INSTALLATION
