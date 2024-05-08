@@ -28,7 +28,7 @@ function _config_add_categories() {
   local categories
   categories=("$(__config_category_name_to_json "$category_name")")
 
-  __config_subcategory_names_to_json "$category_name" "$@"
+  __config_subcategory_names "$category_name" "$@"
   categories+=("${reply[@]}")
 
   _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
@@ -61,7 +61,7 @@ function __config_category_name_to_json() {
   fi
 }
 
-function __config_subcategory_names_to_json() {
+function __config_subcategory_names() {
   local parent_category_name
   parent_category_name="$1"
   shift 1
