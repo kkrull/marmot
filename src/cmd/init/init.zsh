@@ -45,10 +45,14 @@ $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
 
 DESCRIPTION
-This command initializes a blank meta repo in the current working directory.
+This command initializes a blank meta repo in the configured Meta Repo
+directory.
 
 OPTIONS
 --help        Show help
+
+ENVIRONMENT VARIABLES
+MARMOT_META_REPO  Path in which to create the Meta Repo (default: \$HOME/meta)
 EOF
 }
 
