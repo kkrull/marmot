@@ -4,15 +4,17 @@
 emulate -LR zsh
 set -e
 
+## Shared environment
+
+export _MARMOT_HOME="${0:A:h}"
+export _MARMOT_INVOCATION="${0:t}"
+
 ## Local environment
 
 link_path='/usr/local/bin/marmot'
 self="${0:P}"
 
-## Shared environment
-
-export _MARMOT_HOME="${0:A:h}"
-export _MARMOT_INVOCATION="${0:t}"
+source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
 
@@ -25,10 +27,15 @@ function main() {
 
   # Distinguish `marmot --help` (top-level usage) from `marmot <command> --help` (command usage)
   zparseopts -E \
-    -help=help_option
+    -help=help_option \
+    -version=version_option
   if [[ $# == 1 && -n "$help_option" ]]
   then
     print_usage
+    exit 0
+  elif [[ $# == 1 && -n "$version_option" ]]
+  then
+    print_version
     exit 0
   fi
 
@@ -61,6 +68,11 @@ function main() {
     exec "$_MARMOT_HOME/cmd/init/init.zsh" "$@"
     ;;
 
+  'meta')
+    shift 1
+    exec "$_MARMOT_HOME/cmd/meta/meta.zsh" "$@"
+    ;;
+
   'repo')
     shift 1
     exec "$_MARMOT_HOME/cmd/repo/repo.zsh" "$@"
@@ -78,7 +90,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Meta Repo Management Tool
 
 SYNOPSIS
-$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION [--help] [--version]
 $_MARMOT_INVOCATION command [options...]
 
 DESCRIPTION
@@ -99,17 +111,26 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 OPTIONS
 --help        Show help
+--version     Show version
 
 COMMANDS
 category      Work with categories
 exec          Execute a command on a project's repositories
 init          Make a new meta repo in the current directory
+meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 
 INSTALLATION
 link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
+
+ENVIRONMENT VARIABLES
+MARMOT_META_REPO  Path to the Meta Repo (default: \$HOME/meta)
 EOF
+}
+
+function print_version() {
+  _fs_marmot_version
 }
 
 ## Main

@@ -40,19 +40,23 @@ function _fs_make_subcategory_path() {
 
 ## Configuration
 
-function _fs_metadata_file() {
-  echo "$(_fs_metarepo_home)/.marmot/meta-repo.json"
-}
-
 function _fs_metadata_dir() {
   echo "$(_fs_metarepo_home)/.marmot"
 }
 
-## Home
+function _fs_metadata_file() {
+  echo "$(_fs_metarepo_home)/.marmot/meta-repo.json"
+}
 
 function _fs_metarepo_home() {
-  local meta_home
-  meta_home="${PWD:A}"
+  if [[ -n "$MARMOT_META_REPO" ]]
+  then
+    echo "$MARMOT_META_REPO"
+  else
+    echo "$HOME/meta"
+  fi
+}
 
-  echo "$meta_home"
+function _fs_marmot_version() {
+  cat "$_MARMOT_HOME/version"
 }

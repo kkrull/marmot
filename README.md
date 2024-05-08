@@ -17,18 +17,11 @@ developers can still create their own meta repo without needing support or buy-i
 - [Architecture and Design Decisions](./doc/decisions.md)
 - [CI/CD Jobs](./doc/cicd-jobs.md)
 - [Commands](./doc/commands.md)
+- [Environment Variables](./doc/environment-variables.md)
 - [Installation](#installation)
 - [Task Automation](./doc/task-automation.md)
 - [Tools](./doc/tools.md)
 - [Usage](#usage)
-
-## Future work
-
-- all except init: operate on a known/conventional Meta Repo directory, instead of the working
-  directory.
-- category: add tags for repos
-- exec: git pager (turning it off automatically, or adding an option)
-- repository: add `marmot repository migrate --to=github.com`
 
 ## Installation
 
@@ -45,12 +38,21 @@ Installs symlinks in `/usr/local/bin/`.
 marmot
 ```
 
-See [Commands](./doc/commands.md) for details.
+See [Commands](./doc/commands.md) and [Environment Variables](./doc/environment-variables.md) for
+details.
 
 ## Versions
 
+- 0.4: `marmot` can be called from anywhere, not just the meta repo.
 - 0.3.2: `marmot category create` adds the category to local metadata.
 - 0.3.1: Standardize use of code in `src/lib/`.
-- 0.3.0: Add `marmot repo`.
-- 0.2.0: Add `marmot category` and `marmot init`.
-- 0.1.0: Add `marmot exec`.
+- 0.3: Add `marmot repo`.
+- 0.2: Add `marmot category` and `marmot init`.
+- 0.1: Add `marmot exec`.
+
+### Future work
+
+- exec: Operate on categories instead of project files.
+- host: Add `marmot host import <bitbucket.org|github.com>` to register remote
+  repositories and clone them.
+- repo: add `marmot repo migrate --to=github.com`
