@@ -75,9 +75,15 @@ function __config_category_name_to_json() {
 
   if [[ -n "$parent_name" ]]
   then
-    echo "{ \"full_name\": \"$parent_name/$name\", \"name\": \"$name\", \"parent\": \"$parent_name\" }"
+    jo \
+      "full_name=$parent_name/$name" \
+      "name=$name" \
+      "parent_name=$parent_name"
   else
-    echo "{ \"full_name\": \"$name\", \"name\": \"$name\" }"
+    jo -- \
+      "full_name=$name" \
+      "name=$name" \
+      -s 'parent_name='
   fi
 }
 
@@ -137,5 +143,5 @@ function __config_repository_paths_to_json() {
 function __config_repository_path_to_json() {
   local repo_path
   repo_path="$1"
-  echo "{ \"path\": \"$repo_path\" }"
+  jo "path=$repo_path"
 }
