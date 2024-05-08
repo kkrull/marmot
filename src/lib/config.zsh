@@ -47,12 +47,12 @@ function _config_add_categories() {
   _json_update "$config_file" ".meta_repo.categories += ${categories_as_json}"
 }
 
-function _config_category_names() {
+function _config_category_fullnames() {
   local config_file
   config_file="$1"
 
   jq < "$config_file" \
-    -r '.meta_repo.categories[]?.name'
+    -r '.meta_repo.categories[]?.full_name'
 }
 
 function __config_category_names_to_json() {
@@ -75,9 +75,9 @@ function __config_category_name_to_json() {
 
   if [[ -n "$parent_name" ]]
   then
-    echo "{ \"name\": \"$name\", \"parent\": \"$parent_name\" }"
+    echo "{ \"full_name\": \"$parent_name/$name\", \"name\": \"$name\", \"parent\": \"$parent_name\" }"
   else
-    echo "{ \"name\": \"$name\" }"
+    echo "{ \"full_name\": \"$name\", \"name\": \"$name\" }"
   fi
 }
 
