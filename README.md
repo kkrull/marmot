@@ -22,14 +22,6 @@ developers can still create their own meta repo without needing support or buy-i
 - [Tools](./doc/tools.md)
 - [Usage](#usage)
 
-## Future work
-
-- all except init: operate on a known/conventional Meta Repo directory, instead of the working
-  directory.
-- category: add tags for repos
-- exec: git pager (turning it off automatically, or adding an option)
-- repository: add `marmot repository migrate --to=github.com`
-
 ## Installation
 
 Installs symlinks in `/usr/local/bin/`.
@@ -56,3 +48,13 @@ See [Commands](./doc/commands.md) for details.
 - 0.3: Add `marmot repo`.
 - 0.2: Add `marmot category` and `marmot init`.
 - 0.1: Add `marmot exec`.
+
+### Future work
+
+- all except init: operate on a known/conventional Meta Repo directory, instead
+  of the working directory.
+- exec: git pager (turning it off automatically, or adding an option).
+- exec: Operate on categories instead of project files.
+- host: Add `marmot host import <bitbucket.org|github.com>` to register remote
+  repositories and clone them.
+- repo: add `marmot repo migrate --to=github.com`
