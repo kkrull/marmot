@@ -96,13 +96,13 @@ function _config_repository_paths() {
 }
 
 function _config_repository_paths_in_category() {
-  local config_file #category_or_subcategory
+  local config_file category_or_subcategory
   config_file="$1"
-  #category_or_subcategory="$2"
+  category_or_subcategory="$2"
 
-  # TODO KDK: Work on query here
   jq < "$config_file" \
-    -r '.meta_repo.categories[] | select(.full_name == "lang/typescript") | .repository_paths[]?'
+    --arg full_name "$category_or_subcategory" \
+    -r '.meta_repo.categories[] | select(.full_name == $full_name) | .repository_paths[]?'
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
