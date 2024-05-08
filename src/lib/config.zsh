@@ -41,11 +41,14 @@ function _config_add_repositories_to_category() {
     repository_paths+=("${repo_path:A}")
   done
 
+  # Complex assignment to update one element in the array without deleting the others
+  # https://jqlang.github.io/jq/manual/#complex-assignments
   local filter
   filter=$(cat <<EOF
-    .meta_repo.categories[]
+    (.meta_repo.categories[]
       | select(.full_name == "$category_full_name")
-      | .repository_paths? += $(jo -a "${repository_paths[@]}")
+      | .repository_paths)
+      |= . + $(jo -a "${repository_paths[@]}")
 EOF
   )
 
