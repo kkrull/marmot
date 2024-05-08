@@ -16,6 +16,8 @@ export _MARMOT_INVOCATION="${0:t}"
 
 ## Command
 
+source "$_MARMOT_HOME/lib/fs.zsh"
+
 function main() {
   if [[ $# == 0 ]]
   then
@@ -54,6 +56,11 @@ function main() {
   'exec')
     shift 1
     exec "$_MARMOT_HOME/cmd/exec/exec.zsh" "$@"
+    ;;
+
+  'home')
+    shift 1
+    _fs_metarepo_home
     ;;
 
   'init')
