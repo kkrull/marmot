@@ -11,7 +11,7 @@ function _config_metadata_init() {
     -p \
     -- \
     "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
-    'version=0.3.2'
+    'version=0.4'
 }
 
 ## .categories

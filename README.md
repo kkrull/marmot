@@ -49,8 +49,10 @@ See [Commands](./doc/commands.md) for details.
 
 ## Versions
 
+- 0.4: `marmot` can be called from anywhere, not just the meta repo.
+  - [ ] Use `MARMOT_HOME` to find meta repo, or fall back to `$HOME/meta`.
 - 0.3.2: `marmot category create` adds the category to local metadata.
 - 0.3.1: Standardize use of code in `src/lib/`.
-- 0.3.0: Add `marmot repo`.
-- 0.2.0: Add `marmot category` and `marmot init`.
-- 0.1.0: Add `marmot exec`.
+- 0.3: Add `marmot repo`.
+- 0.2: Add `marmot category` and `marmot init`.
+- 0.1: Add `marmot exec`.
