@@ -59,6 +59,7 @@ details.
 
 ### Future work
 
+- auto-complete: for zsh.
 - error handling: `set -euo pipefail` more universally. See
   <https://www.mulle-kybernetik.com/modern-bash-scripting/state-euxo-pipefail.html>.
 - host: Add `marmot host import <bitbucket.org|github.com>` to register remote
