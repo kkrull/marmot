@@ -128,7 +128,7 @@ EOF
 }
 
 function print_version() {
-  echo "0.4"
+  cat "$_MARMOT_HOME/version"
 }
 
 ## Main
