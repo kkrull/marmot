@@ -115,6 +115,9 @@ repo          Work with repositories
 INSTALLATION
 link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
+
+ENVIRONMENT VARIABLES
+MARMOT_META_REPO  Path to the Meta Repo (default: \$HOME/meta)
 EOF
 }
 
