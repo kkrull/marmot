@@ -45,7 +45,7 @@ function _config_add_repositories_to_category() {
   filter=$(cat <<EOF
     .meta_repo.categories[]
       | select(.full_name == "$category_full_name")
-      | .repository_paths[]? += $(jo -a "${repository_paths[@]}")
+      | .repository_paths? += $(jo -a "${repository_paths[@]}")
 EOF
   )
 
