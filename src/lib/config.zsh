@@ -81,27 +81,6 @@ function __config_category_name_to_json() {
   fi
 }
 
-function __config_make_category() {
-  local category_name
-  category_name="$1"
-  subcategory_names=("${@:2}")
-
-  local template
-  template=$(cat <<'EOF'
-{
-  name: $category_name,
-  categories: $subcategories
-}
-EOF
-  )
-
-  jq \
-    --arg category_name "$category_name" \
-    --argjson subcategories "$(__config_category_names_to_json "${subcategory_names[@]}")" \
-    --null-input \
-    "$template"
-}
-
 function __config_subcategory_names_to_json() {
   local parent_category_name
   parent_category_name="$1"
