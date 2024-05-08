@@ -34,8 +34,9 @@ function _config_category_fullnames() {
   local config_file
   config_file="$1"
 
-  jq < "$config_file" \
-    -r '.meta_repo.categories[]?.full_name'
+  jq -r \
+    '.meta_repo.categories[]?.full_name' \
+    "$config_file"
 }
 
 function __config_category_name_to_json() {
@@ -91,8 +92,9 @@ function _config_repository_paths() {
 
   # Treat lack of JSON fields as empty rather than as an error
   # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
-  jq < "$config_file" \
-    -r '.meta_repo.repositories[]?.path'
+  jq -r \
+    '.meta_repo.repositories[]?.path' \
+    "$config_file"
 }
 
 function _config_repository_paths_in_category() {
@@ -108,7 +110,7 @@ function _config_repository_paths_in_category() {
 EOF
   )
 
-  jq -r < "$config_file" "$filter"
+  jq -r "$filter" "$config_file"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
