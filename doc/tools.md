@@ -70,6 +70,6 @@ brew bundle install
 ## `shellcheck`
 
 - Files:
-  - Configuration: `.shellheckrc`
+  - Configuration: `.shellcheckrc`
 - Interactions:
   - `pre-commit`: checks files with this check.

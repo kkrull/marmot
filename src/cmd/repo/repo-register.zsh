@@ -46,9 +46,9 @@ OPTIONS
 
 EXAMPLES
 • Register all the things!
-    \$ find -s ~/git -type d -name .git \\
-      | sed 's/[/][.]git$//g' \\
-      | xargs -I {} $_MARMOT_INVOCATION {}
+  \$ find -s ~/git -type d -name .git \\
+    | sed 's/[/][.]git$//g' \\
+    | xargs -I {} $_MARMOT_INVOCATION {}
 EOF
 }
 

@@ -2,7 +2,9 @@
 
 emulate -LR zsh
 
+source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
+source "$_MARMOT_HOME/lib/json.zsh"
 
 ## Shared environment
 
@@ -24,6 +26,7 @@ function main() {
     exit 1
   else
     make_category_directories "$@"
+    _config_add_categories "$(_fs_metadata_file)" "$@"
   fi
 }
 
@@ -61,11 +64,11 @@ OPTIONS
 
 EXAMPLES
 • Create a "lang" category with sub-categories "java" and "typescript":
-    \$ $_MARMOT_INVOCATION lang java typescript
+  \$ $_MARMOT_INVOCATION lang java typescript
 • Create a "platform" category with sub-categories "beam, "clr", "jvm", and "node":
-    \$ $_MARMOT_INVOCATION platform beam clr jvm node
+  \$ $_MARMOT_INVOCATION platform beam clr jvm node
 • Create a "project" category with sub-categories "dotnet-8-migration" and "skunkworks":
-    \$ $_MARMOT_INVOCATION project dotnet-8-migration skunkworks
+  \$ $_MARMOT_INVOCATION project dotnet-8-migration skunkworks
 EOF
 }
 
