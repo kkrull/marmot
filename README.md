@@ -52,9 +52,6 @@ details.
 
 ### Future work
 
-- all except init: operate on a known/conventional Meta Repo directory, instead
-  of the working directory.
-- exec: git pager (turning it off automatically, or adding an option).
 - exec: Operate on categories instead of project files.
 - host: Add `marmot host import <bitbucket.org|github.com>` to register remote
   repositories and clone them.
