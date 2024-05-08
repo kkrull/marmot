@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 emulate -LR zsh
+set -e
 
 source "$_MARMOT_HOME/lib/fs.zsh"
 
