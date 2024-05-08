@@ -50,8 +50,6 @@ See [Commands](./doc/commands.md) for details.
 ## Versions
 
 - 0.3.2: `marmot category create` adds the category to local metadata.
-  - [x] Update `category-create` to add to the config file so that `category list` works.
-  - [ ] Update `category-list` to show categories and sub-categories.
 - 0.3.1: Standardize use of code in `src/lib/`.
 - 0.3.0: Add `marmot repo`.
 - 0.2.0: Add `marmot category` and `marmot init`.
