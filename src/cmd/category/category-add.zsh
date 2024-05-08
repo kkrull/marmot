@@ -23,19 +23,26 @@ function main() {
   then
     echo "$_MARMOT_INVOCATION: Missing category name"
     exit 1
-  else
-    link_to_category "$@"
+  elif [[ $# == 1 ]]
+  then
+    echo "$_MARMOT_INVOCATION: Missing repository"
+    exit 1
   fi
+
+  local category_or_subcategory
+  category_or_subcategory="$1"
+
+  # _config_add_repositories_to_category "$category_or_subcategory" "${@:2}"
+  link_to_category "$category_or_subcategory" "${@:2}"
 }
 
 function link_to_category() {
   local category_name
   category_name="$1"
-  shift 1
 
   local link_path
   local repository_path
-  for repository_path in "$@"
+  for repository_path in "${@:2}"
   do
     link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
