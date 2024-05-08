@@ -48,8 +48,6 @@ function _fs_metadata_file() {
   echo "$(_fs_metarepo_home)/.marmot/meta-repo.json"
 }
 
-## Home
-
 function _fs_metarepo_home() {
   if [[ -n "$MARMOT_META_REPO" ]]
   then
@@ -57,4 +55,8 @@ function _fs_metarepo_home() {
   else
     echo "$HOME/meta"
   fi
+}
+
+function _fs_marmot_version() {
+  cat "$_MARMOT_HOME/version"
 }

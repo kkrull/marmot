@@ -4,15 +4,17 @@
 emulate -LR zsh
 set -e
 
+## Shared environment
+
+export _MARMOT_HOME="${0:A:h}"
+export _MARMOT_INVOCATION="${0:t}"
+
 ## Local environment
 
 link_path='/usr/local/bin/marmot'
 self="${0:P}"
 
-## Shared environment
-
-export _MARMOT_HOME="${0:A:h}"
-export _MARMOT_INVOCATION="${0:t}"
+source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
 
@@ -128,7 +130,7 @@ EOF
 }
 
 function print_version() {
-  cat "$_MARMOT_HOME/version"
+  _fs_marmot_version
 }
 
 ## Main
