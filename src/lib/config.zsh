@@ -107,7 +107,7 @@ function __config_repository_paths_to_json() {
     repositories+=("$repository_json")
   done
 
-  _json_to_array "${repositories[@]}"
+  jo -a "${repositories[@]}"
 }
 
 function __config_repository_path_to_json() {

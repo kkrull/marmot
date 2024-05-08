@@ -9,7 +9,3 @@ function _json_jq_update() {
   jq < "$tmp_file" > "$json_file" "$*"
   rm -f "$tmp_file"
 }
-
-function _json_to_array() {
-  jo -a "$@"
-}
