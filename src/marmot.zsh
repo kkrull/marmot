@@ -25,10 +25,15 @@ function main() {
 
   # Distinguish `marmot --help` (top-level usage) from `marmot <command> --help` (command usage)
   zparseopts -E \
-    -help=help_option
+    -help=help_option \
+    -version=version_option
   if [[ $# == 1 && -n "$help_option" ]]
   then
     print_usage
+    exit 0
+  elif [[ $# == 1 && -n "$version_option" ]]
+  then
+    print_version
     exit 0
   fi
 
@@ -83,7 +88,7 @@ function print_usage() {
 $_MARMOT_INVOCATION - Meta Repo Management Tool
 
 SYNOPSIS
-$_MARMOT_INVOCATION --help
+$_MARMOT_INVOCATION [--help] [--version]
 $_MARMOT_INVOCATION command [options...]
 
 DESCRIPTION
@@ -104,6 +109,7 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 OPTIONS
 --help        Show help
+--version     Show version
 
 COMMANDS
 category      Work with categories
@@ -119,6 +125,10 @@ unlink        Remove symlink for this script
 ENVIRONMENT VARIABLES
 MARMOT_META_REPO  Path to the Meta Repo (default: \$HOME/meta)
 EOF
+}
+
+function print_version() {
+  echo "0.4"
 }
 
 ## Main
