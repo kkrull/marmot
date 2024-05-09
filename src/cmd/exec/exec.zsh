@@ -69,29 +69,35 @@ DESCRIPTION
 This command repeats a given shell command on all repositories matching a
 (sub-)category.
 
-It changes directories to each repository before running the command, to
-ensure that any path-specific environment settings are applied.  In this
-fashion, directory-based tools such as \`direnv\`, \`fnm\`, and \`rvm\`
-are able to run and apply their settings before running the command.
-The usefulness of the command may depend upon it, for example if checking
-all repositories in a project to see if they are using the same version of
-Node.js.
+$_MARMOT_INVOCATION changes directories to each repository before running the
+shell command, to ensure that any path-specific environment settings are
+applied.  This is helpful for directory-based tools such as
+\`direnv\`, \`fnm\`, and \`rvm\`, which update the shell's path and other
+parts of its environment when changing directories.  The usefulness of the
+shell command may depend upon it, for example when checking if all
+repositories in a project use the same version of Node.js.
 
 OPTIONS
---direnv        Suppress distracting direnv output when changing directories
+--direnv        Suppress direnv output when changing directories
 --help          Show help
---print         Print the name of each repository on its own line above any command output
+--print         Print repository names above shell command output
 
 TIPS
 git:
-• Add --no-pager to git commands that would normally pipe to less (and pause for input)
+• Add --no-pager to git commands that pipe to less (and pause for input)
 
 EXAMPLES
-• List version of Node.js used in repositories that use direnv+nvm:
-  \$ $_MARMOT_INVOCATION --category platform/node --direnv node --version
+• Check which branches are checked out right now:
+  \$ $_MARMOT_INVOCATION --category project/too-many-microservices \\
+    git branch --show-current
 
 • Grep for matching source code in all repositories:
-  \$ $_MARMOT_INVOCATION --category project/robot-masters git --no-pager grep dungeonType
+  \$ $_MARMOT_INVOCATION --category project/robot-masters --print \\
+    git --no-pager grep dungeonType
+
+• List version of Node.js used in repositories that use direnv+nvm:
+  \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
+    node --version
 EOF
 }
 
