@@ -38,7 +38,7 @@ function main() {
     _MARMOT_EXEC_PRINT_STYLE="heading"
   fi
 
-  selected_repositories
+  _selected_repositories_reply
   project_repository_paths=("${reply[@]}")
 echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
 #exit 0
@@ -55,7 +55,7 @@ echo "project_repository_paths[${#project_repository_paths}]: ${project_reposito
   done
 }
 
-function selected_repositories() {
+function _selected_repositories_reply() {
   # shellcheck disable=SC2086,SC2296
   reply=("${(@f)"$(_config_repository_paths "$(_fs_metadata_file)")"}")
 }
