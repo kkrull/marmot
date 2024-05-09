@@ -38,8 +38,8 @@ function main() {
     _MARMOT_EXEC_PRINT_STYLE="heading"
   fi
 
-  # shellcheck disable=SC2086,SC2296
-  project_repository_paths=("${(@f)"$(_config_repository_paths "$(_fs_metadata_file)")"}")
+  selected_repositories
+  project_repository_paths=("${reply[@]}")
 echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
 #exit 0
   for repository_path in "${project_repository_paths[@]}"
@@ -53,6 +53,11 @@ echo "project_repository_paths[${#project_repository_paths}]: ${project_reposito
 
     (cd "$repository_path" && "$@")
   done
+}
+
+function selected_repositories() {
+  # shellcheck disable=SC2086,SC2296
+  reply=("${(@f)"$(_config_repository_paths "$(_fs_metadata_file)")"}")
 }
 
 function print_usage() {
