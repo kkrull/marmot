@@ -30,15 +30,9 @@ function main() {
   fi
 
   local category_or_subcategory
-  if [[ -n "$category_option" ]]
-  then
-    category_or_subcategory="${category_option[2]}"
-  fi
+  [[ -n "$category_option" ]] && category_or_subcategory="${category_option[2]}"
 
-  if [[ -n "$direnv_option" ]]
-  then
-    export DIRENV_LOG_FORMAT=''
-  fi
+  [[ -n "$direnv_option" ]] && export DIRENV_LOG_FORMAT=''
 
   local print_next_repo_fn
   print_next_repo_fn=$(print_next_repo_fn_name "$print_option")
@@ -53,6 +47,23 @@ function main() {
     (cd "$repository_path" && "$@")
   done
 }
+
+function _selected_repositories_reply() {
+  local config_file category_or_subcategory
+  config_file="$1"
+  category_or_subcategory="$2"
+
+  if [[ -n "$category_or_subcategory" ]]
+  then
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
+  else
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
+  fi
+}
+
+## Reporting
 
 function print_next_repo_fn_name() {
   local print_option
@@ -128,21 +139,6 @@ EXAMPLES
   \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
     node --version
 EOF
-}
-
-function _selected_repositories_reply() {
-  local config_file category_or_subcategory
-  config_file="$1"
-  category_or_subcategory="$2"
-
-  if [[ -n "$category_or_subcategory" ]]
-  then
-    # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
-  else
-    # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
-  fi
 }
 
 ## Main
