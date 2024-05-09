@@ -9,38 +9,30 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} exec"
 
 ## Command
 
-
 function main() {
   zparseopts -D -E \
     -direnv=direnv_option \
     -help=help_option \
-    -print=print_option \
-    -project-file:=project_file_option
+    -print=print_option
+
+  if [[ -n "$help_option" ]]
+  then
+    print_usage
+    exit 0
+  elif [[ $# == 0 ]]
+  then
+    echo "$_MARMOT_INVOCATION: Missing command"
+    exit 1
+  fi
 
   if [[ -n "$direnv_option" ]]
   then
     export DIRENV_LOG_FORMAT=''
   fi
 
-  if [[ -n "$help_option" ]]
-  then
-    print_usage
-    exit 0
-  fi
-
   if [[ -n "$print_option" ]]
   then
     print_style="heading"
-  fi
-
-  if [[ $# == 0 ]]
-  then
-    echo "$_MARMOT_INVOCATION: Missing command"
-    exit 1
-  elif [[ -z "$project_file_option" ]]
-  then
-    echo "$_MARMOT_INVOCATION: Missing --project-file"
-    exit 1
   fi
 
   # shellcheck disable=SC2154
@@ -64,23 +56,31 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Execute a command repeatedly
+$_MARMOT_INVOCATION - Execute a command in multiple repositories
 
 SYNOPSIS
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
+  --category <category|sub-category>
   [--direnv] [--print]
-  --project-file <file>
   <shell command> [args...]
 
 DESCRIPTION
-This repeats a given shell command on all repositories that are part of a project.
+This command repeats a given shell command on all repositories matching a
+(sub-)category.
+
+It changes directories to each repository before running the command, to
+ensure that any path-specific environment settings are applied.  In this
+fashion, directory-based tools such as \`direnv\`, \`fnm\`, and \`rvm\`
+are able to run and apply their settings before running the command.
+The usefulness of the command may depend upon it, for example if checking
+all repositories in a project to see if they are using the same version of
+Node.js.
 
 OPTIONS
 --direnv        Suppress distracting direnv output when changing directories
 --help          Show help
 --print         Print the name of each repository on its own line above any command output
---project-file  The project to operate on (see CONFIGURATION)
 
 TIPS
 git:
@@ -88,14 +88,10 @@ git:
 
 EXAMPLES
 • List version of Node.js used in repositories that use direnv+nvm:
-  \$ $_MARMOT_INVOCATION --direnv --project node-projects.conf node --version
+  \$ $_MARMOT_INVOCATION --category platform/node --direnv node --version
 
 • Grep for matching source code in all repositories:
-  \$ $_MARMOT_INVOCATION --project project.conf git --no-pager grep someFunction
-
-CONFIGURATION
-A project configuration file is a newline-delimited text file containing absolute paths to 1 or more
-Git repositories.
+  \$ $_MARMOT_INVOCATION --category project/robot-masters git --no-pager grep dungeonType
 EOF
 }
 
