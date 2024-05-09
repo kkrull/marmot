@@ -49,12 +49,7 @@ function _fs_metadata_file() {
 }
 
 function _fs_metarepo_home() {
-  if [[ -n "$MARMOT_META_REPO" ]]
-  then
-    echo "$MARMOT_META_REPO"
-  else
-    echo "$HOME/meta"
-  fi
+  echo "${MARMOT_META_REPO-$HOME/meta}"
 }
 
 function _fs_marmot_version() {
