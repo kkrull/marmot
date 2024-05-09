@@ -1,7 +1,7 @@
 #!/bin/zsh -i
 
 emulate -LR zsh
-#set -e
+set -euo pipefail
 
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
@@ -29,9 +29,9 @@ function main() {
     exit 1
   fi
 
+  local category_or_subcategory
   if [[ -n "$category_option" ]]
   then
-    local category_or_subcategory
     category_or_subcategory="${category_option[2]}"
   fi
 
