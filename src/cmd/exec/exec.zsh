@@ -14,6 +14,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} exec"
 
 function main() {
   zparseopts -D -E \
+    -category:=category_option \
     -direnv=direnv_option \
     -help=help_option \
     -print=print_option
@@ -28,6 +29,12 @@ function main() {
     exit 1
   fi
 
+  if [[ -n "$category_option" ]]
+  then
+    local category_or_subcategory
+    category_or_subcategory="${category_option[2]}"
+  fi
+
   if [[ -n "$direnv_option" ]]
   then
     export DIRENV_LOG_FORMAT=''
@@ -38,9 +45,9 @@ function main() {
     _MARMOT_EXEC_PRINT_STYLE="heading"
   fi
 
-  _selected_repositories_reply "$(_fs_metadata_file)"
+  _selected_repositories_reply "$(_fs_metadata_file)" "$category_or_subcategory"
   project_repository_paths=("${reply[@]}")
-echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
+#echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
 #exit 0
   for repository_path in "${project_repository_paths[@]}"
   do
@@ -56,10 +63,18 @@ echo "project_repository_paths[${#project_repository_paths}]: ${project_reposito
 }
 
 function _selected_repositories_reply() {
-  local config_file
+  local config_file category_or_subcategory
   config_file="$1"
-  # shellcheck disable=SC2296
-  reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
+  category_or_subcategory="$2"
+
+  if [[ -n "$category_or_subcategory" ]]
+  then
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
+  else
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
+  fi
 }
 
 function print_usage() {
