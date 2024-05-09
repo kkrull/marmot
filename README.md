@@ -56,9 +56,11 @@ details.
 
 ### Future work
 
-- auto-complete: for zsh.
-- error handling: `set -euo pipefail` more universally. See
+- Auto-complete for zsh.
+- Error handling: `set -euo pipefail` more consistently. See
   <https://www.mulle-kybernetik.com/modern-bash-scripting/state-euxo-pipefail.html>.
-- host: Add `marmot host import <bitbucket.org|github.com>` to register remote
+- `exec`: Consider adding an option for whether to exit on the first failure, or keep going.
+  Or ask the user if/when the first failure happens, since you probably don't know in advance.
+- `host`: Add `marmot host import <host: bitbucket.org|github.com>` to register remote
   repositories and `marmot host clone` to clone them.
-- repo: add `marmot repo migrate --to=github.com`
+- `repo`: Add `marmot repo move <host> repository...`.

@@ -9,15 +9,8 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} exec"
 
 ## Command
 
-# TODO KDK: Consider adding an option for whether to exit on the first failure, or keep going.
-# Or ask the user if/when the first failure happens, since you probably don't know in advance.
 
 function main() {
-  # Parse GNU-style long options
-  # https://stackoverflow.com/questions/59981648/how-to-create-scripts-in-zsh-that-can-accept-out-of-order-arguments
-  # https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#The-zsh_002fzutil-Module
-
-  # TODO KDK: Change it to `--project-file=`, to avoid ambiguity with the command to run
   zparseopts -D -E \
     -direnv=direnv_option \
     -help=help_option \
