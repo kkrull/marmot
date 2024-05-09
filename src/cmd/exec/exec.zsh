@@ -17,7 +17,7 @@ function main() {
     -category:=category_option \
     -direnv=direnv_option \
     -help=help_option \
-    -print=print_option
+    -repo-names:=repo_names_option
 
   if [[ -n "$help_option" ]]
   then
@@ -35,7 +35,9 @@ function main() {
   [[ -n "$direnv_option" ]] && export DIRENV_LOG_FORMAT=''
 
   local print_next_repo_fn
-  print_next_repo_fn=$(print_next_repo_fn_name "$print_option")
+  # shellcheck disable=SC2154
+  print_next_repo_fn=$(print_next_repo_fn_name "${repo_names_option[@]}") \
+    || { echo "$print_next_repo_fn" ; exit 1; }
 
   local project_repository_paths
   _selected_repositories_reply "$(_fs_metadata_file)" "$category_or_subcategory"
@@ -66,14 +68,25 @@ function _selected_repositories_reply() {
 ## Reporting
 
 function print_next_repo_fn_name() {
-  local print_option
-  print_option="$1"
-  if [[ -n "$print_option" ]]
-  then
+  local option_name option_value
+  option_name="${1-}"
+  option_value="${2-inline}"
+
+  case "$option_value" in
+  'heading')
     echo print_next_repo_heading
-  else
+    ;;
+
+  'inline')
     echo print_next_repo_inline
-  fi
+    ;;
+
+  *)
+    # Produce an error message instead of the name of the function
+    echo "$option_name: Invalid value \"$option_value\""
+    exit 1
+    ;;
+  esac
 }
 
 # shellcheck disable=SC2317
@@ -112,7 +125,8 @@ repositories in a project use the same version of Node.js.
 OPTIONS
 --direnv        Suppress direnv output when changing directories
 --help          Show help
---print         Print repository names above shell command output
+--repo-names    Print repository names \`inline\` prior to or as a \`heading\`
+                above shell command output
 
 TIPS
 git:
