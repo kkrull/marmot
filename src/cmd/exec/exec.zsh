@@ -40,10 +40,8 @@ function main() {
     export DIRENV_LOG_FORMAT=''
   fi
 
-  if [[ -n "$print_option" ]]
-  then
-    _MARMOT_EXEC_PRINT_STYLE="heading"
-  fi
+  local print_next_repo_fn
+  print_next_repo_fn=$(print_next_repo_fn_name "$print_option")
 
   local project_repository_paths
   _selected_repositories_reply "$(_fs_metadata_file)" "$category_or_subcategory"
@@ -51,15 +49,30 @@ function main() {
 
   for repository_path in "${project_repository_paths[@]}"
   do
-    if [[ "$_MARMOT_EXEC_PRINT_STYLE" == "heading" ]]
-    then
-      printf "\n%s:\n" "$repository_path"
-    else
-      printf "%s: " "$repository_path"
-    fi
-
+    $print_next_repo_fn "$repository_path"
     (cd "$repository_path" && "$@")
   done
+}
+
+function print_next_repo_fn_name() {
+  local print_option
+  print_option="$1"
+  if [[ -n "$print_option" ]]
+  then
+    echo print_next_repo_heading
+  else
+    echo print_next_repo_inline
+  fi
+}
+
+# shellcheck disable=SC2317
+function print_next_repo_heading() {
+  printf "\n%s:\n" "$@"
+}
+
+# shellcheck disable=SC2317
+function print_next_repo_inline() {
+  printf "%s: " "$@"
 }
 
 function print_usage() {
