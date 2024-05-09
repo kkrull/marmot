@@ -45,10 +45,10 @@ function main() {
     _MARMOT_EXEC_PRINT_STYLE="heading"
   fi
 
+  local project_repository_paths
   _selected_repositories_reply "$(_fs_metadata_file)" "$category_or_subcategory"
   project_repository_paths=("${reply[@]}")
-#echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
-#exit 0
+
   for repository_path in "${project_repository_paths[@]}"
   do
     if [[ "$_MARMOT_EXEC_PRINT_STYLE" == "heading" ]]
@@ -60,21 +60,6 @@ function main() {
 
     (cd "$repository_path" && "$@")
   done
-}
-
-function _selected_repositories_reply() {
-  local config_file category_or_subcategory
-  config_file="$1"
-  category_or_subcategory="$2"
-
-  if [[ -n "$category_or_subcategory" ]]
-  then
-    # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
-  else
-    # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
-  fi
 }
 
 function print_usage() {
@@ -130,6 +115,21 @@ EXAMPLES
   \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
     node --version
 EOF
+}
+
+function _selected_repositories_reply() {
+  local config_file category_or_subcategory
+  config_file="$1"
+  category_or_subcategory="$2"
+
+  if [[ -n "$category_or_subcategory" ]]
+  then
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
+  else
+    # shellcheck disable=SC2296
+    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
+  fi
 }
 
 ## Main
