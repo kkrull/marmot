@@ -43,6 +43,8 @@ details.
 
 ## Versions
 
+- 0.5.1:
+  - [ ] Update [command documentation](./doc/commands.md).
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
