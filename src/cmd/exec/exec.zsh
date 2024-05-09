@@ -35,9 +35,6 @@ function main() {
     print_style="heading"
   fi
 
-  # shellcheck disable=SC2154
-  project_file="${project_file_option[2]}"
-
   # shellcheck disable=SC2086,SC2296
   project_repository_paths=("${(@f)"$(<${project_file})"}")
 
@@ -61,7 +58,7 @@ $_MARMOT_INVOCATION - Execute a command in multiple repositories
 SYNOPSIS
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
-  --category <category|sub-category>
+  [--category <category|sub-category>]
   [--direnv] [--print]
   <shell command> [args...]
 
@@ -87,15 +84,23 @@ git:
 • Add --no-pager to git commands that pipe to less (and pause for input)
 
 EXAMPLES
-• Check which branches are checked out right now:
+• Git: Check which branches are checked out right now:
   \$ $_MARMOT_INVOCATION --category project/too-many-microservices \\
     git branch --show-current
 
-• Grep for matching source code in all repositories:
+• Git: Grep for matching source code in all repositories:
   \$ $_MARMOT_INVOCATION --category project/robot-masters --print \\
     git --no-pager grep dungeonType
 
-• List version of Node.js used in repositories that use direnv+nvm:
+• Git: Pull all the things!
+  \$ $_MARMOT_INVOCATION --print \\
+    git pull --ff-only origin
+
+• Git: Push all the things!
+  \$ $_MARMOT_INVOCATION --print \\
+    git push
+
+• Node: List version of Node.js used in repositories that use direnv+nvm:
   \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
     node --version
 EOF
