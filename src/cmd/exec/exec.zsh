@@ -3,6 +3,9 @@
 emulate -LR zsh
 #set -e
 
+source "$_MARMOT_HOME/lib/config.zsh"
+source "$_MARMOT_HOME/lib/fs.zsh"
+
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} exec"
@@ -32,15 +35,16 @@ function main() {
 
   if [[ -n "$print_option" ]]
   then
-    print_style="heading"
+    _MARMOT_EXEC_PRINT_STYLE="heading"
   fi
 
   # shellcheck disable=SC2086,SC2296
-  project_repository_paths=("${(@f)"$(<${project_file})"}")
-
+  project_repository_paths=("${(@f)"$(_config_repository_paths "$(_fs_metadata_file)")"}")
+echo "project_repository_paths[${#project_repository_paths}]: ${project_repository_paths[*]}"
+#exit 0
   for repository_path in "${project_repository_paths[@]}"
   do
-    if [[ "$print_style" == "heading" ]]
+    if [[ "$_MARMOT_EXEC_PRINT_STYLE" == "heading" ]]
     then
       printf "\n%s:\n" "$repository_path"
     else
