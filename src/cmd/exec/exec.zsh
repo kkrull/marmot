@@ -89,9 +89,21 @@ function print_next_repo_fn_name() {
   esac
 }
 
+__print_next_repo_heading_first=1
+
 # shellcheck disable=SC2317
 function print_next_repo_heading() {
-  printf "\n%s:\n" "$@"
+  case "$__print_next_repo_heading_first" in
+  '1')
+    # Don't start a new paragraph, the first time
+    __print_next_repo_heading_first=0
+    printf "%s:\n" "$@"
+    ;;
+
+  '0')
+    printf "\n%s:\n" "$@"
+    ;;
+  esac
 }
 
 # shellcheck disable=SC2317
