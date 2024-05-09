@@ -11,7 +11,7 @@ function _fs_add_repository_link() {
   category_path="$(_fs_category_path "$category_or_subcategory")"
   repository_name="${repository_path:t}"
   link_path="$category_or_subcategory/$repository_name"
-  (cd "$category_path" && ln -s "$repository_path" "$repository_name")
+  (cd "$category_path" && ln -f -s "$repository_path" "$repository_name")
   echo "$link_path"
 }
 

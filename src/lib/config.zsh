@@ -30,12 +30,38 @@ function _config_add_categories() {
   _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
 }
 
+function _config_add_repositories_to_category() {
+  local config_file category_full_name repository_paths
+  config_file="$1"
+  category_full_name="$2"
+
+  repository_paths=()
+  for repo_path in "${@:3}"
+  do
+    repository_paths+=("${repo_path:A}")
+  done
+
+  # Complex assignment to update one element in the array without deleting the others
+  # https://jqlang.github.io/jq/manual/#complex-assignments
+  local filter
+  filter=$(cat <<EOF
+    (.meta_repo.categories[]
+      | select(.full_name == "$category_full_name")
+      | .repository_paths)
+      += $(jo -a "${repository_paths[@]}")
+EOF
+  )
+
+  _json_jq_update "$config_file" "$filter"
+}
+
 function _config_category_fullnames() {
   local config_file
   config_file="$1"
 
-  jq < "$config_file" \
-    -r '.meta_repo.categories[]?.full_name'
+  jq -r \
+    '.meta_repo.categories[]?.full_name' \
+    "$config_file"
 }
 
 function __config_category_name_to_json() {
@@ -91,8 +117,25 @@ function _config_repository_paths() {
 
   # Treat lack of JSON fields as empty rather than as an error
   # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
-  jq < "$config_file" \
-    -r '.meta_repo.repositories[]?.path'
+  jq -r \
+    '.meta_repo.repositories[]?.path' \
+    "$config_file"
+}
+
+function _config_repository_paths_in_category() {
+  local config_file category_or_subcategory
+  config_file="$1"
+  category_or_subcategory="$2"
+
+  local filter
+  filter=$(cat <<EOF
+    .meta_repo.categories[]
+      | select(.full_name == "$category_or_subcategory")
+      | .repository_paths[]?
+EOF
+  )
+
+  jq -r "$filter" "$config_file"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
