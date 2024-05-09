@@ -58,7 +58,7 @@ echo "project_repository_paths[${#project_repository_paths}]: ${project_reposito
 function _selected_repositories_reply() {
   local config_file
   config_file="$1"
-  # shellcheck disable=SC2086,SC2296
+  # shellcheck disable=SC2296
   reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
 }
 
