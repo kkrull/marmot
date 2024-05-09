@@ -43,9 +43,7 @@ details.
 
 ## Versions
 
-- 0.5: `marmot exec` operates on repositories in a matching category now, instead of a project list.
-  - [ ] Update `exec` to work on those matching repositories.
-  - [ ] Update [documentation](./doc/commands.md)
+- 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
 - 0.3.2: `marmot category create` adds the category to local metadata.
@@ -56,9 +54,11 @@ details.
 
 ### Future work
 
-- auto-complete: for zsh.
-- error handling: `set -euo pipefail` more universally. See
+- Auto-complete for zsh.
+- Error handling: `set -euo pipefail` more consistently. See
   <https://www.mulle-kybernetik.com/modern-bash-scripting/state-euxo-pipefail.html>.
-- host: Add `marmot host import <bitbucket.org|github.com>` to register remote
+- `exec`: Consider adding an option for whether to exit on the first failure, or keep going.
+  Or ask the user if/when the first failure happens, since you probably don't know in advance.
+- `host`: Add `marmot host import <host: bitbucket.org|github.com>` to register remote
   repositories and `marmot host clone` to clone them.
-- repo: add `marmot repo migrate --to=github.com`
+- `repo`: Add `marmot repo move <host> repository...`.

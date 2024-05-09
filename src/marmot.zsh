@@ -115,7 +115,7 @@ OPTIONS
 
 COMMANDS
 category      Work with categories
-exec          Execute a command on a project's repositories
+exec          Execute a command in multiple repositories
 init          Make a new meta repo in the current directory
 meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
