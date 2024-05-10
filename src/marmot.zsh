@@ -94,7 +94,7 @@ $_MARMOT_INVOCATION [--help] [--version]
 $_MARMOT_INVOCATION command [options...]
 
 DESCRIPTION
-Marmot creates and maintains a Meta Repository (e.g. "meta repo"), which can
+Marmot creates and maintains a Meta Repository (e.g. a "meta repo"), which can
 be used to group several Git repositories by 1 or more arbitrary categories.
 
 Marmot creates a directory structure in the meta repo's file system to mirror
@@ -116,7 +116,7 @@ OPTIONS
 COMMANDS
 category      Work with categories
 exec          Execute a command in multiple repositories
-init          Make a new meta repo in the current directory
+init          Make a new meta repo in the default directory
 meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 
