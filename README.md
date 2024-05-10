@@ -14,14 +14,19 @@ developers can still create their own meta repo without needing support or buy-i
 
 ## Contents
 
-- [Architecture and Design Decisions](./doc/decisions.md)
-- [CI/CD Jobs](./doc/cicd-jobs.md)
+### For Users
+
+- [Installation](#installation)
+- [Getting Started](#getting-started)
 - [Commands](./doc/commands.md)
 - [Environment Variables](./doc/environment-variables.md)
-- [Installation](#installation)
+
+### For Developers
+
+- [Architecture and Design Decisions](./doc/decisions.md)
+- [CI/CD Jobs](./doc/cicd-jobs.md)
 - [Task Automation](./doc/task-automation.md)
 - [Tools](./doc/tools.md)
-- [Usage](#usage)
 
 ## Installation
 
@@ -31,12 +36,11 @@ Installs symlinks in `/usr/local/bin/`.
 ./src/marmot.zsh link
 ```
 
-## Usage
+## Getting Started
 
-```sh
-# List available commands
-marmot
-```
+### Create a meta repo
+
+### Going further
 
 See [Commands](./doc/commands.md) and [Environment Variables](./doc/environment-variables.md) for
 details.
@@ -53,14 +57,3 @@ details.
 - 0.3: Add `marmot repo`.
 - 0.2: Add `marmot category` and `marmot init`.
 - 0.1: Add `marmot exec`.
-
-### Future work
-
-- Auto-complete for zsh.
-- Error handling: `set -euo pipefail` more consistently. See
-  <https://www.mulle-kybernetik.com/modern-bash-scripting/state-euxo-pipefail.html>.
-- `exec`: Consider adding an option for whether to exit on the first failure, or keep going.
-  Or ask the user if/when the first failure happens, since you probably don't know in advance.
-- `host`: Add `marmot host import <host: bitbucket.org|github.com>` to register remote
-  repositories and `marmot host clone` to clone them.
-- `repo`: Add `marmot repo move <host> repository...`.
