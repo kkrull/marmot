@@ -11,9 +11,9 @@ documents in Obsidian Notes helped me to organize information, I wondered if som
 be done for Git repositories.
 
 Could I come up with a way to arbitrarily group, query, and operate upon several repositories at
-once?  I'll call this a "category" for now, each of which can have 1 or more "values".  For example,
-a `language` category might have values like `java` and `typescript`, or a `project` category might
-have values for each project you have worked on.
+once?  I'll call this a "category" for now, each of which can have 1 or more "sub-categories".  For
+example, a `language` category might have sub-categories like `java` and `typescript`, or a
+`project` category might have sub-categories for each project you have worked on.
 
 Could I find a way to build my own logical structure of somebody else's code and find a way to cope
 with their sprawling architecture, without having to talk them into condensing their code into
@@ -60,8 +60,8 @@ therefore exist at `~/git/:host/:repository/`.
 
 Next, build a secondary structure at `~/meta/` that has sub-directories for each category and
 symlinks for each repository belonging to a category.  This results in a path
-`~/meta/:category-type/:category-value/:repository/`, where `:repository` is a symlink back to
-wherever the Git repository is actually stored in `~/git/:host/`.
+`~/meta/:category/[:sub-category/]:repository/`, where `:repository` is a symlink back to wherever
+the Git repository is actually stored in `~/git/:host/`.
 
 Using directories for categories should make it possible to scope command-line tools to the
 repositories in the same category (e.g. `find ~/meta/... -exec ...`), while also making it possible
