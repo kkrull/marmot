@@ -118,8 +118,8 @@ $_MARMOT_INVOCATION - Execute a command in multiple repositories
 SYNOPSIS
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
-  [--category <category|sub-category>]
-  [--direnv] [--print]
+  [--category <category|sub-category>] [--direnv]
+  [--repo-names inline|heading]
   <shell command> [args...]
 
 DESCRIPTION
@@ -142,28 +142,35 @@ OPTIONS
 
 TIPS
 git:
-• Add --no-pager to git commands that pipe to less (and pause for input)
+• Add \`--no-pager\` to git commands that pipe to less (and pause for input)
 
 EXAMPLES
-• Git: Check which branches are checked out right now:
-  \$ $_MARMOT_INVOCATION --category project/too-many-microservices \\
-    git branch --show-current
 
-• Git: Grep for matching source code in all repositories:
-  \$ $_MARMOT_INVOCATION --category project/robot-masters --print \\
-    git --no-pager grep dungeonType
-
-• Git: Pull all the things!
-  \$ $_MARMOT_INVOCATION --print \\
-    git pull --ff-only origin
-
-• Git: Push all the things!
-  \$ $_MARMOT_INVOCATION --print \\
-    git push
+Scanning:
 
 • Node: List version of Node.js used in repositories that use direnv+nvm:
   \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
     node --version
+
+Searching and tracing:
+
+• Git: Grep for matching source code in all repositories:
+  \$ $_MARMOT_INVOCATION --category project/robot-masters --repo-names heading \\
+    git --no-pager grep dungeonType
+
+Unified work:
+
+• Git: Check which branches are checked out right now:
+  \$ $_MARMOT_INVOCATION --category project/too-many-microservices \\
+    git branch --show-current
+
+• Git: Pull all the things!
+  \$ $_MARMOT_INVOCATION --repo-names heading \\
+    git pull --ff-only origin
+
+• Git: Push all the things!
+  \$ $_MARMOT_INVOCATION --repo-names heading \\
+    git push
 EOF
 }
 

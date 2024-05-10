@@ -1,58 +1,96 @@
 # `marmot exec`
 
-## `marmot exec [--direnv] --project-file <file> <command> [args...]`
+`marmot exec` - Execute a command in multiple repositories
 
-Run the given command in each repository registered for a project.
-
-`marmot` switches to each repository's root directory before running the command, to capture any
-repository-specific settings that may affect the command.  For example, tools like `direnv` and
-`rvm` update environment variables when you change in or out of a directory managed by those tools.
-
-Example:
+## SYNOPSIS
 
 ```sh
-$ marmot exec --project-file website.conf node --version
-/Users/developer/git/website-api: v20.11.1 #runs from website-api/
-/Users/developer/git/website-app: v14.18.1 #runs from website-app/
+marmot exec --help
+marmot exec
+  [--category <category|sub-category>]
+  [--direnv] [--print]
+  <shell command> [args...]
 ```
 
-### `--direnv` option
+## DESCRIPTION
+
+This command repeats a given shell command on all repositories matching a
+(sub-)category.
+
+marmot exec changes directories to each repository before running the
+shell command, to ensure that any path-specific environment settings are
+applied.  This is helpful for directory-based tools such as
+`direnv`, `fnm`, and `rvm`, which update the shell's path and other
+parts of its environment when changing directories.  The usefulness of the
+shell command may depend upon it, for example when checking if all
+repositories in a project use the same version of Node.js.
+
+## OPTIONS
+
+```text
+--direnv        Suppress direnv output when changing directories
+--help          Show help
+--repo-names    Print repository names `inline` prior to or as a `heading`
+                above shell command output
+```
+
+### `--direnv`
 
 Suppress `direnv` output by setting `DIRENV_LOG_FORMAT=`.
 
-Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
-
 ```sh
-$ marmot exec --direnv --project-file website.conf node --version
+$ marmot exec --direnv node --version
 /Users/developer/git/website-api: v14.18.1
 /Users/developer/git/website-app: v20.11.1
 ```
 
-### `--project-file <file>` option
+Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
-Path to the Marmot project file, which lists local repositories associated with the project.
+## TIPS
 
-This is a text file, containing the absolute path to each repository on its own line.  Example:
+### Git
 
-```text
-/Users/developer/git/website-api
-/Users/developer/git/website-app
-```
+- Add `--no-pager` to git commands that pipe to less (and pause for input)
 
-### Example
+## EXAMPLES
 
-```sh
-$ marmot exec --direnv --project-file website.conf git branch --show-current
-/Users/developer/git/website-api: main
-/Users/developer/git/website-app: develop
-```
+### Scanning
 
-### Interaction with `dotfiles`
-
-My own `dotfiles` are noisy.  I needed a way to turn that off:
+Node: List version of Node.js used in repositories that use direnv+nvm:
 
 ```sh
-DOTFILES_SILENT='' marmot exec --project-file website.conf wc -l README.md
-/Users/developer/git/website-api: 125 README.md
-/Users/developer/git/website-app: 128 README.md
+$ marmot exec --category platform/node --direnv \
+  node --version
+```
+
+### Searching and tracing
+
+Git: Grep for matching source code in all repositories:
+
+```sh
+$ marmot exec --category project/robot-masters --repo-names heading \
+  git --no-pager grep dungeonType
+```
+
+### Unified work
+
+Git: Check which branches are checked out right now:
+
+```sh
+$ marmot exec --category project/too-many-microservices \
+  git branch --show-current
+```
+
+Git: Pull all the things!
+
+```sh
+$ marmot exec --repo-names heading \
+  git pull --ff-only origin
+```
+
+Git: Push all the things!
+
+```sh
+$ marmot exec --repo-names heading \
+  git push
 ```
