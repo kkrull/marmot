@@ -39,7 +39,7 @@ Start with the basics:
 
 Then learn more:
 
-- [Commands](./doc/commands.md)
+- [Commands](./doc/command.md)
 - [Environment Variables](./doc/environment-variables.md)
 - [Why does Marmot exist?](./doc/why.md)
 
@@ -101,8 +101,6 @@ might be useful to you.
 
 ## Versions
 
-- 0.5.1:
-  - [ ] Update [command documentation](./doc/commands.md).
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.

@@ -128,5 +128,5 @@ anyone else.
 
 ## Going further
 
-- [Commands](./commands.md): Reference for all the commands Marmot supports.
+- [Commands](./command.md): Reference for all the commands Marmot supports.
 - [Environment Variables](./environment-variables.md): Customize your environment.

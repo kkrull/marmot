@@ -1,6 +1,4 @@
-# Commands
-
-Marmot is a Command Line Interface with multiple commands, much like Git.
+# `marmot exec`
 
 ## `marmot exec [--direnv] --project-file <file> <command> [args...]`
 
