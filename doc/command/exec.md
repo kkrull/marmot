@@ -59,7 +59,7 @@ Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 Node: List version of Node.js used in repositories that use direnv+nvm:
 
 ```sh
-$ marmot exec --category platform/node --direnv \
+marmot exec --category platform/node --direnv \
   node --version
 ```
 
@@ -68,7 +68,7 @@ $ marmot exec --category platform/node --direnv \
 Git: Grep for matching source code in all repositories:
 
 ```sh
-$ marmot exec --category project/robot-masters --repo-names heading \
+marmot exec --category project/robot-masters --repo-names heading \
   git --no-pager grep dungeonType
 ```
 
@@ -77,20 +77,20 @@ $ marmot exec --category project/robot-masters --repo-names heading \
 Git: Check which branches are checked out right now:
 
 ```sh
-$ marmot exec --category project/too-many-microservices \
+marmot exec --category project/too-many-microservices \
   git branch --show-current
 ```
 
 Git: Pull all the things!
 
 ```sh
-$ marmot exec --repo-names heading \
+marmot exec --repo-names heading \
   git pull --ff-only origin
 ```
 
 Git: Push all the things!
 
 ```sh
-$ marmot exec --repo-names heading \
+marmot exec --repo-names heading \
   git push
 ```
