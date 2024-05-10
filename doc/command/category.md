@@ -2,6 +2,10 @@
 
 `marmot category` - Work with categories
 
+- [`marmot category add`](./category-add.md)
+- [`marmot category create`](./category-create.md)
+- [`marmot category list`](./category-list.md)
+
 ## SYNOPSIS
 
 ```sh

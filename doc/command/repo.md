@@ -2,6 +2,9 @@
 
 `marmot repo` - Work with repositories
 
+- [`marmot repo list`](./repo-list.md)
+- [`marmot repo register`](./repo-register.md)
+
 ## SYNOPSIS
 
 ```sh

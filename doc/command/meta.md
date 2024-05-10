@@ -2,6 +2,8 @@
 
 `marmot meta` - Information about the meta repo
 
+- [`marmot meta home`](./meta-home.md)
+
 ## SYNOPSIS
 
 ```sh
