@@ -1,7 +1,9 @@
-.\" Mandoc manual
-.\" Format: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
-.\" Other conventions: https://linux.die.net/man/7/man-pages
-.\" Render: mandoc <file>
+.\" Manual for marmot
+.\" how-to guide: https://www.cyberciti.biz/faq/linux-unix-creating-a-manpage/
+.\" man-pages reference: https://linux.die.net/man/7/man-pages
+.\" mdoc layout: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
+.\" man macros: https://linux.die.net/man/7/man
+.\" troff syntax: https://www.fileformat.info/info/man-pages/macro.htm
 .Dd "May 10, 2024"
 .Dt MARMOT 1
 .Os
