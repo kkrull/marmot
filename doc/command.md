@@ -10,13 +10,6 @@ Marmot is a Command Line Interface with multiple commands, much like Git.
 
 ## Usage
 
-### OPTIONS
-
-```text
---help        Show help
---version     Show version
-```
-
 ### COMMANDS
 
 ```text

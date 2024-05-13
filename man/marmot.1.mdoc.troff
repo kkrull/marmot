@@ -39,3 +39,14 @@ editor for those Git repositories, without clutter and noise from irrelevant sou
 repositories.
 
 .Sh OPTIONS
+\-\-help
+.Rs
+Show help
+.Re
+
+\-\-version
+.Rs
+Prints the
+.Nm
+suite version that the program came from
+.Re
