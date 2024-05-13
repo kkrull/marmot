@@ -7,11 +7,9 @@
 .Dd "May 10, 2024"
 .Dt MARMOT 1
 .Os
-
 .Sh NAME
 .Nm marmot
 .Nd Meta Repo Management Tool
-
 .Sh SYNOPSIS
 .Nm
 .Op Fl -help
@@ -19,7 +17,6 @@
 .Nm
 .Ar command
 .Op options...
-
 .Sh DESCRIPTION
 .Nm
 creates and maintains a Meta Repository (e.g. a "meta repo"), which can be used to group several Git
@@ -37,16 +34,13 @@ repositories that have that categorization in common.
 In this fashion, users can do things like search closely-related code with `git grep` or open an
 editor for those Git repositories, without clutter and noise from irrelevant sources in unrelated
 repositories.
-
 .Sh OPTIONS
 \-\-help
 .Rs
 Show help
 .Re
-
+.Pp
 \-\-version
 .Rs
-Prints the
-.Nm
-suite version that the program came from
+Prints the suite version that the program came from
 .Re
