@@ -1,7 +1,26 @@
-.TH MARMOT 1 "10 May 2024" "0.5" "marmot man page"
-.SH NAME
-marmot \- Meta Repo Management Tool
+.\" Mandoc manual
+.\" Format: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
+.\" Other conventions: https://linux.die.net/man/7/man-pages
+.\" Render: mandoc <file>
+.Dd "10 May 2024"
+.Dt MARMOT 1
+.Os
 
-.SH SYNOPSIS
-marmot [--help] [--version]
-marmot command [options...]
+.Sh NAME
+.Nm marmot
+.Nd Meta Repo Management Tool
+
+.Sh SYNOPSIS
+.Nm
+.Op Fl -help
+.Op Fl -version
+.Nm
+.Ar command
+.Op options...
+
+.Sh DESCRIPTION
+.Nm
+creates and maintains a Meta Repository (e.g. a "meta repo"), which can be used to group several Git repositories by 1 or more arbitrary categories.
+
+.\" marmot [--help] [--version]
+.\" marmot command [options...]
