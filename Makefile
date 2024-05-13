@@ -15,6 +15,12 @@ install: homebrew-install pre-commit-install
 homebrew-install:
 	brew bundle install --file=./Brewfile
 
+## manual
+
+.PHONY: manual-preview
+manual-preview:
+	man ./man/marmot.1.troff
+
 ## pre-commit
 
 .PHONY: pre-commit-check
