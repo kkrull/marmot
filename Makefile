@@ -17,6 +17,12 @@ homebrew-install:
 
 ## manual
 
+.PHONY: manual
+manual: man/marmot.1.md
+
+man/marmot.1.md: man/marmot.1.mdoc
+	mandoc -T markdown ./man/marmot.1.mdoc > ./man/marmot.1.md
+
 .PHONY: manual-preview
 manual-preview:
 	man -mdoc ./man/marmot.1.mdoc
