@@ -13,16 +13,9 @@ Marmot is a Command Line Interface with multiple commands, much like Git.
 ### COMMANDS
 
 ```text
-category      Work with categories
-exec          Execute a command in multiple repositories
-init          Make a new meta repo in the default directory
-meta          Information about the meta repo (not the data it manages)
-repo          Work with repositories
 ```
 
 ### INSTALLATION
 
 ```text
-link          Add symlink so you can use this on your path
-unlink        Remove symlink for this script
 ```

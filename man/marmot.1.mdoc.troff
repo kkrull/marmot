@@ -44,6 +44,27 @@ Prints the
 .Nm
 suite version that the program came from
 .El
+.Sh COMMANDS
+.Ss MARMOT COMMANDS
+.Bl -tag -width 8n
+.It category
+Work with categories
+.It exec
+Execute a command in multiple repositories
+.It init
+Make a new meta repo in the default directory
+.It meta
+Information about the meta repo (not the data it manages)
+.It repo
+Work with repositories
+.El
+.Ss INSTALLATION
+.Bl -tag -width Ds
+.It link
+Add symlink so you can use this on your path
+.It unlink
+Remove symlink for this script
+.El
 .Sh ENVIRONMENT
 .Bl -tag -width Ds
 .It MARMOT_META_REPO
