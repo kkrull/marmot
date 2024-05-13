@@ -5,9 +5,9 @@ default: check
 .PHONY: check
 check: pre-commit-check
 
-.NOTPARALLEL: install
-.PHONY: install
-install: homebrew-install pre-commit-install
+.NOTPARALLEL: install-dependencies
+.PHONY: install-dependencies
+install-dependencies: homebrew-install pre-commit-install
 
 ## homebrew
 
