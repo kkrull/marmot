@@ -1,1 +1,7 @@
-.TH man 1 "10 May 2024" "0.5" "marmot man page"
+.TH MARMOT 1 "10 May 2024" "0.5" "marmot man page"
+.SH NAME
+marmot \- Meta Repo Management Tool
+
+.SH SYNOPSIS
+marmot [--help] [--version]
+marmot command [options...]
