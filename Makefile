@@ -19,7 +19,7 @@ homebrew-install:
 
 .PHONY: manual-preview
 manual-preview:
-	man ./man/marmot.1.troff
+	man -mdoc ./man/marmot.1.mdoc
 
 ## pre-commit
 
