@@ -44,6 +44,8 @@ Prints the
 .Nm
 suite version that the program came from
 .El
+.Sh ENVIRONMENT
+.Sh FILES
 .Sh EXIT STATUS
 .Bl -tag -width Ds
 .It 0
@@ -51,3 +53,4 @@ Success
 .It 1+
 Invalid command or command failure
 .El
+.Sh EXAMPLES
