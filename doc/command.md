@@ -26,9 +26,3 @@ repo          Work with repositories
 link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
 ```
-
-### ENVIRONMENT VARIABLES
-
-```text
-MARMOT_META_REPO  Path to the Meta Repo (default: $HOME/meta)
-```

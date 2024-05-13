@@ -45,7 +45,13 @@ Prints the
 suite version that the program came from
 .El
 .Sh ENVIRONMENT
+.Bl -tag -width Ds
+.It MARMOT_META_REPO
+Path to the Meta Repo (default: $HOME/meta)
+.El
 .Sh FILES
+.Nm
+reads meta data from $HOME/meta/.marmot/meta-repo.json.
 .Sh EXIT STATUS
 .Bl -tag -width Ds
 .It 0
@@ -53,4 +59,3 @@ Success
 .It 1+
 Invalid command or command failure
 .El
-.Sh EXAMPLES
