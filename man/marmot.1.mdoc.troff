@@ -2,7 +2,7 @@
 .\" Format: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
 .\" Other conventions: https://linux.die.net/man/7/man-pages
 .\" Render: mandoc <file>
-.Dd "10 May 2024"
+.Dd "May 10, 2024"
 .Dt MARMOT 1
 .Os
 
