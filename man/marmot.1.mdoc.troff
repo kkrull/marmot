@@ -8,17 +8,17 @@
 .Dd "May 10, 2024"
 .Dt MARMOT 1
 .Os
-.Sh NAME
+.Sh "NAME"
 .Nm marmot
 .Nd Meta Repo Management Tool
-.Sh SYNOPSIS
+.Sh "SYNOPSIS"
 .Nm
 .Op Fl -help
 .Op Fl -version
 .Nm
 .Ar command
 .Op options...
-.Sh DESCRIPTION
+.Sh "DESCRIPTION"
 .Nm
 creates and maintains a Meta Repository (e.g. a "meta repo"), which can be used to group several Git
 repositories by 1 or more arbitrary categories.
@@ -35,7 +35,7 @@ repositories that have that categorization in common.
 In this fashion, users can do things like search closely-related code with `git grep` or open an
 editor for those Git repositories, without clutter and noise from irrelevant sources in unrelated
 repositories.
-.Sh OPTIONS
+.Sh "OPTIONS"
 .Bl -tag -width Ds
 .It Fl \-help
 Show help
@@ -44,8 +44,8 @@ Prints the
 .Nm
 suite version that the program came from
 .El
-.Sh COMMANDS
-.Ss MARMOT COMMANDS
+.Sh "COMMANDS"
+.Ss "MARMOT COMMANDS"
 .Bl -tag -width 8n
 .It category
 Work with categories
@@ -58,22 +58,22 @@ Information about the meta repo (not the data it manages)
 .It repo
 Work with repositories
 .El
-.Ss INSTALLATION
+.Ss "INSTALLATION COMMANDS"
 .Bl -tag -width Ds
 .It link
 Add symlink so you can use this on your path
 .It unlink
 Remove symlink for this script
 .El
-.Sh ENVIRONMENT
+.Sh "ENVIRONMENT"
 .Bl -tag -width Ds
 .It MARMOT_META_REPO
 Path to the Meta Repo (default: $HOME/meta)
 .El
-.Sh FILES
+.Sh "FILES"
 .Nm
 reads meta data from $HOME/meta/.marmot/meta-repo.json.
-.Sh EXIT STATUS
+.Sh "EXIT STATUS"
 .Bl -tag -width Ds
 .It 0
 Success
