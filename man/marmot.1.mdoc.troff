@@ -4,6 +4,7 @@
 .\" mdoc layout: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
 .\" man macros: https://linux.die.net/man/7/man
 .\" troff syntax: https://www.fileformat.info/info/man-pages/macro.htm
+.\" definitive (mdoc) reference: https://leaf.dragonflybsd.org/cgi/web-man?command=mdoc&section=7
 .Dd "May 10, 2024"
 .Dt MARMOT 1
 .Os
@@ -35,12 +36,11 @@ In this fashion, users can do things like search closely-related code with `git 
 editor for those Git repositories, without clutter and noise from irrelevant sources in unrelated
 repositories.
 .Sh OPTIONS
-\-\-help
-.Rs
+.Bl -tag -width Ds
+.It Fl \-help
 Show help
-.Re
-.Pp
-\-\-version
-.Rs
-Prints the suite version that the program came from
-.Re
+.It Fl \-version
+Prints the
+.Nm
+suite version that the program came from
+.El
