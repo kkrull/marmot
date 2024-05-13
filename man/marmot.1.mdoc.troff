@@ -23,6 +23,3 @@
 .Sh DESCRIPTION
 .Nm
 creates and maintains a Meta Repository (e.g. a "meta repo"), which can be used to group several Git repositories by 1 or more arbitrary categories.
-
-.\" marmot [--help] [--version]
-.\" marmot command [options...]

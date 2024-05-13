@@ -5,6 +5,9 @@ default: check
 .PHONY: check
 check: pre-commit-check
 
+# TODO KDK: Make install task that installs to /usr/local/{bin,man,share}
+# Manual page installation: https://stackoverflow.com/a/33049378/112682
+
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
 install-dependencies: homebrew-install pre-commit-install
