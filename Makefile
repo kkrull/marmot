@@ -24,11 +24,11 @@ homebrew-install:
 manual: man/marmot.1.md
 
 man/marmot.1.md: man/marmot.1.mdoc.troff
-	mandoc -T markdown ./man/marmot.1.mdoc.troff > ./man/marmot.1.md
+	mandoc -T markdown -Wwarning,stop ./man/marmot.1.mdoc.troff > ./man/marmot.1.md
 
 .PHONY: manual-preview
 manual-preview:
-	man -mdoc ./man/marmot.1.mdoc.troff
+	mandoc -Wwarning,stop ./man/marmot.1.mdoc.troff
 
 ## pre-commit
 
