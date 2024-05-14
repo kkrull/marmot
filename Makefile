@@ -20,12 +20,12 @@ check: pre-commit-check
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
-install-dependencies: homebrew-install pre-commit-install
+install-dependencies: brew-install-runtime-deps pre-commit-install
 
 ## homebrew
 
-.PHONY: homebrew-install
-homebrew-install:
+.PHONY: brew-install-runtime-deps
+brew-install-runtime-deps:
 	brew bundle install --file=./Brewfile
 
 ## installation
