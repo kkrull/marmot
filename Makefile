@@ -60,7 +60,7 @@ link-remove:
 
 .PHONY: manual-clean
 manual-clean:
-	$(RM) -r man/groff/*.groff man/markdown/*.md
+	$(RM) man/groff/*.groff man/markdown/*.md
 
 .PHONY: manual-groff
 manual-groff: man/groff/marmot.1.groff
