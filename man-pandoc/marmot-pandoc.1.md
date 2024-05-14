@@ -40,7 +40,7 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 -\-version
 
-: Show version
+: Prints the **marmot** suite version that the program came from
 
 # COMMANDS
 
@@ -83,3 +83,17 @@ clutter and noise from irrelevant sources in unrelated repositories.
 **MARMOT_META_REPO**
 
 : Path to the Meta Repo (default: $HOME/meta)
+
+# FILES
+
+**marmot** reads meta data from $HOME/meta/.marmot/meta-repo.json.
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command or command failure
