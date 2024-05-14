@@ -89,8 +89,11 @@ man/groff/%.groff: man/pandoc/%.md
 
 ### markdown manuals
 
+markdown_manual_objects := $(patsubst man/pandoc/%.md,man/markdown/%.md,$(manual_sources))
+# $(info markdown_manual_objects is $(markdown_manual_objects))
+
 .PHONY: markdown-manual
-markdown-manual: man/markdown/marmot.1.md
+markdown-manual: $(markdown_manual_objects)
 
 .PHONY: markdown-manual-clean
 markdown-manual-clean:
