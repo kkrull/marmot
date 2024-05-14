@@ -30,6 +30,14 @@ man/marmot.1.md: man/marmot.1.mdoc.troff
 manual-preview:
 	mandoc -Wwarning,stop ./man/marmot.1.mdoc.troff
 
+## pandoc
+
+.PHONY: pandoc-manual
+pandoc-manual: man-pandoc/marmot-pandoc.1.groff
+
+man-pandoc/marmot-pandoc.1.groff: man-pandoc/marmot-pandoc.1.md
+	pandoc -f markdown -t man -s -o man-pandoc/marmot-pandoc.1.groff man-pandoc/marmot-pandoc.1.md
+
 ## pre-commit
 
 .PHONY: pre-commit-check
