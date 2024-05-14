@@ -22,9 +22,17 @@ check: pre-commit-check
 .PHONY: clean
 clean: pre-commit-clean manual-clean
 
+.NOTPARALLEL: install
+.PHONY: install
+install: link-install
+
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
 install-dependencies: brew-install-runtime-deps pre-commit-install
+
+.NOTPARALLEL: remove
+.PHONY: remove
+remove: link-remove
 
 ## homebrew
 
@@ -32,23 +40,23 @@ install-dependencies: brew-install-runtime-deps pre-commit-install
 brew-install-runtime-deps:
 	brew bundle install --file=./Brewfile
 
-## installation
+## links
 
-# TODO KDK: Install the manual pages too
-# https://stackoverflow.com/a/33049378/112682
-
-.PHONY: install
-install:
+.PHONY: link-install
+link-install:
 	ln -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
-.PHONY: remove
-remove:
+.PHONY: link-remove
+link-remove:
 	$(RM) $(bindir)/marmot
 
 ## manual
 
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
+
+# TODO KDK: Install the manual pages too
+# https://stackoverflow.com/a/33049378/112682
 
 .PHONY: manual-clean
 manual-clean:
