@@ -31,13 +31,6 @@ install-info:
 
 ### Sources
 
-srcdir := $(realpath src)
-
-.PHONY: source-info
-source-info:
-	$(info Sources:)
-	$(info - srcdir: $(srcdir))
-
 ## Targets
 
 ### Main targets
@@ -45,32 +38,34 @@ source-info:
 .PHONY: all
 all:
 	$(MAKE) -C man all
+	$(MAKE) -C src all
 
 .PHONY: check
 check: pre-commit-check
 
-.NOTPARALLEL: clean
 .PHONY: clean
 clean: pre-commit-clean
 	$(MAKE) -C man clean
+	$(MAKE) -C src clean
 
 .PHONY: info
 info: install-info source-info
 	$(MAKE) -C man info
+	$(MAKE) -C src info
 
-.NOTPARALLEL: install
 .PHONY: install
-install: marmot-install
+install:
 	$(MAKE) -C man install
+	$(MAKE) -C src install
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
 
-.NOTPARALLEL: remove
 .PHONY: remove
-remove: marmot-remove
+remove:
 	$(MAKE) -C man remove
+	$(MAKE) -C src remove
 
 ### homebrew targets
 
@@ -81,17 +76,6 @@ brew-developer-install:
 .PHONY: brew-user-install
 brew-user-install:
 	brew bundle install --file=./Brewfile.user
-
-### marmot targets
-
-.PHONY: marmot-install
-marmot-install:
-	mkdir -p $(bindir)
-	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
-
-.PHONY: marmot-remove
-marmot-remove:
-	$(RM) $(bindir)/marmot
 
 ### pre-commit targets
 
