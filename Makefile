@@ -18,6 +18,10 @@ default: check
 .PHONY: check
 check: pre-commit-check
 
+.NOTPARALLEL: clean
+.PHONY: clean
+clean: pre-commit-clean manual-clean
+
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
 install-dependencies: brew-install-runtime-deps pre-commit-install
@@ -45,6 +49,10 @@ remove:
 
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
+
+.PHONY: manual-clean
+manual-clean:
+	$(RM) -r man/groff/*.groff man/markdown/*.md
 
 .PHONY: manual-groff
 manual-groff: man/groff/marmot.1.groff
