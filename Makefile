@@ -18,18 +18,6 @@ install-dependencies: homebrew-install pre-commit-install
 homebrew-install:
 	brew bundle install --file=./Brewfile
 
-## manual
-
-.PHONY: manual
-manual: man/marmot.1.md
-
-man/marmot.1.md: man/marmot.1.mdoc.troff
-	mandoc -T markdown -Wwarning,stop ./man/marmot.1.mdoc.troff > ./man/marmot.1.md
-
-.PHONY: manual-preview
-manual-preview:
-	mandoc -Wwarning,stop ./man/marmot.1.mdoc.troff
-
 ## pandoc
 
 .PHONY: pandoc-manual
