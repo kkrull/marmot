@@ -11,9 +11,6 @@ export _MARMOT_INVOCATION="${0:t}"
 
 ## Local environment
 
-link_path='/usr/local/bin/marmot'
-self="${0:P}"
-
 source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
@@ -41,18 +38,6 @@ function main() {
 
   command="$1"
   case "$command" in
-  # Installation
-  'link')
-    ln -s "$self" "$link_path"
-    echo "Added symlink: $link_path"
-    ;;
-
-  'unlink')
-    rm -f "$link_path"
-    echo "Removed symlink: $link_path"
-    ;;
-
-  # Commands
   'category')
     shift 1
     exec "$_MARMOT_HOME/cmd/category/category.zsh" "$@"
@@ -119,10 +104,6 @@ exec          Execute a command in multiple repositories
 init          Make a new meta repo in the default directory
 meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
-
-INSTALLATION
-link          Add symlink so you can use this on your path
-unlink        Remove symlink for this script
 
 ENVIRONMENT VARIABLES
 MARMOT_META_REPO  Path to the Meta Repo (default: \$HOME/meta)
