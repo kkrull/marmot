@@ -24,17 +24,29 @@ homebrew-install:
 pandoc-manual: man-pandoc/marmot-pandoc.1.groff
 
 man-pandoc/marmot-pandoc.1.groff: man-pandoc/marmot-pandoc.1.md
-	pandoc ./man-pandoc/marmot-pandoc.1.md -f markdown+definition_lists+line_blocks -o ./man-pandoc/marmot-pandoc.1.groff -s -t man
+	pandoc ./man-pandoc/marmot-pandoc.1.md \
+		-f markdown+definition_lists+line_blocks \
+		-o ./man-pandoc/marmot-pandoc.1.groff \
+		-s \
+		-t man
 
 .PHONY: pandoc-markdown
 pandoc-markdown: ./man-pandoc/marmot-pandoc-simplified.1.md
 
 ./man-pandoc/marmot-pandoc-simplified.1.md: ./man-pandoc/marmot-pandoc.1.md
-	pandoc ./man-pandoc/marmot-pandoc.1.md -f markdown+definition_lists+line_blocks -o ./man-pandoc/marmot-pandoc-simplified.1.md -s -t markdown-definition_lists-line_blocks
+	pandoc ./man-pandoc/marmot-pandoc.1.md \
+		-f markdown+definition_lists+line_blocks \
+		-o ./man-pandoc/marmot-pandoc-simplified.1.md \
+		-s \
+		-t markdown-definition_lists-line_blocks
 
 .PHONY: pandoc-preview
 pandoc-preview:
-	pandoc ./man-pandoc/marmot-pandoc.1.md -f markdown+definition_lists+line_blocks -s -t man | mandoc
+	pandoc ./man-pandoc/marmot-pandoc.1.md \
+		-f markdown+definition_lists+line_blocks \
+		-s \
+		-t man \
+		| mandoc
 
 ## pre-commit
 
