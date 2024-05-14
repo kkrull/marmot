@@ -50,7 +50,7 @@ link-install:
 link-remove:
 	$(RM) $(bindir)/marmot
 
-## manual
+## manuals
 
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
@@ -61,15 +61,30 @@ link-remove:
 PANDOC := pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 
+pandoc_sources := $(wildcard man/pandoc/**.md)
+# $(info pandoc_sources is $(pandoc_sources))
+
+### manuals (groff aka man pages)
+
+groff_objects := $(patsubst man/pandoc/%.md,man/groff/%.groff,$(pandoc_sources))
+# $(info groff_objects is $(groff_objects))
+
 .PHONY: manual-clean
 manual-clean:
-	$(RM) man/groff/*.groff man/markdown/*.md
+	$(RM) man/**/*.groff man/markdown/*.md
 
 .PHONY: manual-groff
-manual-groff: man/groff/marmot.1.groff
+manual-groff: $(groff_objects)
 
 man/groff/%.groff: man/pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
+
+.PHONY: manual-preview
+manual-preview:
+	$(PANDOC) ./man/pandoc/marmot.1.md $(PANDOCFLAGS) -s -t man \
+		| mandoc
+
+### manuals (markdown)
 
 .PHONY: manual-markdown
 manual-markdown: man/markdown/marmot.1.md
@@ -77,11 +92,6 @@ manual-markdown: man/markdown/marmot.1.md
 man/markdown/%.md: man/pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s \
 		-t markdown-definition_lists-line_blocks
-
-.PHONY: manual-preview
-manual-preview:
-	$(PANDOC) ./man/pandoc/marmot.1.md $(PANDOCFLAGS) -s -t man \
-		| mandoc
 
 ## pre-commit
 
