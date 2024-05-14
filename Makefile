@@ -64,6 +64,9 @@ PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 manual_sources := $(wildcard man/pandoc/**.md)
 # $(info manual_sources is $(manual_sources))
 
+.PHONY: manual
+manual: groff-manual markdown-manual
+
 .PHONY: manual-clean
 manual-clean: groff-manual-clean markdown-manual-clean
 
