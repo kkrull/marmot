@@ -2,6 +2,10 @@
 % Kyle Krull
 % May 2024
 
+<!---
+man-pages reference: https://linux.die.net/man/7/man-pages
+-->
+
 # Name
 
 **marmot** - Meta Repo Management Tool
@@ -9,7 +13,7 @@
 # SYNOPSIS
 
 | **marmot** [-\-help] [-\-version]
-| **marmot** _command_ [_options..._]
+| **marmot** *COMMAND* [_options_...]
 
 # DESCRIPTION
 
