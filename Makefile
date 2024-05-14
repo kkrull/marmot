@@ -24,7 +24,7 @@ clean: pre-commit-clean manual-clean
 
 .NOTPARALLEL: install
 .PHONY: install
-install: link-install
+install: groff-manual-install link-install
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
@@ -32,7 +32,7 @@ install-dependencies: brew-install-runtime-deps pre-commit-install
 
 .NOTPARALLEL: remove
 .PHONY: remove
-remove: link-remove
+remove: groff-manual-remove link-remove
 
 ## homebrew
 
@@ -44,7 +44,7 @@ brew-install-runtime-deps:
 
 .PHONY: link-install
 link-install:
-	ln -s $(srcdir)/marmot.zsh $(bindir)/marmot
+	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
 .PHONY: link-remove
 link-remove:
@@ -54,9 +54,6 @@ link-remove:
 
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
-
-# TODO KDK: Install the manual pages too
-# https://stackoverflow.com/a/33049378/112682
 
 PANDOC := pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
@@ -77,8 +74,11 @@ manual-preview:
 
 ### groff manuals (a.k.a man pages)
 
+groff_manual_installed := $(wildcard $(man1dir)/marmot*)
+# $(info groff_manual_installed is $(groff_manual_installed))
+
 groff_manual_objects := $(patsubst man/pandoc/%.md,man/groff/%,$(manual_sources))
-$(info groff_manual_objects is $(groff_manual_objects))
+# $(info groff_manual_objects is $(groff_manual_objects))
 
 .PHONY: groff-manual
 groff-manual: $(groff_manual_objects)
@@ -86,6 +86,15 @@ groff-manual: $(groff_manual_objects)
 .PHONY: groff-manual-clean
 groff-manual-clean:
 	$(RM) man/groff/**.groff
+
+.PHONY: groff-manual-install
+groff-manual-install: $(groff_manual_objects)
+	mkdir -p $(man1dir)
+	install -g 0 -o 0 -m 0644 $(groff_manual_objects) $(man1dir)
+
+.PHONY: groff-manual-remove
+groff-manual-remove:
+	$(RM) $(groff_manual_installed)
 
 man/groff/%: man/pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
