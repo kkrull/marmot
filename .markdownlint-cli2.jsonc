@@ -10,8 +10,10 @@
     "ol-prefix": {
       "style": "one_or_ordered"
     },
+    "single-h1": false,
     "ul-style": {
       "style": "consistent"
     }
-  }
+  },
+  "frontMatter": "^%[\\s\\S][^#]*"
 }
