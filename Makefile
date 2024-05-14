@@ -77,8 +77,8 @@ manual-preview:
 
 ### groff manuals (a.k.a man pages)
 
-groff_manual_objects := $(patsubst man/pandoc/%.md,man/groff/%.groff,$(manual_sources))
-# $(info groff_manual_objects is $(groff_manual_objects))
+groff_manual_objects := $(patsubst man/pandoc/%.md,man/groff/%,$(manual_sources))
+$(info groff_manual_objects is $(groff_manual_objects))
 
 .PHONY: groff-manual
 groff-manual: $(groff_manual_objects)
@@ -87,7 +87,7 @@ groff-manual: $(groff_manual_objects)
 groff-manual-clean:
 	$(RM) man/groff/**.groff
 
-man/groff/%.groff: man/pandoc/%.md
+man/groff/%: man/pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
 
 ### markdown manuals

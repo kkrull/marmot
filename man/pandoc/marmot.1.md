@@ -68,16 +68,6 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 : Work with repositories
 
-## INSTALLATION COMMANDS
-
-**link**
-
-: Add symlink so you can use this on your path
-
-**unlink**
-
-: Remove symlink for this script
-
 # ENVIRONMENT VARIABLES
 
 **MARMOT_META_REPO**
