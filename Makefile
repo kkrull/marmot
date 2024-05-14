@@ -61,8 +61,8 @@ link-remove:
 PANDOC := pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 
-pandoc_sources := $(wildcard man/pandoc/**.md)
-# $(info pandoc_sources is $(pandoc_sources))
+manual_sources := $(wildcard man/pandoc/**.md)
+# $(info manual_sources is $(manual_sources))
 
 .PHONY: manual-clean
 manual-clean:
@@ -75,7 +75,7 @@ manual-preview:
 
 ### groff manuals (a.k.a man pages)
 
-groff_objects := $(patsubst man/pandoc/%.md,man/groff/%.groff,$(pandoc_sources))
+groff_objects := $(patsubst man/pandoc/%.md,man/groff/%.groff,$(manual_sources))
 # $(info groff_objects is $(groff_objects))
 
 .PHONY: manual-groff
