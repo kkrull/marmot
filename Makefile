@@ -44,6 +44,7 @@ brew-install-runtime-deps:
 
 .PHONY: link-install
 link-install:
+	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
 .PHONY: link-remove
