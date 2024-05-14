@@ -15,5 +15,8 @@
       "style": "consistent"
     }
   },
-  "frontMatter": "^%[\\s\\S][^#]*"
+  "frontMatter": "^%[\\s\\S][^#]*",
+  "ignores": [
+    "man/markdown/**"
+  ]
 }

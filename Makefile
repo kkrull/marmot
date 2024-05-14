@@ -23,29 +23,29 @@ homebrew-install:
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
 
-.PHONY: pandoc-manual
-pandoc-manual: man-pandoc/marmot-pandoc.1.groff
+.PHONY: manual-groff
+manual-groff: man/groff/marmot.1.groff
 
-man-pandoc/marmot-pandoc.1.groff: man-pandoc/marmot-pandoc.1.md
-	pandoc ./man-pandoc/marmot-pandoc.1.md \
+man/groff/marmot.1.groff: man/pandoc/marmot.1.md
+	pandoc ./man/pandoc/marmot.1.md \
 		-f markdown+definition_lists+line_blocks \
-		-o ./man-pandoc/marmot-pandoc.1.groff \
+		-o ./man/groff/marmot.1.groff \
 		-s \
 		-t man
 
-.PHONY: pandoc-markdown
-pandoc-markdown: ./man-pandoc/marmot-pandoc-simplified.1.md
+.PHONY: manual-markdown
+manual-markdown: man/markdown/marmot.1.md
 
-./man-pandoc/marmot-pandoc-simplified.1.md: ./man-pandoc/marmot-pandoc.1.md
-	pandoc ./man-pandoc/marmot-pandoc.1.md \
+man/markdown/marmot.1.md: man/pandoc/marmot.1.md
+	pandoc ./man/pandoc/marmot.1.md \
 		-f markdown+definition_lists+line_blocks \
-		-o ./man-pandoc/marmot-pandoc-simplified.1.md \
+		-o ./man/markdown/marmot.1.md \
 		-s \
 		-t markdown-definition_lists-line_blocks
 
-.PHONY: pandoc-preview
-pandoc-preview:
-	pandoc ./man-pandoc/marmot-pandoc.1.md \
+.PHONY: manual-preview
+manual-preview:
+	pandoc ./man/pandoc/marmot.1.md \
 		-f markdown+definition_lists+line_blocks \
 		-s \
 		-t man \
