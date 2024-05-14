@@ -1,12 +1,22 @@
+## Sources and artifacts
+
+# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
+prefix := /usr/local
+exec_prefix := $(prefix)
+bindir := $(exec_prefix)/bin
+
+datarootdir := $(prefix)/share
+mandir := $(datarootdir)/man
+man1dir := $(mandir)/man1
+
+srcdir := $(realpath src)
+
 ## Top-level tasks
 
 default: check
 
 .PHONY: check
 check: pre-commit-check
-
-# TODO KDK: Make install task that installs to /usr/local/{bin,man,share}
-# Manual page installation: https://stackoverflow.com/a/33049378/112682
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
@@ -18,7 +28,20 @@ install-dependencies: homebrew-install pre-commit-install
 homebrew-install:
 	brew bundle install --file=./Brewfile
 
-## pandoc
+## installation
+
+# TODO KDK: Install the manual pages too
+# https://stackoverflow.com/a/33049378/112682
+
+.PHONY: install
+install:
+	ln -s $(srcdir)/marmot.zsh $(bindir)/marmot
+
+.PHONY: remove
+remove:
+	$(RM) $(bindir)/marmot
+
+## manual
 
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
