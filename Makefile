@@ -65,10 +65,10 @@ manual-clean:
 .PHONY: manual-groff
 manual-groff: man/groff/marmot.1.groff
 
-man/groff/marmot.1.groff: man/pandoc/marmot.1.md
-	pandoc ./man/pandoc/marmot.1.md \
+man/groff/%.groff: man/pandoc/%.md
+	pandoc $< \
 		-f markdown+definition_lists+line_blocks \
-		-o ./man/groff/marmot.1.groff \
+		-o $@ \
 		-s \
 		-t man
 
