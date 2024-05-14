@@ -36,7 +36,7 @@ manual-preview:
 pandoc-manual: man-pandoc/marmot-pandoc.1.groff
 
 man-pandoc/marmot-pandoc.1.groff: man-pandoc/marmot-pandoc.1.md
-	pandoc -f markdown -t man -s -o man-pandoc/marmot-pandoc.1.groff man-pandoc/marmot-pandoc.1.md
+	pandoc -f markdown+definition_lists-line_blocks -t man -s -o man-pandoc/marmot-pandoc.1.groff man-pandoc/marmot-pandoc.1.md
 
 ## pre-commit
 
