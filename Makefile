@@ -58,6 +58,9 @@ link-remove:
 # TODO KDK: Install the manual pages too
 # https://stackoverflow.com/a/33049378/112682
 
+PANDOC := pandoc
+PANDOCFLAGS := -f markdown+definition_lists+line_blocks
+
 .PHONY: manual-clean
 manual-clean:
 	$(RM) man/groff/*.groff man/markdown/*.md
@@ -66,28 +69,18 @@ manual-clean:
 manual-groff: man/groff/marmot.1.groff
 
 man/groff/%.groff: man/pandoc/%.md
-	pandoc $< \
-		-f markdown+definition_lists+line_blocks \
-		-o $@ \
-		-s \
-		-t man
+	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
 
 .PHONY: manual-markdown
 manual-markdown: man/markdown/marmot.1.md
 
 man/markdown/%.md: man/pandoc/%.md
-	pandoc $< \
-		-f markdown+definition_lists+line_blocks \
-		-o $@ \
-		-s \
+	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s \
 		-t markdown-definition_lists-line_blocks
 
 .PHONY: manual-preview
 manual-preview:
-	pandoc ./man/pandoc/marmot.1.md \
-		-f markdown+definition_lists+line_blocks \
-		-s \
-		-t man \
+	$(PANDOC) ./man/pandoc/marmot.1.md $(PANDOCFLAGS) -s -t man \
 		| mandoc
 
 ## pre-commit
