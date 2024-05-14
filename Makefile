@@ -29,6 +29,9 @@ install-info:
 
 ### Programs
 
+BREW ?= brew
+PRECOMMIT ?= pre-commit
+
 ### Sources
 
 ## Targets
@@ -71,26 +74,26 @@ remove:
 
 .PHONY: brew-developer-install
 brew-developer-install:
-	brew bundle install --file=./Brewfile.developer
+	$(BREW) bundle install --file=./Brewfile.developer
 
 .PHONY: brew-user-install
 brew-user-install:
-	brew bundle install --file=./Brewfile.user
+	$(BREW) bundle install --file=./Brewfile.user
 
 ### pre-commit targets
 
 .PHONY: pre-commit-check
 pre-commit-check:
-	pre-commit run --all-files
+	$(PRECOMMIT) run --all-files
 
 .PHONY: pre-commit-clean
 pre-commit-clean:
-	pre-commit gc
+	$(PRECOMMIT) gc
 
 .PHONY: pre-commit-install
 pre-commit-install:
-	pre-commit install
+	$(PRECOMMIT) install
 
 .PHONY: pre-commit-update
 pre-commit-update:
-	pre-commit autoupdate
+	$(PRECOMMIT) autoupdate
