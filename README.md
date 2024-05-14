@@ -74,6 +74,12 @@ make install
 path+=(/usr/local/bin)
 ```
 
+If you need to install to somewhere other than `/usr/local/`, run `make` with another `prefix`:
+
+```sh
+prefix=/path/to/bin make install
+```
+
 ### Install dependencies
 
 Marmot uses a few packages that are listed in `Brewfile`.  If you happen to be using Homebrew, try
