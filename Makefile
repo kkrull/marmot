@@ -38,6 +38,10 @@ pandoc-manual: man-pandoc/marmot-pandoc.1.groff
 man-pandoc/marmot-pandoc.1.groff: man-pandoc/marmot-pandoc.1.md
 	pandoc -f markdown+definition_lists-line_blocks -t man -s -o man-pandoc/marmot-pandoc.1.groff man-pandoc/marmot-pandoc.1.md
 
+.PHONY: pandoc-preview
+pandoc-preview:
+	pandoc ./man-pandoc/marmot-pandoc.1.md -s -t man | mandoc
+
 ## pre-commit
 
 .PHONY: pre-commit-check

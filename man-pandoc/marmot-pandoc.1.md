@@ -1,17 +1,17 @@
 % MARMOT(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
 
 # Name
 
 **marmot** - Meta Repo Management Tool
 
-## SYNOPSIS
+# SYNOPSIS
 
-```sh
-marmot [--help] [--version]
-marmot command [options...]
-```
+| **marmot** [-\-help] [-\-version]
+| **marmot** _command_ [_options..._]
 
-## DESCRIPTION
+# DESCRIPTION
 
 Marmot creates and maintains a Meta Repository (e.g. a "meta repo"), which can
 be used to group several Git repositories by 1 or more arbitrary categories.
@@ -28,14 +28,17 @@ In this fashion, users can do things like search closely-related
 code with `git grep` or open an editor for those Git repositories, without
 clutter and noise from irrelevant sources in unrelated repositories.
 
-## OPTIONS
+# OPTIONS
 
-```text
---help        Show help
---version     Show version
-```
+-\-help
 
-## COMMANDS
+: Show help
+
+-\-version
+
+: Show version
+
+# COMMANDS
 
 ```text
 category      Work with categories
@@ -45,14 +48,14 @@ meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 ```
 
-## INSTALLATION
+# INSTALLATION
 
 ```text
 link          Add symlink so you can use this on your path
 unlink        Remove symlink for this script
 ```
 
-## ENVIRONMENT VARIABLES
+# ENVIRONMENT VARIABLES
 
 ```text
 MARMOT_META_REPO  Path to the Meta Repo (default: $HOME/meta)
