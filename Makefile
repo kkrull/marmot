@@ -35,25 +35,25 @@ install-info:
 
 ### Main targets
 
-.PHONY: all
+.PHONY: all check clean info install remove
+
 all:
 	$(MAKE) -C man all
 	$(MAKE) -C src all
 
-.PHONY: check
 check: pre-commit-check
+	$(MAKE) -C man check
+	$(MAKE) -C src check
 
-.PHONY: clean
 clean: pre-commit-clean
 	$(MAKE) -C man clean
 	$(MAKE) -C src clean
 
-.PHONY: info
-info: install-info source-info
+NOTPARALLEL: info
+info: install-info
 	$(MAKE) -C man info
 	$(MAKE) -C src info
 
-.PHONY: install
 install:
 	$(MAKE) -C man install
 	$(MAKE) -C src install
@@ -62,7 +62,6 @@ install:
 .PHONY: install-dependencies
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
 
-.PHONY: remove
 remove:
 	$(MAKE) -C man remove
 	$(MAKE) -C src remove

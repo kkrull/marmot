@@ -47,6 +47,7 @@ all: ;
 check: ;
 clean: ;
 
+.NOTPARALLEL: info
 info: install-info source-info ;
 
 install:

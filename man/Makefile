@@ -47,20 +47,19 @@ source-info:
 
 ### Main targets
 
-.PHONY: all
+.PHONY: all check clean info install remove
+
 all: groff-manual markdown-manual
 
-.PHONY: clean
+check: ;
+
 clean: groff-manual-clean markdown-manual-clean
 
 .NOTPARALLEL: info
-.PHONY: info
 info: install-info source-info groff-manual-info markdown-manual-info
 
-.PHONY: install
 install: groff-manual-install
 
-.PHONY: remove
 remove: groff-manual-remove
 
 ### groff manual (e.g. man pages) targets
