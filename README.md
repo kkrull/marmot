@@ -39,7 +39,9 @@ Start with the basics:
 
 Then learn more:
 
-- [Commands](./doc/command.md)
+- Command Reference:
+  - [Markdown version](./man/markdown/marmot.1.md) (run `make markdown-manual` first)
+  - [Pandoc source](./man/pandoc/marmot.1.md)
 - [Environment Variables](./doc/environment-variables.md)
 - [Why does Marmot exist?](./doc/why.md)
 
@@ -58,7 +60,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 This was developed with Linux, MacOS, and Windows Subsystem for Linux (WSL) in mind.
 
-### Clone and link
+### Clone and install
 
 Clone this repository to a location of your choice.  Marmot doesn't have its own package to install;
 just a single command that needs to be on your path somewhere.  You might try something simple like
@@ -66,18 +68,16 @@ this:
 
 ```sh
 # Might require sudo
-mkdir -p /usr/local/bin
+make install
 
 # Might be unnecessary, if this is already on your path
 path+=(/usr/local/bin)
-
-# Install a symlink; might require sudo again
-./src/marmot.zsh link
 ```
 
 ### Install dependencies
 
-Marmot uses a few packages that are listed in `Brewfile`.  If you happen to be using Homebrew, try this:
+Marmot uses a few packages that are listed in `Brewfile`.  If you happen to be using Homebrew, try
+this:
 
 ```sh
 # Installs `jo` and `jq` commands, if you do not already have them
