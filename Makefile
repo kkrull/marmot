@@ -65,8 +65,7 @@ manual_sources := $(wildcard man/pandoc/**.md)
 # $(info manual_sources is $(manual_sources))
 
 .PHONY: manual-clean
-manual-clean: groff-manual-clean
-	$(RM) man/markdown/*.md
+manual-clean: groff-manual-clean markdown-manual-clean
 
 .PHONY: manual-preview
 manual-preview:
@@ -90,8 +89,12 @@ man/groff/%.groff: man/pandoc/%.md
 
 ### markdown manuals
 
-.PHONY: manual-markdown
-manual-markdown: man/markdown/marmot.1.md
+.PHONY: markdown-manual
+markdown-manual: man/markdown/marmot.1.md
+
+.PHONY: markdown-manual-clean
+markdown-manual-clean:
+	$(RM) man/markdown/**.md
 
 man/markdown/%.md: man/pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s \
