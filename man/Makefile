@@ -50,13 +50,16 @@ source-info:
 .PHONY: all check clean info install remove
 
 all: groff-manual markdown-manual
+	@:
 
-check: ;
+check:
+	@:
 
 clean: groff-manual-clean markdown-manual-clean
 
 .NOTPARALLEL: info
 info: install-info source-info groff-manual-info markdown-manual-info
+	@:
 
 install: groff-manual-install
 

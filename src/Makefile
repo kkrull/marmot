@@ -43,12 +43,18 @@ source-info:
 ### Main targets
 
 .PHONY: all check clean info install remove
-all: ;
-check: ;
-clean: ;
+all:
+	@:
+
+check:
+	@:
+
+clean:
+	@:
 
 .NOTPARALLEL: info
-info: install-info source-info ;
+info: install-info source-info
+	@:
 
 install:
 	mkdir -p $(bindir)

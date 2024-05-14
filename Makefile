@@ -61,6 +61,7 @@ install:
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
+	@:
 
 remove:
 	$(MAKE) -C man remove
