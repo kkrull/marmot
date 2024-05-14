@@ -20,6 +20,8 @@ homebrew-install:
 
 ## pandoc
 
+# Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
+
 .PHONY: pandoc-manual
 pandoc-manual: man-pandoc/marmot-pandoc.1.groff
 
