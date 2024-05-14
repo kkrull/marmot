@@ -1,7 +1,7 @@
 ## Sources and artifacts
 
 # https://www.gnu.org/software/make/manual/make.html#Directory-Variables
-prefix := /usr/local
+prefix ?= /usr/local
 exec_prefix := $(prefix)
 bindir := $(exec_prefix)/bin
 
@@ -21,6 +21,18 @@ check: pre-commit-check
 .NOTPARALLEL: clean
 .PHONY: clean
 clean: pre-commit-clean manual-clean
+
+.PHONY: info
+info:
+	$(info prefix: $(prefix))
+	$(info exec_prefix: $(exec_prefix))
+	$(info bindir: $(bindir))
+
+	$(info datarootdir: $(datarootdir))
+	$(info mandir: $(mandir))
+	$(info man1dir: $(man1dir))
+
+	$(info srcdir: $(srcdir))
 
 .NOTPARALLEL: install
 .PHONY: install
@@ -56,11 +68,11 @@ link-remove:
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages reference: https://linux.die.net/man/7/man-pages
 
-PANDOC := pandoc
+PANDOC ?= pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 
 manual_sources := $(wildcard man/pandoc/**.md)
-# $(info manual_sources is $(manual_sources))
+# $(info manual_sources: $(manual_sources))
 
 .PHONY: manual
 manual: groff-manual markdown-manual
@@ -76,10 +88,10 @@ manual-preview:
 ### groff manuals (a.k.a man pages)
 
 groff_manual_installed := $(wildcard $(man1dir)/marmot*)
-# $(info groff_manual_installed is $(groff_manual_installed))
+# $(info groff_manual_installed: $(groff_manual_installed))
 
 groff_manual_objects := $(patsubst man/pandoc/%.md,man/groff/%,$(manual_sources))
-# $(info groff_manual_objects is $(groff_manual_objects))
+# $(info groff_manual_objects: $(groff_manual_objects))
 
 .PHONY: groff-manual
 groff-manual: $(groff_manual_objects)
@@ -103,7 +115,7 @@ man/groff/%: man/pandoc/%.md
 ### markdown manuals
 
 markdown_manual_objects := $(patsubst man/pandoc/%.md,man/markdown/%.md,$(manual_sources))
-# $(info markdown_manual_objects is $(markdown_manual_objects))
+# $(info markdown_manual_objects: $(markdown_manual_objects))
 
 .PHONY: markdown-manual
 markdown-manual: $(markdown_manual_objects)
