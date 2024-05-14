@@ -65,7 +65,7 @@ install: marmot-install
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
-install-dependencies: brew-runtime-deps-install pre-commit-install
+install-dependencies: brew-developer-install brew-user-install pre-commit-install
 
 .NOTPARALLEL: remove
 .PHONY: remove
@@ -74,9 +74,13 @@ remove: marmot-remove
 
 ### homebrew targets
 
-.PHONY: brew-runtime-deps-install
-brew-runtime-deps-install:
-	brew bundle install --file=./Brewfile
+.PHONY: brew-developer-install
+brew-developer-install:
+	brew bundle install --file=./Brewfile.developer
+
+.PHONY: brew-user-install
+brew-user-install:
+	brew bundle install --file=./Brewfile.user
 
 ### marmot targets
 
