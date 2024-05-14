@@ -75,10 +75,10 @@ man/groff/%.groff: man/pandoc/%.md
 .PHONY: manual-markdown
 manual-markdown: man/markdown/marmot.1.md
 
-man/markdown/marmot.1.md: man/pandoc/marmot.1.md
-	pandoc ./man/pandoc/marmot.1.md \
+man/markdown/%.md: man/pandoc/%.md
+	pandoc $< \
 		-f markdown+definition_lists+line_blocks \
-		-o ./man/markdown/marmot.1.md \
+		-o $@ \
 		-s \
 		-t markdown-definition_lists-line_blocks
 
