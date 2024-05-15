@@ -21,7 +21,7 @@ Run the **marmot** *command*, which interacts with the Meta Repo in some way.  S
 
 A Meta Repo, for the purposes of this program, is a set of references to other Git repositories that
 are grouped into 1 or more categories.  **marmot** helps you work with all the repositories in a
-category, as if they are a single unit.  See *marmot(7)* for details.
+category, as if they are a single unit.  See *marmot(7)* to get started.
 
 # OPTIONS
 
@@ -35,7 +35,7 @@ category, as if they are a single unit.  See *marmot(7)* for details.
 
 # COMMANDS
 
-## META REPO COMMANDS
+## Meta Repo Commands
 
 **init**
 
@@ -45,13 +45,13 @@ category, as if they are a single unit.  See *marmot(7)* for details.
 
 : Information about the meta repo itself
 
-## CATEGORY COMMANDS
+## Category commands
 
 **category**
 
 : Work with categories
 
-## REPOSITORY COMMANDS
+## Repository Commands
 
 **exec**
 
