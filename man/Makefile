@@ -31,6 +31,8 @@ install-info:
 
 ### Programs
 
+FSWATCH ?= fswatch
+MANDOC ?= mandoc
 PANDOC ?= pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 
@@ -91,11 +93,17 @@ groff-manual-install: $(groff_manual_objects)
 .PHONY: groff-manual-preview
 groff-manual-preview:
 	$(PANDOC) $(sources) $(PANDOCFLAGS) -s -t man \
-		| mandoc
+		| $(MANDOC)
 
 .PHONY: groff-manual-remove
 groff-manual-remove:
 	$(RM) $(groff_manual_installed)
+
+.PHONY: groff-manual-watch
+groff-manual-watch:
+	$(FSWATCH) $(sources) \
+		| xargs -I {} echo "$(PANDOC) {} $(PANDOCFLAGS) -s -t man | $(MANDOC)" \
+		| sh
 
 groff/%: pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
