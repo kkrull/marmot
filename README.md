@@ -40,7 +40,6 @@ Start with the basics:
 Then learn more:
 
 - Command Reference:
-  - [Local version](./doc/command.md)
   - [Markdown version](./man/markdown/marmot.1.md) (run `make -C man markdown-manual` first)
   - [Pandoc source](./man/pandoc/marmot.1.md)
 - [Environment Variables](./doc/environment-variables.md)

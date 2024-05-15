@@ -125,8 +125,3 @@ stores its own meta data in its own place–not anyone else's repository–so th
 underlying Git repositories has to change or even know about the existence of a Meta Repo.  This
 empowers individual developers to create their own Meta Repo without needing support or buy-in from
 anyone else.
-
-## Going further
-
-- [Commands](./command.md): Reference for all the commands Marmot supports.
-- [Environment Variables](./environment-variables.md): Customize your environment.
