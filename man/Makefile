@@ -77,7 +77,7 @@ groff-manual: $(groff_manual_objects)
 
 .PHONY: groff-manual-clean
 groff-manual-clean:
-	$(RM) groff/**.groff
+	$(RM) groff/**
 
 .PHONY: groff-manual-info
 groff-manual-info:
