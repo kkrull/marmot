@@ -13,7 +13,7 @@ man-pages reference: https://linux.die.net/man/7/man-pages
 # SYNOPSIS
 
 | **marmot** [-\-help] [-\-version]
-| **marmot** *COMMAND* [*options*...]
+| **marmot** *command* [*options*...]
 
 # DESCRIPTION
 
