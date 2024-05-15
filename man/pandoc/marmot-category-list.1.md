@@ -23,11 +23,11 @@
 
 # ENVIRONMENT VARIABLES
 
-See *marmot-category(1)*.
+See [*marmot-category(1)*](./marmot-category.1.md).
 
 # FILES
 
-See *marmot-category(1)*.
+See [*marmot-category(1)*](./marmot-category.1.md).
 
 # EXIT STATUS
 
@@ -41,6 +41,6 @@ See *marmot-category(1)*.
 
 # SEE ALSO
 
-*marmot(1)*, *marmot-category(1)*
+[*marmot(1)*](./marmot.1.md), [*marmot-category(1)*](./marmot-category.1.md)
 
-*marmot(7)*
+[*marmot(7)*](./marmot.7.md)

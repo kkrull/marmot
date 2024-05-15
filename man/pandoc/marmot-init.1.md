@@ -45,4 +45,4 @@ Initialize a blank Meta Repo in the configured directory, if none is already pre
 
 # SEE ALSO
 
-*marmot(1)*, *marmot(7)*
+[*marmot(1)*](./marmot.1.md), [*marmot(7)*](./marmot.7.md)

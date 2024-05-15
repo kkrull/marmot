@@ -55,6 +55,7 @@
 
 # SEE ALSO
 
-*marmot(1)*, *marmot-repo-list(1)*, *marmot-repo-register(1)*
+[*marmot(1)*](./marmot.1.md), [*marmot-repo-list(1)*](./marmot-repo-list.1.md),
+[*marmot-repo-register(1)*](./marmot-repo-register.1.md)
 
-*marmot(7)*
+[*marmot(7)*](./marmot.7.md)

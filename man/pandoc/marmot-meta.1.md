@@ -51,6 +51,6 @@
 
 # SEE ALSO
 
-*marmot(1)*, *marmot-meta-home(1)*
+[*marmot(1)*](./marmot.1.md), [*marmot-meta-home(1)*](./marmot-meta-home.1.md)
 
-*marmot(7)*
+[*marmot(7)*](./marmot.7.md)

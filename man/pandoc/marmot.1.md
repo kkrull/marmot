@@ -18,11 +18,11 @@ man-pages reference: https://linux.die.net/man/7/man-pages
 # DESCRIPTION
 
 Run the **marmot** *command* with any *args* to interact with the Meta Repo or the repositories it
-tracks, in some way.  See COMMANDS.
+tracks, in some way.  See [COMMANDS](#commands).
 
 A Meta Repo, for the purposes of this program, is a set of references to other Git repositories that
 are grouped into 1 or more categories.  **marmot** helps you work with all the repositories in a
-category, as if they are a single unit.  See *marmot(7)* to get started.
+category, as if they are a single unit.  See [*marmot(7)*](./marmot.7.md) to get started.
 
 # OPTIONS
 
@@ -86,6 +86,8 @@ category, as if they are a single unit.  See *marmot(7)* to get started.
 
 # SEE ALSO
 
-*marmot-category(1)*, *marmot-exec(1)*, *marmot-init(1)*, *marmot-meta(1)*, *marmot-repo(1)*
+[*marmot-category(1)*](./marmot-category.1.md), [*marmot-exec(1)*](./marmot-exec.1.md),
+[*marmot-init(1)*](./marmot-init.1.md), [*marmot-meta(1)*](./marmot-meta.1.md),
+[*marmot-repo(1)*](./marmot-repo.1.md)
 
-*marmot(7)*
+[*marmot(7)*](./marmot.7.md)

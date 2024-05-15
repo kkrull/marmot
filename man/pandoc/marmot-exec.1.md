@@ -126,4 +126,4 @@ marmot exec --repo-names heading \
 
 # SEE ALSO
 
-*marmot(1)*, *marmot(7)*
+[*marmot(1)*](./marmot.1.md), [*marmot(7)*](./marmot.7.md)

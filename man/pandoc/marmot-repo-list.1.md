@@ -28,11 +28,11 @@ lists only the repositories that match the given criteria.
 
 # ENVIRONMENT VARIABLES
 
-See *marmot-repo(1)*.
+See [*marmot-repo(1)*](./marmot-repo.1.md).
 
 # FILES
 
-See *marmot-repo(1)*.
+See [*marmot-repo(1)*](./marmot-repo.1.md).
 
 # EXIT STATUS
 
@@ -54,6 +54,6 @@ marmot repo list --category lang/typescript
 
 # SEE ALSO
 
-*marmot(1)*, *marmot-repo(1)*
+[*marmot(1)*](./marmot.1.md), [*marmot-repo(1)*](./marmot-repo.1.md)
 
-*marmot(7)*
+[*marmot(7)*](./marmot.7.md)
