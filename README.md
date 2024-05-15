@@ -112,7 +112,7 @@ might be useful to you.
   - [x] Make top-level manpage
   - [x] Add `install` rule to `Makefile` and update instructions
   - [x] Port command documentation to Pandoc pages
-  - [ ] Port sub-command documentation to Pandoc pages
+  - [x] Port sub-command documentation to Pandoc pages
   - [ ] Update [Task Automation](./doc/task-automation.md)
   - [ ] Update [Tools](./doc/tools.md)
   - [ ] Add manual build to GitHub Actions
