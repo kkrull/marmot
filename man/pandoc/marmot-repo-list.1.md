@@ -2,7 +2,7 @@
 % Kyle Krull
 % May 2024
 
-# `marmot repo list`
+# NAME
 
 **marmot repo list** - List repositories
 

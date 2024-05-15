@@ -2,7 +2,6 @@
 % Kyle Krull
 % May 2024
 
-
 # NAME
 
 **marmot** - Meta Repo Management Tool
