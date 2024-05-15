@@ -111,10 +111,13 @@ might be useful to you.
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
   - [x] Make top-level manpage
   - [x] Add `install` rule to `Makefile` and update instructions
-  - [ ] Port other command documentation to Pandoc pages
+  - [x] Port command documentation to Pandoc pages
+  - [ ] Port sub-command documentation to Pandoc pages
   - [ ] Update [Task Automation](./doc/task-automation.md)
   - [ ] Update [Tools](./doc/tools.md)
   - [ ] Add manual build to GitHub Actions
+  - [ ] Trim `--help` output
+  - [ ] What to do with `doc/command`?
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
 - 0.3.2: `marmot category create` adds the category to local metadata.
