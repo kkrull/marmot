@@ -40,6 +40,7 @@ Start with the basics:
 Then learn more:
 
 - Command Reference:
+  - Manual Pages: `man marmot` and `man 7 marmot` (run `make install` first)
   - [Markdown version](./man/markdown/marmot.1.md) (run `make -C man markdown-manual` first)
   - [Pandoc source](./man/pandoc/marmot.1.md)
 - [Environment Variables](./doc/environment-variables.md)
@@ -107,7 +108,7 @@ might be useful to you.
 
 ## Versions
 
-- 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
+- 0.5.1: Add installation and manuals.
   - [x] Make top-level manpage
   - [x] Add `install` rule to `Makefile` and update instructions
   - [x] Port command documentation to Pandoc pages
@@ -116,7 +117,10 @@ might be useful to you.
   - [ ] Update [Tools](./doc/tools.md)
   - [ ] Add manual build to GitHub Actions
   - [ ] Trim `--help` output
-  - [ ] What to do with `doc/command`?
+  - [ ] Update version in manuals
+  - [ ] Update version in sources
+  - [x] What to do with `doc/command`?
+- 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
 - 0.3.2: `marmot category create` adds the category to local metadata.
