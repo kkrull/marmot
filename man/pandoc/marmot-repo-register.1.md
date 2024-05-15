@@ -9,11 +9,11 @@
 # SYNOPSIS
 
 | **marmot repo register** [**\-\-help**]
-| **marmot repo register** *repository* [...]
+| **marmot repo register** *repository-path* [...]
 
 # DESCRIPTION
 
-**marmot repo register** registers the each given *repository* path with Marmot, so it can start to
+**marmot repo register** registers the each given *repository-path*, so **marmot** can start to
 categorize and operate upon them.
 
 # OPTIONS

@@ -49,10 +49,10 @@ Add a repository to the "user" category:
 marmot category add user ~/git/dotfiles
 ```
 
-Add some repositories to the "skunkworks" project (lookout Dr. Light):
+Add some repositories to the "wily" project (lookout Dr. Light):
 
 ```sh
-marmot category add project/skunkworks ~/git/robot-masters ~/git/skull-fortress
+marmot category add project/wily ~/git/robot-masters ~/git/skull-fortress
 ```
 
 # SEE ALSO

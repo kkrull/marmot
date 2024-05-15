@@ -20,7 +20,7 @@ lists only the repositories that match the given criteria.
 
 **\-\-category**
 
-: List repositories that have been added to the given category or sub-category
+: List repositories that have been added to the given *category* or *sub-category*
 
 **-\-help**
 

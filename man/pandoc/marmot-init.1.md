@@ -13,7 +13,7 @@
 
 # DESCRIPTION
 
-Initialize a blank meta repo in the configured directory, if none is already present.
+Initialize a blank Meta Repo in the configured directory, if none is already present.
 
 # OPTIONS
 
