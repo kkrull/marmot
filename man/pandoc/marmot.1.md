@@ -6,7 +6,7 @@
 man-pages reference: https://linux.die.net/man/7/man-pages
 -->
 
-# Name
+# NAME
 
 **marmot** - Meta Repo Management Tool
 
@@ -17,20 +17,11 @@ man-pages reference: https://linux.die.net/man/7/man-pages
 
 # DESCRIPTION
 
-Marmot creates and maintains a Meta Repository (e.g. a "meta repo"), which can
-be used to group several Git repositories by 1 or more arbitrary categories.
+Run the **marmot** *command*, which interacts with the Meta Repo in some way.  See COMMANDS.
 
-Marmot creates a directory structure in the meta repo's file system to mirror
-the way that repositories have been categorized, so that there is a
-`/:category/:sub-category` directory for each (sub-)category.  Each directory
-contains symbolic links back to the Git repositories that are grouped into
-the same (sub-)category.
-
-Users run commands from one of these directories in order to restrict
-commands to the Git repositories that have that categorization in common.
-In this fashion, users can do things like search closely-related
-code with `git grep` or open an editor for those Git repositories, without
-clutter and noise from irrelevant sources in unrelated repositories.
+A Meta Repo, for the purposes of this program, is a set of references to other Git repositories that
+are grouped into 1 or more categories.  **marmot** helps you work with all the repositories in a
+category, as if they are a single unit.  See *marmot(7)* for details.
 
 # OPTIONS
 
@@ -48,21 +39,23 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 **init**
 
-: Make a new meta repo in the default directory
+: Create a new meta repo
 
 **meta**
 
-: Information about the meta repo (not the data it manages)
+: Information about the meta repo itself
 
-## CATEGORY AND REPOSITORY COMMANDS
+## CATEGORY COMMANDS
 
 **category**
 
 : Work with categories
 
+## REPOSITORY COMMANDS
+
 **exec**
 
-: Execute a command in multiple repositories
+: Execute a shell command in multiple repositories
 
 **repo**
 
@@ -76,7 +69,9 @@ clutter and noise from irrelevant sources in unrelated repositories.
 
 # FILES
 
-**marmot** reads meta data from $HOME/meta/.marmot/meta-repo.json.
+*$MARMOT_META_REPO/.marmot/meta-repo.json*
+
+: Registered repositories and how they relate to one another
 
 # EXIT STATUS
 
@@ -87,3 +82,7 @@ clutter and noise from irrelevant sources in unrelated repositories.
 1+
 
 : Invalid command or command failure
+
+# SEE ALSO
+
+*marmot(7)*
