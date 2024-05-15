@@ -6,9 +6,6 @@
 
 **marmot repo** - Work with repositories
 
-- [`marmot repo list`](./repo-list.md)
-- [`marmot repo register`](./repo-register.md)
-
 # SYNOPSIS
 
 | **marmot repo** [**\-\-help**]
@@ -26,11 +23,11 @@
 
 # SUB-COMMANDS
 
-**list**
+[**list**](./marmot-repo-list.1.md)
 
 : List repositories
 
-**register**
+[**register**](./marmot-repo-register.1.md)
 
 : Register repositories to manage
 

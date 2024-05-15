@@ -6,8 +6,6 @@
 
 **marmot meta** - Information about the meta repo
 
-- [`marmot meta home`](./meta-home.md)
-
 # SYNOPSIS
 
 | **marmot meta** [**\-\-help**]
@@ -25,7 +23,7 @@
 
 # SUB-COMMANDS
 
-**home**
+[**home**](./marmot-meta-home.1.md)
 
 : Show the base directory of the Meta Repo
 

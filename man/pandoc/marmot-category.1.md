@@ -6,10 +6,6 @@
 
 **marmot category** - Work with categories
 
-- [`marmot category add`](./category-add.md)
-- [`marmot category create`](./category-create.md)
-- [`marmot category list`](./category-list.md)
-
 # SYNOPSIS
 
 | **marmot category** [**\-\-help**]
@@ -27,15 +23,15 @@
 
 # SUB-COMMANDS
 
-**add**
+[**add**](./marmot-category-add.1.md)
 
 : Add repositories to a category
 
-**create**
+[**create**](./marmot-category-create.1.md)
 
 : Create a new category
 
-**list**
+[**list**](./marmot-category-list.1.md)
 
 : List categories
 

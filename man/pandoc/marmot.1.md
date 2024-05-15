@@ -38,27 +38,27 @@ category, as if they are a single unit.  See *marmot(7)* to get started.
 
 ## Meta Repo Commands
 
-**init**
+[**init**](./marmot-init.1.md)
 
 : Create a new meta repo
 
-**meta**
+[**meta**](./marmot-meta.1.md)
 
 : Information about the meta repo itself
 
 ## Category commands
 
-**category**
+[**category**](./marmot-category.1.md)
 
 : Work with categories
 
 ## Repository Commands
 
-**exec**
+[**exec**](./marmot-exec.1.md)
 
 : Execute a shell command in multiple repositories
 
-**repo**
+[**repo**](./marmot-repo.1.md)
 
 : Work with repositories
 
