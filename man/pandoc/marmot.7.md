@@ -148,4 +148,4 @@ $ marmot exec --category webapp git grep -e 'some[_]?field'
 
 # SEE ALSO
 
-*marmot(1)*, *marmot-init(1)*
+*marmot(1)*, *marmot-category(1)*, *marmot-exec(1)*, *marmot-init(1)*, *marmot-repo(1)*

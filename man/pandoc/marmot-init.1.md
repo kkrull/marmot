@@ -8,8 +8,8 @@
 
 # SYNOPSIS
 
-| **marmot** init [\-\-help]
-| **marmot** init
+| **marmot init** [\-\-help]
+| **marmot init**
 
 # DESCRIPTION
 

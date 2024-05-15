@@ -1,0 +1,58 @@
+% MARMOT-META(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
+
+# NAME
+
+**marmot meta** - Information about the meta repo
+
+- [`marmot meta home`](./meta-home.md)
+
+# SYNOPSIS
+
+| **marmot meta** [\-\-help]
+| **marmot meta** *sub-command* [*options*...]
+
+# DESCRIPTION
+
+**marmot meta** reports information about the Meta Repo, itself.
+
+# OPTIONS
+
+-\-help
+
+: Show help
+
+# SUB-COMMANDS
+
+**home**
+
+: Show the base directory of the Meta Repo
+
+# ENVIRONMENT VARIABLES
+
+**MARMOT_META_REPO**
+
+: Path to the Meta Repo (default: $HOME/meta)
+
+# FILES
+
+*$MARMOT_META_REPO/.marmot/meta-repo.json*
+
+: Each category and references to their repositories
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command
+
+# SEE ALSO
+
+*marmot(1)*, *marmot-meta-home(1)*
+
+*marmot(7)*
