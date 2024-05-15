@@ -85,4 +85,4 @@ category, as if they are a single unit.  See *marmot(7)* to get started.
 
 # SEE ALSO
 
-*marmot(7)*
+*marmot-init(1)*, *marmot(7)*
