@@ -11,17 +11,16 @@
 
 # SYNOPSIS
 
-| **marmot repo** [\-\-help]
-| **marmot repo** *sub-command* [*options*...]
+| **marmot repo** [**\-\-help**]
+| **marmot repo** *sub-command* [*args* ...]
 
 # DESCRIPTION
 
-**marmot repo** runs commands that operate upon the Git repositories that have been registered with
-**marmot**.
+**marmot repo** runs the given *sub-command* with any *args* to do something with repositories.
 
 # OPTIONS
 
--\-help
+**-\-help**
 
 : Show help
 

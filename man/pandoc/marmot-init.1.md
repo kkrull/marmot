@@ -8,7 +8,7 @@
 
 # SYNOPSIS
 
-| **marmot init** [\-\-help]
+| **marmot init** [**\-\-help**]
 | **marmot init**
 
 # DESCRIPTION
@@ -17,7 +17,7 @@ Initialize a blank meta repo in the configured directory, if none is already pre
 
 # OPTIONS
 
--\-help
+**-\-help**
 
 : Show help
 

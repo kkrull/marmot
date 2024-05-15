@@ -1,20 +1,46 @@
-# `marmot meta home`
+% MARMOT-META-HOME(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
 
-`marmot meta home` - Show path to Meta Repo
+# NAME
 
-## SYNOPSIS
+**marmot meta home** - Show path to Meta Repo
 
-```sh
-marmot meta home --help
-marmot meta home
-```
+# SYNOPSIS
 
-## DESCRIPTION
+| **marmot meta home** [**\-\-help**]
+| **marmot meta home**
 
-This command shows the base directory of the Meta Repo.
+# DESCRIPTION
 
-## OPTIONS
+**marmot meta home** prints the base directory of the Meta Repo.
 
-```text
---help        Show help
-```
+# OPTIONS
+
+**-\-help**
+
+: Show help
+
+# ENVIRONMENT VARIABLES
+
+See *marmot-meta(1)*.
+
+# FILES
+
+See *marmot-meta(1)*.
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command or command failure
+
+# SEE ALSO
+
+*marmot(1)*, *marmot-meta(1)*
+
+*marmot(7)*

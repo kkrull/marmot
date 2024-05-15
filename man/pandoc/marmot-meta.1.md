@@ -10,16 +10,16 @@
 
 # SYNOPSIS
 
-| **marmot meta** [\-\-help]
-| **marmot meta** *sub-command* [*options*...]
+| **marmot meta** [**\-\-help**]
+| **marmot meta** *sub-command* [*args* ...]
 
 # DESCRIPTION
 
-**marmot meta** reports information about the Meta Repo, itself.
+**marmot meta** runs the given *sub-command* with any *args* to do something on the Meta Repo.
 
 # OPTIONS
 
--\-help
+**-\-help**
 
 : Show help
 

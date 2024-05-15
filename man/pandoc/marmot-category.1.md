@@ -12,17 +12,16 @@
 
 # SYNOPSIS
 
-| **marmot category** [\-\-help]
-| **marmot category** *sub-command* [*options*...]
+| **marmot category** [**\-\-help**]
+| **marmot category** *sub-command* [*args* ...]
 
 # DESCRIPTION
 
-**marmot category** runs commands that operate upon the categories that have been created with
-**marmot**.
+**marmot category** runs the given *sub-command* with any *args*, to do something with categories.
 
 # OPTIONS
 
--\-help
+**-\-help**
 
 : Show help
 

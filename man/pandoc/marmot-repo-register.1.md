@@ -1,23 +1,46 @@
-# `marmot repo register`
+% MARMOT-REPO-REGISTER(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
 
-`marmot repo register` - Register repositories to manage
+# NAME
 
-## SYNOPSIS
+**marmot repo register** - Register repositories to manage
 
-```sh
-marmot repo register --help
-marmot repo register <Git repository> ...
-```
+# SYNOPSIS
 
-## DESCRIPTION
+| **marmot repo register** [**\-\-help**]
+| **marmot repo register** *repository* [...]
 
-This command registers 1 or more repositories with Marmot, so it can manage them.
+# DESCRIPTION
 
-## OPTIONS
+**marmot repo register** registers the each given *repository* path with Marmot, so it can start to
+categorize and operate upon them.
 
---help        Show help
+# OPTIONS
 
-## EXAMPLES
+**-\-help**
+
+: Show help
+
+# ENVIRONMENT VARIABLES
+
+See *marmot-repo(1)*.
+
+# FILES
+
+See *marmot-repo(1)*.
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command or command failure
+
+# EXAMPLE
 
 Register all the things!
 
@@ -26,3 +49,9 @@ find -s ~/git -type d -name .git \
   | sed 's/[/][.]git$//g' \
   | xargs -I {} marmot repo register {}
 ```
+
+# SEE ALSO
+
+*marmot(1)*, *marmot-repo(1)*
+
+*marmot(7)*

@@ -22,7 +22,7 @@ Given options, this lists only the repositories that match the given criteria.
 --help        Show help
 ```
 
-## EXAMPLES
+## EXAMPLE
 
 List registered TypeScript repositories
 

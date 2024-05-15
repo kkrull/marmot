@@ -12,12 +12,13 @@ man-pages reference: https://linux.die.net/man/7/man-pages
 
 # SYNOPSIS
 
-| **marmot** [-\-help] [-\-version]
-| **marmot** *command* [*options*...]
+| **marmot** [**-\-help**] [**-\-version**]
+| **marmot** *command* [*args* ...]
 
 # DESCRIPTION
 
-Run the **marmot** *command*, which interacts with the Meta Repo in some way.  See COMMANDS.
+Run the **marmot** *command* with any *args* to interact with the Meta Repo or the repositories it
+tracks, in some way.  See COMMANDS.
 
 A Meta Repo, for the purposes of this program, is a set of references to other Git repositories that
 are grouped into 1 or more categories.  **marmot** helps you work with all the repositories in a
@@ -25,11 +26,11 @@ category, as if they are a single unit.  See *marmot(7)* to get started.
 
 # OPTIONS
 
--\-help
+**-\-help**
 
 : Show help
 
--\-version
+**-\-version**
 
 : Prints the **marmot** suite version that the program came from
 

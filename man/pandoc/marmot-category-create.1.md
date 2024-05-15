@@ -1,26 +1,46 @@
-# `marmot category create`
+% MARMOT-CATEGORY-CREATE(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
 
-`marmot category create` - Create a category
+# NAME
 
-## SYNOPSIS
+**marmot category create** - Create a category
 
-```sh
-marmot category create --help
-marmot category create <category> [sub-category...]
-```
+# SYNOPSIS
 
-## DESCRIPTION
+| **marmot category create** [**\-\-help**]
+| **marmot category create** *category* [*sub-category* ...]
 
-This command creates a new category and adds its directory structure to the
-meta repo.
+# DESCRIPTION
 
-## OPTIONS
+**marmot category create** creates a new *category* and each given *sub-category*, then adds a
+directory for each to the Meta Repo.
 
-```text
---help        Show help
-```
+# OPTIONS
 
-## EXAMPLES
+**-\-help**
+
+: Show help
+
+# ENVIRONMENT VARIABLES
+
+See *marmot-category(1)*.
+
+# FILES
+
+See *marmot-category(1)*.
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command or command failure
+
+# EXAMPLE
 
 Create a "lang" category with sub-categories "java" and "typescript":
 
@@ -39,3 +59,9 @@ Create a "project" category with sub-categories "dotnet-8-migration" and "skunkw
 ```sh
 marmot category create project dotnet-8-migration skunkworks
 ```
+
+# SEE ALSO
+
+*marmot(1)*, *marmot-category(1)*
+
+*marmot(7)*

@@ -17,7 +17,7 @@ This command registers 1 or more repositories with Marmot, so it can manage them
 
 --help        Show help
 
-## EXAMPLES
+## EXAMPLE
 
 Register all the things!
 

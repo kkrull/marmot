@@ -99,7 +99,7 @@ lrwxr-xr-x somebody  users  ... barservice -> ~/git/barservice
 lrwxr-xr-x somebody  users  ... fooservice -> ~/git/fooservice
 ```
 
-# EXAMPLES
+# EXAMPLE
 
 Note that examples list directories using `~/` instead of the path to an imaginary home directory,
 for brevity.

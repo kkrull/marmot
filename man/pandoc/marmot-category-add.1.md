@@ -1,26 +1,47 @@
-# `marmot category add`
+% MARMOT-CATEGORY-ADD(1) Version 0.5 | Meta Repo Management Tool
+% Kyle Krull
+% May 2024
 
-`marmot category add` - Add repositories to a category
+# NAME
 
-## SYNOPSIS
+**marmot category add** - Add repositories to a category
 
-```sh
-marmot category add --help
-marmot category add <category> <repository> [repository...]
-marmot category add <category>/<sub-category> <repository> [repository...]
-```
+# SYNOPSIS
 
-## DESCRIPTION
+| **marmot category add** [**\-\-help**]
+| **marmot category add** *category* *repository* [...]
+| **marmot category add** *category*/*sub-category* *repository* [...]
 
-This command adds 1 or more repositories to a (sub-)category.
+# DESCRIPTION
 
-## OPTIONS
+**marmot category add** adds each *repository* to a *category* or *sub-category*.  Add a **/**
+between *category* and *sub-category*, to work within a sub-category.
 
-```text
---help        Show help
-```
+# OPTIONS
 
-## EXAMPLES
+**-\-help**
+
+: Show help
+
+# ENVIRONMENT VARIABLES
+
+See *marmot-category(1)*.
+
+# FILES
+
+See *marmot-category(1)*.
+
+# EXIT STATUS
+
+0
+
+: Success
+
+1+
+
+: Invalid command or command failure
+
+# EXAMPLE
 
 Add a repository to the "user" category:
 
@@ -33,3 +54,9 @@ Add some repositories to the "skunkworks" project (lookout Dr. Light):
 ```sh
 marmot category add project/skunkworks ~/git/robot-masters ~/git/skull-fortress
 ```
+
+# SEE ALSO
+
+*marmot(1)*, *marmot-category(1)*
+
+*marmot(7)*

@@ -20,7 +20,7 @@ This command adds 1 or more repositories to a (sub-)category.
 --help        Show help
 ```
 
-## EXAMPLES
+## EXAMPLE
 
 Add a repository to the "user" category:
 

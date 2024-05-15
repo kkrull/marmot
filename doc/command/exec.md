@@ -52,7 +52,7 @@ Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
 - Add `--no-pager` to git commands that pipe to less (and pause for input)
 
-## EXAMPLES
+## EXAMPLE
 
 ### Scanning
 

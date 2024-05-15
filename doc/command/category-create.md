@@ -20,7 +20,7 @@ meta repo.
 --help        Show help
 ```
 
-## EXAMPLES
+## EXAMPLE
 
 Create a "lang" category with sub-categories "java" and "typescript":
 

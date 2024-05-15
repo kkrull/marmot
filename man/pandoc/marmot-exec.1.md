@@ -8,17 +8,19 @@
 
 # SYNOPSIS
 
-| **marmot exec** [\-\-help]
+| **marmot exec** [**\-\-help**]
 | **marmot exec**
   [**\-\-category** *category*|*sub-category*]
   [**\-\-direnv**] [**\-\-repo-names** **heading**|**inline**]
-  *shell-command* [*args*...]
+  *shell-command* [*args* ...]
 
 # DESCRIPTION
 
-**marmot exec** repeats a given *shell-command* on each repository matching a (sub-)category.
+**marmot exec** repeats a given *shell-command* with any *args* on each matching repository.  The
+repositories are either all registered repositories, or those matching a given *category* or
+*sub-category*.
 
-**marmot exec** changes directories to each repository before running the shell command, to ensure
+**marmot exec** changes directories to each repository before running *shell-command*, to ensure
 that any path-specific environment settings are applied.  This is helpful for directory-based tools
 such as `direnv`, `fnm`, and `rvm`, which update the shell's path and other parts of its environment
 when changing directories.  The usefulness of the shell command may depend upon it, for example when
@@ -26,15 +28,15 @@ checking if all repositories in a project use the same version of Node.js.
 
 # OPTIONS
 
-\-\-direnv
+**\-\-direnv**
 
 : Suppress `direnv` output when changing directories
 
-\-\-help
+**\-\-help**
 
 : Show help
 
-\-\-repo\-names
+**\-\-repo\-names**
 
 : Print repository names **inline** prior to output from *shell-command*, or as a **heading** above
 it
@@ -79,7 +81,7 @@ Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
 Add `--no-pager` to git commands that pipe to less (and pause for input).
 
-# EXAMPLES
+# EXAMPLE
 
 ## Scanning
 
