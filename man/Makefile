@@ -16,6 +16,7 @@ bindir := $(exec_prefix)/bin
 datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
+man7dir := $(mandir)/man7
 
 .PHONY: install-info
 install-info:
@@ -28,6 +29,7 @@ install-info:
 	$(info - datarootdir: $(datarootdir))
 	$(info - mandir: $(mandir))
 	$(info - man1dir: $(man1dir))
+	$(info - man7dir: $(man7dir))
 
 ### Programs
 
@@ -39,11 +41,15 @@ PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 ### Sources
 
 sources := $(wildcard pandoc/**.md)
+sources_man1 := $(filter %.1.md,$(sources))
+sources_man7 := $(filter %.7.md,$(sources))
 
 .PHONY: source-info
 source-info:
 	$(info Sources:)
 	$(info - sources: $(sources))
+	$(info - sources_man1: $(sources_man1))
+	$(info - sources_man7: $(sources_man7))
 
 ## Targets
 
@@ -69,11 +75,12 @@ remove: groff-manual-remove
 
 ### groff manual (e.g. man pages) targets
 
-groff_manual_installed := $(wildcard $(man1dir)/marmot*)
-groff_manual_objects := $(patsubst pandoc/%.md,groff/%,$(sources))
+groff_manual_installed := $(wildcard $(man1dir)/marmot* $(man7dir)/marmot*)
+groff_man1_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man1))
+groff_man7_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man7))
 
 .PHONY: groff-manual
-groff-manual: $(groff_manual_objects)
+groff-manual: $(groff_man1_objects) $(groff_man7_objects)
 
 .PHONY: groff-manual-clean
 groff-manual-clean:
@@ -83,12 +90,14 @@ groff-manual-clean:
 groff-manual-info:
 	$(info Groff Manual (man pages):)
 	$(info - groff_manual_installed: $(groff_manual_installed))
-	$(info - groff_manual_objects: $(groff_manual_objects))
+	$(info - groff_man1_objects: $(groff_man1_objects))
+	$(info - groff_man7_objects: $(groff_man7_objects))
 
 .PHONY: groff-manual-install
-groff-manual-install: $(groff_manual_objects)
-	mkdir -p $(man1dir)
-	install -g 0 -o 0 -m 0644 $(groff_manual_objects) $(man1dir)
+groff-manual-install: $(groff_man1_objects) $(groff_man7_objects)
+	mkdir -p $(man1dir) $(man7dir)
+	install -g 0 -o 0 -m 0644 $(groff_man1_objects) $(man1dir)
+	install -g 0 -o 0 -m 0644 $(groff_man7_objects) $(man7dir)
 
 .PHONY: groff-manual-preview
 groff-manual-preview:
