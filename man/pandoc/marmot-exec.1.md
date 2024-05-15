@@ -1,4 +1,4 @@
-% MARMOT-EXEC(1) Version 0.5 | Meta Repo Management Tool
+% MARMOT-EXEC(1) Version 0.5.1 | Meta Repo Management Tool
 % Kyle Krull
 % May 2024
 

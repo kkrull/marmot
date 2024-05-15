@@ -116,8 +116,8 @@ might be useful to you.
   - [ ] Update [Tools](./doc/tools.md)
   - [ ] Add manual build to GitHub Actions
   - [ ] Trim `--help` output
-  - [ ] Update version in manuals
-  - [ ] Update version in sources
+  - [x] Update version in manuals
+  - [x] Update version in sources
   - [x] What to do with `doc/command`?
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
