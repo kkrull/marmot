@@ -126,7 +126,7 @@ OPTIONS
 --repo-names    Print repository names \`inline\` prior to or as a \`heading\`
                 above shell command output
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

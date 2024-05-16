@@ -56,7 +56,7 @@ $_MARMOT_INVOCATION <category> [sub-category ...]
 OPTIONS
 --help        Show help
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

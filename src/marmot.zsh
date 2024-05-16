@@ -87,7 +87,7 @@ init          Make a new meta repo in the default directory
 meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

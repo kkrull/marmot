@@ -55,7 +55,7 @@ register      Register repositories to manage
 OPTIONS
 --help        Show help
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

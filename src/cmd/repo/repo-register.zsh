@@ -39,7 +39,7 @@ $_MARMOT_INVOCATION <repository path> ...
 OPTIONS
 --help        Show help
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

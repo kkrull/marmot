@@ -42,7 +42,7 @@ $_MARMOT_INVOCATION
 OPTIONS
 --help        Show help
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

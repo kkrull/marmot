@@ -61,7 +61,7 @@ list          List categories
 OPTIONS
 --help        Show help
 
-See \`man $_MARMOT_INVOCATION\` for details.
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 
