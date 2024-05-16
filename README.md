@@ -35,7 +35,7 @@ everyone using a reasonably current version of Node.js?).
 Start with the basics:
 
 - [Installation](./doc/installation.md)
-- [Getting Started](./doc/getting-started.md)
+- [Getting Started](./man/markdown/marmot.7.md#getting-started)
 
 Then learn more:
 
