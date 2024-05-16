@@ -39,9 +39,8 @@ Start with the basics:
 
 Then learn more:
 
-- Command Reference:
-  - Manual Pages: `man marmot` and `man 7 marmot` (run `make install-man` first)
-  - [Markdown version](./man/markdown/marmot.1.md) (run `make -C man markdown-manual` first)
+- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make install-man` followed by `man
+  marmot`_)
 - [Why does Marmot exist?](./doc/why.md)
 
 ### For Developers
