@@ -115,7 +115,7 @@ might be useful to you.
   - [ ] Update [Task Automation](./doc/task-automation.md)
   - [ ] Update [Tools](./doc/tools.md)
   - [ ] Add manual build to GitHub Actions
-  - [ ] Trim `--help` output
+  - [x] Trim `--help` output
   - [x] Update version in manuals
   - [x] Update version in sources
   - [x] What to do with `doc/command`?
