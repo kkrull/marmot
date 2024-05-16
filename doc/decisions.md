@@ -22,7 +22,7 @@ multi-repos?
 Building my own meta repo could help, but I would need a tool to maintain it.  Let's call it the
 Meta Repo Management Tool, or "marmot" for short.
 
-## 01: Use widely-available *nix tools
+## 01: Use widely-available linux tools
 
 Implement marmot in *nix tools that are widely-available on the platforms I use - e.g. MacOS, Linux,
 and Windows Subsystem for Linux.  Writing it in ZShell and using readily-available packages should
@@ -33,7 +33,7 @@ translation to put them into a script.
 Since we're doing scripting, organize it into command-based scripts like Git to keep the size and
 scope of responsibility of each file manageable.
 
-## 02: Store metadata as JSON files
+## 02: Store metadata in JSON files
 
 If marmot is going to build a neural network of information about Git repositories, it will need to
 be extendible.  It would also be helpful to have something that's in plain text, in case I need to
@@ -81,7 +81,7 @@ over what changes merit what kind of version bump:
 - Minor version: Increment when adding a new feature (e.g. a command or sub-command).
 - Patch version: Increment when refactoring to prepare for another feature.
 
-## 05: Apply Single Responsibility Principle (SRP) to scripts
+## 05: Apply Single Responsibility Principle
 
 This code is getting more complex, and this is leading to duplication of concepts and algorithms.
 For example, knowledge about the structure of the config file and algorithms for how to find it.

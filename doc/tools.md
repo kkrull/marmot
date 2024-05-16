@@ -153,7 +153,7 @@ Tools used by some part of this project's build, deployment, or development proc
 
 - [`pre-commit`](#pre-commit) includes hooks to ensure files comply with ShellCheck
 
-## Z Shell (e.g. `zsh`)
+## Z Shell
 
 <https://www.zsh.org/>
 
