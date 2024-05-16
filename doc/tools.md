@@ -1,75 +1,116 @@
 # Tools
 
-Tools used by this project.
+Tools used by some part of this project's build, deployment, or development processes.
 
 ## EditorConfig
 
-- Files:
-  - Configuration: `.editorconfig`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+<https://editorconfig.org/>
+
+### Files
+
+- `.editorconfig`: Configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit): includes hooks to ensure files comply with EditorConfig
 
 ## GitHub Actions
 
-- Documentation:
-  - [Jobs](./cicd-jobs.md)
-- Files:
-  - Job definition: `.github/workflows/`
-- Interactions:
-  - `pre-commit`: GitHub Actions runs `pre-commit` to do its checks.
+<https://docs.github.com/en/actions>
+
+### Documentation
+
+- [CI/CD Jobs](./cicd-jobs.md)
+- Workflow Syntax:
+  <https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions>
+
+### Files
+
+- `.github/workflows/`: Job definitions.
+
+### Interactions
+
+- [`pre-commit`](#pre-commit): GitHub Actions contains jobs that run `pre-commit` checks
 
 ## Homebrew
 
-- Documentation:
-  - <https://github.com/Homebrew/homebrew-bundle>
-- Files:
-  - `Brewfile`
-  - `Brewfile.lock.json`
+<https://brew.sh/>
 
-### Usage
+### Documentation
 
-Check:
+- `homebrew-bundle`: <https://github.com/Homebrew/homebrew-bundle>
 
-```sh
-brew bundle check
-```
+### Files
 
-Update `Brewfile`
+- `Brewfile.developer` and `Brewfile.developer.lock.json`: packages for developers, to work on this
+  project.
+- `Brewfile.user` and `Brewfile.user.lock.json`: packages for end users, to run the programs built
+  from these sources.
 
-```sh
-# Dumps all packages installed on the system; requires editing
-brew dump --file=./Brewfile
-```
+## GNU Make
 
-Install tools needed by this repository:
+<https://www.gnu.org/software/make/>
 
-```sh
-brew bundle install
-```
+### Documentation
 
-## `make`
+- GNU Make Manual: <https://www.gnu.org/software/make/manual/>
 
-- Files:
-  - Task definition: `Makefile`
+### Files
 
-## `markdownlint`
+- `Makefile`: targets to build everything and tasks to help set up your environment
+- `man/Makefile`: targets to build manuals
+- `src/Makefile`: targets to build programs
 
-- Files:
-  - Configuration: `.markdownlint.json`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+## `markdownlint-cli2`
+
+<https://github.com/DavidAnson/markdownlint-cli2>
+
+### Documentation
+
+- Configuration JSON schema:
+  <https://github.com/DavidAnson/markdownlint-cli2#markdownlint-cli2jsonc>
+- `pre-commit` hook: <https://github.com/DavidAnson/markdownlint-cli2?tab=readme-ov-file#pre-commit>
+
+### Files
+
+- `.markdownlint-cli2.jsonc`: configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit): includes hooks to ensure files comply with linting rules
 
 ## `pre-commit`
 
-- Files:
-  - Configuration: `.pre-commit.yaml`
-- Usage:
-  - Install Git hooks: `pre-commit install`
-  - Run checks: `pre-commit run --all`
+<https://pre-commit.com/>
 
-## `shellcheck`
+### Files
 
-- Files:
-  - Configuration: `.shellcheckrc`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+- `.pre-commit.yaml`: configures repository sources and hooks to run.  May also contain
+  configuration not already included in any hook-specific configuration files (e.g.
+  `.editorconfig`).
+
+### Interactions
+
+- [EditorConfig](#editorconfig): checked by `pre-commit`
+- [GNU Make](#gnu-make): contains [tasks](./task-automation.md#pre-commit-tasks) to install Git
+  hooks and update `pre-commit` repositories
+- [`markdownlint-cli2`](#markdownlint-cli2): run by `pre-commit`
+- [ShellCheck](#shellcheck): run by `pre-commit`
+
+## ShellCheck
+
+<https://github.com/koalaman/shellcheck>
+
+### Documentation
+
+- Checks (open Pages dropdown): <https://github.com/koalaman/shellcheck/wiki/Checks>
+- Directives: <https://github.com/koalaman/shellcheck/wiki/Directive>
+- Ignoring findings: <https://www.shellcheck.net/wiki/Ignore>
+
+### Files
+
+- `.shellcheckrc`: configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit): includes hooks to ensure files comply with ShellCheck
