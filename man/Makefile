@@ -19,8 +19,8 @@ mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 man7dir := $(mandir)/man7
 
-.PHONY: install-info
-install-info:
+.PHONY: path-debug
+path-debug:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -45,8 +45,8 @@ sources := $(wildcard pandoc/**.md)
 sources_man1 := $(filter %.1.md,$(sources))
 sources_man7 := $(filter %.7.md,$(sources))
 
-.PHONY: source-info
-source-info:
+.PHONY: source-debug
+source-debug:
 	$(info Sources:)
 	$(info - sources: $(sources))
 	$(info - sources_man1: $(sources_man1))
@@ -56,15 +56,15 @@ source-info:
 
 ### Main targets
 
-.PHONY: all clean info install test uninstall
+.PHONY: all clean debug install test uninstall
 
 all:
 	@:
 
 clean: groff-manual-clean markdown-manual-clean
 
-.NOTPARALLEL: info
-info: install-info source-info groff-manual-info markdown-manual-info
+.NOTPARALLEL: debug
+debug: path-debug source-debug groff-manual-debug markdown-manual-debug
 	@:
 
 install:
@@ -95,8 +95,8 @@ groff-manual: $(groff_man1_objects) $(groff_man7_objects)
 groff-manual-clean:
 	$(RM) groff/**
 
-.PHONY: groff-manual-info
-groff-manual-info:
+.PHONY: groff-manual-debug
+groff-manual-debug:
 	$(info Groff Manual (man pages):)
 	$(info - groff_manual_installed: $(groff_manual_installed))
 	$(info - groff_man1_objects: $(groff_man1_objects))
@@ -137,8 +137,8 @@ markdown-manual: $(markdown_manual_objects)
 markdown-manual-clean:
 	$(RM) markdown/**.md
 
-.PHONY: markdown-manual-info
-markdown-manual-info:
+.PHONY: markdown-manual-debug
+markdown-manual-debug:
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
 

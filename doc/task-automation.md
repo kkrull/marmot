@@ -27,7 +27,7 @@ Build everything except documentation.
 
 Remove files that were built by running `make` earlier.
 
-### `make info`
+### `make debug`
 
 Print debugging information, such as the values of variables that affect the build.
 

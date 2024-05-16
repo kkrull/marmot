@@ -16,8 +16,8 @@ datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 
-.PHONY: install-info
-install-info:
+.PHONY: path-debug
+path-debug:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -34,8 +34,8 @@ install-info:
 
 srcdir := $(realpath .)
 
-.PHONY: source-info
-source-info:
+.PHONY: source-debug
+source-debug:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
@@ -43,12 +43,12 @@ source-info:
 
 ### Main targets
 
-.PHONY: all clean info install test uninstall
+.PHONY: all clean debug install test uninstall
 all:
 	@:
 
-.NOTPARALLEL: info
-info: install-info source-info
+.NOTPARALLEL: debug
+debug: path-debug source-debug
 	@:
 
 install:

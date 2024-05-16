@@ -16,8 +16,8 @@ datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 
-.PHONY: install-info
-install-info:
+.PHONY: path-debug
+path-debug:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -39,7 +39,7 @@ PRECOMMIT ?= pre-commit
 
 ### Main targets
 
-.PHONY: all clean info install test uninstall
+.PHONY: all clean debug install test uninstall
 
 all:
 	$(MAKE) -C man all
@@ -49,10 +49,10 @@ clean: pre-commit-clean
 	$(MAKE) -C man clean
 	$(MAKE) -C src clean
 
-.NOTPARALLEL: info
-info: install-info
-	$(MAKE) -C man info
-	$(MAKE) -C src info
+.NOTPARALLEL: debug
+debug: path-debug
+	$(MAKE) -C man debug
+	$(MAKE) -C src debug
 
 install:
 	$(MAKE) -C man install
