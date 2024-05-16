@@ -2,6 +2,7 @@
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages conventions: https://linux.die.net/man/7/man-pages
 
+.PHONY: default
 default: all
 
 ## Environment
@@ -55,12 +56,9 @@ source-info:
 
 ### Main targets
 
-.PHONY: all check clean info install remove
+.PHONY: all clean info install remove test
 
 all: groff-manual markdown-manual
-	@:
-
-check:
 	@:
 
 clean: groff-manual-clean markdown-manual-clean
@@ -72,6 +70,9 @@ info: install-info source-info groff-manual-info markdown-manual-info
 install: groff-manual-install
 
 remove: groff-manual-remove
+
+test:
+	@:
 
 ### groff manual (e.g. man pages) targets
 

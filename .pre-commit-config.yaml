@@ -13,6 +13,12 @@ repos:
     hooks:
       - id: markdownlint-cli2
 
+  # https://github.com/mrtazz/checkmake#pre-commit-usage
+  - repo: https://github.com/mrtazz/checkmake.git
+    rev: 0.2.2
+    hooks:
+      - id: checkmake
+
   # https://pre-commit.com/hooks.html
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0

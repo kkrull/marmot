@@ -21,10 +21,6 @@ calls `make` with the same target, in sub-directories that have their own `Makef
 
 Build everything.
 
-### `make check`
-
-Run all checks.
-
 ### `make clean`
 
 Remove files that were built by running `make` earlier.
@@ -40,6 +36,10 @@ Install all programs and manuals that are sourced in this repository.
 ### `make remove`
 
 Remove all programs and manuals that are sourced in this repository.
+
+### `make test`
+
+Run all tests and checks.
 
 ## Homebrew tasks
 
@@ -74,10 +74,6 @@ symlinks to programs in `$(bindir)`.
 
 ## `pre-commit` tasks
 
-### `make pre-commit-check`
-
-Check all repository files with `pre-commit`.
-
 ### `make pre-commit-clean`
 
 Remove unused tools that were installed by `pre-commit`.
@@ -85,6 +81,10 @@ Remove unused tools that were installed by `pre-commit`.
 ### `make pre-commit-install`
 
 Install Git hooks for `pre-commit`.
+
+### `make pre-commit-run`
+
+Run all `pre-commit` checks on all repository files.
 
 ### `make pre-commit-update`
 

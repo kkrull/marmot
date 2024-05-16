@@ -1,5 +1,6 @@
 # Marmot program
 
+.PHONY: default
 default: all
 
 ## Environment
@@ -42,14 +43,8 @@ source-info:
 
 ### Main targets
 
-.PHONY: all check clean info install remove
+.PHONY: all clean info install remove test
 all:
-	@:
-
-check:
-	@:
-
-clean:
 	@:
 
 .NOTPARALLEL: info
@@ -62,3 +57,6 @@ install:
 
 remove:
 	$(RM) $(bindir)/marmot
+
+test:
+	@:

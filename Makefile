@@ -1,5 +1,6 @@
 # Marmot
 
+.PHONY: default
 default: all
 
 ## Environment
@@ -38,21 +39,17 @@ PRECOMMIT ?= pre-commit
 
 ### Main targets
 
-.PHONY: all check clean info install remove
+.PHONY: all clean info install remove test
 
 all:
 	$(MAKE) -C man all
 	$(MAKE) -C src all
 
-check: pre-commit-check
-	$(MAKE) -C man check
-	$(MAKE) -C src check
-
 clean: pre-commit-clean
 	$(MAKE) -C man clean
 	$(MAKE) -C src clean
 
-NOTPARALLEL: info
+.NOTPARALLEL: info
 info: install-info
 	$(MAKE) -C man info
 	$(MAKE) -C src info
@@ -70,6 +67,10 @@ remove:
 	$(MAKE) -C man remove
 	$(MAKE) -C src remove
 
+test: pre-commit-run
+	$(MAKE) -C man test
+	$(MAKE) -C src test
+
 ### homebrew targets
 
 .PHONY: brew-developer-install
@@ -82,10 +83,6 @@ brew-user-install:
 
 ### pre-commit targets
 
-.PHONY: pre-commit-check
-pre-commit-check:
-	$(PRECOMMIT) run --all-files
-
 .PHONY: pre-commit-clean
 pre-commit-clean:
 	$(PRECOMMIT) gc
@@ -93,6 +90,10 @@ pre-commit-clean:
 .PHONY: pre-commit-install
 pre-commit-install:
 	$(PRECOMMIT) install
+
+.PHONY: pre-commit-run
+pre-commit-run:
+	$(PRECOMMIT) run --all-files
 
 .PHONY: pre-commit-update
 pre-commit-update:
