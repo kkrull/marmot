@@ -1,4 +1,5 @@
 # https://pre-commit.com/index.html#adding-pre-commit-plugins-to-your-project
+exclude: ^man/markdown/.*$
 repos:
   # https://github.com/editorconfig-checker/editorconfig-checker.python?tab=readme-ov-file#usage-with-the-pre-commit-git-hooks-framework
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python

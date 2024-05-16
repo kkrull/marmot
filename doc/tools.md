@@ -123,6 +123,12 @@ Tools used by some part of this project's build, deployment, or development proc
 
 <https://pre-commit.com/>
 
+### Documentation
+
+- Configuration syntax: <https://pre-commit.com/#pre-commit-configyaml---top-level>
+- Installation: <https://pre-commit.com/#install>
+- Supported Hooks: <https://pre-commit.com/hooks.html>
+
 ### Files
 
 - `.pre-commit.yaml`: configures repository sources and hooks to run.  May also contain
