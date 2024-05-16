@@ -2,13 +2,13 @@
 # Guide: https://eddieantonio.ca/blog/2015/12/18/authoring-manpages-in-markdown-with-pandoc/
 # man-pages conventions: https://linux.die.net/man/7/man-pages
 
+.PHONY: default
 default: all
 
 ## Environment
 
 ### Installation directories
 
-# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
@@ -18,8 +18,8 @@ mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 man7dir := $(mandir)/man7
 
-.PHONY: install-info
-install-info:
+.PHONY: path-debug
+path-debug:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -44,34 +44,42 @@ sources := $(wildcard pandoc/**.md)
 sources_man1 := $(filter %.1.md,$(sources))
 sources_man7 := $(filter %.7.md,$(sources))
 
-.PHONY: source-info
-source-info:
+.PHONY: source-debug
+source-debug:
 	$(info Sources:)
 	$(info - sources: $(sources))
 	$(info - sources_man1: $(sources_man1))
 	$(info - sources_man7: $(sources_man7))
 
-## Targets
+## Standard Targets
 
-### Main targets
-
-.PHONY: all check clean info install remove
-
-all: groff-manual markdown-manual
-	@:
-
-check:
+.PHONY: all clean install test uninstall
+all:
 	@:
 
 clean: groff-manual-clean markdown-manual-clean
 
-.NOTPARALLEL: info
-info: install-info source-info groff-manual-info markdown-manual-info
+install:
 	@:
 
-install: groff-manual-install
+test:
+	@:
 
-remove: groff-manual-remove
+uninstall: groff-manual-uninstall
+
+## Other Targets
+
+.PHONY: debug
+.NOTPARALLEL: debug
+debug: path-debug source-debug groff-manual-debug markdown-manual-debug
+	@:
+
+.PHONY:
+install-man: groff-manual-install
+
+.PHONY: man
+man: groff-manual markdown-manual
+	@:
 
 ### groff manual (e.g. man pages) targets
 
@@ -86,8 +94,8 @@ groff-manual: $(groff_man1_objects) $(groff_man7_objects)
 groff-manual-clean:
 	$(RM) groff/**
 
-.PHONY: groff-manual-info
-groff-manual-info:
+.PHONY: groff-manual-debug
+groff-manual-debug:
 	$(info Groff Manual (man pages):)
 	$(info - groff_manual_installed: $(groff_manual_installed))
 	$(info - groff_man1_objects: $(groff_man1_objects))
@@ -104,8 +112,8 @@ groff-manual-preview:
 	$(PANDOC) $(sources) $(PANDOCFLAGS) -s -t man \
 		| $(MANDOC)
 
-.PHONY: groff-manual-remove
-groff-manual-remove:
+.PHONY: groff-manual-uninstall
+groff-manual-uninstall:
 	$(RM) $(groff_manual_installed)
 
 .PHONY: groff-manual-watch
@@ -120,6 +128,7 @@ groff/%: pandoc/%.md
 ### markdown manual targets
 
 markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
+markdown_manual_objects_dir := markdown
 
 .PHONY: markdown-manual
 markdown-manual: $(markdown_manual_objects)
@@ -128,11 +137,19 @@ markdown-manual: $(markdown_manual_objects)
 markdown-manual-clean:
 	$(RM) markdown/**.md
 
-.PHONY: markdown-manual-info
-markdown-manual-info:
+.PHONY: markdown-manual-debug
+markdown-manual-debug:
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
+	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
+
+# Make sure directory exists before building targets
+# https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
+$(markdown_manual_objects): | $(markdown_manual_objects_dir)
+
+$(markdown_manual_objects_dir):
+	mkdir -p markdown
 
 markdown/%.md: pandoc/%.md
-	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s \
+	$(PANDOC) "$<" $(PANDOCFLAGS) -o "$@" -s \
 		-t markdown-definition_lists-line_blocks

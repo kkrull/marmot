@@ -1,12 +1,12 @@
-# Marmot program
+# Marmot programs
 
+.PHONY: default
 default: all
 
 ## Environment
 
 ### Installation directories
 
-# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
@@ -15,8 +15,8 @@ datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 
-.PHONY: install-info
-install-info:
+.PHONY: path-debug
+path-debug:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -33,32 +33,33 @@ install-info:
 
 srcdir := $(realpath .)
 
-.PHONY: source-info
-source-info:
+.PHONY: source-debug
+source-debug:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
-## Targets
+## Standard Targets
 
-### Main targets
-
-.PHONY: all check clean info install remove
+.PHONY: all clean install test uninstall
 all:
 	@:
 
-check:
-	@:
-
 clean:
-	@:
-
-.NOTPARALLEL: info
-info: install-info source-info
 	@:
 
 install:
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
-remove:
+test:
+	@:
+
+uninstall:
 	$(RM) $(bindir)/marmot
+
+## Other Targets
+
+.PHONY: debug
+.NOTPARALLEL: debug
+debug: path-debug source-debug
+	@:

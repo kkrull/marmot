@@ -27,4 +27,4 @@ jobs:
         version: 3.2
 
     - name: Build
-      run: make -C man all
+      run: make -C man man

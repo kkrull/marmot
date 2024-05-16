@@ -47,6 +47,8 @@ Tools used by some part of this project's build, deployment, or development proc
 ### Documentation
 
 - GNU Make Manual: <https://www.gnu.org/software/make/manual/>
+- Standard Targets:
+  <https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets>
 
 ### Files
 
@@ -121,6 +123,12 @@ Tools used by some part of this project's build, deployment, or development proc
 
 <https://pre-commit.com/>
 
+### Documentation
+
+- Configuration syntax: <https://pre-commit.com/#pre-commit-configyaml---top-level>
+- Installation: <https://pre-commit.com/#install>
+- Supported Hooks: <https://pre-commit.com/hooks.html>
+
 ### Files
 
 - `.pre-commit.yaml`: configures repository sources and hooks to run.  May also contain
@@ -130,8 +138,8 @@ Tools used by some part of this project's build, deployment, or development proc
 ### Interactions
 
 - [EditorConfig](#editorconfig) is checked by `pre-commit`
-- [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-tasks) to install Git hooks
-  and update `pre-commit` repositories
+- [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-targets) to install Git
+  hooks and update `pre-commit` repositories
 - [`markdownlint-cli2`](#markdownlint-cli2) is run by `pre-commit`
 - [ShellCheck](#shellcheck) is run by `pre-commit`
 
@@ -153,7 +161,7 @@ Tools used by some part of this project's build, deployment, or development proc
 
 - [`pre-commit`](#pre-commit) includes hooks to ensure files comply with ShellCheck
 
-## Z Shell (e.g. `zsh`)
+## Z Shell
 
 <https://www.zsh.org/>
 

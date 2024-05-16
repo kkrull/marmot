@@ -35,14 +35,12 @@ everyone using a reasonably current version of Node.js?).
 Start with the basics:
 
 - [Installation](./doc/installation.md)
-- [Getting Started](./doc/getting-started.md)
+- [Getting Started](./man/markdown/marmot.7.md#getting-started)
 
 Then learn more:
 
-- Command Reference:
-  - Manual Pages: `man marmot` and `man 7 marmot` (run `make install` first)
-  - [Markdown version](./man/markdown/marmot.1.md) (run `make -C man markdown-manual` first)
-- [Environment Variables](./doc/environment-variables.md)
+- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make install-man` followed by `man
+  marmot`_)
 - [Why does Marmot exist?](./doc/why.md)
 
 ### For Developers
