@@ -1,7 +1,6 @@
 # Getting Started
 
-Please make sure you have completed the [installation instructions](../README.md#installation),
-first.
+Please make sure you have completed the [installation instructions](./installation.md), first.
 
 Now prepare to use your imagination.
 
