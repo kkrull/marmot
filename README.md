@@ -42,7 +42,6 @@ Then learn more:
 - Command Reference:
   - Manual Pages: `man marmot` and `man 7 marmot` (run `make install` first)
   - [Markdown version](./man/markdown/marmot.1.md) (run `make -C man markdown-manual` first)
-- [Environment Variables](./doc/environment-variables.md)
 - [Why does Marmot exist?](./doc/why.md)
 
 ### For Developers
