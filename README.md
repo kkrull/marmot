@@ -59,17 +59,6 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 ## Versions
 
 - 0.5.1: Add installation and manuals.
-  - [x] Make top-level manpage
-  - [x] Add `install` rule to `Makefile` and update instructions
-  - [x] Port command documentation to Pandoc pages
-  - [x] Port sub-command documentation to Pandoc pages
-  - [x] Update [Task Automation](./doc/task-automation.md)
-  - [x] Update [Tools](./doc/tools.md)
-  - [ ] Add manual build to GitHub Actions
-  - [x] Trim `--help` output
-  - [x] Update version in manuals
-  - [x] Update version in sources
-  - [x] What to do with `doc/command`?
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.
 - 0.4: `marmot` can be called from anywhere, not just the meta repo.
