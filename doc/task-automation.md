@@ -8,9 +8,11 @@ This project uses GNU Make to automate tasks.
   install to different paths by setting environment variables when running `make`.
 - Use variables for the names of external programs like `fswatch`, with reasonable defaults.  This
   enables one to use a different program by setting an environment variable when running `make`.
-- Use conventional names of targets like `all` and `install`.  Create separate `Makefiles` for
-  sub-directories that have their own work to do for these targets, to avoid the clutter of separate
-  targets for separate artifacts (`install-manuals` and `install-program`, for example)
+- Use [standard
+  targets](https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets)
+  like `all` and `install`.  Create separate `Makefiles` for sub-directories that have their own
+  work to do for these targets, to avoid the clutter of separate targets for separate artifacts
+  (`install-manuals` and `install-program`, for example)
 
 ## Main targets
 
@@ -19,7 +21,7 @@ calls `make` with the same target, in sub-directories that have their own `Makef
 
 ### `make all`
 
-Build everything.
+Build everything except documentation.
 
 ### `make clean`
 
@@ -33,13 +35,13 @@ Print debugging information, such as the values of variables that affect the bui
 
 Install all programs and manuals that are sourced in this repository.
 
-### `make remove`
-
-Remove all programs and manuals that are sourced in this repository.
-
 ### `make test`
 
 Run all tests and checks.
+
+### `make uninstall`
+
+Uninstall all programs and manuals that are sourced in this repository.
 
 ## Homebrew tasks
 

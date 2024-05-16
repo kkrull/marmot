@@ -43,7 +43,7 @@ source-info:
 
 ### Main targets
 
-.PHONY: all clean info install remove test
+.PHONY: all clean info install test uninstall
 all:
 	@:
 
@@ -55,8 +55,8 @@ install:
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
-remove:
-	$(RM) $(bindir)/marmot
-
 test:
 	@:
+
+uninstall:
+	$(RM) $(bindir)/marmot

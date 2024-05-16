@@ -56,7 +56,7 @@ source-info:
 
 ### Main targets
 
-.PHONY: all clean info install remove test
+.PHONY: all clean info install test uninstall
 
 all: groff-manual markdown-manual
 	@:
@@ -69,10 +69,10 @@ info: install-info source-info groff-manual-info markdown-manual-info
 
 install: groff-manual-install
 
-remove: groff-manual-remove
-
 test:
 	@:
+
+uninstall: groff-manual-uninstall
 
 ### groff manual (e.g. man pages) targets
 
@@ -105,8 +105,8 @@ groff-manual-preview:
 	$(PANDOC) $(sources) $(PANDOCFLAGS) -s -t man \
 		| $(MANDOC)
 
-.PHONY: groff-manual-remove
-groff-manual-remove:
+.PHONY: groff-manual-uninstall
+groff-manual-uninstall:
 	$(RM) $(groff_manual_installed)
 
 .PHONY: groff-manual-watch

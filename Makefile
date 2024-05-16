@@ -39,7 +39,7 @@ PRECOMMIT ?= pre-commit
 
 ### Main targets
 
-.PHONY: all clean info install remove test
+.PHONY: all clean info install test uninstall
 
 all:
 	$(MAKE) -C man all
@@ -63,13 +63,13 @@ install:
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
 	@:
 
-remove:
-	$(MAKE) -C man remove
-	$(MAKE) -C src remove
-
 test: pre-commit-run
 	$(MAKE) -C man test
 	$(MAKE) -C src test
+
+uninstall:
+	$(MAKE) -C man uninstall
+	$(MAKE) -C src uninstall
 
 ### homebrew targets
 
