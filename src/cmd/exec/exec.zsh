@@ -113,26 +113,12 @@ function print_next_repo_inline() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Execute a command in multiple repositories
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
-  [--category <category|sub-category>] [--direnv]
-  [--repo-names inline|heading]
-  <shell command> [args...]
-
-DESCRIPTION
-This command repeats a given shell command on all repositories matching a
-(sub-)category.
-
-$_MARMOT_INVOCATION changes directories to each repository before running the
-shell command, to ensure that any path-specific environment settings are
-applied.  This is helpful for directory-based tools such as
-\`direnv\`, \`fnm\`, and \`rvm\`, which update the shell's path and other
-parts of its environment when changing directories.  The usefulness of the
-shell command may depend upon it, for example when checking if all
-repositories in a project use the same version of Node.js.
+  [--category <category|category/sub-category>]
+  [--direnv] [--repo-names <inline|heading>]
+  <shell command> [args ...]
 
 OPTIONS
 --direnv        Suppress direnv output when changing directories
@@ -140,37 +126,7 @@ OPTIONS
 --repo-names    Print repository names \`inline\` prior to or as a \`heading\`
                 above shell command output
 
-TIPS
-git:
-• Add \`--no-pager\` to git commands that pipe to less (and pause for input)
-
-EXAMPLES
-
-Scanning:
-
-• Node: List version of Node.js used in repositories that use direnv+nvm:
-  \$ $_MARMOT_INVOCATION --category platform/node --direnv \\
-    node --version
-
-Searching and tracing:
-
-• Git: Grep for matching source code in all repositories:
-  \$ $_MARMOT_INVOCATION --category project/robot-masters --repo-names heading \\
-    git --no-pager grep dungeonType
-
-Unified work:
-
-• Git: Check which branches are checked out right now:
-  \$ $_MARMOT_INVOCATION --category project/too-many-microservices \\
-    git branch --show-current
-
-• Git: Pull all the things!
-  \$ $_MARMOT_INVOCATION --repo-names heading \\
-    git pull --ff-only origin
-
-• Git: Push all the things!
-  \$ $_MARMOT_INVOCATION --repo-names heading \\
-    git push
+See \`man $_MARMOT_INVOCATION\` for details.
 EOF
 }
 

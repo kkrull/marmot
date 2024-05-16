@@ -44,11 +44,9 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Work with repositories
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION sub-command [options...]
+$_MARMOT_INVOCATION sub-command [args ...]
 
 SUB-COMMANDS
 list          List repositories
@@ -56,6 +54,8 @@ register      Register repositories to manage
 
 OPTIONS
 --help        Show help
+
+See \`man $_MARMOT_INVOCATION\` for details.
 EOF
 }
 
