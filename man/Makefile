@@ -58,7 +58,7 @@ source-info:
 
 .PHONY: all clean info install test uninstall
 
-all: groff-manual markdown-manual
+all:
 	@:
 
 clean: groff-manual-clean markdown-manual-clean
@@ -67,7 +67,15 @@ clean: groff-manual-clean markdown-manual-clean
 info: install-info source-info groff-manual-info markdown-manual-info
 	@:
 
-install: groff-manual-install
+install:
+	@:
+
+.PHONY: install-man
+install-man: groff-manual-install
+
+.PHONY: man
+man: groff-manual markdown-manual
+	@:
 
 test:
 	@:

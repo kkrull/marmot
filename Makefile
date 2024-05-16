@@ -63,6 +63,10 @@ install:
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
 	@:
 
+.PHONY: install-man
+install-man:
+	$(MAKE) -C man install-man
+
 test: pre-commit-run
 	$(MAKE) -C man test
 	$(MAKE) -C src test

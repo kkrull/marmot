@@ -33,7 +33,11 @@ Print debugging information, such as the values of variables that affect the bui
 
 ### `make install`
 
-Install all programs and manuals that are sourced in this repository.
+Install all programs (not manuals) that are made here.
+
+### `make install-man`
+
+Install all manuals that are made here.
 
 ### `make test`
 
@@ -41,7 +45,7 @@ Run all tests and checks.
 
 ### `make uninstall`
 
-Uninstall all programs and manuals that are sourced in this repository.
+Uninstall all programs and manuals made in this repository.
 
 ## Homebrew tasks
 
@@ -56,10 +60,8 @@ Install homebrew packages in `Brewfile.user` that users need to run the programs
 ## Manual Page tasks
 
 A separate `man/Makefile` builds manuals.  It converts Pandoc sources to man pages (e.g. `groff` or
-`troff`) and to basic Markdown, in `man/groff` and `man/markdown`, respectively.  It includes
-conventional targets that install manuals to `$(mandir)`.
-
-It also has some custom targets:
+`troff`) and to basic Markdown, in `man/groff` and `man/markdown`, respectively.  It has some custom
+targets:
 
 ### `make groff-manual-preview`
 
@@ -68,6 +70,14 @@ Convert and render manuals as man pages, without installing them anywhere.
 ### `make groff-manual-watch`
 
 Watch Pandoc source files and render previews of them when they change.
+
+### `make install-man`
+
+Install man pages to `$(mandir)`.
+
+### `make man`
+
+Build all manuals.
 
 ## `marmot` tasks
 
