@@ -32,17 +32,14 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - List categories
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
 
-DESCRIPTION
-This command lists the categories that are used to group repositories.
-
 OPTIONS
 --help        Show help
+
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

@@ -35,17 +35,14 @@ function show_home() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Show path to Meta Repo
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
 
-DESCRIPTION
-This command shows the base directory of the Meta Repo.
-
 OPTIONS
 --help        Show help
+
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

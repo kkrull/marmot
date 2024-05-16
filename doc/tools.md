@@ -1,75 +1,163 @@
 # Tools
 
-Tools used by this project.
+Tools used by some part of this project's build, deployment, or development processes.
 
 ## EditorConfig
 
-- Files:
-  - Configuration: `.editorconfig`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+<https://editorconfig.org/>
+
+### Files
+
+- `.editorconfig`: Configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit) includes hooks to ensure files comply with EditorConfig
+
+## `fswatch`
+
+<https://github.com/emcrisostomo/fswatch>
+
+### Interactions
+
+- [GNU Make](#gnu-make) includes tasks that use `fswatch`
 
 ## GitHub Actions
 
-- Documentation:
-  - [Jobs](./cicd-jobs.md)
-- Files:
-  - Job definition: `.github/workflows/`
-- Interactions:
-  - `pre-commit`: GitHub Actions runs `pre-commit` to do its checks.
+<https://docs.github.com/en/actions>
+
+### Documentation
+
+- [CI/CD Jobs](./cicd-jobs.md)
+- Workflow Syntax:
+  <https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions>
+
+### Files
+
+- `.github/workflows/`: Job definitions.
+
+### Interactions
+
+- [`pre-commit`](#pre-commit) checks are also run during some jobs
+
+## GNU Make
+
+<https://www.gnu.org/software/make/>
+
+### Documentation
+
+- GNU Make Manual: <https://www.gnu.org/software/make/manual/>
+
+### Files
+
+- `Makefile`: targets to build everything and tasks to help set up your environment
+- `man/Makefile`: targets to build manuals
+- `src/Makefile`: targets to build programs
 
 ## Homebrew
 
-- Documentation:
-  - <https://github.com/Homebrew/homebrew-bundle>
-- Files:
-  - `Brewfile`
-  - `Brewfile.lock.json`
+<https://brew.sh/>
 
-### Usage
+### Documentation
 
-Check:
+- `homebrew-bundle`: <https://github.com/Homebrew/homebrew-bundle>
 
-```sh
-brew bundle check
-```
+### Files
 
-Update `Brewfile`
+- `Brewfile.developer` and `Brewfile.developer.lock.json`: packages for developers, to work on this
+  project.
+- `Brewfile.user` and `Brewfile.user.lock.json`: packages for end users, to run the programs built
+  from these sources.
 
-```sh
-# Dumps all packages installed on the system; requires editing
-brew dump --file=./Brewfile
-```
+## `jo`
 
-Install tools needed by this repository:
+<https://jpmens.net/2016/03/05/a-shell-command-to-create-json-jo/>
 
-```sh
-brew bundle install
-```
+### Documentation
 
-## `make`
+- GitHub: <https://github.com/jpmens/jo>
+- Installation: <https://github.com/jpmens/jo?tab=readme-ov-file#install>
 
-- Files:
-  - Task definition: `Makefile`
+## `jq`
 
-## `markdownlint`
+<https://jqlang.github.io/jq/>
 
-- Files:
-  - Configuration: `.markdownlint.json`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+### Documentation
+
+- Manual: <https://jqlang.github.io/jq/manual/v1.7/>
+
+## `markdownlint-cli2`
+
+<https://github.com/DavidAnson/markdownlint-cli2>
+
+### Documentation
+
+- Configuration JSON schema:
+  <https://github.com/DavidAnson/markdownlint-cli2#markdownlint-cli2jsonc>
+- `pre-commit` hook: <https://github.com/DavidAnson/markdownlint-cli2?tab=readme-ov-file#pre-commit>
+
+### Files
+
+- `.markdownlint-cli2.jsonc`: configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit) includes hooks to ensure files comply with linting rules
+
+## Pandoc
+
+<https://pandoc.org/>
+
+### Documentation
+
+- GitHub Actions for Pandoc: <https://pandoc.org/installing.html#github-actions>
+- Installation: <https://pandoc.org/installing.html>
+
+### Interactions
+
+- [GNU Make](#gnu-make) runs Pandoc to convert command documentation to manuals
 
 ## `pre-commit`
 
-- Files:
-  - Configuration: `.pre-commit.yaml`
-- Usage:
-  - Install Git hooks: `pre-commit install`
-  - Run checks: `pre-commit run --all`
+<https://pre-commit.com/>
 
-## `shellcheck`
+### Files
 
-- Files:
-  - Configuration: `.shellcheckrc`
-- Interactions:
-  - `pre-commit`: checks files with this check.
+- `.pre-commit.yaml`: configures repository sources and hooks to run.  May also contain
+  configuration not already included in any hook-specific configuration files (e.g.
+  `.editorconfig`).
+
+### Interactions
+
+- [EditorConfig](#editorconfig) is checked by `pre-commit`
+- [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-tasks) to install Git hooks
+  and update `pre-commit` repositories
+- [`markdownlint-cli2`](#markdownlint-cli2) is run by `pre-commit`
+- [ShellCheck](#shellcheck) is run by `pre-commit`
+
+## ShellCheck
+
+<https://github.com/koalaman/shellcheck>
+
+### Documentation
+
+- Checks (open Pages dropdown): <https://github.com/koalaman/shellcheck/wiki/Checks>
+- Directives: <https://github.com/koalaman/shellcheck/wiki/Directive>
+- Ignoring findings: <https://www.shellcheck.net/wiki/Ignore>
+
+### Files
+
+- `.shellcheckrc`: configuration
+
+### Interactions
+
+- [`pre-commit`](#pre-commit) includes hooks to ensure files comply with ShellCheck
+
+## Z Shell (e.g. `zsh`)
+
+<https://www.zsh.org/>
+
+### Documentation
+
+- Cheat Sheet: <https://gist.github.com/ClementNerma/1dd94cb0f1884b9c20d1ba0037bdcde2>
+- Manual: <https://zsh.sourceforge.io/Doc/Release/index.html>

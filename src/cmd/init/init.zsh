@@ -38,21 +38,14 @@ function create_meta_repo() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Initialize a meta repo
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
 $_MARMOT_INVOCATION
-
-DESCRIPTION
-This command initializes a blank meta repo in the configured Meta Repo
-directory.
 
 OPTIONS
 --help        Show help
 
-ENVIRONMENT VARIABLES
-MARMOT_META_REPO  Path in which to create the Meta Repo (default: \$HOME/meta)
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

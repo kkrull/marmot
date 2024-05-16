@@ -1,2 +1,3 @@
-# Marmot
-conf/
+# Manual
+man/groff/*
+man/markdown/*

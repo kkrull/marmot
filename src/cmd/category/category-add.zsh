@@ -56,24 +56,15 @@ function link_to_category() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Add repositories to a category
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION <category> <repository> [repository...]
-$_MARMOT_INVOCATION <category>/<sub-category> <repository> [repository...]
-
-DESCRIPTION
-This command adds 1 or more repositories to a (sub-)category.
+$_MARMOT_INVOCATION <category> <repository> [...]
+$_MARMOT_INVOCATION <category>/<sub-category> <repository> [...]
 
 OPTIONS
 --help        Show help
 
-EXAMPLES
-• Add a repository to the "user" category:
-  \$ $_MARMOT_INVOCATION user ~/git/dotfiles
-• Add some repositories to the "skunkworks" project (lookout Dr. Light):
-  \$ $_MARMOT_INVOCATION project/skunkworks ~/git/robot-masters ~/git/skull-fortress
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

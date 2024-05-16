@@ -1,4 +1,4 @@
 tap "homebrew/bundle"
-brew "jo"
-brew "jq"
+brew "fswatch"
+brew "pandoc"
 brew "pre-commit"

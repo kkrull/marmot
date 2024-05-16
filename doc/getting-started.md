@@ -1,7 +1,6 @@
 # Getting Started
 
-Please make sure you have completed the [installation instructions](../README.md#installation),
-first.
+Please make sure you have completed the [installation instructions](./installation.md), first.
 
 Now prepare to use your imagination.
 
@@ -112,21 +111,3 @@ package.json:    "typescript": "^5.2.2"
 $HOME/old-repo:
 package.json:    "typescript": "^4.1.6"
 ```
-
-### Maybe try sharing?
-
-You've gone through the trouble of describing an architecture that does not describe itself.  Could
-that information be helpful to anyone else on your team?  The Meta Repo that Marmot manages is just
-another Git repository.  Maybe you can try sharing it with your teammates, so that the next
-developer doesn't need to spend quite as much time figuring this stuff out for themselves.
-
-Just keep in mind that the target audience for Marmot is still the individual developer.  Marmot
-stores its own meta data in its own place–not anyone else's repository–so that nothing in the
-underlying Git repositories has to change or even know about the existence of a Meta Repo.  This
-empowers individual developers to create their own Meta Repo without needing support or buy-in from
-anyone else.
-
-## Going further
-
-- [Commands](./command.md): Reference for all the commands Marmot supports.
-- [Environment Variables](./environment-variables.md): Customize your environment.

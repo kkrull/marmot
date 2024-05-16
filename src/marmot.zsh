@@ -11,9 +11,6 @@ export _MARMOT_INVOCATION="${0:t}"
 
 ## Local environment
 
-link_path='/usr/local/bin/marmot'
-self="${0:P}"
-
 source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
@@ -41,18 +38,6 @@ function main() {
 
   command="$1"
   case "$command" in
-  # Installation
-  'link')
-    ln -s "$self" "$link_path"
-    echo "Added symlink: $link_path"
-    ;;
-
-  'unlink')
-    rm -f "$link_path"
-    echo "Removed symlink: $link_path"
-    ;;
-
-  # Commands
   'category')
     shift 1
     exec "$_MARMOT_HOME/cmd/category/category.zsh" "$@"
@@ -87,27 +72,9 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Meta Repo Management Tool
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION [--help] [--version]
-$_MARMOT_INVOCATION command [options...]
-
-DESCRIPTION
-Marmot creates and maintains a Meta Repository (e.g. a "meta repo"), which can
-be used to group several Git repositories by 1 or more arbitrary categories.
-
-Marmot creates a directory structure in the meta repo's file system to mirror
-the way that repositories have been categorized, so that there is a
-\`/:category/:sub-category\` directory for each (sub-)category.  Each directory
-contains symbolic links back to the Git repositories that are grouped into
-the same (sub-)category.
-
-Users run commands from one of these directories in order to restrict
-commands to the Git repositories that have that categorization in common.
-In this fashion, users can do things like search closely-related
-code with \`git grep\` or open an editor for those Git repositories, without
-clutter and noise from irrelevant sources in unrelated repositories.
+$_MARMOT_INVOCATION command [args ...]
 
 OPTIONS
 --help        Show help
@@ -120,12 +87,7 @@ init          Make a new meta repo in the default directory
 meta          Information about the meta repo (not the data it manages)
 repo          Work with repositories
 
-INSTALLATION
-link          Add symlink so you can use this on your path
-unlink        Remove symlink for this script
-
-ENVIRONMENT VARIABLES
-MARMOT_META_REPO  Path to the Meta Repo (default: \$HOME/meta)
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

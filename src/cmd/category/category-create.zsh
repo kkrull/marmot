@@ -49,26 +49,14 @@ function make_category_directories() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Create a category
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION <category> [sub-category...]
-
-DESCRIPTION
-This command creates a new category and adds its directory structure to the
-meta repo.
+$_MARMOT_INVOCATION <category> [sub-category ...]
 
 OPTIONS
 --help        Show help
 
-EXAMPLES
-• Create a "lang" category with sub-categories "java" and "typescript":
-  \$ $_MARMOT_INVOCATION lang java typescript
-• Create a "platform" category with sub-categories "beam, "clr", "jvm", and "node":
-  \$ $_MARMOT_INVOCATION platform beam clr jvm node
-• Create a "project" category with sub-categories "dotnet-8-migration" and "skunkworks":
-  \$ $_MARMOT_INVOCATION project dotnet-8-migration skunkworks
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

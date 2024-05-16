@@ -39,17 +39,17 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Information about the meta repo
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION sub-command [options...]
+$_MARMOT_INVOCATION sub-command [args ...]
 
 SUB-COMMANDS
 home          Show the base directory of the Meta Repo
 
 OPTIONS
 --help        Show help
+
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

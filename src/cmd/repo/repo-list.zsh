@@ -38,24 +38,16 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - List repositories
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION [--category <category|sub-category>]
-
-DESCRIPTION
-This command lists repositories that have been registered with Marmot.
-Given options, this lists only the repositories that match the given criteria.
+$_MARMOT_INVOCATION [--category <category|category/sub-category>]
 
 OPTIONS
 --category    List repositories that have been added to the given category
               or sub-category.
 --help        Show help
 
-EXAMPLES
-• List registered TypeScript repositories
-  \$ $_MARMOT_INVOCATION --category lang/typescript
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 

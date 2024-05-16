@@ -49,11 +49,9 @@ function main() {
 
 function print_usage() {
   cat >&2 <<-EOF
-$_MARMOT_INVOCATION - Work with categories
-
-SYNOPSIS
+USAGE
 $_MARMOT_INVOCATION --help
-$_MARMOT_INVOCATION sub-command [options...]
+$_MARMOT_INVOCATION sub-command [args ...]
 
 SUB-COMMANDS
 add           Add repositories to a category
@@ -62,6 +60,8 @@ list          List categories
 
 OPTIONS
 --help        Show help
+
+See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
 }
 
