@@ -128,6 +128,7 @@ groff/%: pandoc/%.md
 ### markdown manual targets
 
 markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
+markdown_manual_objects_dir := markdown
 
 .PHONY: markdown-manual
 markdown-manual: $(markdown_manual_objects)
@@ -140,7 +141,15 @@ markdown-manual-clean:
 markdown-manual-debug:
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
+	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
+
+# Make sure directory exists before building targets
+# https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
+$(markdown_manual_objects): | $(markdown_manual_objects_dir)
+
+$(markdown_manual_objects_dir):
+	mkdir -p markdown
 
 markdown/%.md: pandoc/%.md
-	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s \
+	$(PANDOC) "$<" $(PANDOCFLAGS) -o "$@" -s \
 		-t markdown-definition_lists-line_blocks
