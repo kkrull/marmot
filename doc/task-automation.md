@@ -51,7 +51,7 @@ Install homebrew packages in `Brewfile.developer` that developers need to work o
 
 Install homebrew packages in `Brewfile.user` that users need to run the programs built here.
 
-## Manual Page (e.g. "man page") tasks
+## Manual Page tasks
 
 A separate `man/Makefile` builds manuals.  It converts Pandoc sources to man pages (e.g. `groff` or
 `troff`) and to basic Markdown, in `man/groff` and `man/markdown`, respectively.  It includes

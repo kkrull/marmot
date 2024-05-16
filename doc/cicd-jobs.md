@@ -2,9 +2,11 @@
 
 Jobs are run with GitHub Actions.
 
-## `check-basics`
+## `build`
 
-Runs basic checks with `pre-commit`.
+- [Build manuals](./task-automation.md#manual-page-tasks)
+- Run [`pre-commit`](./tools.md#pre-commit) checks.
 
-- Files:
-  - Job definition: `.github/workflows/check-basics.yml`
+### Files
+
+- `.github/workflows/build.yml`
