@@ -9,7 +9,6 @@ default: all
 
 ### Installation directories
 
-# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
@@ -52,35 +51,35 @@ source-debug:
 	$(info - sources_man1: $(sources_man1))
 	$(info - sources_man7: $(sources_man7))
 
-## Targets
+## Standard Targets
 
-### Main targets
-
-.PHONY: all clean debug install test uninstall
-
+.PHONY: all clean install test uninstall
 all:
 	@:
 
 clean: groff-manual-clean markdown-manual-clean
 
-.NOTPARALLEL: debug
-debug: path-debug source-debug groff-manual-debug markdown-manual-debug
-	@:
-
 install:
-	@:
-
-.PHONY: install-man
-install-man: groff-manual-install
-
-.PHONY: man
-man: groff-manual markdown-manual
 	@:
 
 test:
 	@:
 
 uninstall: groff-manual-uninstall
+
+## Other Targets
+
+.PHONY: debug
+.NOTPARALLEL: debug
+debug: path-debug source-debug groff-manual-debug markdown-manual-debug
+	@:
+
+.PHONY:
+install-man: groff-manual-install
+
+.PHONY: man
+man: groff-manual markdown-manual
+	@:
 
 ### groff manual (e.g. man pages) targets
 

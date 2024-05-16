@@ -1,4 +1,4 @@
-# Marmot program
+# Marmot programs
 
 .PHONY: default
 default: all
@@ -7,7 +7,6 @@ default: all
 
 ### Installation directories
 
-# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
@@ -39,16 +38,13 @@ source-debug:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
-## Targets
+## Standard Targets
 
-### Main targets
-
-.PHONY: all clean debug install test uninstall
+.PHONY: all clean install test uninstall
 all:
 	@:
 
-.NOTPARALLEL: debug
-debug: path-debug source-debug
+clean:
 	@:
 
 install:
@@ -60,3 +56,10 @@ test:
 
 uninstall:
 	$(RM) $(bindir)/marmot
+
+## Other Targets
+
+.PHONY: debug
+.NOTPARALLEL: debug
+debug: path-debug source-debug
+	@:

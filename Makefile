@@ -7,7 +7,6 @@ default: all
 
 ### Installation directories
 
-# https://www.gnu.org/software/make/manual/make.html#Directory-Variables
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
@@ -35,12 +34,9 @@ PRECOMMIT ?= pre-commit
 
 ### Sources
 
-## Targets
+## Standard Targets
 
-### Main targets
-
-.PHONY: all clean debug install test uninstall
-
+.PHONY: all clean install test uninstall
 all:
 	$(MAKE) -C man all
 	$(MAKE) -C src all
@@ -49,14 +45,25 @@ clean: pre-commit-clean
 	$(MAKE) -C man clean
 	$(MAKE) -C src clean
 
+install:
+	$(MAKE) -C man install
+	$(MAKE) -C src install
+
+test: pre-commit-run
+	$(MAKE) -C man test
+	$(MAKE) -C src test
+
+uninstall:
+	$(MAKE) -C man uninstall
+	$(MAKE) -C src uninstall
+
+## Other Targets
+
+.PHONY: debug
 .NOTPARALLEL: debug
 debug: path-debug
 	$(MAKE) -C man debug
 	$(MAKE) -C src debug
-
-install:
-	$(MAKE) -C man install
-	$(MAKE) -C src install
 
 .NOTPARALLEL: install-dependencies
 .PHONY: install-dependencies
@@ -66,14 +73,6 @@ install-dependencies: brew-developer-install brew-user-install pre-commit-instal
 .PHONY: install-man
 install-man:
 	$(MAKE) -C man install-man
-
-test: pre-commit-run
-	$(MAKE) -C man test
-	$(MAKE) -C src test
-
-uninstall:
-	$(MAKE) -C man uninstall
-	$(MAKE) -C src uninstall
 
 ### homebrew targets
 

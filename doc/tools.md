@@ -132,8 +132,8 @@ Tools used by some part of this project's build, deployment, or development proc
 ### Interactions
 
 - [EditorConfig](#editorconfig) is checked by `pre-commit`
-- [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-tasks) to install Git hooks
-  and update `pre-commit` repositories
+- [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-targets) to install Git
+  hooks and update `pre-commit` repositories
 - [`markdownlint-cli2`](#markdownlint-cli2) is run by `pre-commit`
 - [ShellCheck](#shellcheck) is run by `pre-commit`
 
