@@ -50,6 +50,7 @@ $_MARMOT_INVOCATION sub-command [args ...]
 
 SUB-COMMANDS
 list          List repositories
+prune         Prune metadata about missing repositories
 register      Register repositories to manage
 
 OPTIONS
