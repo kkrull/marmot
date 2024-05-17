@@ -48,12 +48,12 @@ function prune_repositories() {
   local config_file
   config_file="$1"
 
-  local all_paths stale_paths
+  local stale_paths
   _config_repository_paths_reply "$config_file"
-  echo "reply[${#reply}]: ${reply[@]}"
-exit 0
+  echo "reply[${#reply}]: ${reply[*]}"
+
   stale_paths=()
-  for repo_path in "${all_paths[@]}"
+  for repo_path in "${reply[@]}"
   do
     echo "? $repo_path"
     [[ -d "$repo_path" ]] && continue
