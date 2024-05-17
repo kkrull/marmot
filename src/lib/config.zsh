@@ -122,13 +122,20 @@ function _config_repository_paths() {
     "$config_file"
 }
 
-# TODO KDK: Is there a way to make this the default?
+function _config_repository_paths_reply() {
+  local config_file
+  config_file="$1"
+  IFS=' ' read -rA <<EOF
+    $(jq -r \
+      '[.meta_repo.repositories[]?.path] | join(" ")' \
+      "$config_file")
+EOF
+}
+
 function _config_repository_paths_spaces() {
   local config_file
   config_file="$1"
 
-  # Treat lack of JSON fields as empty rather than as an error
-  # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
   jq -r \
     '[.meta_repo.repositories[]?.path] | join(" ")' \
     "$config_file"
