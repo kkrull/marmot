@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 emulate -LR zsh
-set -e
+set -euo pipefail
 
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
