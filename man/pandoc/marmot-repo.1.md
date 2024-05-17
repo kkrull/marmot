@@ -29,7 +29,7 @@
 
 [**prune**](./marmot-repo-prune.1.md)
 
-: Prune metadata about missing repositories
+: Prune references to missing repositories
 
 [**register**](./marmot-repo-register.1.md)
 

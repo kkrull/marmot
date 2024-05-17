@@ -30,6 +30,11 @@ function main() {
     exec "$_MARMOT_HOME/cmd/repo/repo-list.zsh" "$@"
     ;;
 
+  'prune')
+    shift 1
+    exec "$_MARMOT_HOME/cmd/repo/repo-prune.zsh" "$@"
+    ;;
+
   'register')
     shift 1
     exec "$_MARMOT_HOME/cmd/repo/repo-register.zsh" "$@"
@@ -50,7 +55,7 @@ $_MARMOT_INVOCATION sub-command [args ...]
 
 SUB-COMMANDS
 list          List repositories
-prune         Prune metadata about missing repositories
+prune         Prune references to missing repositories
 register      Register repositories to manage
 
 OPTIONS
