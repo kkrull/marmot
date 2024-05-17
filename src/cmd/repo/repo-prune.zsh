@@ -50,7 +50,7 @@ function prune_repositories() {
 
   local all_paths stale_paths
   stale_paths=()
-  _config_repository_paths_reply "$config_file" 'all_paths'
+  _config_repository_paths_reply "$config_file" all_paths
   for repo_path in "${all_paths[@]}"
   do
     echo "? $repo_path"
