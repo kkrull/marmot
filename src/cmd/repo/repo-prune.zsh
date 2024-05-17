@@ -25,9 +25,10 @@ function main() {
   if [[ -n "$help_option" ]]
   then
     print_usage
-  else
-    _config_repository_paths "$(_fs_metadata_file)"
+    exit 0
   fi
+
+  prune_repositories "$(_fs_metadata_file)"
 }
 
 function print_usage() {
@@ -41,6 +42,27 @@ OPTIONS
 
 See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
+}
+
+function prune_repositories() {
+  local config_file
+  config_file="$1"
+
+  local all_paths stale_paths
+
+  # shellcheck disable=SC2207
+  all_paths=($(_config_repository_paths_spaces "$config_file"))
+  stale_paths=()
+  for repo_path in "${all_paths[@]}"
+  do
+    [[ -d "$repo_path" ]] && continue
+    stale_paths+=("$repo_path")
+  done
+
+  for repo_path in "${stale_paths[@]}"
+  do
+    echo "- $repo_path"
+  done
 }
 
 ## Main

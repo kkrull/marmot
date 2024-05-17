@@ -122,6 +122,18 @@ function _config_repository_paths() {
     "$config_file"
 }
 
+# TODO KDK: Is there a way to make this the default?
+function _config_repository_paths_spaces() {
+  local config_file
+  config_file="$1"
+
+  # Treat lack of JSON fields as empty rather than as an error
+  # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
+  jq -r \
+    '[.meta_repo.repositories[]?.path] | join(" ")' \
+    "$config_file"
+}
+
 function _config_repository_paths_in_category() {
   local config_file category_or_subcategory
   config_file="$1"
@@ -136,6 +148,15 @@ EOF
   )
 
   jq -r "$filter" "$config_file"
+}
+
+function _config_remove_repositories() {
+  local config_file repository_paths
+  config_file="$1"
+  repository_paths=("${@:2}")
+
+  echo "TODO KDK: See if jq supports -= for arrays"
+  exit 1
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
