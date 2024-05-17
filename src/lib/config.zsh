@@ -154,11 +154,8 @@ EOF
 }
 
 function _config_remove_repositories() {
-  local config_file repository_paths
-  config_file="$1"
-  repository_paths=("${@:2}")
-
-  for repo_path in "${repository_paths[@]}"
+  declare config_file="$1" repo_paths=("${@:2}")
+  for repo_path in "${repo_paths[@]}"
   do
     echo "- $repo_path"
   done
