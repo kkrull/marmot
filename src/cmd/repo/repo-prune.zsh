@@ -51,8 +51,7 @@ function prune_repositories() {
   _config_repository_paths_reply "$config_file"
   for repo_path in "${reply[@]}"
   do
-    [[ -d "$repo_path" ]] && continue
-    stale_paths+=("$repo_path")
+    [[ ! -d "$repo_path" ]] && stale_paths+=("$repo_path")
   done
 
   _config_remove_repositories "$config_file" "${stale_paths[@]}"
