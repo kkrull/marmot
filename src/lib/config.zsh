@@ -125,20 +125,16 @@ function _config_repository_paths() {
 function _config_repository_paths_reply() {
   local config_file
   config_file="$1"
-  IFS=' ' read -rA "$2" <<EOF
-    $(jq -r \
-      '[.meta_repo.repositories[]?.path] | join(" ")' \
-      "$config_file")
+
+  reply=()
+  while read -d $'\0' -r line
+  do
+    reply+=("$line")
+  done <<EOF
+    $(jq < "$config_file" \
+      --raw-output0 \
+      '.meta_repo.repositories[]?.path')
 EOF
-}
-
-function _config_repository_paths_spaces() {
-  local config_file
-  config_file="$1"
-
-  jq -r \
-    '[.meta_repo.repositories[]?.path] | join(" ")' \
-    "$config_file"
 }
 
 function _config_repository_paths_in_category() {
