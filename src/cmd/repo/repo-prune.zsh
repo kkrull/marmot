@@ -55,6 +55,10 @@ function prune_repositories() {
   done
 
   _config_remove_repositories "$config_file" "${stale_paths[@]}"
+  for removed_path in "${stale_paths[@]}"
+  do
+    echo "- $removed_path (repository)"
+  done
 }
 
 ## Main

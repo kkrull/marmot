@@ -155,13 +155,8 @@ EOF
 
 function _config_remove_repositories() {
   declare config_file="$1" repo_paths=("${@:2}")
-  for repo_path in "${repo_paths[@]}"
-  do
-    echo "- $repo_path"
-  done
 
   echo "TODO KDK: See if jq supports -= for arrays"
-  exit 1
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
