@@ -125,7 +125,7 @@ function _config_repository_paths() {
 function _config_repository_paths_reply() {
   local config_file
   config_file="$1"
-  IFS=' ' read -rA <<EOF
+  IFS=' ' read -rA "$2" <<EOF
     $(jq -r \
       '[.meta_repo.repositories[]?.path] | join(" ")' \
       "$config_file")

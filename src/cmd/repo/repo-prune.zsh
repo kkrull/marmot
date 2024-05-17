@@ -48,11 +48,10 @@ function prune_repositories() {
   local config_file
   config_file="$1"
 
-  local stale_paths
+  local all_paths stale_paths
   stale_paths=()
-  _config_repository_paths_reply "$config_file"
-  #shellcheck disable=SC2154
-  for repo_path in "${reply[@]}"
+  _config_repository_paths_reply "$config_file" 'all_paths'
+  for repo_path in "${all_paths[@]}"
   do
     echo "? $repo_path"
     [[ -d "$repo_path" ]] && continue
