@@ -158,6 +158,11 @@ function _config_remove_repositories() {
   config_file="$1"
   repository_paths=("${@:2}")
 
+  for repo_path in "${repository_paths[@]}"
+  do
+    echo "- $repo_path"
+  done
+
   echo "TODO KDK: See if jq supports -= for arrays"
   exit 1
 }

@@ -45,25 +45,17 @@ EOF
 }
 
 function prune_repositories() {
-  local config_file
-  config_file="$1"
+  declare config_file="$1"
 
-  local reply stale_paths
+  declare reply stale_paths=()
   _config_repository_paths_reply "$config_file"
-  echo "reply[${#reply}]: ${reply[*]}"
-
-  stale_paths=()
   for repo_path in "${reply[@]}"
   do
-    echo "? $repo_path"
     [[ -d "$repo_path" ]] && continue
     stale_paths+=("$repo_path")
   done
 
-  for repo_path in "${stale_paths[@]}"
-  do
-    echo "- $repo_path"
-  done
+  _config_remove_repositories "$config_file" "${stale_paths[@]}"
 }
 
 ## Main
