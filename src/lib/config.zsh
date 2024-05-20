@@ -156,17 +156,28 @@ EOF
 function _config_remove_repositories() {
   declare config_file="$1" repo_paths=("${@:2}")
 
+  # Version 1: Given existing_paths and missing_paths
   # . | .categories[].repository_paths
   #     -= ["b-missing"]
   #   | .repositories
   #     |= map(select(
   #        .path
   #        | in( ["a-exists", "c-exists"]
-  #              | map(. as $elem
-  #                    | { key: $elem, value: 1 })
+  #              | map(. as $elem | { key: $elem, value: 1 })
   #              | from_entries )))
 
-  echo "TODO KDK: See if jq supports -= for arrays"
+  # Version 2: Given missing_paths
+  # . | .categories[].repository_paths
+  #       -= ["b-missing"]
+  #     .repositories[]
+  #       |= del(select(
+  #               .path
+  #               | in(["b-missing"]
+  #                    | map(. as $elem | { key: $elem, value: 1 })
+  #                    | from_entries)))
+  #       | del(..|nulls)
+
+  echo "TODO KDK: Work here"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
