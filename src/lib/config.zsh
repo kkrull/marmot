@@ -167,9 +167,10 @@ function _config_remove_repositories() {
   #              | from_entries )))
 
   # Version 2: Given missing_paths
-  # . | .categories[].repository_paths
+  # .meta_repo
+  #   | .categories[].repository_paths
   #       -= ["b-missing"]
-  #     .repositories[]
+  #   | .repositories[]
   #       |= del(select(
   #               .path
   #               | in(["b-missing"]
@@ -177,6 +178,22 @@ function _config_remove_repositories() {
   #                    | from_entries)))
   #       | del(..|nulls)
 
+  # Version 3: missing_paths via variable
+  # missing_paths=$(jo -a "bowling-game-kata-java")
+  # jq < _paths.json --argjson missing_paths "$missing_paths" '
+  #.meta_repo
+  #  | .categories[].repository_paths -= $missing_paths
+  #  | .repositories[]
+  #      |= del(select(
+  #              .path
+  #              | in($missing_paths
+  #                   | map(. as $elem | { key: $elem, value: 1 })
+  #                   | from_entries)))
+  #      | del(..|nulls)
+  #'
+
+  local missing_repositories
+  missing_repositories="$(jo -a ${missing_paths[@]})"
   echo "TODO KDK: Work here"
 }
 
