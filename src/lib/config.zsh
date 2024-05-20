@@ -156,6 +156,16 @@ EOF
 function _config_remove_repositories() {
   declare config_file="$1" repo_paths=("${@:2}")
 
+  # . | .categories[].repository_paths
+  #     -= ["b-missing"]
+  #   | .repositories
+  #     |= map(select(
+  #        .path
+  #        | in( ["a-exists", "c-exists"]
+  #              | map(. as $elem
+  #                    | { key: $elem, value: 1 })
+  #              | from_entries )))
+
   echo "TODO KDK: See if jq supports -= for arrays"
 }
 
