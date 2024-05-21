@@ -74,12 +74,14 @@ function __config_category_name_to_json() {
     jo -- \
       "full_name=$parent_name/$name" \
       "name=$name" \
-      "parent_name=$parent_name"
+      "parent_name=$parent_name" \
+      'repository_paths=[]'
   else
     jo -- \
       "full_name=$name" \
       "name=$name" \
-      -s 'parent_name='
+      -s 'parent_name=' \
+      'repository_paths=[]'
   fi
 }
 
