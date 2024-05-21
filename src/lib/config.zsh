@@ -41,15 +41,14 @@ EOF
 }
 
 function _config_add_repositories_to_category() {
-  local config_file category_full_name repository_paths
+  local config_file category_full_name
   config_file="$1"
   category_full_name="$2"
 
-  repository_paths=()
-  for repo_path in "${@:3}"
+  declare -a repository_paths=()
+  for some_repo_path in "${@:3}"
   do
-    #TODO KDK: Normalize path here
-    repository_paths+=("${repo_path:A}")
+    repository_paths+=("$(__config_normalize_path "$some_repo_path")")
   done
 
   # Complex assignment to update one element in the array without deleting the others
@@ -71,6 +70,8 @@ function _config_category_fullnames() {
     '.meta_repo.categories[]?.full_name' \
     "$config_file"
 }
+
+# private
 
 function __config_category_name_to_json() {
   local name parent_name
@@ -115,10 +116,10 @@ function _config_add_repositories() {
   local config_file="$1"
   declare -a repositories=()
 
+  local repo_path repository
   for some_path in "${@:2}"
   do
-    local repo_path repository
-    repo_path="$(normalize_path "$some_path")"
+    repo_path="$(__config_normalize_path "$some_path")"
     repository="$(__config_repository_path_to_json "$repo_path")"
     repositories+=("$repository")
   done
@@ -130,20 +131,6 @@ function _config_add_repositories() {
       | .meta_repo.repositories |= (. + ${repositories_as_json} | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
-}
-
-function normalize_paths() {
-  for some_path in "$@"
-  do
-    local absolute_path="${some_path:A}"
-    echo "${absolute_path%%/.git}"
-  done
-}
-
-function normalize_path() {
-  local some_path="$1"
-  local absolute_path="${some_path:A}"
-  echo "${absolute_path%%/.git}"
 }
 
 function _config_repository_paths() {
@@ -209,19 +196,12 @@ function _config_remove_repositories() {
 EOF
 }
 
-# __ prefix indicates private access - e.g. implementation details not meant to cross the interface
+# private
 
-function __config_repository_paths_to_json() {
-  local repositories repository_json
-
-  repositories=()
-  for repository_path in "$@"
-  do
-    repository_json=$(__config_repository_path_to_json "$repository_path")
-    repositories+=("$repository_json")
-  done
-
-  jo -a "${repositories[@]}"
+function __config_normalize_path() {
+  local some_path="$1"
+  local absolute_path="${some_path:A}"
+  echo "${absolute_path%%/.git}"
 }
 
 function __config_repository_path_to_json() {
