@@ -59,11 +59,14 @@ function _config_add_repositories_to_category() {
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  _json_jq_update "$config_file" '--sort-keys' <<-EOF
+  _json_jq_update "$config_file" \
+    --arg category_full_name "$category_full_name" \
+    --argjson repository_paths_json "$(jo -a "${repository_paths[@]}")" \
+    --sort-keys <<-'EOF'
     . | (.meta_repo.categories[]
-          | select(.full_name == "$category_full_name")
+          | select(.full_name == $category_full_name)
           | .repository_paths)
-        |= (. + $(jo -a "${repository_paths[@]}") | unique)
+        |= (. + $repository_paths_json | unique)
       | .meta_repo.updated |= (now | todate)
 EOF
 }
