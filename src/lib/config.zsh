@@ -35,7 +35,7 @@ function _config_add_categories() {
   categories+=("${reply[@]}")
 
   _json_jq_update "$config_file" '--sort-keys' <<-EOF
-    . | .meta_repo.categories += $(jo -a "${categories[@]}")
+    . | .meta_repo.categories |= (. + $(jo -a "${categories[@]}") | unique_by(.full_name))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
