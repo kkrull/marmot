@@ -154,7 +154,7 @@ EOF
 }
 
 function _config_remove_repositories() {
-  declare config_file="$1" repo_paths=("${@:2}")
+  declare config_file="$1" remove_paths=("${@:2}")
 
   # Version 1: Given existing_paths and missing_paths
   # . | .categories[].repository_paths
@@ -192,8 +192,8 @@ function _config_remove_repositories() {
   #      | del(..|nulls)
   #'
 
-  local missing_repositories
-  missing_repositories="$(jo -a ${missing_paths[@]})"
+set -x
+  declare remove_paths_json="$(jo -a ${remove_paths[*]})"
   echo "TODO KDK: Work here"
 }
 
