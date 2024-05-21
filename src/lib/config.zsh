@@ -192,16 +192,27 @@ function _config_remove_repositories() {
   #      | del(..|nulls)
   #'
 
-set -x
   declare remove_paths_json
   remove_paths_json="$(jo -a "${remove_paths[@]}")"
 
   declare filter
   filter=$(cat <<'EOF'
-$remove_paths_json
+. | .meta_repo.categories[].repository_paths? -= $remove_paths_json
+  | .meta_repo.repositories[]
+      |= del(select(
+              .path
+              | in($remove_paths_json
+                   | map(. as $elem | { key: $elem, value: 1 })
+                   | from_entries)))
+      | del(..|nulls)
 EOF
 )
-  jq < "$config_file" --argjson remove_paths_json "$remove_paths_json" "$filter"
+
+set -x
+  # tmp_file=$(mktemp)
+  # cp "$config_file" "$tmp_file"
+  jq --argjson remove_paths_json "$remove_paths_json" "$filter" "$config_file" > "$config_file.2"
+  # rm -f "$tmp_file"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
