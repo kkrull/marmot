@@ -10,7 +10,7 @@ function _config_metadata_init() {
   jo > "$meta_repo_file" \
     -p \
     -- \
-    "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
+    "meta_repo=$(jo -- 'categories=[]' 'repositories=[]' "updated=$(date -Iseconds -u)")" \
     "version=$(_fs_marmot_version)"
 }
 
