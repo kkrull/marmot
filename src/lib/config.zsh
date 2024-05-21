@@ -80,7 +80,7 @@ function _config_category_fullnames() {
 function __config_category_from_name() {
   local name parent_name
   name="$1"
-  parent_name="$2"
+  parent_name="${2-}"
 
   if [[ -n "$parent_name" ]]
   then

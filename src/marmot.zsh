@@ -2,7 +2,7 @@
 
 # https://stackoverflow.com/a/56311706/112682
 emulate -LR zsh
-set -e
+set -euo pipefail
 
 ## Shared environment
 
