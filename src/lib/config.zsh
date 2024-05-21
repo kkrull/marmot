@@ -125,16 +125,14 @@ EOF
 }
 
 function normalize_paths() {
-set -x
   declare -a reply=()
-  for p in "$@"
+  for some_path in "$@"
   do
-    local absolute_path="${p:A}"
+    local absolute_path="${some_path:A}"
     reply+=("${absolute_path%%/.git}")
   done
 
   echo "${reply[@]}"
-set +x
 }
 
 function _config_repository_paths() {
