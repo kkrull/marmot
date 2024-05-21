@@ -7,11 +7,16 @@ function _config_metadata_init() {
   local meta_repo_file
   meta_repo_file="$directory/meta-repo.json"
 
-  jo > "$meta_repo_file" \
-    -p \
-    -- \
-    "meta_repo=$(jo -- 'categories=[]' 'repositories=[]' "updated=$(date -Iseconds -u)")" \
-    "version=$(_fs_marmot_version)"
+  _json_jq_create "$meta_repo_file" '--null-input' '--sort-keys' <<EOF
+{
+  meta_repo: {
+    categories: [],
+    repositories: [],
+    updated: now | todate
+  },
+  version: "$(_fs_marmot_version)"
+}
+EOF
 }
 
 ## .categories
