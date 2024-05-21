@@ -7,7 +7,9 @@ function _config_metadata_init() {
   local meta_repo_file
   meta_repo_file="$directory/meta-repo.json"
 
-  _json_jq_create "$meta_repo_file" '--null-input' '--sort-keys' <<EOF
+  _json_jq_create \
+    "$meta_repo_file" \
+    '--null-input' '--sort-keys' <<EOF
 {
   meta_repo: {
     categories: [],
