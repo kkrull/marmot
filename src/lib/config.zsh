@@ -9,7 +9,7 @@ function _config_init() {
 
   _json_jq_create \
     "$meta_repo_file" \
-    '--null-input' '--sort-keys' <<EOF
+    '--null-input' '--sort-keys' <<-EOF
 {
   meta_repo: {
     categories: [],
@@ -54,7 +54,7 @@ function _config_add_repositories_to_category() {
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  _json_jq_update "$config_file" '--sort-keys' <<EOF
+  _json_jq_update "$config_file" '--sort-keys' <<-EOF
     . | (.meta_repo.categories[]
           | select(.full_name == "$category_full_name")
           | .repository_paths)
@@ -137,7 +137,7 @@ function _config_repository_paths_reply() {
   while read -r line
   do
     reply+=("$line")
-  done <<EOF
+  done <<-EOF
     $(jq < "$config_file" \
       --raw-output \
       '.meta_repo.repositories[]?.path')
@@ -150,7 +150,7 @@ function _config_repository_paths_in_category() {
   category_or_subcategory="$2"
 
   local filter
-  filter=$(cat <<EOF
+  filter=$(cat <<-EOF
     .meta_repo.categories[]
       | select(.full_name == "$category_or_subcategory")
       | .repository_paths[]?
@@ -168,7 +168,7 @@ function _config_remove_repositories() {
 
   _json_jq_update "$config_file" \
     --argjson remove_paths_json "$remove_paths_json" \
-    '--sort-keys' <<'EOF'
+    '--sort-keys' <<-'EOF'
     . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
       | .meta_repo.repositories[]
         |= del(select(
