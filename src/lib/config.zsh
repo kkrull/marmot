@@ -127,12 +127,12 @@ function _config_repository_paths_reply() {
   config_file="$1"
 
   reply=()
-  while read -d $'\0' -r line
+  while read -r line
   do
     reply+=("$line")
   done <<EOF
     $(jq < "$config_file" \
-      --raw-output0 \
+      --raw-output \
       '.meta_repo.repositories[]?.path')
 EOF
 }
