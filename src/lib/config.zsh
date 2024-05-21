@@ -4,19 +4,21 @@ function _config_init() {
   local directory
   directory="$1"
 
-  local meta_repo_file
+  local meta_repo_file version
   meta_repo_file="$directory/meta-repo.json"
+  version="$(_fs_marmot_version)"
 
-  _json_jq_create \
-    "$meta_repo_file" \
-    '--null-input' '--sort-keys' <<-EOF
+  _json_jq_create "$meta_repo_file" \
+    --arg version "$version" \
+    --null-input \
+    --sort-keys <<-'EOF'
 {
   meta_repo: {
     categories: [],
     repositories: [],
     updated: now | todate
   },
-  version: "$(_fs_marmot_version)"
+  version: $version
 }
 EOF
 }
