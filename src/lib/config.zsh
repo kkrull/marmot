@@ -119,7 +119,7 @@ function _config_add_repositories() {
   repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
   _json_jq_update "$config_file" '--sort-keys' <<-EOF
     .
-      | .meta_repo.repositories += ${repositories_as_json}
+      | .meta_repo.repositories |= (. + ${repositories_as_json} | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
