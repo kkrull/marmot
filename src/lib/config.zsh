@@ -110,7 +110,12 @@ function _config_add_repositories() {
 
   local repositories_as_json
   repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
-  _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
+  # _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
+  _json_jq_heredoc "$config_file" <<-EOF
+    .
+      | .meta_repo.repositories += ${repositories_as_json}
+      | .meta_repo.updated += (now | todate)
+EOF
 }
 
 function _config_repository_paths() {
