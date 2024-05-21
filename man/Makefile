@@ -59,8 +59,7 @@ all:
 
 clean: groff-manual-clean markdown-manual-clean
 
-install:
-	@:
+install: groff-manual-install
 
 test:
 	@:
@@ -73,9 +72,6 @@ uninstall: groff-manual-uninstall
 .NOTPARALLEL: debug
 debug: path-debug source-debug groff-manual-debug markdown-manual-debug
 	@:
-
-.PHONY:
-install-man: groff-manual-install
 
 .PHONY: man
 man: groff-manual markdown-manual

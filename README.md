@@ -39,7 +39,7 @@ Start with the basics:
 
 Then learn more:
 
-- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make install-man` followed by `man
+- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make -C man install` followed by `man
   marmot`_)
 - [Why does Marmot exist?](./doc/why.md)
 

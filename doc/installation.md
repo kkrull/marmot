@@ -10,7 +10,7 @@ this:
 
 ```sh
 # Might require sudo
-make install install-man
+make install
 
 # Might be unnecessary, if this is already on your path
 path+=(/usr/local/bin)
@@ -19,7 +19,7 @@ path+=(/usr/local/bin)
 If you need to install to somewhere other than `/usr/local/`, run `make` with another `prefix`:
 
 ```sh
-prefix=/path/to/programs make install install-man
+prefix=/path/to/programs make install
 ```
 
 ## Install dependencies

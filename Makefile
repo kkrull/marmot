@@ -70,10 +70,6 @@ debug: path-debug
 install-dependencies: brew-developer-install brew-user-install pre-commit-install
 	@:
 
-.PHONY: install-man
-install-man:
-	$(MAKE) -C man install-man
-
 ### homebrew targets
 
 .PHONY: brew-developer-install

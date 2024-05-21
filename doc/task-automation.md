@@ -28,11 +28,7 @@ Remove files that were built by running `make` earlier.
 
 ### `make install`
 
-Install all programs (not manuals) that are made here.
-
-### `make install-man`
-
-Install all manuals that are made here.
+Install all programs and manuals that are made here.
 
 ### `make test`
 
@@ -66,7 +62,7 @@ Convert and render manuals as man pages, without installing them anywhere.
 
 Watch Pandoc source files and render previews of them when they change.
 
-### `make install-man`
+### `make install`
 
 Install man pages to `$(mandir)`.
 
