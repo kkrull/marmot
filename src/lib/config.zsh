@@ -158,42 +158,6 @@ EOF
 function _config_remove_repositories() {
   declare config_file="$1" remove_paths=("${@:2}")
 
-  # Version 1: Given existing_paths and missing_paths
-  # . | .categories[].repository_paths
-  #     -= ["b-missing"]
-  #   | .repositories
-  #     |= map(select(
-  #        .path
-  #        | in( ["a-exists", "c-exists"]
-  #              | map(. as $elem | { key: $elem, value: 1 })
-  #              | from_entries )))
-
-  # Version 2: Given missing_paths
-  # .meta_repo
-  #   | .categories[].repository_paths
-  #       -= ["b-missing"]
-  #   | .repositories[]
-  #       |= del(select(
-  #               .path
-  #               | in(["b-missing"]
-  #                    | map(. as $elem | { key: $elem, value: 1 })
-  #                    | from_entries)))
-  #       | del(..|nulls)
-
-  # Version 3: missing_paths via variable
-  # missing_paths=$(jo -a "bowling-game-kata-java")
-  # jq < _paths.json --argjson missing_paths "$missing_paths" '
-  #.meta_repo
-  #  | .categories[].repository_paths -= $missing_paths
-  #  | .repositories[]
-  #      |= del(select(
-  #              .path
-  #              | in($missing_paths
-  #                   | map(. as $elem | { key: $elem, value: 1 })
-  #                   | from_entries)))
-  #      | del(..|nulls)
-  #'
-
   declare remove_paths_json
   remove_paths_json="$(jo -a "${remove_paths[@]}")"
 
