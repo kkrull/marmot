@@ -2,7 +2,7 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-REPO(1) Version 0.5.1 \| Meta Repo Management Tool
+title: MARMOT-REPO(1) Version 0.5.2 \| Meta Repo Management Tool
 ---
 
 # NAME
@@ -28,6 +28,9 @@ Show help
 
 [**list**](./marmot-repo-list.1.md)  
 List repositories
+
+[**prune**](./marmot-repo-prune.1.md)  
+Prune references to missing repositories
 
 [**register**](./marmot-repo-register.1.md)  
 Register repositories to manage

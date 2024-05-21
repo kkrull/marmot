@@ -56,6 +56,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 ## Versions
 
+- 0.5.2: Add `marmot repo prune` to remove and de-categorize repositories that don't exist anymore.
 - 0.5.1: Add installation and manuals.
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.
 - 0.4.1: Add `--category` criteria to `marmot repo list`.

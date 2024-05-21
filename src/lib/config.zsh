@@ -7,11 +7,18 @@ function _config_metadata_init() {
   local meta_repo_file
   meta_repo_file="$directory/meta-repo.json"
 
-  jo > "$meta_repo_file" \
-    -p \
-    -- \
-    "meta_repo=$(jo -- 'categories=[]' 'repositories=[]')" \
-    "version=$(_fs_marmot_version)"
+  _json_jq_create \
+    "$meta_repo_file" \
+    '--null-input' '--sort-keys' <<EOF
+{
+  meta_repo: {
+    categories: [],
+    repositories: [],
+    updated: now | todate
+  },
+  version: "$(_fs_marmot_version)"
+}
+EOF
 }
 
 ## .categories
@@ -27,7 +34,10 @@ function _config_add_categories() {
   __config_subcategory_names "$category_name" "${subcategory_names[@]}"
   categories+=("${reply[@]}")
 
-  _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
+  _json_jq_update "$config_file" '--sort-keys' <<-EOF
+    . | .meta_repo.categories += $(jo -a "${categories[@]}")
+      | .meta_repo.updated |= (now | todate)
+EOF
 }
 
 function _config_add_repositories_to_category() {
@@ -43,16 +53,13 @@ function _config_add_repositories_to_category() {
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  local filter
-  filter=$(cat <<EOF
-    (.meta_repo.categories[]
-      | select(.full_name == "$category_full_name")
-      | .repository_paths)
-      += $(jo -a "${repository_paths[@]}")
+  _json_jq_update "$config_file" '--sort-keys' <<EOF
+    . | (.meta_repo.categories[]
+          | select(.full_name == "$category_full_name")
+          | .repository_paths)
+          += $(jo -a "${repository_paths[@]}")
+      | .meta_repo.updated |= (now | todate)
 EOF
-  )
-
-  _json_jq_update "$config_file" "$filter"
 }
 
 function _config_category_fullnames() {
@@ -74,12 +81,14 @@ function __config_category_name_to_json() {
     jo -- \
       "full_name=$parent_name/$name" \
       "name=$name" \
-      "parent_name=$parent_name"
+      "parent_name=$parent_name" \
+      'repository_paths=[]'
   else
     jo -- \
       "full_name=$name" \
       "name=$name" \
-      -s 'parent_name='
+      -s 'parent_name=' \
+      'repository_paths=[]'
   fi
 }
 
@@ -108,7 +117,11 @@ function _config_add_repositories() {
 
   local repositories_as_json
   repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
-  _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
+  _json_jq_update "$config_file" '--sort-keys' <<-EOF
+    .
+      | .meta_repo.repositories += ${repositories_as_json}
+      | .meta_repo.updated |= (now | todate)
+EOF
 }
 
 function _config_repository_paths() {
@@ -120,6 +133,21 @@ function _config_repository_paths() {
   jq -r \
     '.meta_repo.repositories[]?.path' \
     "$config_file"
+}
+
+function _config_repository_paths_reply() {
+  local config_file
+  config_file="$1"
+
+  reply=()
+  while read -r line
+  do
+    reply+=("$line")
+  done <<EOF
+    $(jq < "$config_file" \
+      --raw-output \
+      '.meta_repo.repositories[]?.path')
+EOF
 }
 
 function _config_repository_paths_in_category() {
@@ -136,6 +164,27 @@ EOF
   )
 
   jq -r "$filter" "$config_file"
+}
+
+function _config_remove_repositories() {
+  declare config_file="$1" remove_paths=("${@:2}")
+
+  declare remove_paths_json
+  remove_paths_json="$(jo -a "${remove_paths[@]}")"
+
+  _json_jq_update "$config_file" \
+    --argjson remove_paths_json "$remove_paths_json" \
+    '--sort-keys' <<'EOF'
+    . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
+      | .meta_repo.repositories[]
+        |= del(select(
+                .path
+                | in($remove_paths_json
+                      | map(. as $elem | { key: $elem, value: 1 })
+                      | from_entries)))
+        | del(..|nulls)
+      | .meta_repo.updated |= (now | todate)
+EOF
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
