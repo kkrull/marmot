@@ -1,12 +1,15 @@
 #!/bin/zsh
 
 emulate -LR zsh
-
-source "$_MARMOT_HOME/lib/fs.zsh"
+set -euo pipefail
 
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} home"
+
+## Local environment
+
+source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
 

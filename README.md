@@ -39,7 +39,7 @@ Start with the basics:
 
 Then learn more:
 
-- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make install-man` followed by `man
+- [Command Reference](./man/markdown/marmot.1.md): (_Or run `make -C man install` followed by `man
   marmot`_)
 - [Why does Marmot exist?](./doc/why.md)
 
@@ -56,6 +56,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 ## Versions
 
+- 0.5.3: Omit inserting duplicate categories or repositories.  Commands fail-fast.
 - 0.5.2: Add `marmot repo prune` to remove and de-categorize repositories that don't exist anymore.
 - 0.5.1: Add installation and manuals.
 - 0.5: `marmot exec` operates on registered repositories and accepts an optional category.

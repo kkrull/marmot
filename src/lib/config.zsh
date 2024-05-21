@@ -1,22 +1,20 @@
 # Marmot configuration
 
-function _config_metadata_init() {
+function _config_init() {
   local directory
   directory="$1"
 
-  local meta_repo_file
-  meta_repo_file="$directory/meta-repo.json"
-
-  _json_jq_create \
-    "$meta_repo_file" \
-    '--null-input' '--sort-keys' <<EOF
+  _json_jq_create "$directory/meta-repo.json" \
+    --arg version "$(_fs_marmot_version)" \
+    --null-input \
+    --sort-keys <<-'EOF'
 {
   meta_repo: {
     categories: [],
     repositories: [],
     updated: now | todate
   },
-  version: "$(_fs_marmot_version)"
+  version: $version
 }
 EOF
 }
@@ -24,40 +22,46 @@ EOF
 ## .categories
 
 function _config_add_categories() {
-  local config_file category_name subcategory_names
+  local config_file category_name
   config_file="$1"
   category_name="$2"
-  subcategory_names=("${@:3}")
 
   local categories
-  categories=("$(__config_category_name_to_json "$category_name")")
-  __config_subcategory_names "$category_name" "${subcategory_names[@]}"
-  categories+=("${reply[@]}")
+  categories=("$(__config_category_from_name "$category_name")")
+  for subcategory_name in "${@:3}"
+  do
+    categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
+  done
 
-  _json_jq_update "$config_file" '--sort-keys' <<-EOF
-    . | .meta_repo.categories += $(jo -a "${categories[@]}")
+  _json_jq_update "$config_file" \
+    --argjson categories "$(jo -a "${categories[@]}")" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
 
 function _config_add_repositories_to_category() {
-  local config_file category_full_name repository_paths
+  local config_file category_full_name
   config_file="$1"
   category_full_name="$2"
 
-  repository_paths=()
-  for repo_path in "${@:3}"
+  declare -a repository_paths=()
+  for some_repo_path in "${@:3}"
   do
-    repository_paths+=("${repo_path:A}")
+    repository_paths+=("$(__config_normalize_path "$some_repo_path")")
   done
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  _json_jq_update "$config_file" '--sort-keys' <<EOF
+  _json_jq_update "$config_file" \
+    --arg category_full_name "$category_full_name" \
+    --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
+    --sort-keys <<-'EOF'
     . | (.meta_repo.categories[]
-          | select(.full_name == "$category_full_name")
+          | select(.full_name == $category_full_name)
           | .repository_paths)
-          += $(jo -a "${repository_paths[@]}")
+        |= (. + $repository_paths | unique)
       | .meta_repo.updated |= (now | todate)
 EOF
 }
@@ -71,10 +75,12 @@ function _config_category_fullnames() {
     "$config_file"
 }
 
-function __config_category_name_to_json() {
+# private
+
+function __config_category_from_name() {
   local name parent_name
   name="$1"
-  parent_name="$2"
+  parent_name="${2-}"
 
   if [[ -n "$parent_name" ]]
   then
@@ -92,34 +98,25 @@ function __config_category_name_to_json() {
   fi
 }
 
-function __config_subcategory_names() {
-  local parent_category_name subcategory_names
-  parent_category_name="$1"
-  subcategory_names=("${@:2}")
-
-  local subcategories
-  subcategories=()
-  for name in "${subcategory_names[@]}"
-  do
-    subcategory_json="$(__config_category_name_to_json "$name" "$parent_category_name")"
-    subcategories+=("$subcategory_json")
-  done
-
-  reply=("${subcategories[@]}")
-}
-
 ## .repositories
 
 function _config_add_repositories() {
-  local config_file repository_paths
-  config_file="$1"
-  repository_paths=("${@:2}")
+  local config_file="$1"
+  declare -a repositories=()
 
-  local repositories_as_json
-  repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
-  _json_jq_update "$config_file" '--sort-keys' <<-EOF
+  local repo_path repository
+  for some_path in "${@:2}"
+  do
+    repo_path="$(__config_normalize_path "$some_path")"
+    repository="$(__config_repository_from_path "$repo_path")"
+    repositories+=("$repository")
+  done
+
+  _json_jq_update "$config_file" \
+    --argjson repositories "$(jo -a "${repositories[@]}")" \
+    --sort-keys <<-'EOF'
     .
-      | .meta_repo.repositories += ${repositories_as_json}
+      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
@@ -143,7 +140,7 @@ function _config_repository_paths_reply() {
   while read -r line
   do
     reply+=("$line")
-  done <<EOF
+  done <<-EOF
     $(jq < "$config_file" \
       --raw-output \
       '.meta_repo.repositories[]?.path')
@@ -156,30 +153,31 @@ function _config_repository_paths_in_category() {
   category_or_subcategory="$2"
 
   local filter
-  filter=$(cat <<EOF
+  filter=$(cat <<-'EOF'
     .meta_repo.categories[]
-      | select(.full_name == "$category_or_subcategory")
+      | select(.full_name == $full_name)
       | .repository_paths[]?
 EOF
   )
 
-  jq -r "$filter" "$config_file"
+  jq \
+    --arg full_name "$category_or_subcategory" \
+    -r \
+    "$filter" "$config_file"
 }
 
 function _config_remove_repositories() {
-  declare config_file="$1" remove_paths=("${@:2}")
-
-  declare remove_paths_json
-  remove_paths_json="$(jo -a "${remove_paths[@]}")"
+  declare config_file="$1"
+  declare remove_paths=("${@:2}")
 
   _json_jq_update "$config_file" \
-    --argjson remove_paths_json "$remove_paths_json" \
-    '--sort-keys' <<'EOF'
-    . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
+    --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories[].repository_paths? -= $repository_paths
       | .meta_repo.repositories[]
         |= del(select(
                 .path
-                | in($remove_paths_json
+                | in($repository_paths
                       | map(. as $elem | { key: $elem, value: 1 })
                       | from_entries)))
         | del(..|nulls)
@@ -187,22 +185,15 @@ function _config_remove_repositories() {
 EOF
 }
 
-# __ prefix indicates private access - e.g. implementation details not meant to cross the interface
+# private
 
-function __config_repository_paths_to_json() {
-  local repositories repository_json
-
-  repositories=()
-  for repository_path in "$@"
-  do
-    repository_json=$(__config_repository_path_to_json "$repository_path")
-    repositories+=("$repository_json")
-  done
-
-  jo -a "${repositories[@]}"
+function __config_normalize_path() {
+  local some_path="$1"
+  local absolute_path="${some_path:A}"
+  echo "${absolute_path%%/.git}"
 }
 
-function __config_repository_path_to_json() {
+function __config_repository_from_path() {
   local repo_path
   repo_path="$1"
   jo -- "path=$repo_path"

@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 emulate -LR zsh
+set -euo pipefail
 
 ## Shared environment
 
