@@ -176,10 +176,7 @@ function _config_remove_repositories() {
 EOF
 )
 
-  tmp_file=$(mktemp)
-  cp "$config_file" "$tmp_file"
-  jq --argjson remove_paths_json "$remove_paths_json" "$filter" "$tmp_file" > "$config_file"
-  rm -f "$tmp_file"
+  _json_jq_update "$config_file" --argjson remove_paths_json "$remove_paths_json" "$filter"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
