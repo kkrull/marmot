@@ -31,7 +31,7 @@ function _config_add_categories() {
 
   local categories
   categories=("$(__config_category_name_to_json "$category_name")")
-  __config_subcategory_names "$category_name" "${subcategory_names[@]}"
+  __config_subcategory_names_reply "$category_name" "${subcategory_names[@]}"
   categories+=("${reply[@]}")
 
   _json_jq_update "$config_file" '--sort-keys' <<-EOF
@@ -93,7 +93,7 @@ function __config_category_name_to_json() {
   fi
 }
 
-function __config_subcategory_names() {
+function __config_subcategory_names_reply() {
   local parent_category_name subcategory_names
   parent_category_name="$1"
   subcategory_names=("${@:2}")
