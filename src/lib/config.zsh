@@ -113,7 +113,7 @@ function __config_subcategory_names() {
 function _config_add_repositories() {
   local config_file repository_paths
   config_file="$1"
-  repository_paths=("${@:2}")
+  repository_paths=($(normalize_paths "${@:2}"))
 
   local repositories_as_json
   repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
@@ -122,6 +122,19 @@ function _config_add_repositories() {
       | .meta_repo.repositories |= (. + ${repositories_as_json} | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
+}
+
+function normalize_paths() {
+set -x
+  declare -a reply=()
+  for p in "$@"
+  do
+    local absolute_path="${p:A}"
+    reply+=("${absolute_path%%/.git}")
+  done
+
+  echo "${reply[@]}"
+set +x
 }
 
 function _config_repository_paths() {
