@@ -202,8 +202,8 @@ function _config_remove_repositories() {
       |= del(select(
               .path
               | in($remove_paths_json
-                   | map(. as $elem | { key: $elem, value: 1 })
-                   | from_entries)))
+                    | map(. as $elem | { key: $elem, value: 1 })
+                    | from_entries)))
       | del(..|nulls)
 EOF
 )
