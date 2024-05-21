@@ -95,22 +95,6 @@ function __config_category_name_to_json() {
   fi
 }
 
-function __config_subcategory_names_reply() {
-  local parent_category_name subcategory_names
-  parent_category_name="$1"
-  subcategory_names=("${@:2}")
-
-  local subcategories
-  subcategories=()
-  for name in "${subcategory_names[@]}"
-  do
-    subcategory_json="$(__config_category_name_to_json "$name" "$parent_category_name")"
-    subcategories+=("$subcategory_json")
-  done
-
-  reply=("${subcategories[@]}")
-}
-
 ## .repositories
 
 function _config_add_repositories() {
