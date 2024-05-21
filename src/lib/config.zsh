@@ -174,7 +174,6 @@ function _config_remove_repositories() {
 EOF
 )
 
-set -x
   tmp_file=$(mktemp)
   cp "$config_file" "$tmp_file"
   jq --argjson remove_paths_json "$remove_paths_json" "$filter" "$tmp_file" > "$config_file"
