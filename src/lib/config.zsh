@@ -165,12 +165,14 @@ function _config_remove_repositories() {
   filter=$(cat <<'EOF'
 . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
   | .meta_repo.repositories[]
-      |= del(select(
-              .path
-              | in($remove_paths_json
-                    | map(. as $elem | { key: $elem, value: 1 })
-                    | from_entries)))
-      | del(..|nulls)
+    |= del(select(
+            .path
+            | in($remove_paths_json
+                  | map(. as $elem | { key: $elem, value: 1 })
+                  | from_entries)))
+    | del(..|nulls)
+  | .meta_repo.updated
+    |= (now | todate)
 EOF
 )
 
