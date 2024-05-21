@@ -24,15 +24,16 @@ EOF
 ## .categories
 
 function _config_add_categories() {
-  local config_file category_name subcategory_names
+  local config_file category_name
   config_file="$1"
   category_name="$2"
-  subcategory_names=("${@:3}")
 
   local categories
   categories=("$(__config_category_name_to_json "$category_name")")
-  __config_subcategory_names_reply "$category_name" "${subcategory_names[@]}"
-  categories+=("${reply[@]}")
+  for subcategory_name in "${@:3}"
+  do
+    categories+=("$(__config_category_name_to_json "$subcategory_name" "$category_name")")
+  done
 
   _json_jq_update "$config_file" '--sort-keys' <<-EOF
     . | .meta_repo.categories |= (. + $(jo -a "${categories[@]}") | unique_by(.full_name))
