@@ -112,11 +112,11 @@ function _config_add_repositories() {
     repositories+=("$repository")
   done
 
-  local repositories_as_json
-  repositories_as_json=$(jo -a "${repositories[@]}")
-  _json_jq_update "$config_file" '--sort-keys' <<-EOF
+  _json_jq_update "$config_file" \
+    --argjson repositories "$(jo -a "${repositories[@]}")" \
+    --sort-keys <<-'EOF'
     .
-      | .meta_repo.repositories |= (. + ${repositories_as_json} | unique_by(.path))
+      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
@@ -164,19 +164,17 @@ EOF
 }
 
 function _config_remove_repositories() {
-  declare config_file="$1" remove_paths=("${@:2}")
-
-  declare remove_paths_json
-  remove_paths_json="$(jo -a "${remove_paths[@]}")"
+  declare config_file="$1"
+  declare remove_paths=("${@:2}")
 
   _json_jq_update "$config_file" \
-    --argjson remove_paths_json "$remove_paths_json" \
-    '--sort-keys' <<-'EOF'
-    . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
+    --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories[].repository_paths? -= $repository_paths
       | .meta_repo.repositories[]
         |= del(select(
                 .path
-                | in($remove_paths_json
+                | in($repository_paths
                       | map(. as $elem | { key: $elem, value: 1 })
                       | from_entries)))
         | del(..|nulls)
