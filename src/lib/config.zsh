@@ -48,6 +48,7 @@ function _config_add_repositories_to_category() {
   repository_paths=()
   for repo_path in "${@:3}"
   do
+    #TODO KDK: Normalize path here
     repository_paths+=("${repo_path:A}")
   done
 
