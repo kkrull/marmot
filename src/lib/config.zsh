@@ -4,12 +4,8 @@ function _config_init() {
   local directory
   directory="$1"
 
-  local meta_repo_file version
-  meta_repo_file="$directory/meta-repo.json"
-  version="$(_fs_marmot_version)"
-
-  _json_jq_create "$meta_repo_file" \
-    --arg version "$version" \
+  _json_jq_create "$directory/meta-repo.json" \
+    --arg version "$(_fs_marmot_version)" \
     --null-input \
     --sort-keys <<-'EOF'
 {
@@ -30,16 +26,15 @@ function _config_add_categories() {
   config_file="$1"
   category_name="$2"
 
-  local categories categories_json
+  local categories
   categories=("$(__config_category_from_name "$category_name")")
   for subcategory_name in "${@:3}"
   do
     categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
 
-  categories_json=$(jo -a "${categories[@]}")
   _json_jq_update "$config_file" \
-    --argjson categories "$categories_json" \
+    --argjson categories "$(jo -a "${categories[@]}")" \
     --sort-keys <<-'EOF'
     . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
       | .meta_repo.updated |= (now | todate)
@@ -61,12 +56,12 @@ function _config_add_repositories_to_category() {
   # https://jqlang.github.io/jq/manual/#complex-assignments
   _json_jq_update "$config_file" \
     --arg category_full_name "$category_full_name" \
-    --argjson repository_paths_json "$(jo -a "${repository_paths[@]}")" \
+    --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
     --sort-keys <<-'EOF'
     . | (.meta_repo.categories[]
           | select(.full_name == $category_full_name)
           | .repository_paths)
-        |= (. + $repository_paths_json | unique)
+        |= (. + $repository_paths | unique)
       | .meta_repo.updated |= (now | todate)
 EOF
 }
