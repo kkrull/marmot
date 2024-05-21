@@ -1,6 +1,6 @@
 # Marmot configuration
 
-function _config_metadata_init() {
+function _config_init() {
   local directory
   directory="$1"
 
@@ -29,10 +29,10 @@ function _config_add_categories() {
   category_name="$2"
 
   local categories
-  categories=("$(__config_category_name_to_json "$category_name")")
+  categories=("$(__config_category_from_name "$category_name")")
   for subcategory_name in "${@:3}"
   do
-    categories+=("$(__config_category_name_to_json "$subcategory_name" "$category_name")")
+    categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
 
   _json_jq_update "$config_file" '--sort-keys' <<-EOF
@@ -74,7 +74,7 @@ function _config_category_fullnames() {
 
 # private
 
-function __config_category_name_to_json() {
+function __config_category_from_name() {
   local name parent_name
   name="$1"
   parent_name="$2"
@@ -105,7 +105,7 @@ function _config_add_repositories() {
   for some_path in "${@:2}"
   do
     repo_path="$(__config_normalize_path "$some_path")"
-    repository="$(__config_repository_path_to_json "$repo_path")"
+    repository="$(__config_repository_from_path "$repo_path")"
     repositories+=("$repository")
   done
 
@@ -189,7 +189,7 @@ function __config_normalize_path() {
   echo "${absolute_path%%/.git}"
 }
 
-function __config_repository_path_to_json() {
+function __config_repository_from_path() {
   local repo_path
   repo_path="$1"
   jo -- "path=$repo_path"

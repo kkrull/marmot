@@ -33,7 +33,7 @@ function create_meta_repo() {
   local directory="$1"
   mkdir -p "$directory"
 
-  _config_metadata_init "$directory"
+  _config_init "$directory"
   echo "Initialized meta repository at $directory"
 }
 
