@@ -30,15 +30,18 @@ function _config_add_categories() {
   config_file="$1"
   category_name="$2"
 
-  local categories
+  local categories categories_json
   categories=("$(__config_category_from_name "$category_name")")
   for subcategory_name in "${@:3}"
   do
     categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
 
-  _json_jq_update "$config_file" '--sort-keys' <<-EOF
-    . | .meta_repo.categories |= (. + $(jo -a "${categories[@]}") | unique_by(.full_name))
+  categories_json=$(jo -a "${categories[@]}")
+  _json_jq_update "$config_file" \
+    --argjson categories "$categories_json" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
