@@ -193,8 +193,15 @@ function _config_remove_repositories() {
   #'
 
 set -x
-  declare remove_paths_json="$(jo -a ${remove_paths[*]})"
-  echo "TODO KDK: Work here"
+  declare remove_paths_json
+  remove_paths_json="$(jo -a "${remove_paths[@]}")"
+
+  declare filter
+  filter=$(cat <<'EOF'
+$remove_paths_json
+EOF
+)
+  jq < "$config_file" --argjson remove_paths_json "$remove_paths_json" "$filter"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
