@@ -153,14 +153,17 @@ function _config_repository_paths_in_category() {
   category_or_subcategory="$2"
 
   local filter
-  filter=$(cat <<-EOF
+  filter=$(cat <<-'EOF'
     .meta_repo.categories[]
-      | select(.full_name == "$category_or_subcategory")
+      | select(.full_name == $full_name)
       | .repository_paths[]?
 EOF
   )
 
-  jq -r "$filter" "$config_file"
+  jq \
+    --arg full_name "$category_or_subcategory" \
+    -r \
+    "$filter" "$config_file"
 }
 
 function _config_remove_repositories() {
