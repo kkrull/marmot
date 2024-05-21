@@ -27,7 +27,10 @@ function _config_add_categories() {
   __config_subcategory_names "$category_name" "${subcategory_names[@]}"
   categories+=("${reply[@]}")
 
-  _json_jq_update "$config_file" ".meta_repo.categories += $(jo -a "${categories[@]}")"
+  _json_jq_update "$config_file" <<-EOF
+    . | .meta_repo.categories += $(jo -a "${categories[@]}")
+      | .meta_repo.updated |= (now | todate)
+EOF
 }
 
 function _config_add_repositories_to_category() {
@@ -43,16 +46,13 @@ function _config_add_repositories_to_category() {
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  local filter
-  filter=$(cat <<EOF
-    (.meta_repo.categories[]
-      | select(.full_name == "$category_full_name")
-      | .repository_paths)
-      += $(jo -a "${repository_paths[@]}")
+  _json_jq_update "$config_file" <<EOF
+    . | (.meta_repo.categories[]
+          | select(.full_name == "$category_full_name")
+          | .repository_paths)
+          += $(jo -a "${repository_paths[@]}")
+      | .meta_repo.updated |= (now | todate)
 EOF
-  )
-
-  _json_jq_update "$config_file" "$filter"
 }
 
 function _config_category_fullnames() {
@@ -110,11 +110,10 @@ function _config_add_repositories() {
 
   local repositories_as_json
   repositories_as_json=$(__config_repository_paths_to_json "${repository_paths[@]}")
-  # _json_jq_update "$config_file" ".meta_repo.repositories += ${repositories_as_json}"
-  _json_jq_heredoc "$config_file" <<-EOF
+  _json_jq_update "$config_file" <<-EOF
     .
       | .meta_repo.repositories += ${repositories_as_json}
-      | .meta_repo.updated += (now | todate)
+      | .meta_repo.updated |= (now | todate)
 EOF
 }
 
@@ -166,22 +165,18 @@ function _config_remove_repositories() {
   declare remove_paths_json
   remove_paths_json="$(jo -a "${remove_paths[@]}")"
 
-  declare filter
-  filter=$(cat <<'EOF'
-. | .meta_repo.categories[].repository_paths? -= $remove_paths_json
-  | .meta_repo.repositories[]
-    |= del(select(
-            .path
-            | in($remove_paths_json
-                  | map(. as $elem | { key: $elem, value: 1 })
-                  | from_entries)))
-    | del(..|nulls)
-  | .meta_repo.updated
-    |= (now | todate)
+  _json_jq_update "$config_file" \
+    --argjson remove_paths_json "$remove_paths_json" <<'EOF'
+    . | .meta_repo.categories[].repository_paths? -= $remove_paths_json
+      | .meta_repo.repositories[]
+        |= del(select(
+                .path
+                | in($remove_paths_json
+                      | map(. as $elem | { key: $elem, value: 1 })
+                      | from_entries)))
+        | del(..|nulls)
+      | .meta_repo.updated |= (now | todate)
 EOF
-)
-
-  _json_jq_update "$config_file" --argjson remove_paths_json "$remove_paths_json" "$filter"
 }
 
 # __ prefix indicates private access - e.g. implementation details not meant to cross the interface
