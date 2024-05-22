@@ -6,6 +6,7 @@ set -euo pipefail
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
+source "$_MARMOT_HOME/lib/string.zsh"
 
 ## Shared environment
 
@@ -31,28 +32,17 @@ function main() {
     exit 1
   fi
 
-  local category_or_subcategory
+  local category_or_subcategory category_name subcategory_name
   category_or_subcategory="$1"
+  category_name="$(_string_category_name "$category_or_subcategory")"
+  subcategory_name="$(_string_subcategory_name "$category_or_subcategory")"
 
-  ## make_category_directories "$@"
-
-  # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
-  declare -a category_words=()
-  category_words=(${=category_or_subcategory//\// })
-
-  local category_name subcategory_name
-  category_name="${category_words[1]}"
-  subcategory_name="${category_words[2]}"
-
-  subcategory_path="$(_fs_make_subcategory_path "$category_name" "$subcategory_name")"
-  echo "+ $subcategory_path (sub-category)"
-
-  ## _config_add_categories "$(_fs_metadata_file)" "$@"
-
+  # Could be a new (sub-)category; create if so
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
+  _fs_make_category_path "$category_name"
+  _fs_make_subcategory_path "$category_name" "$subcategory_name"
 
-  ## what it was doing before
-
+  # Add these repositories to the (sub-)category
   _config_add_repositories_to_category \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
