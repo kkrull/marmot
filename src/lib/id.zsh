@@ -1,16 +1,16 @@
 
 ## Category IDs
 
-# https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
-
 function _id_category_name() {
-  declare -a category_words=()
-  category_words=(${=category_or_subcategory//\// })
-  echo "${category_words[1]}"
+  local category_or_subcategory
+  category_or_subcategory="$1"
+  IFS='/' read -r category_name <<< "$category_or_subcategory"
+  echo "$category_name"
 }
 
 function _id_subcategory_name() {
-  declare -a category_words=()
-  category_words=(${=category_or_subcategory//\// })
-  echo "${category_words[2]}"
+  local category_or_subcategory
+  category_or_subcategory="$1"
+  IFS='/' read -r category_name subcategory_name <<< "$category_or_subcategory"
+  echo "$subcategory_name"
 }
