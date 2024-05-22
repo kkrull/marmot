@@ -2,14 +2,13 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT(1) Version 0.5.3 \| Meta Repo Management Tool
+title: MARMOT(1) Version 0.5.4 \| Meta Repo Management Tool
 ---
 
-```{=html}
 <!---
 man-pages reference: https://linux.die.net/man/7/man-pages
 -->
-```
+
 # NAME
 
 **marmot** - Meta Repo Management Tool

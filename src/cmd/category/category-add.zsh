@@ -50,8 +50,8 @@ function ensure_create_category() {
   subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
 
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
-  _fs_make_category_path "$category_name"
-  _fs_make_subcategory_path "$category_name" "$subcategory_name"
+  _fs_make_category_path "$category_name" > /dev/null
+  _fs_make_subcategory_path "$category_name" "$subcategory_name" > /dev/null
 }
 
 function link_to_category() {
