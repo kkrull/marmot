@@ -74,11 +74,11 @@ install-dependencies: brew-developer-install brew-user-install pre-commit-instal
 
 .PHONY: brew-developer-install
 brew-developer-install:
-	$(BREW) bundle install --file=./Brewfile.developer
+	$(BREW) bundle install --file=./etc/macos/Brewfile.developer
 
 .PHONY: brew-user-install
 brew-user-install:
-	$(BREW) bundle install --file=./Brewfile.user
+	$(BREW) bundle install --file=./etc/macos/Brewfile.user
 
 ### pre-commit targets
 

@@ -66,6 +66,8 @@ Tools used by some part of this project's build, deployment, or development proc
 
 ### Files
 
+In `etc/macos/`:
+
 - `Brewfile.developer` and `Brewfile.developer.lock.json`: packages for developers, to work on this
   project.
 - `Brewfile.user` and `Brewfile.user.lock.json`: packages for end users, to run the programs built

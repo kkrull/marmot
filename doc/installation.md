@@ -24,25 +24,25 @@ prefix=/path/to/programs make install
 
 ## Install dependencies
 
-Marmot uses a few packages that are listed in `Brewfile`.  If you happen to be using Homebrew, try
-this:
+Marmot uses a few packages that are listed in `etc/macos/Brewfile*`.  If you happen to be using
+Homebrew, try this:
 
 ```sh
-# Installs `jo` and `jq` commands, if you do not already have them
-brew bundle install
+# Installs programs needed at runtime
+brew bundle install --file=./etc/macos/Brewfile.user
 ```
 
 If you use another package manager such as `apt` (Debian, Ubuntu), there should be similarly named
-packages that provide the same commands.  It doesn't matter where `jo` and `jq` come from, as long
-as they are reasonably up to date and on your path.
+packages that provide the same commands.  It doesn't matter where they come from, as long as they
+are reasonably up to date and on your path.
 
-Please also remember to install `zsh` if you do not already have it.  You shouldn't have to use
-`zsh` as your main shell; it's just what Marmot uses for its own work.
+Please also remember to install `zsh` if you do not already have it.  You don't have to use `zsh` as
+your main shell; it's just what Marmot uses internally.
 
 ## Use it
 
 If you can run `marmot --help`, you have a working installation.  If you can re-start your terminal
 and it _still_ works, you're in even better shape.
 
-Now head over to [Getting Started](./getting-started.md) to see if Marmot does anything that
-might be useful to you.
+Now head over to [Getting Started](./getting-started.md) to see if Marmot does anything that might
+be useful to you.
