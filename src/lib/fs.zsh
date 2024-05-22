@@ -3,9 +3,8 @@
 ## Categories
 
 function _fs_add_repository_link() {
-  local category_or_subcategory repository_path
-  category_or_subcategory="$1"
-  repository_path="$2"
+  local category_or_subcategory="$1" repository_path="$2"
+  [[ -z "$category_or_subcategory" || -z "$repository_path" ]] && exit 0
 
   local link_path repository_name category_path
   category_path="$(_fs_category_path "$category_or_subcategory")"
@@ -16,15 +15,13 @@ function _fs_add_repository_link() {
 }
 
 function _fs_category_path() {
-  local category_or_subcategory
-  category_or_subcategory="$1"
-
+  local category_or_subcategory="$1"
   echo "$(_fs_metarepo_home)/$category_or_subcategory"
 }
 
 function _fs_make_category_path() {
-  local category_or_subcategory
-  category_or_subcategory="$1"
+  local category_or_subcategory="$1"
+  [[ -z "$category_or_subcategory" ]] && exit 0
 
   category_path="$(_fs_category_path "$category_or_subcategory")"
   mkdir -p "$category_path"
@@ -32,9 +29,9 @@ function _fs_make_category_path() {
 }
 
 function _fs_make_subcategory_path() {
-  local category subcategory
-  category="$1"
-  subcategory="$2"
+  local category="$1" subcategory="$2"
+  [[ -z "$category" || -z "$subcategory" ]] && exit 0
+
   _fs_make_category_path "$category/$subcategory"
 }
 

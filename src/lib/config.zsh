@@ -1,8 +1,7 @@
 # Marmot configuration
 
 function _config_init() {
-  local directory
-  directory="$1"
+  local directory="$1"
 
   _json_jq_create "$directory/meta-repo.json" \
     --arg version "$(_fs_marmot_version)" \
@@ -21,14 +20,15 @@ EOF
 
 ## .categories
 
+# Remove array elements matching '' to avoid entering a world of pain
+# https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
+
 function _config_add_categories() {
-  local config_file category_name
-  config_file="$1"
-  category_name="$2"
+  local config_file="$1" category_name="$2" ; shift 2
 
   local categories
   categories=("$(__config_category_from_name "$category_name")")
-  for subcategory_name in "${@:3}"
+  for subcategory_name in "${@:#}"
   do
     categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
@@ -42,12 +42,10 @@ EOF
 }
 
 function _config_add_repositories_to_category() {
-  local config_file category_full_name
-  config_file="$1"
-  category_full_name="$2"
+  local config_file="$1" category_full_name="$2" ; shift 2
 
   declare -a repository_paths=()
-  for some_repo_path in "${@:3}"
+  for some_repo_path in "${@:#}"
   do
     repository_paths+=("$(__config_normalize_path "$some_repo_path")")
   done
@@ -67,8 +65,7 @@ EOF
 }
 
 function _config_category_fullnames() {
-  local config_file
-  config_file="$1"
+  local config_file="$1"
 
   jq -r \
     '.meta_repo.categories[]?.full_name' \
@@ -78,9 +75,7 @@ function _config_category_fullnames() {
 # private
 
 function __config_category_from_name() {
-  local name parent_name
-  name="$1"
-  parent_name="${2-}"
+  local name="$1" parent_name="${2-}"
 
   if [[ -n "$parent_name" ]]
   then
@@ -101,11 +96,11 @@ function __config_category_from_name() {
 ## .repositories
 
 function _config_add_repositories() {
-  local config_file="$1"
-  declare -a repositories=()
+  local config_file="$1" ; shift 1
 
+  declare -a repositories=()
   local repo_path repository
-  for some_path in "${@:2}"
+  for some_path in "${@:#}"
   do
     repo_path="$(__config_normalize_path "$some_path")"
     repository="$(__config_repository_from_path "$repo_path")"
@@ -122,8 +117,7 @@ EOF
 }
 
 function _config_repository_paths() {
-  local config_file
-  config_file="$1"
+  local config_file="$1"
 
   # Treat lack of JSON fields as empty rather than as an error
   # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
@@ -133,8 +127,7 @@ function _config_repository_paths() {
 }
 
 function _config_repository_paths_reply() {
-  local config_file
-  config_file="$1"
+  local config_file="$1"
 
   reply=()
   while read -r line
@@ -148,10 +141,7 @@ EOF
 }
 
 function _config_repository_paths_in_category() {
-  local config_file category_or_subcategory
-  config_file="$1"
-  category_or_subcategory="$2"
-
+  local config_file="$1" category_or_subcategory="$2"
   local filter
   filter=$(cat <<-'EOF'
     .meta_repo.categories[]
@@ -167,8 +157,8 @@ EOF
 }
 
 function _config_remove_repositories() {
-  declare config_file="$1"
-  declare remove_paths=("${@:2}")
+  declare config_file="$1" ; shift 1
+  declare -a remove_paths=("${@:#}")
 
   _json_jq_update "$config_file" \
     --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
@@ -194,7 +184,6 @@ function __config_normalize_path() {
 }
 
 function __config_repository_from_path() {
-  local repo_path
-  repo_path="$1"
+  local repo_path="$1"
   jo -- "path=$repo_path"
 }

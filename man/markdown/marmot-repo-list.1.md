@@ -2,7 +2,7 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-REPO-LIST(1) Version 0.5.3 \| Meta Repo Management Tool
+title: MARMOT-REPO-LIST(1) Version 0.5.4 \| Meta Repo Management Tool
 ---
 
 # NAME
