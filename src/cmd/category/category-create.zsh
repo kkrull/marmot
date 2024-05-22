@@ -21,13 +21,15 @@ function main() {
   then
     print_usage
     exit 0
-  elif [[ $# == 0 ]]
+  elif [[ $# == 0 || -z "$1" ]]
   then
     echo "$_MARMOT_INVOCATION: Missing category name"
     exit 1
   else
-    make_category_directories "$@"
-    _config_add_categories "$(_fs_metadata_file)" "$@"
+    # Remove array elements matching '' to avoid entering a world of pain
+    # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
+    make_category_directories "${@:#}"
+    _config_add_categories "$(_fs_metadata_file)" "${@:#}"
   fi
 }
 
