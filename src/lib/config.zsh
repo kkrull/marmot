@@ -21,14 +21,18 @@ EOF
 
 ## .categories
 
+# Remove array elements matching '' to avoid entering a world of pain
+# https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
+
 function _config_add_categories() {
   local config_file category_name
   config_file="$1"
   category_name="$2"
+  shift 2
 
   local categories
   categories=("$(__config_category_from_name "$category_name")")
-  for subcategory_name in "${@:3}"
+  for subcategory_name in "${@:#}"
   do
     categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
@@ -45,9 +49,10 @@ function _config_add_repositories_to_category() {
   local config_file category_full_name
   config_file="$1"
   category_full_name="$2"
+  shift 2
 
   declare -a repository_paths=()
-  for some_repo_path in "${@:3}"
+  for some_repo_path in "${@:#}"
   do
     repository_paths+=("$(__config_normalize_path "$some_repo_path")")
   done
@@ -101,11 +106,11 @@ function __config_category_from_name() {
 ## .repositories
 
 function _config_add_repositories() {
-  local config_file="$1"
-  declare -a repositories=()
+  local config_file="$1" ; shift 1
 
+  declare -a repositories=()
   local repo_path repository
-  for some_path in "${@:2}"
+  for some_path in "${@:#}"
   do
     repo_path="$(__config_normalize_path "$some_path")"
     repository="$(__config_repository_from_path "$repo_path")"
@@ -167,8 +172,8 @@ EOF
 }
 
 function _config_remove_repositories() {
-  declare config_file="$1"
-  declare remove_paths=("${@:2}")
+  declare config_file="$1" ; shift 1
+  declare remove_paths=("${@:#}")
 
   _json_jq_update "$config_file" \
     --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
