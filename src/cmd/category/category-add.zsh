@@ -32,22 +32,27 @@ function main() {
     exit 1
   fi
 
-  local category_or_subcategory category_name subcategory_name
+  local category_or_subcategory
   category_or_subcategory="$1"
-  category_name="$(_id_category_name "$category_or_subcategory")"
-  subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
 
   # Given (sub-)category may be new; create if so
-  _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
-  _fs_make_category_path "$category_name"
-  _fs_make_subcategory_path "$category_name" "$subcategory_name"
-
-  # Add these repositories to the (sub-)category
+  ensure_create_category "$category_or_subcategory"
   _config_add_repositories_to_category \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
     "${@:2}"
   link_to_category "$category_or_subcategory" "${@:2}"
+}
+
+function ensure_create_category() {
+  local category_or_subcategory category_name subcategory_name
+  category_or_subcategory="$1"
+  category_name="$(_id_category_name "$category_or_subcategory")"
+  subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
+
+  _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
+  _fs_make_category_path "$category_name"
+  _fs_make_subcategory_path "$category_name" "$subcategory_name"
 }
 
 function link_to_category() {
