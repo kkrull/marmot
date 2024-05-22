@@ -5,8 +5,8 @@ set -euo pipefail
 
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
+source "$_MARMOT_HOME/lib/id.zsh"
 source "$_MARMOT_HOME/lib/json.zsh"
-source "$_MARMOT_HOME/lib/string.zsh"
 
 ## Shared environment
 
@@ -34,10 +34,10 @@ function main() {
 
   local category_or_subcategory category_name subcategory_name
   category_or_subcategory="$1"
-  category_name="$(_string_category_name "$category_or_subcategory")"
-  subcategory_name="$(_string_subcategory_name "$category_or_subcategory")"
+  category_name="$(_id_category_name "$category_or_subcategory")"
+  subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
 
-  # Could be a new (sub-)category; create if so
+  # Given (sub-)category may be new; create if so
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
   _fs_make_category_path "$category_name"
   _fs_make_subcategory_path "$category_name" "$subcategory_name"
@@ -60,23 +60,6 @@ function link_to_category() {
   do
     link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
-  done
-}
-
-function make_category_directories() {
-  local category_name
-  category_name="$1"
-  shift 1
-
-  local category_path
-  category_path="$(_fs_make_category_path "$category_name")"
-  echo "+ $category_path (category)"
-
-  local subcategory_path
-  for subcategory_name in "$@"
-  do
-    subcategory_path="$(_fs_make_subcategory_path "$category_name" "$subcategory_name")"
-    echo "+ $subcategory_path (sub-category)"
   done
 }
 
