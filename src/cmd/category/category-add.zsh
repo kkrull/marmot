@@ -34,6 +34,25 @@ function main() {
   local category_or_subcategory
   category_or_subcategory="$1"
 
+  ## make_category_directories "$@"
+
+  # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
+  declare -a category_words=()
+  category_words=(${=category_or_subcategory//\// })
+
+  local category_name subcategory_name
+  category_name="${category_words[1]}"
+  subcategory_name="${category_words[2]}"
+
+  subcategory_path="$(_fs_make_subcategory_path "$category_name" "$subcategory_name")"
+  echo "+ $subcategory_path (sub-category)"
+
+  ## _config_add_categories "$(_fs_metadata_file)" "$@"
+
+  _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
+
+  ## what it was doing before
+
   _config_add_repositories_to_category \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
@@ -51,6 +70,23 @@ function link_to_category() {
   do
     link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
+  done
+}
+
+function make_category_directories() {
+  local category_name
+  category_name="$1"
+  shift 1
+
+  local category_path
+  category_path="$(_fs_make_category_path "$category_name")"
+  echo "+ $category_path (category)"
+
+  local subcategory_path
+  for subcategory_name in "$@"
+  do
+    subcategory_path="$(_fs_make_subcategory_path "$category_name" "$subcategory_name")"
+    echo "+ $subcategory_path (sub-category)"
   done
 }
 
