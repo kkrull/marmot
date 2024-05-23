@@ -72,6 +72,27 @@ function _config_category_fullnames() {
     "$config_file"
 }
 
+function _config_rm_repositories_from_category() {
+  local config_file="$1" category_full_name="$2" ; shift 2
+
+  declare -a repository_paths=()
+  for some_repo_path in "${@:#}"
+  do
+    repository_paths+=("$(_fs_normalize_repo_path "$some_repo_path")")
+  done
+
+  _json_jq_update "$config_file" \
+    --arg category_full_name "$category_full_name" \
+    --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
+    --sort-keys <<-'EOF'
+    . | (.meta_repo.categories[]
+          | select(.full_name == $category_full_name)
+          | .repository_paths)
+        |= (. - $repository_paths | unique)
+      | .meta_repo.updated |= (now | todate)
+EOF
+}
+
 ### private
 
 function __config_category_from_name() {
