@@ -55,12 +55,10 @@ function ensure_create_category() {
 }
 
 function link_to_category() {
-  local category_name
-  category_name="$1"
+  local category_name="$1" ; shift 1
 
-  local link_path
-  local repository_path
-  for repository_path in "${@:2}"
+  local link_path repository_path
+  for repository_path in "${@:#}"
   do
     link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
