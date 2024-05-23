@@ -47,7 +47,7 @@ function _config_add_repositories_to_category() {
   declare -a repository_paths=()
   for some_repo_path in "${@:#}"
   do
-    repository_paths+=("$(__config_normalize_path "$some_repo_path")")
+    repository_paths+=("$(_fs_normalize_repo_path "$some_repo_path")")
   done
 
   # Complex assignment to update one element in the array without deleting the others
@@ -72,7 +72,7 @@ function _config_category_fullnames() {
     "$config_file"
 }
 
-# private
+### private
 
 function __config_category_from_name() {
   local name="$1" parent_name="${2-}"
@@ -102,7 +102,7 @@ function _config_add_repositories() {
   local repo_path repository
   for some_path in "${@:#}"
   do
-    repo_path="$(__config_normalize_path "$some_path")"
+    repo_path="$(_fs_normalize_repo_path "$some_path")"
     repository="$(__config_repository_from_path "$repo_path")"
     repositories+=("$repository")
   done
@@ -175,13 +175,7 @@ function _config_remove_repositories() {
 EOF
 }
 
-# private
-
-function __config_normalize_path() {
-  local some_path="$1"
-  local absolute_path="${some_path:A}"
-  echo "${absolute_path%%/.git}"
-}
+### private
 
 function __config_repository_from_path() {
   local repo_path="$1"
