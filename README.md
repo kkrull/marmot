@@ -56,6 +56,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 ## Versions
 
+- 0.5.5: Store and link to absolute paths for repositories.
 - 0.5.4: Bug fixes for empty category names and repository paths.
 - 0.5.3: Omit inserting duplicate categories or repositories.  Commands fail-fast.
 - 0.5.2: Add `marmot repo prune` to remove and de-categorize repositories that don't exist anymore.
