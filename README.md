@@ -56,8 +56,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 ## Versions
 
-- _next_: Add `marmot category rm` to remove a repository from a category.
-  - Offer a way to remove a newly-empty category that no longer has any repositories?
+- 0.6: Add `marmot category rm` to remove a repository from a category.
 - 0.5.5: Store and link to absolute paths for repositories.
 - 0.5.4: Bug fixes for empty category names and repository paths.
 - 0.5.3: Omit inserting duplicate categories or repositories.  Commands fail-fast.
