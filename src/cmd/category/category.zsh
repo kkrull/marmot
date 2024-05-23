@@ -41,6 +41,11 @@ function main() {
     exec "$_MARMOT_HOME/cmd/category/category-list.zsh" "$@"
     ;;
 
+  'rm')
+    shift 1
+    exec "$_MARMOT_HOME/cmd/category/category-rm.zsh" "$@"
+    ;;
+
   *)
     echo "Unknown sub-command: $sub_command"
     exit 1
@@ -58,6 +63,7 @@ SUB-COMMANDS
 add           Add repositories to a category
 create        Create a new category
 list          List categories
+rm            Remove repositories from a category
 
 OPTIONS
 --help        Show help

@@ -2,7 +2,7 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-CATEGORY-CREATE(1) Version 0.5.5 \| Meta Repo Management
+title: MARMOT-CATEGORY-CREATE(1) Version 0.6 \| Meta Repo Management
   Tool
 ---
 

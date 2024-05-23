@@ -10,7 +10,7 @@ source "$_MARMOT_HOME/lib/json.zsh"
 
 ## Shared environment
 
-export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} add"
+export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} rm"
 
 ## Command
 
@@ -34,34 +34,21 @@ function main() {
 
   local category_or_subcategory="$1" ; shift 1
 
-  # Given (sub-)category may be new; create if so
-  ensure_create_category "$category_or_subcategory"
-  _config_add_repositories_to_category \
+  _config_rm_repositories_from_category \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
     "${@:#}"
-  link_to_category "$category_or_subcategory" "${@:#}"
+  rm_link_to_category "$category_or_subcategory" "${@:#}"
 }
 
-function ensure_create_category() {
-  local category_or_subcategory category_name subcategory_name
-  category_or_subcategory="$1"
-  category_name="$(_id_category_name "$category_or_subcategory")"
-  subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
-
-  _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
-  _fs_make_category_path "$category_name" > /dev/null
-  _fs_make_subcategory_path "$category_name" "$subcategory_name" > /dev/null
-}
-
-function link_to_category() {
+function rm_link_to_category() {
   local category_name="$1" ; shift 1
 
   local link_path repository_path
   for repository_path in "${@:#}"
   do
-    link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
-    echo "+ ${link_path} (link)"
+    link_path="$(_fs_rm_repository_link "$category_name" "$repository_path")"
+    echo "- ${link_path} (link)"
   done
 }
 

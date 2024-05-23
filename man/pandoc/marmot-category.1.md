@@ -1,4 +1,4 @@
-% MARMOT-CATEGORY(1) Version 0.5.5 | Meta Repo Management Tool
+% MARMOT-CATEGORY(1) Version 0.6 | Meta Repo Management Tool
 % Kyle Krull
 % May 2024
 
@@ -35,6 +35,10 @@
 
 : List categories
 
+[**rm**](./marmot-category-rm.1.md)
+
+: Remove repositories from a category
+
 # ENVIRONMENT VARIABLES
 
 **MARMOT_META_REPO**
@@ -61,6 +65,7 @@
 
 [*marmot(1)*](./marmot.1.md), [*marmot-category-add(1)*](./marmot-category-add.1.md),
 [*marmot-category-create(1)*](./marmot-category-create.1.md),
-[*marmot-category-list(1)*](./marmot-category-list.1.md)
+[*marmot-category-list(1)*](./marmot-category-list.1.md),
+[*marmot-category-rm*](./marmot-category-rm.1.md)
 
 [*marmot(7)*](./marmot.7.md)
