@@ -3,14 +3,18 @@
 ## Categories
 
 function _fs_add_repository_link() {
-  local category_or_subcategory="$1" repository_path="$2"
-  [[ -z "$category_or_subcategory" || -z "$repository_path" ]] && exit 0
+  local category_or_subcategory="$1" some_repo_path="$2"
+  [[ -z "$category_or_subcategory" || -z "$some_repo_path" ]] && exit 0
 
-  local link_path repository_name category_path
+  local category_path full_repo_path repository_name
   category_path="$(_fs_category_path "$category_or_subcategory")"
-  repository_name="${repository_path:t}"
+  full_repo_path="$(_fs_normalize_repo_path "$some_repo_path")"
+  repository_name="${some_repo_path:t}"
+  (cd "$category_path" \
+    && ln -f -s "$full_repo_path" "$repository_name")
+
+  local link_path
   link_path="$category_or_subcategory/$repository_name"
-  (cd "$category_path" && ln -f -s "$repository_path" "$repository_name")
   echo "$link_path"
 }
 
