@@ -39,6 +39,25 @@ function _fs_make_subcategory_path() {
   _fs_make_category_path "$category/$subcategory"
 }
 
+function _fs_rm_repository_link() {
+  local category_or_subcategory="$1" some_repo_path="$2"
+  [[ -z "$category_or_subcategory" || -z "$some_repo_path" ]] && exit 0
+
+  local category_path
+  category_path="$(_fs_category_path "$category_or_subcategory")"
+
+  local full_repo_path repository_name
+  full_repo_path="$(_fs_normalize_repo_path "$some_repo_path")"
+  repository_name="${full_repo_path:t}"
+
+  local link_path_full
+  link_path_full="$category_path/$repository_name"
+  rm -f "$link_path_full"
+
+  local link_path_relative="$category_or_subcategory/$repository_name"
+  echo "$link_path_relative"
+}
+
 ## Configuration
 
 function _fs_metadata_dir() {
