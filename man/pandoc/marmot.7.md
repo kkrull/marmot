@@ -110,7 +110,8 @@ change open in a single editor.  Imagine how opening repositories for a front-en
 feature flags in a single editor might help you spot typos and stale flags:
 
 ```sh
-code ~/meta/project/frontend
+# Create a workspace to commit to multiple Git repos at the same time
+code ~/meta/project/frontend/*
 ```
 
 ## Use Categories for Shell Commands
