@@ -120,7 +120,6 @@ Imagine how categorizing repositories by platform might make it easier to check 
 using the same version of the platform:
 
 ```sh
-# direnv switches node to use the version listed in each directory
 $ marmot exec --category platform/node cat .node-version
 ~/meta/platform/node/fooclient: v16.0
 ~/meta/platform/node/barclient: v18.0
@@ -142,7 +141,6 @@ $ marmot exec --category api/client git grep 'apiVersion'
 $ marmot exec --category webapp git grep -e 'some[_]?field'
 ~/meta/webapp/fooserver/controller.js: some_field: "42"
 ~/meta/webapp/barclient/api.js: const answer = response.someField
-
 ```
 
 # SEE ALSO
