@@ -2,29 +2,34 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-REPO(1) Version 0.6 \| Meta Repo Management Tool
+title: 'MARMOT-REPO(1) Version 0.6.1 \| Meta Repo Management Tool'
 ---
 
-# NAME
+NAME
+====
 
 **marmot repo** - Work with repositories
 
-# SYNOPSIS
+SYNOPSIS
+========
 
 **marmot repo** \[**\--help**\]\
 **marmot repo** *sub-command* \[*args* ...\]
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
 **marmot repo** runs the given *sub-command* with any *args* to do
 something with repositories.
 
-# OPTIONS
+OPTIONS
+=======
 
 **\--help**  
 Show help
 
-# SUB-COMMANDS
+SUB-COMMANDS
+============
 
 [**list**](./marmot-repo-list.1.md)  
 List repositories
@@ -35,17 +40,20 @@ Prune references to missing repositories
 [**register**](./marmot-repo-register.1.md)  
 Register repositories to manage
 
-# ENVIRONMENT VARIABLES
+ENVIRONMENT VARIABLES
+=====================
 
-**MARMOT_META_REPO**  
+**MARMOT\_META\_REPO**  
 Path to the Meta Repo (default: \$HOME/meta)
 
-# FILES
+FILES
+=====
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
+*\$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
 Repositories that **marmot** knows about
 
-# EXIT STATUS
+EXIT STATUS
+===========
 
 0  
 Success
@@ -53,7 +61,8 @@ Success
 1+  
 Invalid command
 
-# SEE ALSO
+SEE ALSO
+========
 
 [*marmot(1)*](./marmot.1.md),
 [*marmot-repo-list(1)*](./marmot-repo-list.1.md),

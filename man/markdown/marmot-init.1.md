@@ -2,39 +2,46 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-INIT(1) Version 0.6 \| Meta Repo Management Tool
+title: 'MARMOT-INIT(1) Version 0.6.1 \| Meta Repo Management Tool'
 ---
 
-# NAME
+NAME
+====
 
 **marmot init** - Initialize a meta repo
 
-# SYNOPSIS
+SYNOPSIS
+========
 
 **marmot init** \[**\--help**\]\
 **marmot init**
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
 Initialize a blank Meta Repo in the configured directory, if none is
 already present.
 
-# OPTIONS
+OPTIONS
+=======
 
 **\--help**  
 Show help
 
-# ENVIRONMENT VARIABLES
+ENVIRONMENT VARIABLES
+=====================
 
-**MARMOT_META_REPO**  
+**MARMOT\_META\_REPO**  
 Path in which to create the Meta Repo (default: \$HOME/meta)
 
-# FILES
+FILES
+=====
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
+*\$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
 Blank metadata with no registered repositories or categories
 
-# EXIT STATUS
+EXIT STATUS
+===========
 
 0  
 Success
@@ -42,6 +49,7 @@ Success
 1+  
 Invalid command, command failure, or meta repo already exists
 
-# SEE ALSO
+SEE ALSO
+========
 
 [*marmot(1)*](./marmot.1.md), [*marmot(7)*](./marmot.7.md)

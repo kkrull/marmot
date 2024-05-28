@@ -56,6 +56,7 @@ If you are planning to contribute to Marmot in some fashion, these may be helpfu
 
 ## Versions
 
+- 0.6.1: `marmot repo prune` includes any un-registered repositories from categories.
 - 0.6: Add `marmot category rm` to remove a repository from a category.
 - 0.5.5: Store and link to absolute paths for repositories.
 - 0.5.4: Bug fixes for empty category names and repository paths.
