@@ -2,27 +2,23 @@
 author:
 - Kyle Krull
 date: May 2024
-title: 'MARMOT(1) Version 0.6.1 \| Meta Repo Management Tool'
+title: MARMOT(1) Version 0.6.1 \| Meta Repo Management Tool
 ---
 
-```{=html}
 <!---
 man-pages reference: https://linux.die.net/man/7/man-pages
 -->
-```
-NAME
-====
+
+# NAME
 
 **marmot** - Meta Repo Management Tool
 
-SYNOPSIS
-========
+# SYNOPSIS
 
 **marmot** \[**\--help**\] \[**\--version**\]\
 **marmot** *command* \[*args* ...\]
 
-DESCRIPTION
-===========
+# DESCRIPTION
 
 Run the **marmot** *command* with any *args* to interact with the Meta
 Repo or the repositories it tracks, in some way. See
@@ -33,8 +29,7 @@ other Git repositories that are grouped into 1 or more categories.
 **marmot** helps you work with all the repositories in a category, as if
 they are a single unit. See [*marmot(7)*](./marmot.7.md) to get started.
 
-OPTIONS
-=======
+# OPTIONS
 
 **\--help**  
 Show help
@@ -42,11 +37,9 @@ Show help
 **\--version**  
 Prints the **marmot** suite version that the program came from
 
-COMMANDS
-========
+# COMMANDS
 
-Meta Repo Commands
-------------------
+## Meta Repo Commands
 
 [**init**](./marmot-init.1.md)  
 Create a new meta repo
@@ -54,14 +47,12 @@ Create a new meta repo
 [**meta**](./marmot-meta.1.md)  
 Information about the meta repo itself
 
-Category commands
------------------
+## Category commands
 
 [**category**](./marmot-category.1.md)  
 Work with categories
 
-Repository Commands
--------------------
+## Repository Commands
 
 [**exec**](./marmot-exec.1.md)  
 Execute a shell command in multiple repositories
@@ -69,20 +60,17 @@ Execute a shell command in multiple repositories
 [**repo**](./marmot-repo.1.md)  
 Work with repositories
 
-ENVIRONMENT VARIABLES
-=====================
+# ENVIRONMENT VARIABLES
 
-**MARMOT\_META\_REPO**  
+**MARMOT_META_REPO**  
 Path to the Meta Repo (default: \$HOME/meta)
 
-FILES
-=====
+# FILES
 
-*\$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
+*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
 Registered repositories and how they relate to one another
 
-EXIT STATUS
-===========
+# EXIT STATUS
 
 0  
 Success
@@ -90,8 +78,7 @@ Success
 1+  
 Invalid command or command failure
 
-SEE ALSO
-========
+# SEE ALSO
 
 [*marmot-category(1)*](./marmot-category.1.md),
 [*marmot-exec(1)*](./marmot-exec.1.md),

@@ -2,29 +2,25 @@
 author:
 - Kyle Krull
 date: May 2024
-title: 'MARMOT-REPO-LIST(1) Version 0.6.1 \| Meta Repo Management Tool'
+title: MARMOT-REPO-LIST(1) Version 0.6.1 \| Meta Repo Management Tool
 ---
 
-NAME
-====
+# NAME
 
 **marmot repo list** - List repositories
 
-SYNOPSIS
-========
+# SYNOPSIS
 
 **marmot repo list** \[**\--help**\]\
 **marmot repo list** \[**\--category** *category*\|*sub-category*\]
 
-DESCRIPTION
-===========
+# DESCRIPTION
 
 **marmot repo list** lists repositories that have been registered with
 Marmot. Given options, this lists only the repositories that match the
 given criteria.
 
-OPTIONS
-=======
+# OPTIONS
 
 **\--category**  
 List repositories that have been added to the given *category* or
@@ -33,18 +29,15 @@ List repositories that have been added to the given *category* or
 **\--help**  
 Show help
 
-ENVIRONMENT VARIABLES
-=====================
+# ENVIRONMENT VARIABLES
 
 See [*marmot-repo(1)*](./marmot-repo.1.md).
 
-FILES
-=====
+# FILES
 
 See [*marmot-repo(1)*](./marmot-repo.1.md).
 
-EXIT STATUS
-===========
+# EXIT STATUS
 
 0  
 Success
@@ -52,17 +45,15 @@ Success
 1+  
 Invalid command or command failure
 
-EXAMPLE
-=======
+# EXAMPLE
 
 List registered TypeScript repositories
 
-``` {.sh}
+``` sh
 marmot repo list --category lang/typescript
 ```
 
-SEE ALSO
-========
+# SEE ALSO
 
 [*marmot(1)*](./marmot.1.md), [*marmot-repo(1)*](./marmot-repo.1.md)
 

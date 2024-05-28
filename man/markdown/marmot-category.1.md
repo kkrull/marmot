@@ -2,34 +2,29 @@
 author:
 - Kyle Krull
 date: May 2024
-title: 'MARMOT-CATEGORY(1) Version 0.6.1 \| Meta Repo Management Tool'
+title: MARMOT-CATEGORY(1) Version 0.6.1 \| Meta Repo Management Tool
 ---
 
-NAME
-====
+# NAME
 
 **marmot category** - Work with categories
 
-SYNOPSIS
-========
+# SYNOPSIS
 
 **marmot category** \[**\--help**\]\
 **marmot category** *sub-command* \[*args* ...\]
 
-DESCRIPTION
-===========
+# DESCRIPTION
 
 **marmot category** runs the given *sub-command* with any *args*, to do
 something with categories.
 
-OPTIONS
-=======
+# OPTIONS
 
 **\--help**  
 Show help
 
-SUB-COMMANDS
-============
+# SUB-COMMANDS
 
 [**add**](./marmot-category-add.1.md)  
 Add repositories to a category
@@ -43,20 +38,17 @@ List categories
 [**rm**](./marmot-category-rm.1.md)  
 Remove repositories from a category
 
-ENVIRONMENT VARIABLES
-=====================
+# ENVIRONMENT VARIABLES
 
-**MARMOT\_META\_REPO**  
+**MARMOT_META_REPO**  
 Path to the Meta Repo (default: \$HOME/meta)
 
-FILES
-=====
+# FILES
 
-*\$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
+*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
 Each category and references to their repositories
 
-EXIT STATUS
-===========
+# EXIT STATUS
 
 0  
 Success
@@ -64,8 +56,7 @@ Success
 1+  
 Invalid command
 
-SEE ALSO
-========
+# SEE ALSO
 
 [*marmot(1)*](./marmot.1.md),
 [*marmot-category-add(1)*](./marmot-category-add.1.md),

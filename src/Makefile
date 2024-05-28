@@ -38,7 +38,7 @@ source-debug:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
-## Standard Targets
+#. STANDARD TARGETS
 
 .PHONY: all clean install test uninstall
 all:
@@ -47,19 +47,27 @@ all:
 clean:
 	@:
 
-install:
+install: #> Install symlink from $(bindir) to sources
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
 test:
 	@:
 
-uninstall:
+uninstall: #> Delete symlink from $(bindir)
 	$(RM) $(bindir)/marmot
 
-## Other Targets
+#. OTHER TARGETS
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: path-debug source-debug
+debug: path-debug source-debug #> Show debugging information
 	@:
+
+.PHONY: help
+help: #> Show this help
+	@sed -n \
+		-e '/@sed/!s/#[.] *//p' \
+		-e '/@sed/!s/:.*#> /:/p' \
+		$(MAKEFILE_LIST) \
+		| column -ts :
