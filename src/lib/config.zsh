@@ -149,16 +149,21 @@ function _config_repository_paths() {
 
 function _config_repository_paths_reply() {
   local config_file="$1"
+  local filter
+
+  filter=$(cat <<-EOF
+    [ .meta_repo.categories[].repository_paths[] ]
+      + [ .meta_repo.repositories[].path ]
+      | unique
+      | .[]
+EOF
+)
 
   reply=()
   while read -r line
   do
     reply+=("$line")
-  done <<-EOF
-    $(jq < "$config_file" \
-      --raw-output \
-      '.meta_repo.repositories[]?.path')
-EOF
+  done < <(jq --raw-output "$filter" "$config_file")
 }
 
 function _config_repository_paths_in_category() {
