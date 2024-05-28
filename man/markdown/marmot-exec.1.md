@@ -2,21 +2,24 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-EXEC(1) Version 0.6 \| Meta Repo Management Tool
+title: 'MARMOT-EXEC(1) Version 0.6.1 \| Meta Repo Management Tool'
 ---
 
-# NAME
+NAME
+====
 
 **marmot exec** - Execute a command in multiple repositories
 
-# SYNOPSIS
+SYNOPSIS
+========
 
 **marmot exec** \[**\--help**\]\
 **marmot exec** \[**\--category** *category*\|*sub-category*\]
 \[**\--direnv**\] \[**\--repo-names** **heading**\|**inline**\]
 *shell-command* \[*args* ...\]
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
 **marmot exec** repeats a given *shell-command* with any *args* on each
 matching repository. The repositories are either all registered
@@ -30,7 +33,8 @@ environment when changing directories. The usefulness of the shell
 command may depend upon it, for example when checking if all
 repositories in a project use the same version of Node.js.
 
-# OPTIONS
+OPTIONS
+=======
 
 **\--direnv**  
 Suppress `direnv` output when changing directories
@@ -42,17 +46,20 @@ Show help
 Print repository names **inline** prior to output from *shell-command*,
 or as a **heading** above it
 
-# ENVIRONMENT VARIABLES
+ENVIRONMENT VARIABLES
+=====================
 
-**MARMOT_META_REPO**  
+**MARMOT\_META\_REPO**  
 Path to the Meta Repo (default: \$HOME/meta)
 
-# FILES
+FILES
+=====
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
+*\$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
 Categories and registered repositories
 
-# EXIT STATUS
+EXIT STATUS
+===========
 
 0  
 Success
@@ -60,13 +67,15 @@ Success
 1+  
 Invalid command or **shell-command** failure
 
-# NOTES
+NOTES
+=====
 
-## `direnv`
+`direnv`
+--------
 
 Suppress `direnv` output by setting `DIRENV_LOG_FORMAT=`.
 
-``` sh
+``` {.sh}
 $ marmot exec --direnv node --version
 /Users/developer/git/website-api: v14.18.1
 /Users/developer/git/website-app: v20.11.1
@@ -74,54 +83,60 @@ $ marmot exec --direnv node --version
 
 Source: <https://github.com/direnv/direnv/wiki/Quiet-or-Silence-direnv>
 
-## Git
+Git
+---
 
 Add `--no-pager` to git commands that pipe to less (and pause for
 input).
 
-# EXAMPLE
+EXAMPLE
+=======
 
-## Scanning
+Scanning
+--------
 
 Node: List version of Node.js used in repositories that use direnv+nvm:
 
-``` sh
+``` {.sh}
 marmot exec --category platform/node --direnv \
   node --version
 ```
 
-## Searching and Tracing
+Searching and Tracing
+---------------------
 
 Git: Grep for matching source code in all repositories:
 
-``` sh
+``` {.sh}
 marmot exec --category project/robot-masters --repo-names heading \
   git --no-pager grep dungeonType
 ```
 
-## Unified Work
+Unified Work
+------------
 
 Git: Check which branches are checked out right now:
 
-``` sh
+``` {.sh}
 marmot exec --category project/too-many-microservices \
   git branch --show-current
 ```
 
 Git: Pull all the things!
 
-``` sh
+``` {.sh}
 marmot exec --repo-names heading \
   git pull --ff-only origin
 ```
 
 Git: Push all the things!
 
-``` sh
+``` {.sh}
 marmot exec --repo-names heading \
   git push
 ```
 
-# SEE ALSO
+SEE ALSO
+========
 
 [*marmot(1)*](./marmot.1.md), [*marmot(7)*](./marmot.7.md)

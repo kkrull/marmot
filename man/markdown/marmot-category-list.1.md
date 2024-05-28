@@ -2,37 +2,45 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-CATEGORY-LIST(1) Version 0.6 \| Meta Repo Management Tool
+title: 'MARMOT-CATEGORY-LIST(1) Version 0.6.1 \| Meta Repo Management
+  Tool'
 ---
 
-# NAME
+NAME
+====
 
 **marmot category list** - List categories
 
-# SYNOPSIS
+SYNOPSIS
+========
 
 **marmot category list** \[**\--help**\]\
 **marmot category list**
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
 **marmot category list** lists the categories that are used to group
 repositories.
 
-# OPTIONS
+OPTIONS
+=======
 
 **\--help**  
 Show help
 
-# ENVIRONMENT VARIABLES
+ENVIRONMENT VARIABLES
+=====================
 
 See [*marmot-category(1)*](./marmot-category.1.md).
 
-# FILES
+FILES
+=====
 
 See [*marmot-category(1)*](./marmot-category.1.md).
 
-# EXIT STATUS
+EXIT STATUS
+===========
 
 0  
 Success
@@ -40,7 +48,8 @@ Success
 1+  
 Invalid command or command failure
 
-# SEE ALSO
+SEE ALSO
+========
 
 [*marmot(1)*](./marmot.1.md),
 [*marmot-category(1)*](./marmot-category.1.md)

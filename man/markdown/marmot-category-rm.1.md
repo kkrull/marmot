@@ -2,39 +2,47 @@
 author:
 - Kyle Krull
 date: May 2024
-title: MARMOT-CATEGORY-RM(1) Version 0.6 \| Meta Repo Management Tool
+title: 'MARMOT-CATEGORY-RM(1) Version 0.6.1 \| Meta Repo Management
+  Tool'
 ---
 
-# NAME
+NAME
+====
 
 **marmot category rm** - Remove repositories from a category
 
-# SYNOPSIS
+SYNOPSIS
+========
 
 **marmot category rm** \[**\--help**\]\
 **marmot category rm** *category* *repository* \[...\]\
 **marmot category rm** *category*/*sub-category* *repository* \[...\]
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
 **marmot category rm** removes each *repository* from a *category* or
 *sub-category*. Add a **/** between *category* and *sub-category*, to
 work within a sub-category.
 
-# OPTIONS
+OPTIONS
+=======
 
 **\--help**  
 Show help
 
-# ENVIRONMENT VARIABLES
+ENVIRONMENT VARIABLES
+=====================
 
 See [*marmot-category(1)*](./marmot-category.1.md).
 
-# FILES
+FILES
+=====
 
 See [*marmot-category(1)*](./marmot-category.1.md).
 
-# EXIT STATUS
+EXIT STATUS
+===========
 
 0  
 Success
@@ -42,16 +50,18 @@ Success
 1+  
 Invalid command or command failure
 
-# EXAMPLE
+EXAMPLE
+=======
 
 Remove a newly-categorized repository from the "inbox" category:
 
-``` sh
+``` {.sh}
 marmot category add lang/shiny ~/git/what-is-this
 marmot category rm inbox ~/git/what-is-this
 ```
 
-# SEE ALSO
+SEE ALSO
+========
 
 [*marmot(1)*](./marmot.1.md),
 [*marmot-category(1)*](./marmot-category.1.md)
