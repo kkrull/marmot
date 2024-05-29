@@ -3,7 +3,7 @@
 function _config_init() {
   local directory="$1"
 
-  _json_jq_create "$directory/meta-repo.json" \
+  _jq_create "$directory/meta-repo.json" \
     --arg version "$(_fs_marmot_version)" \
     --null-input \
     --sort-keys <<-'EOF'
@@ -33,7 +33,7 @@ function _config_add_categories() {
     categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
   done
 
-  _json_jq_update "$config_file" \
+  _jq_update "$config_file" \
     --argjson categories "$(jo -a "${categories[@]}")" \
     --sort-keys <<-'EOF'
     . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
@@ -52,7 +52,7 @@ function _config_add_repositories_to_category() {
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
-  _json_jq_update "$config_file" \
+  _jq_update "$config_file" \
     --arg category_full_name "$category_full_name" \
     --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
     --sort-keys <<-'EOF'
@@ -81,7 +81,7 @@ function _config_rm_repositories_from_category() {
     repository_paths+=("$(_fs_normalize_repo_path "$some_repo_path")")
   done
 
-  _json_jq_update "$config_file" \
+  _jq_update "$config_file" \
     --arg category_full_name "$category_full_name" \
     --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
     --sort-keys <<-'EOF'
@@ -128,7 +128,7 @@ function _config_add_repositories() {
     repositories+=("$repository")
   done
 
-  _json_jq_update "$config_file" \
+  _jq_update "$config_file" \
     --argjson repositories "$(jo -a "${repositories[@]}")" \
     --sort-keys <<-'EOF'
     .
@@ -186,7 +186,7 @@ function _config_remove_repositories() {
   declare config_file="$1" ; shift 1
   declare -a remove_paths=("${@:#}")
 
-  _json_jq_update "$config_file" \
+  _jq_update "$config_file" \
     --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
     --sort-keys <<-'EOF'
     . | .meta_repo.categories[].repository_paths? -= $repository_paths
