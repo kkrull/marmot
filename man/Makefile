@@ -51,40 +51,47 @@ source-debug:
 	$(info - sources_man1: $(sources_man1))
 	$(info - sources_man7: $(sources_man7))
 
-## Standard Targets
+#. STANDARD TARGETS
 
 .PHONY: all clean install test uninstall
-all:
+all: groff-manual markdown-manual #> Build all manuals
 	@:
 
-clean: groff-manual-clean markdown-manual-clean
+clean: groff-manual-clean markdown-manual-clean #> Remove built manuals
+	@:
 
-install: groff-manual-install
+install: groff-manual-install #> Install man pages to $(mandir)
+	@:
 
 test:
 	@:
 
-uninstall: groff-manual-uninstall
+uninstall: groff-manual-uninstall #> Uninstall man pages
+	@:
 
-## Other Targets
+#. OTHER TARGETS
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: path-debug source-debug groff-manual-debug markdown-manual-debug
+debug: path-debug source-debug groff-manual-debug markdown-manual-debug #> Show debugging information
 	@:
 
-.PHONY: man
-man: groff-manual markdown-manual
-	@:
+.PHONY: help
+help: #> Show this help
+	@sed -n \
+		-e '/@sed/!s/#[.] *//p' \
+		-e '/@sed/!s/:.*#> /:/p' \
+		$(MAKEFILE_LIST) \
+		| column -ts :
 
-### groff manual (e.g. man pages) targets
+#. GROFF MANUAL TARGETS
 
 groff_manual_installed := $(wildcard $(man1dir)/marmot* $(man7dir)/marmot*)
 groff_man1_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man1))
 groff_man7_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man7))
 
 .PHONY: groff-manual
-groff-manual: $(groff_man1_objects) $(groff_man7_objects)
+groff-manual: $(groff_man1_objects) $(groff_man7_objects) #> Build man pages
 
 .PHONY: groff-manual-clean
 groff-manual-clean:
@@ -104,7 +111,7 @@ groff-manual-install: $(groff_man1_objects) $(groff_man7_objects)
 	install -g 0 -o 0 -m 0644 $(groff_man7_objects) $(man7dir)
 
 .PHONY: groff-manual-preview
-groff-manual-preview:
+groff-manual-preview: #> Render man pages without building or installing
 	$(PANDOC) $(sources) $(PANDOCFLAGS) -s -t man \
 		| $(MANDOC)
 
@@ -113,7 +120,7 @@ groff-manual-uninstall:
 	$(RM) $(groff_manual_installed)
 
 .PHONY: groff-manual-watch
-groff-manual-watch:
+groff-manual-watch: #> Emit rendered man pages when Pandoc sources change
 	$(FSWATCH) $(sources) \
 		| xargs -I {} echo "$(PANDOC) {} $(PANDOCFLAGS) -s -t man | $(MANDOC)" \
 		| sh
@@ -121,13 +128,13 @@ groff-manual-watch:
 groff/%: pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
 
-### markdown manual targets
+#. MARKDOWN MANUAL TARGETS
 
 markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
 markdown_manual_objects_dir := markdown
 
 .PHONY: markdown-manual
-markdown-manual: $(markdown_manual_objects)
+markdown-manual: $(markdown_manual_objects) #> Build Markdown manuals which are part of this repo
 
 .PHONY: markdown-manual-clean
 markdown-manual-clean:

@@ -2,43 +2,36 @@
 author:
 - Kyle Krull
 date: May 2024
-title: 'MARMOT-META-HOME(1) Version 0.6.1 \| Meta Repo Management Tool'
+title: MARMOT-META-HOME(1) Version 0.6.1 \| Meta Repo Management Tool
 ---
 
-NAME
-====
+# NAME
 
 **marmot meta home** - Show path to Meta Repo
 
-SYNOPSIS
-========
+# SYNOPSIS
 
 **marmot meta home** \[**\--help**\]\
 **marmot meta home**
 
-DESCRIPTION
-===========
+# DESCRIPTION
 
 **marmot meta home** prints the base directory of the Meta Repo.
 
-OPTIONS
-=======
+# OPTIONS
 
 **\--help**  
 Show help
 
-ENVIRONMENT VARIABLES
-=====================
+# ENVIRONMENT VARIABLES
 
 See [*marmot-meta(1)*](./marmot-meta.1.md).
 
-FILES
-=====
+# FILES
 
 See [*marmot-meta(1)*](./marmot-meta.1.md).
 
-EXIT STATUS
-===========
+# EXIT STATUS
 
 0  
 Success
@@ -46,8 +39,7 @@ Success
 1+  
 Invalid command or command failure
 
-SEE ALSO
-========
+# SEE ALSO
 
 [*marmot(1)*](./marmot.1.md), [*marmot-meta(1)*](./marmot-meta.1.md)
 
