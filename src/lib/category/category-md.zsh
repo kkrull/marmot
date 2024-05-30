@@ -44,7 +44,6 @@ function _categorymd_create() {
 EOF
 }
 
-
 function _categorymd_full_names() {
   local config_file="$1"
 
