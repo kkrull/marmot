@@ -5,7 +5,7 @@ set -euo pipefail
 
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
-source "$_MARMOT_HOME/lib/id.zsh"
+source "$_MARMOT_HOME/lib/category-id.zsh"
 source "$_MARMOT_HOME/lib/jq.zsh"
 
 ## Shared environment

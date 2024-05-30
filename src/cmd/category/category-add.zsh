@@ -5,7 +5,7 @@ set -euo pipefail
 
 source "$_MARMOT_HOME/lib/config.zsh"
 source "$_MARMOT_HOME/lib/fs.zsh"
-source "$_MARMOT_HOME/lib/id.zsh"
+source "$_MARMOT_HOME/lib/category-id.zsh"
 source "$_MARMOT_HOME/lib/jq.zsh"
 
 ## Shared environment
@@ -46,8 +46,8 @@ function main() {
 function ensure_create_category() {
   local category_or_subcategory category_name subcategory_name
   category_or_subcategory="$1"
-  category_name="$(_id_category_name "$category_or_subcategory")"
-  subcategory_name="$(_id_subcategory_name "$category_or_subcategory")"
+  category_name="$(_category_name_from_id "$category_or_subcategory")"
+  subcategory_name="$(_category_subcategory_from_id "$category_or_subcategory")"
 
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
   _fs_make_category_path "$category_name" > /dev/null
