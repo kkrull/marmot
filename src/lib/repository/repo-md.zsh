@@ -2,7 +2,7 @@
 # Repository metadata
 
 function _repomd_add_local_paths() {
-  local config_file="$1" ; shift 1
+  local data_file="$1" ; shift 1
 
   declare -a repositories=()
   local repo_path repository
@@ -13,7 +13,7 @@ function _repomd_add_local_paths() {
     repositories+=("$repository")
   done
 
-  _jq_update "$config_file" \
+  _jq_update "$data_file" \
     --argjson repositories "$(jo -a "${repositories[@]}")" \
     --sort-keys <<-'EOF'
     .
@@ -23,13 +23,12 @@ EOF
 }
 
 function _repomd_delete_local_paths() {
-  declare config_file="$1" ; shift 1
+  declare data_file="$1" ; shift 1
   declare -a remove_paths=("${@:#}")
 
-  _jq_update "$config_file" \
+  _jq_update "$data_file" \
     --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
     --sort-keys <<-'EOF'
-    . | .meta_repo.categories[].repository_paths? -= $repository_paths
       | .meta_repo.repositories[]
         |= del(select(
                 .path
@@ -42,17 +41,17 @@ EOF
 }
 
 function _repomd_local_paths() {
-  local config_file="$1"
+  local data_file="$1"
 
   # Treat lack of JSON fields as empty rather than as an error
   # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
   jq -r \
     '.meta_repo.repositories[]?.path' \
-    "$config_file"
+    "$data_file"
 }
 
 function _repomd_local_paths_for_category() {
-  local config_file="$1" category_or_subcategory="$2"
+  local data_file="$1" category_or_subcategory="$2"
   local filter
   filter=$(cat <<-'EOF'
     .meta_repo.categories[]
@@ -64,11 +63,11 @@ EOF
   jq \
     --arg full_name "$category_or_subcategory" \
     -r \
-    "$filter" "$config_file"
+    "$filter" "$data_file"
 }
 
 function _repomd_local_paths_reply() {
-  local config_file="$1"
+  local data_file="$1"
   local filter
 
   filter=$(cat <<-EOF
@@ -83,7 +82,7 @@ EOF
   while read -r line
   do
     reply+=("$line")
-  done < <(jq --raw-output "$filter" "$config_file")
+  done < <(jq --raw-output "$filter" "$data_file")
 }
 
 ## private

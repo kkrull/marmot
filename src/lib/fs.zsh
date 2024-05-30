@@ -5,6 +5,10 @@ function _fs_metadata_dir() {
   echo "$(_fs_metarepo_home)/.marmot"
 }
 
+function _fs_localdata_file() {
+  echo "$(_fs_metarepo_home)/.marmot/meta-repo-local.json"
+}
+
 function _fs_metadata_file() {
   echo "$(_fs_metarepo_home)/.marmot/meta-repo.json"
 }

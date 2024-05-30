@@ -44,6 +44,18 @@ function _categorymd_create() {
 EOF
 }
 
+function _categorymd_delete_local_paths() {
+  declare data_file="$1" ; shift 1
+  declare -a remove_paths=("${@:#}")
+
+  _jq_update "$data_file" \
+    --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories[].repository_paths? -= $repository_paths
+      | .meta_repo.updated |= (now | todate)
+EOF
+}
+
 function _categorymd_full_names() {
   local config_file="$1"
 
