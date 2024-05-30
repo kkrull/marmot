@@ -15,3 +15,7 @@ function _metacmd_init() {
   _metafs_init "$directory"
   echo "Initialized meta repository at $directory"
 }
+
+function _metacmd_show_home() {
+  _fs_metarepo_home
+}

@@ -15,7 +15,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} home"
 function main() {
   if [[ $# == 0 ]]
   then
-    show_home
+    _metacmd_show_home
     exit 0
   fi
 
@@ -29,10 +29,6 @@ function main() {
     echo "Unknown option: $1"
     exit 1
   fi
-}
-
-function show_home() {
-  _fs_metarepo_home
 }
 
 function print_usage() {
