@@ -7,7 +7,7 @@ function _repocmd_list_all() {
 
 function _repocmd_list_category() {
   local category_id="$1"
-  _repomd_local_paths_for_category "$(_fs_localdata_file)" "$category_id"
+  _repomd_local_paths_for_category "$(_fs_metadata_file)" "$category_id"
 }
 
 function _repocmd_prune_missing() {
