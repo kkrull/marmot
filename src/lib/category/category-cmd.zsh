@@ -5,20 +5,20 @@
 # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
 
 function _categorycmd_add_repository_paths() {
-  local category_or_subcategory="$1" ; shift 1
+  local category_id="$1" ; shift 1
 
   # Given (sub-)category may be new; create if so
-  ensure_create_category "$category_or_subcategory"
+  __categorycmd_ensure_create "$category_id"
 
   _categorymd_add_repositories_as_local_path \
     "$(_fs_metadata_file)" \
-    "$category_or_subcategory" \
+    "$category_id" \
     "${@:#}"
-  link_to_category "$category_or_subcategory" "${@:#}"
+  __categorycmd_add_links_to_local_paths "$category_id" "${@:#}"
 }
 
 function _categorycmd_create() {
-  make_category_directories "${@:#}"
+  __categorycmd_mkdirs "${@:#}"
   _categorymd_create "$(_fs_metadata_file)" "${@:#}"
 }
 
@@ -27,29 +27,18 @@ function _categorycmd_list() {
 }
 
 function _categorycmd_rm_repository_paths() {
-  local category_or_subcategory="$1" ; shift 1
+  local category_id="$1" ; shift 1
 
   _categorymd_remove_repositories_as_local_paths \
     "$(_fs_metadata_file)" \
-    "$category_or_subcategory" \
+    "$category_id" \
     "${@:#}"
-  rm_link_to_category "$category_or_subcategory" "${@:#}"
+  __categorycmd_rm_links_to_local_paths "$category_id" "${@:#}"
 }
 
 ## private
 
-function ensure_create_category() {
-  local category_or_subcategory category_name subcategory_name
-  category_or_subcategory="$1"
-  category_name="$(_categoryid_category "$category_or_subcategory")"
-  subcategory_name="$(_categoryid_subcategory "$category_or_subcategory")"
-
-  _categorymd_create "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
-  _categoryfs_mkdir "$category_name" > /dev/null
-  _categoryfs_mkdir_subcategory "$category_name" "$subcategory_name" > /dev/null
-}
-
-function link_to_category() {
+function __categorycmd_add_links_to_local_paths() {
   local category_name="$1" ; shift 1
 
   local link_path repository_path
@@ -60,10 +49,20 @@ function link_to_category() {
   done
 }
 
-function make_category_directories() {
-  local category_name
-  category_name="$1"
-  shift 1
+function __categorycmd_ensure_create() {
+  local category_id="$1"
+
+  local category_name subcategory_name
+  category_name="$(_categoryid_category "$category_id")"
+  subcategory_name="$(_categoryid_subcategory "$category_id")"
+
+  _categorymd_create "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
+  _categoryfs_mkdir "$category_name" > /dev/null
+  _categoryfs_mkdir_subcategory "$category_name" "$subcategory_name" > /dev/null
+}
+
+function __categorycmd_mkdirs() {
+  local category_name="$1" ; shift 1
 
   local category_path
   category_path="$(_categoryfs_mkdir "$category_name")"
@@ -77,7 +76,7 @@ function make_category_directories() {
   done
 }
 
-function rm_link_to_category() {
+function __categorycmd_rm_links_to_local_paths() {
   local category_name="$1" ; shift 1
 
   local link_path repository_path
