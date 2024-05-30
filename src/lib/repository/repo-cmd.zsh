@@ -39,6 +39,6 @@ function _repocmd_register_from_local_paths() {
     ssh_url="$(cd "$local_path" && git remote get-url "$remote_name")"
 
     _repomd_add_local_path "$(_fs_localdata_file)" "$local_path" "$ssh_url"
-    _repomd_add_remote "$(_fs_localdata_file)" "$ssh_url"
+    _repomd_add_remote "$(_fs_metadata_file)" "$ssh_url"
   done
 }

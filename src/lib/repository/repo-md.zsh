@@ -42,6 +42,24 @@ function _repomd_add_local_paths() {
 EOF
 }
 
+function _repomd_add_remote() {
+  local data_file="$1"
+  local ssh_url="$2"
+
+  declare -a repositories=()
+  local repository
+  repository="$(__repomd_repository_from_url "$ssh_url")"
+  repositories+=("$repository")
+
+  _jq_update "$data_file" \
+    --argjson repositories "$(jo -a "${repositories[@]}")" \
+    --sort-keys <<-'EOF'
+    .
+      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
+      | .meta_repo.updated |= (now | todate)
+EOF
+}
+
 function _repomd_delete_local_paths() {
   declare data_file="$1" ; shift 1
   declare -a remove_paths=("${@:#}")
@@ -116,4 +134,9 @@ function __repomd_repository_from_local_path_and_url() {
   local repo_path="$1"
   local ssh_url="$2"
   jo -- "path=$repo_path" "ssh_url=$ssh_url"
+}
+
+function __repomd_repository_from_url() {
+  local ssh_url="$1"
+  jo -- "ssh_url=$ssh_url"
 }
