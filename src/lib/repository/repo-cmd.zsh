@@ -32,5 +32,6 @@ function _repocmd_prune_missing() {
 }
 
 function _repocmd_register_local_paths() {
+  # TODO KDK: Add repository SSH URLs to the metadata file, too
   _repomd_add_local_paths "$(_fs_localdata_file)" "$@"
 }

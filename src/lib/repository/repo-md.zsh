@@ -1,6 +1,7 @@
 
 # Repository metadata
 
+# TODO KDK: Call `git remote get-url "$(git remote)"` on each repository, to add to local file
 function _repomd_add_local_paths() {
   local data_file="$1" ; shift 1
 
