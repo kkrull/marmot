@@ -1,4 +1,5 @@
-# Marmot configuration
+
+# Marmot metadata
 
 function _config_init() {
   local directory="$1"

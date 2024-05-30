@@ -44,8 +44,8 @@ function main() {
 function ensure_create_category() {
   local category_or_subcategory category_name subcategory_name
   category_or_subcategory="$1"
-  category_name="$(_category_name_from_id "$category_or_subcategory")"
-  subcategory_name="$(_category_subcategory_from_id "$category_or_subcategory")"
+  category_name="$(_categoryid_category "$category_or_subcategory")"
+  subcategory_name="$(_categoryid_subcategory "$category_or_subcategory")"
 
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
   _categoryfs_mkdir "$category_name" > /dev/null

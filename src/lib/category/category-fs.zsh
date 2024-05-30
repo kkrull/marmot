@@ -1,5 +1,5 @@
 
-# Category representation on the filesystem
+# Category filesystem
 
 function _categoryfs_add_repository_link() {
   local category_or_subcategory="$1" some_repo_path="$2"

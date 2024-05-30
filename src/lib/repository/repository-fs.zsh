@@ -1,5 +1,5 @@
 
-## Repositories
+# Repository filesystem
 
 function _fs_normalize_repo_path() {
   local some_repo_path="$1"

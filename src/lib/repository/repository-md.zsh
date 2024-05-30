@@ -1,5 +1,5 @@
 
-## .repositories
+# Repository metadata
 
 function _config_add_repositories() {
   local config_file="$1" ; shift 1

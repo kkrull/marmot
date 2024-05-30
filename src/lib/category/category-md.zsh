@@ -1,5 +1,5 @@
 
-## .categories
+# Category metadata
 
 # Remove array elements matching '' to avoid entering a world of pain
 # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion

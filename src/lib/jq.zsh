@@ -1,4 +1,5 @@
-# Marmot JSON processing
+
+# JQ interface
 
 function _jq_create() {
   local json_file="$1" ; shift 1
