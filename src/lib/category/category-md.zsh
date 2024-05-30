@@ -28,7 +28,7 @@ function _config_add_repositories_to_category() {
   declare -a repository_paths=()
   for some_repo_path in "${@:#}"
   do
-    repository_paths+=("$(_fs_normalize_repo_path "$some_repo_path")")
+    repository_paths+=("$(_repofs_normalize_path "$some_repo_path")")
   done
 
   # Complex assignment to update one element in the array without deleting the others
@@ -59,7 +59,7 @@ function _config_rm_repositories_from_category() {
   declare -a repository_paths=()
   for some_repo_path in "${@:#}"
   do
-    repository_paths+=("$(_fs_normalize_repo_path "$some_repo_path")")
+    repository_paths+=("$(_repofs_normalize_path "$some_repo_path")")
   done
 
   _jq_update "$config_file" \
@@ -74,7 +74,7 @@ function _config_rm_repositories_from_category() {
 EOF
 }
 
-### private
+## private
 
 function __config_category_from_name() {
   local name="$1" parent_name="${2-}"

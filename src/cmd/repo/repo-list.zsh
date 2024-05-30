@@ -30,9 +30,9 @@ function main() {
   then
     local category_or_subcategory
     category_or_subcategory="${category_option[2]}"
-    _config_repository_paths_in_category "$(_fs_metadata_file)" "$category_or_subcategory"
+    _repomd_local_paths_for_category "$(_fs_metadata_file)" "$category_or_subcategory"
   else
-    _config_repository_paths "$(_fs_metadata_file)"
+    _repomd_local_paths "$(_fs_metadata_file)"
   fi
 }
 

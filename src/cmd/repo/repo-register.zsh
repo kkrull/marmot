@@ -48,7 +48,7 @@ function register_local_repositories() {
   config_file="$1"
   shift 1
 
-  _config_add_repositories "$config_file" "$@"
+  _repomd_add_local_paths "$config_file" "$@"
 }
 
 ## Main

@@ -7,7 +7,7 @@ function _categoryfs_add_repository_link() {
 
   local category_path full_repo_path repository_name
   category_path="$(__categoryfs_local_path "$category_or_subcategory")"
-  full_repo_path="$(_fs_normalize_repo_path "$some_repo_path")"
+  full_repo_path="$(_repofs_normalize_path "$some_repo_path")"
   repository_name="${some_repo_path:t}"
   (cd "$category_path" \
     && ln -f -s "$full_repo_path" "$repository_name")
@@ -46,7 +46,7 @@ function _categoryfs_rm_repository_link() {
   category_path="$(__categoryfs_local_path "$category_or_subcategory")"
 
   local full_repo_path repository_name
-  full_repo_path="$(_fs_normalize_repo_path "$some_repo_path")"
+  full_repo_path="$(_repofs_normalize_path "$some_repo_path")"
   repository_name="${full_repo_path:t}"
 
   local link_path_full

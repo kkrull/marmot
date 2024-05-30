@@ -1,7 +1,7 @@
 
-# Marmot metadata
+# Metadata filesystem
 
-function _config_init() {
+function _metafs_init() {
   local directory="$1"
 
   _jq_create "$directory/meta-repo.json" \
