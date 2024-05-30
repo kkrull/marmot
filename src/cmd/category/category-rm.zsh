@@ -45,7 +45,7 @@ function rm_link_to_category() {
   local link_path repository_path
   for repository_path in "${@:#}"
   do
-    link_path="$(_fs_rm_repository_link "$category_name" "$repository_path")"
+    link_path="$(_categoryfs_rm_repository_link "$category_name" "$repository_path")"
     echo "- ${link_path} (link)"
   done
 }

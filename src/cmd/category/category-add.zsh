@@ -48,8 +48,8 @@ function ensure_create_category() {
   subcategory_name="$(_category_subcategory_from_id "$category_or_subcategory")"
 
   _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
-  _fs_make_category_path "$category_name" > /dev/null
-  _fs_make_subcategory_path "$category_name" "$subcategory_name" > /dev/null
+  _categoryfs_mkdir "$category_name" > /dev/null
+  _categoryfs_mkdir_subcategory "$category_name" "$subcategory_name" > /dev/null
 }
 
 function link_to_category() {
@@ -58,7 +58,7 @@ function link_to_category() {
   local link_path repository_path
   for repository_path in "${@:#}"
   do
-    link_path="$(_fs_add_repository_link "$category_name" "$repository_path")"
+    link_path="$(_categoryfs_add_repository_link "$category_name" "$repository_path")"
     echo "+ ${link_path} (link)"
   done
 }
