@@ -28,11 +28,9 @@ function main() {
     print_usage
   elif [[ -n "$category_option" ]]
   then
-    local category_or_subcategory
-    category_or_subcategory="${category_option[2]}"
-    _repomd_local_paths_for_category "$(_fs_metadata_file)" "$category_or_subcategory"
+    _repocmd_list_category "${category_option[2]}"
   else
-    _repomd_local_paths "$(_fs_metadata_file)"
+    _repocmd_list_all
   fi
 }
 
