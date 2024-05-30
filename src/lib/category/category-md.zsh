@@ -1,30 +1,11 @@
 
 # Category metadata
 
-# Remove array elements matching '' to avoid entering a world of pain
-# https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
-
-function _config_add_categories() {
-  local config_file="$1" category_name="$2" ; shift 2
-
-  local categories
-  categories=("$(__config_category_from_name "$category_name")")
-  for subcategory_name in "${@:#}"
-  do
-    categories+=("$(__config_category_from_name "$subcategory_name" "$category_name")")
-  done
-
-  _jq_update "$config_file" \
-    --argjson categories "$(jo -a "${categories[@]}")" \
-    --sort-keys <<-'EOF'
-    . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
-      | .meta_repo.updated |= (now | todate)
-EOF
-}
-
-function _config_add_repositories_to_category() {
+function _categorymd_add_repositories_as_local_path() {
   local config_file="$1" category_full_name="$2" ; shift 2
 
+  # Remove array elements matching '' to avoid entering a world of pain
+  # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
   declare -a repository_paths=()
   for some_repo_path in "${@:#}"
   do
@@ -45,7 +26,26 @@ function _config_add_repositories_to_category() {
 EOF
 }
 
-function _config_category_fullnames() {
+function _categorymd_create() {
+  local config_file="$1" category_name="$2" ; shift 2
+
+  local categories
+  categories=("$(__categorymd_category_from_name "$category_name")")
+  for subcategory_name in "${@:#}"
+  do
+    categories+=("$(__categorymd_category_from_name "$subcategory_name" "$category_name")")
+  done
+
+  _jq_update "$config_file" \
+    --argjson categories "$(jo -a "${categories[@]}")" \
+    --sort-keys <<-'EOF'
+    . | .meta_repo.categories |= (. + $categories | unique_by(.full_name))
+      | .meta_repo.updated |= (now | todate)
+EOF
+}
+
+
+function _categorymd_full_names() {
   local config_file="$1"
 
   jq -r \
@@ -53,7 +53,7 @@ function _config_category_fullnames() {
     "$config_file"
 }
 
-function _config_rm_repositories_from_category() {
+function _categorymd_remove_repositories_as_local_paths() {
   local config_file="$1" category_full_name="$2" ; shift 2
 
   declare -a repository_paths=()
@@ -76,7 +76,7 @@ EOF
 
 ## private
 
-function __config_category_from_name() {
+function __categorymd_category_from_name() {
   local name="$1" parent_name="${2-}"
 
   if [[ -n "$parent_name" ]]

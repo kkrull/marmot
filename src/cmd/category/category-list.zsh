@@ -15,7 +15,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 function main() {
   if [[ $# == 0 ]]
   then
-    _config_category_fullnames "$(_fs_metadata_file)"
+    _categorymd_full_names "$(_fs_metadata_file)"
     exit 0
   fi
 

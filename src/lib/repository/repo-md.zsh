@@ -9,7 +9,7 @@ function _repomd_add_local_paths() {
   for some_path in "${@:#}"
   do
     repo_path="$(_repofs_normalize_path "$some_path")"
-    repository="$(__repomd_repository_from_path "$repo_path")"
+    repository="$(__repomd_repository_from_local_path "$repo_path")"
     repositories+=("$repository")
   done
 
@@ -88,7 +88,7 @@ EOF
 
 ## private
 
-function __repomd_repository_from_path() {
+function __repomd_repository_from_local_path() {
   local repo_path="$1"
   jo -- "path=$repo_path"
 }

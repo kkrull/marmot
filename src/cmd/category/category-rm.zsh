@@ -32,7 +32,7 @@ function main() {
 
   local category_or_subcategory="$1" ; shift 1
 
-  _config_rm_repositories_from_category \
+  _categorymd_remove_repositories_as_local_paths \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
     "${@:#}"

@@ -34,7 +34,7 @@ function main() {
 
   # Given (sub-)category may be new; create if so
   ensure_create_category "$category_or_subcategory"
-  _config_add_repositories_to_category \
+  _categorymd_add_repositories_as_local_path \
     "$(_fs_metadata_file)" \
     "$category_or_subcategory" \
     "${@:#}"
@@ -47,7 +47,7 @@ function ensure_create_category() {
   category_name="$(_categoryid_category "$category_or_subcategory")"
   subcategory_name="$(_categoryid_subcategory "$category_or_subcategory")"
 
-  _config_add_categories "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
+  _categorymd_create "$(_fs_metadata_file)" "$category_name" "$subcategory_name"
   _categoryfs_mkdir "$category_name" > /dev/null
   _categoryfs_mkdir_subcategory "$category_name" "$subcategory_name" > /dev/null
 }

@@ -28,7 +28,7 @@ function main() {
     # Remove array elements matching '' to avoid entering a world of pain
     # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
     make_category_directories "${@:#}"
-    _config_add_categories "$(_fs_metadata_file)" "${@:#}"
+    _categorymd_create "$(_fs_metadata_file)" "${@:#}"
   fi
 }
 
