@@ -2,9 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -58,10 +58,10 @@ function _selected_repositories_reply() {
   if [[ -n "$category_or_subcategory" ]]
   then
     # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths_in_category "$config_file" "$category_or_subcategory")"}")
+    reply=("${(@f)"$(_repomd_local_paths_for_category "$config_file" "$category_or_subcategory")"}")
   else
     # shellcheck disable=SC2296
-    reply=("${(@f)"$(_config_repository_paths "$config_file")"}")
+    reply=("${(@f)"$(_repomd_local_paths "$config_file")"}")
   fi
 }
 

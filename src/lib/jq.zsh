@@ -1,6 +1,7 @@
-# Marmot JSON processing
 
-function _json_jq_create() {
+# JQ interface
+
+function _jq_create() {
   local json_file="$1" ; shift 1
 
   declare -a filter_lines=()
@@ -12,7 +13,7 @@ function _json_jq_create() {
   jq "$@" "${filter_lines[*]}" > "$json_file"
 }
 
-function _json_jq_update() {
+function _jq_update() {
   local json_file="$1" ; shift 1
   declare -a filter_lines=()
   while read -r line

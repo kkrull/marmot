@@ -2,10 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
-source "$_MARMOT_HOME/lib/json.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -21,21 +20,9 @@ function main() {
   then
     print_usage
     exit 0
-  elif [[ -d "$(_fs_metadata_dir)" ]]
-  then
-    printf "Meta repo already exists: %s" "$(_fs_metadata_dir)"
-    exit 1
-  else
-    create_meta_repo "$(_fs_metadata_dir)"
   fi
-}
 
-function create_meta_repo() {
-  local directory="$1"
-  mkdir -p "$directory"
-
-  _config_init "$directory"
-  echo "Initialized meta repository at $directory"
+  _metacmd_init
 }
 
 function print_usage() {

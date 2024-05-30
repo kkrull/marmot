@@ -2,11 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
-source "$_MARMOT_HOME/lib/id.zsh"
-source "$_MARMOT_HOME/lib/json.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -32,24 +30,8 @@ function main() {
     exit 1
   fi
 
-  local category_or_subcategory="$1" ; shift 1
-
-  _config_rm_repositories_from_category \
-    "$(_fs_metadata_file)" \
-    "$category_or_subcategory" \
-    "${@:#}"
-  rm_link_to_category "$category_or_subcategory" "${@:#}"
-}
-
-function rm_link_to_category() {
-  local category_name="$1" ; shift 1
-
-  local link_path repository_path
-  for repository_path in "${@:#}"
-  do
-    link_path="$(_fs_rm_repository_link "$category_name" "$repository_path")"
-    echo "- ${link_path} (link)"
-  done
+  local category_id="$1" ; shift 1
+  _categorycmd_rm_repository_paths "$category_id" "$@"
 }
 
 function print_usage() {

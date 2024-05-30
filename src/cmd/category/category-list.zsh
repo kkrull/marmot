@@ -2,9 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -15,7 +15,7 @@ export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} list"
 function main() {
   if [[ $# == 0 ]]
   then
-    _config_category_fullnames "$(_fs_metadata_file)"
+    _categorycmd_list
     exit 0
   fi
 

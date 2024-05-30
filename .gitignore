@@ -1,3 +1,6 @@
 # Manual
 man/groff/*
 #man/markdown/*
+
+# VS Code
+*.code-workspace

@@ -2,21 +2,20 @@
 
 emulate -LR zsh
 set -euo pipefail
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
 export _MARMOT_INVOCATION="${_MARMOT_INVOCATION} home"
-
-## Local environment
-
-source "$_MARMOT_HOME/lib/fs.zsh"
 
 ## Command
 
 function main() {
   if [[ $# == 0 ]]
   then
-    show_home
+    _metacmd_show_home
     exit 0
   fi
 
@@ -30,10 +29,6 @@ function main() {
     echo "Unknown option: $1"
     exit 1
   fi
-}
-
-function show_home() {
-  _fs_metarepo_home
 }
 
 function print_usage() {

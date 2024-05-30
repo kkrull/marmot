@@ -2,9 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -28,11 +28,9 @@ function main() {
     print_usage
   elif [[ -n "$category_option" ]]
   then
-    local category_or_subcategory
-    category_or_subcategory="${category_option[2]}"
-    _config_repository_paths_in_category "$(_fs_metadata_file)" "$category_or_subcategory"
+    _repocmd_list_category "${category_option[2]}"
   else
-    _config_repository_paths "$(_fs_metadata_file)"
+    _repocmd_list_all
   fi
 }
 

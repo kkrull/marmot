@@ -2,10 +2,9 @@
 
 emulate -LR zsh
 set -euo pipefail
-
-source "$_MARMOT_HOME/lib/config.zsh"
-source "$_MARMOT_HOME/lib/fs.zsh"
-source "$_MARMOT_HOME/lib/json.zsh"
+while IFS= read -d $'\0' -r f; do
+  source "$f"
+done < <(find -s "$_MARMOT_HOME/lib" -type f -iname '*.zsh' -print0)
 
 ## Shared environment
 
@@ -26,7 +25,7 @@ function main() {
     echo "$_MARMOT_INVOCATION: Missing repository path"
     exit 1
   else
-    register_local_repositories "$(_fs_metadata_file)" "$@"
+    _repocmd_register_local_paths "$@"
     exit 0
   fi
 }
@@ -42,14 +41,6 @@ OPTIONS
 
 See \`man ${_MARMOT_INVOCATION// /-}\` for details.
 EOF
-}
-
-function register_local_repositories() {
-  local config_file
-  config_file="$1"
-  shift 1
-
-  _config_add_repositories "$config_file" "$@"
 }
 
 ## Main
