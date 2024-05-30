@@ -25,7 +25,7 @@ function main() {
     echo "$_MARMOT_INVOCATION: Missing repository path"
     exit 1
   else
-    _repocmd_register_local_paths "$@"
+    _repocmd_register_from_local_paths "$@"
     exit 0
   fi
 }

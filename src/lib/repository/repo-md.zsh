@@ -1,7 +1,26 @@
 
 # Repository metadata
 
-# TODO KDK: Call `git remote get-url "$(git remote)"` on each repository, to add to local file
+function _repomd_add_local_path() {
+  local data_file="$1"
+  local some_repo_path="$2"
+  local ssh_url="$3"
+
+  declare -a repositories=()
+  local repo_path repository
+  repo_path="$(_repofs_normalize_path "$some_repo_path")"
+  repository="$(__repomd_repository_from_local_path_and_url "$repo_path" "$ssh_url")"
+  repositories+=("$repository")
+
+  _jq_update "$data_file" \
+    --argjson repositories "$(jo -a "${repositories[@]}")" \
+    --sort-keys <<-'EOF'
+    .
+      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
+      | .meta_repo.updated |= (now | todate)
+EOF
+}
+
 function _repomd_add_local_paths() {
   local data_file="$1" ; shift 1
 
@@ -91,4 +110,10 @@ EOF
 function __repomd_repository_from_local_path() {
   local repo_path="$1"
   jo -- "path=$repo_path"
+}
+
+function __repomd_repository_from_local_path_and_url() {
+  local repo_path="$1"
+  local ssh_url="$2"
+  jo -- "path=$repo_path" "ssh_url=$ssh_url"
 }

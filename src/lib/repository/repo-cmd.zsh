@@ -31,7 +31,14 @@ function _repocmd_prune_missing() {
   done
 }
 
-function _repocmd_register_local_paths() {
-  # TODO KDK: Add repository SSH URLs to the metadata file, too
-  _repomd_add_local_paths "$(_fs_localdata_file)" "$@"
+function _repocmd_register_from_local_paths() {
+  local remote_name ssh_url
+  for local_path in "${@:#}"
+  do
+    remote_name="$(cd "$local_path" && git remote)"
+    ssh_url="$(cd "$local_path" && git remote get-url "$remote_name")"
+
+    _repomd_add_local_path "$(_fs_localdata_file)" "$local_path" "$ssh_url"
+    _repomd_add_remote "$(_fs_localdata_file)" "$ssh_url"
+  done
 }
