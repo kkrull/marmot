@@ -25,28 +25,8 @@ function main() {
     echo "$_MARMOT_INVOCATION: Missing category name"
     exit 1
   else
-    # Remove array elements matching '' to avoid entering a world of pain
-    # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
-    make_category_directories "${@:#}"
-    _categorymd_create "$(_fs_metadata_file)" "${@:#}"
+    _categorycmd_create "$@"
   fi
-}
-
-function make_category_directories() {
-  local category_name
-  category_name="$1"
-  shift 1
-
-  local category_path
-  category_path="$(_categoryfs_mkdir "$category_name")"
-  echo "+ $category_path (category)"
-
-  local subcategory_path
-  for subcategory_name in "$@"
-  do
-    subcategory_path="$(_categoryfs_mkdir_subcategory "$category_name" "$subcategory_name")"
-    echo "+ $subcategory_path (sub-category)"
-  done
 }
 
 function print_usage() {

@@ -31,7 +31,7 @@ function main() {
   fi
 
   local category_id="$1" ; shift 1
-  _categorycmd_rm "$category_id" "$@"
+  _categorycmd_rm_repository_paths "$category_id" "$@"
 }
 
 function print_usage() {
