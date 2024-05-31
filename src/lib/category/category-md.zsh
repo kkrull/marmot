@@ -44,6 +44,7 @@ function _categorymd_create() {
 EOF
 }
 
+# TODO KDK: Doesn't make sense anymore since categories persist even when local clone gone
 function _categorymd_delete_local_paths() {
   declare data_file="$1" ; shift 1
   declare -a remove_paths=("${@:#}")
@@ -64,6 +65,7 @@ function _categorymd_full_names() {
     "$config_file"
 }
 
+# TODO KDK: Doesn't make sense anymore since categories persist even when local clone gone
 function _categorymd_remove_repositories_as_local_paths() {
   local config_file="$1" category_full_name="$2" ; shift 2
 

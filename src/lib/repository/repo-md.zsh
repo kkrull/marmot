@@ -12,12 +12,11 @@ function _repomd_add_local_path() {
   repository="$(__repomd_repository_from_local_path_and_url "$repo_path" "$ssh_url")"
   repositories+=("$repository")
 
-  #TODO KDK: Rename to local_repositories
   _jq_update "$data_file" \
     --argjson repositories "$(jo -a "${repositories[@]}")" \
     --sort-keys <<-'EOF'
     .
-      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
+      | .meta_repo.local_repositories |= (. + $repositories | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }

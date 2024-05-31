@@ -19,7 +19,7 @@ function __metafs_init_localdata_file() {
     --sort-keys <<-'EOF'
 {
   meta_repo: {
-    repositories: [],
+    local_repositories: [],
     updated: now | todate
   },
   version: $version
