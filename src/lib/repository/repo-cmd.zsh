@@ -23,7 +23,6 @@ function _repocmd_prune_missing() {
 
   [[ "${#stale_paths}" -eq 0 ]] && exit 0
 
-  _categorymd_delete_local_paths "$data_file" "${stale_paths[@]}"
   _repomd_delete_local_paths "$data_file" "${stale_paths[@]}"
   for removed_path in "${stale_paths[@]}"
   do

@@ -69,7 +69,7 @@ function _repomd_delete_local_paths() {
   _jq_update "$data_file" \
     --argjson repository_paths "$(jo -a "${remove_paths[@]}")" \
     --sort-keys <<-'EOF'
-      | .meta_repo.repositories[]
+    . | .meta_repo.local_repositories[]
         |= del(select(
                 .path
                 | in($repository_paths
@@ -111,8 +111,7 @@ function _repomd_local_paths_reply() {
   local filter
 
   filter=$(cat <<-EOF
-    [ .meta_repo.categories[].repository_paths[] ]
-      + [ .meta_repo.repositories[].path ]
+    [ .meta_repo.local_repositories[].path ]
       | unique
       | .[]
 EOF
