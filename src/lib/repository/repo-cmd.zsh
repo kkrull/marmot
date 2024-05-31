@@ -32,12 +32,10 @@ function _repocmd_prune_missing() {
 }
 
 function _repocmd_register_from_local_paths() {
-  local remote_name ssh_url
+  local ssh_url
   for local_path in "${@:#}"
   do
-    remote_name="$(cd "$local_path" && git remote)"
-    ssh_url="$(cd "$local_path" && git remote get-url "$remote_name")"
-
+    ssh_url="$(_git_ssh_url "$local_path")"
     _repomd_add_local_path "$(_fs_localdata_file)" "$local_path" "$ssh_url"
     _repomd_add_remote "$(_fs_metadata_file)" "$ssh_url"
   done
