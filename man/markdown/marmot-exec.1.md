@@ -1,20 +1,13 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT-EXEC(1) Version 0.6.1 \| Meta Repo Management Tool
----
-
 # NAME
 
 **marmot exec** - Execute a command in multiple repositories
 
 # SYNOPSIS
 
-**marmot exec** \[**\--help**\]\
-**marmot exec** \[**\--category** *category*\|*sub-category*\]
-\[**\--direnv**\] \[**\--repo-names** **heading**\|**inline**\]
-*shell-command* \[*args* ...\]
+**marmot exec** \[**--help**\]  
+**marmot exec** \[**--category** *category*|*sub-category*\]
+\[**--direnv**\] \[**--repo-names** **heading**|**inline**\]
+*shell-command* \[*args* …\]
 
 # DESCRIPTION
 
@@ -25,40 +18,40 @@ repositories, or those matching a given *category* or *sub-category*.
 **marmot exec** changes directories to each repository before running
 *shell-command*, to ensure that any path-specific environment settings
 are applied. This is helpful for directory-based tools such as `direnv`,
-`fnm`, and `rvm`, which update the shell's path and other parts of its
+`fnm`, and `rvm`, which update the shell’s path and other parts of its
 environment when changing directories. The usefulness of the shell
 command may depend upon it, for example when checking if all
 repositories in a project use the same version of Node.js.
 
 # OPTIONS
 
-**\--direnv**  
-Suppress `direnv` output when changing directories
+  - **--direnv**  
+    Suppress `direnv` output when changing directories
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
-**\--repo-names**  
-Print repository names **inline** prior to output from *shell-command*,
-or as a **heading** above it
+  - **--repo-names**  
+    Print repository names **inline** prior to output from
+    *shell-command*, or as a **heading** above it
 
 # ENVIRONMENT VARIABLES
 
-**MARMOT_META_REPO**  
-Path to the Meta Repo (default: \$HOME/meta)
+  - **MARMOT\_META\_REPO**  
+    Path to the Meta Repo (default: $HOME/meta)
 
 # FILES
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
-Categories and registered repositories
+  - *$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
+    Categories and registered repositories
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command or **shell-command** failure
+  - 1+  
+    Invalid command or **shell-command** failure
 
 # NOTES
 
@@ -108,14 +101,14 @@ marmot exec --category project/too-many-microservices \
   git branch --show-current
 ```
 
-Git: Pull all the things!
+Git: Pull all the things\!
 
 ``` sh
 marmot exec --repo-names heading \
   git pull --ff-only origin
 ```
 
-Git: Push all the things!
+Git: Push all the things\!
 
 ``` sh
 marmot exec --repo-names heading \

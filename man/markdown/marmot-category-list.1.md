@@ -1,18 +1,10 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT-CATEGORY-LIST(1) Version 0.6.1 \| Meta Repo Management
-  Tool
----
-
 # NAME
 
 **marmot category list** - List categories
 
 # SYNOPSIS
 
-**marmot category list** \[**\--help**\]\
+**marmot category list** \[**--help**\]  
 **marmot category list**
 
 # DESCRIPTION
@@ -22,8 +14,8 @@ repositories.
 
 # OPTIONS
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
 # ENVIRONMENT VARIABLES
 
@@ -35,11 +27,11 @@ See [*marmot-category(1)*](./marmot-category.1.md).
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command or command failure
+  - 1+  
+    Invalid command or command failure
 
 # SEE ALSO
 

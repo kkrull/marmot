@@ -1,19 +1,11 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT-REPO-REGISTER(1) Version 0.6.1 \| Meta Repo Management
-  Tool
----
-
 # NAME
 
 **marmot repo register** - Register repositories to manage
 
 # SYNOPSIS
 
-**marmot repo register** \[**\--help**\]\
-**marmot repo register** *repository-path* \[...\]
+**marmot repo register** \[**--help**\]  
+**marmot repo register** *repository-path* \[…\]
 
 # DESCRIPTION
 
@@ -27,8 +19,8 @@ the process of finding and registering lots of Git repositories at once.
 
 # OPTIONS
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
 # ENVIRONMENT VARIABLES
 
@@ -40,15 +32,15 @@ See [*marmot-repo(1)*](./marmot-repo.1.md).
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command or command failure
+  - 1+  
+    Invalid command or command failure
 
 # EXAMPLE
 
-Register all the things!
+Register all the things\!
 
 ``` sh
 find ~/git -type d -name .git \

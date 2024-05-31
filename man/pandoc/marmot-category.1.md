@@ -66,6 +66,6 @@
 [*marmot(1)*](./marmot.1.md), [*marmot-category-add(1)*](./marmot-category-add.1.md),
 [*marmot-category-create(1)*](./marmot-category-create.1.md),
 [*marmot-category-list(1)*](./marmot-category-list.1.md),
-[*marmot-category-rm*](./marmot-category-rm.1.md)
+[*marmot-category-rm(1)*](./marmot-category-rm.1.md)
 
 [*marmot(7)*](./marmot.7.md)

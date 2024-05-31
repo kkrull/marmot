@@ -1,18 +1,11 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT-REPO(1) Version 0.6.1 \| Meta Repo Management Tool
----
-
 # NAME
 
 **marmot repo** - Work with repositories
 
 # SYNOPSIS
 
-**marmot repo** \[**\--help**\]\
-**marmot repo** *sub-command* \[*args* ...\]
+**marmot repo** \[**--help**\]  
+**marmot repo** *sub-command* \[*args* …\]
 
 # DESCRIPTION
 
@@ -21,42 +14,43 @@ something with repositories.
 
 # OPTIONS
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
 # SUB-COMMANDS
 
-[**list**](./marmot-repo-list.1.md)  
-List repositories
+  - [**list**](./marmot-repo-list.1.md)  
+    List repositories
 
-[**prune**](./marmot-repo-prune.1.md)  
-Prune references to missing repositories
+  - [**prune**](./marmot-repo-prune.1.md)  
+    Prune references to missing repositories
 
-[**register**](./marmot-repo-register.1.md)  
-Register repositories to manage
+  - [**register**](./marmot-repo-register.1.md)  
+    Register repositories to manage
 
 # ENVIRONMENT VARIABLES
 
-**MARMOT_META_REPO**  
-Path to the Meta Repo (default: \$HOME/meta)
+  - **MARMOT\_META\_REPO**  
+    Path to the Meta Repo (default: $HOME/meta)
 
 # FILES
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
-Repositories that **marmot** knows about
+  - *$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
+    Repositories that **marmot** knows about
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command
+  - 1+  
+    Invalid command
 
 # SEE ALSO
 
 [*marmot(1)*](./marmot.1.md),
 [*marmot-repo-list(1)*](./marmot-repo-list.1.md),
+[*marmot-repo-prune(1)*](./marmot-repo-prune.1.md),
 [*marmot-repo-register(1)*](./marmot-repo-register.1.md)
 
 [*marmot(7)*](./marmot.7.md)
