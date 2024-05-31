@@ -154,4 +154,4 @@ $(markdown_manual_objects_dir):
 	mkdir -p markdown
 
 markdown/%.md: pandoc/%.md
-	$(PANDOC) $< $(PANDOCFLAGS) -o $@ --atx-headers -s -t gfm
+	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t gfm
