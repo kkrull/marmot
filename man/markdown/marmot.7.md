@@ -1,17 +1,10 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT(7) Version 0.6.1 \| Meta Repo Management Tool
----
-
 # NAME
 
 **marmot** - Meta Repo Management Tool
 
 # DESCRIPTION
 
-**marmot** creates and maintains a Meta Repository (e.g. a "Meta Repo")
+**marmot** creates and maintains a Meta Repository (e.g. a “Meta Repo”)
 of several Git repositories.
 
 A Meta Repo, for the purposes of this program, is a set of references to
@@ -21,7 +14,7 @@ they are a single unit.
 
 ## What it Does
 
-**marmot** creates a directory structure in the meta repo's file system
+**marmot** creates a directory structure in the meta repo’s file system
 to mirror the way that repositories have been categorized, so that there
 is a `/:category/:sub-category` directory for each (sub-)category. Each
 directory contains symbolic links back to the Git repositories that are
@@ -29,7 +22,7 @@ grouped into the same (sub-)category.
 
 Users run commands from one of these directories in order to restrict
 commands to the Git repositories that have that category in common. This
-can be done directly by passing a category's path to a shell command or
+can be done directly by passing a category’s path to a shell command or
 indirectly by passing a shell command and the name of the category to
 **marmot exec**. Either way causes a command to run within the scope of
 a category, instead of getting distracted by irrelevant sources in
@@ -129,8 +122,8 @@ code ~/meta/project/frontend/*
 
 ## Use Categories for Shell Commands
 
-Sometimes it can be helpful to run the a shell command on several--but
-not all--repositories at once. Imagine how categorizing repositories by
+Sometimes it can be helpful to run the a shell command on several–but
+not all–repositories at once. Imagine how categorizing repositories by
 platform might make it easier to check if they are all using the same
 version of the platform:
 

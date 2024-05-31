@@ -1,10 +1,3 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT(1) Version 0.6.1 \| Meta Repo Management Tool
----
-
 <!---
 man-pages reference: https://linux.die.net/man/7/man-pages
 -->
@@ -15,8 +8,8 @@ man-pages reference: https://linux.die.net/man/7/man-pages
 
 # SYNOPSIS
 
-**marmot** \[**\--help**\] \[**\--version**\]\
-**marmot** *command* \[*args* ...\]
+**marmot** \[**--help**\] \[**--version**\]  
+**marmot** *command* \[*args* …\]
 
 # DESCRIPTION
 
@@ -31,52 +24,52 @@ they are a single unit. See [*marmot(7)*](./marmot.7.md) to get started.
 
 # OPTIONS
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
-**\--version**  
-Prints the **marmot** suite version that the program came from
+  - **--version**  
+    Prints the **marmot** suite version that the program came from
 
 # COMMANDS
 
 ## Meta Repo Commands
 
-[**init**](./marmot-init.1.md)  
-Create a new meta repo
+  - [**init**](./marmot-init.1.md)  
+    Create a new meta repo
 
-[**meta**](./marmot-meta.1.md)  
-Information about the meta repo itself
+  - [**meta**](./marmot-meta.1.md)  
+    Information about the meta repo itself
 
 ## Category commands
 
-[**category**](./marmot-category.1.md)  
-Work with categories
+  - [**category**](./marmot-category.1.md)  
+    Work with categories
 
 ## Repository Commands
 
-[**exec**](./marmot-exec.1.md)  
-Execute a shell command in multiple repositories
+  - [**exec**](./marmot-exec.1.md)  
+    Execute a shell command in multiple repositories
 
-[**repo**](./marmot-repo.1.md)  
-Work with repositories
+  - [**repo**](./marmot-repo.1.md)  
+    Work with repositories
 
 # ENVIRONMENT VARIABLES
 
-**MARMOT_META_REPO**  
-Path to the Meta Repo (default: \$HOME/meta)
+  - **MARMOT\_META\_REPO**  
+    Path to the Meta Repo (default: $HOME/meta)
 
 # FILES
 
-*\$MARMOT_META_REPO/.marmot/meta-repo.json*  
-Registered repositories and how they relate to one another
+  - *$MARMOT\_META\_REPO/.marmot/meta-repo.json*  
+    Registered repositories and how they relate to one another
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command or command failure
+  - 1+  
+    Invalid command or command failure
 
 # SEE ALSO
 

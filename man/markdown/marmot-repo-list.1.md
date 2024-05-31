@@ -1,18 +1,11 @@
----
-author:
-- Kyle Krull
-date: May 2024
-title: MARMOT-REPO-LIST(1) Version 0.6.1 \| Meta Repo Management Tool
----
-
 # NAME
 
 **marmot repo list** - List repositories
 
 # SYNOPSIS
 
-**marmot repo list** \[**\--help**\]\
-**marmot repo list** \[**\--category** *category*\|*sub-category*\]
+**marmot repo list** \[**--help**\]  
+**marmot repo list** \[**--category** *category*|*sub-category*\]
 
 # DESCRIPTION
 
@@ -22,12 +15,12 @@ given criteria.
 
 # OPTIONS
 
-**\--category**  
-List repositories that have been added to the given *category* or
-*sub-category*
+  - **--category**  
+    List repositories that have been added to the given *category* or
+    *sub-category*
 
-**\--help**  
-Show help
+  - **--help**  
+    Show help
 
 # ENVIRONMENT VARIABLES
 
@@ -39,11 +32,11 @@ See [*marmot-repo(1)*](./marmot-repo.1.md).
 
 # EXIT STATUS
 
-0  
-Success
+  - 0  
+    Success
 
-1+  
-Invalid command or command failure
+  - 1+  
+    Invalid command or command failure
 
 # EXAMPLE
 
