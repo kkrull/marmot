@@ -7,14 +7,18 @@
 function _categorycmd_add_repository_paths() {
   local category_id="$1" ; shift 1
 
-  # Given (sub-)category may be new; create if so
   __categorycmd_ensure_create "$category_id"
-
-  _categorymd_add_repositories_as_local_path \
-    "$(_fs_metadata_file)" \
-    "$category_id" \
-    "${@:#}"
   __categorycmd_add_links_to_local_paths "$category_id" "${@:#}"
+
+  local local_path ssh_url
+  for local_path in "${@:#}"
+  do
+    ssh_url="$(_git_ssh_url "$local_path")"
+    _categorymd_add_repositories_as_ssh_url \
+      "$(_fs_metadata_file)" \
+      "$category_id" \
+      "$ssh_url"
+  done
 }
 
 function _categorycmd_create() {

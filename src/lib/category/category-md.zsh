@@ -1,27 +1,25 @@
 
 # Category metadata
 
-function _categorymd_add_repositories_as_local_path() {
+function _categorymd_add_repositories_as_ssh_url() {
   local config_file="$1" category_full_name="$2" ; shift 2
 
-  # Remove array elements matching '' to avoid entering a world of pain
-  # https://zsh.sourceforge.io/Doc/Release/Expansion.html#Parameter-Expansion
-  declare -a repository_paths=()
-  for some_repo_path in "${@:#}"
+  declare -a repository_ssh_urls=()
+  for ssh_url in "${@:#}"
   do
-    repository_paths+=("$(_repofs_normalize_path "$some_repo_path")")
+    repository_ssh_urls+=("$ssh_url")
   done
 
   # Complex assignment to update one element in the array without deleting the others
   # https://jqlang.github.io/jq/manual/#complex-assignments
   _jq_update "$config_file" \
     --arg category_full_name "$category_full_name" \
-    --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
+    --argjson repository_ssh_urls "$(jo -a "${repository_ssh_urls[@]}")" \
     --sort-keys <<-'EOF'
     . | (.meta_repo.categories[]
           | select(.full_name == $category_full_name)
-          | .repository_paths)
-        |= (. + $repository_paths | unique)
+          | .repository_ssh_urls)
+        |= (. + $repository_ssh_urls | unique)
       | .meta_repo.updated |= (now | todate)
 EOF
 }
@@ -98,12 +96,14 @@ function __categorymd_category_from_name() {
       "full_name=$parent_name/$name" \
       "name=$name" \
       "parent_name=$parent_name" \
-      'repository_paths=[]'
+      'repository_paths=[]' \
+      'repository_ssh_urls=[]'
   else
     jo -- \
       "full_name=$name" \
       "name=$name" \
       -s 'parent_name=' \
-      'repository_paths=[]'
+      'repository_paths=[]' \
+      'repository_ssh_urls=[]'
   fi
 }
