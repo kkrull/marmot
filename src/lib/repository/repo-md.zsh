@@ -83,10 +83,10 @@ EOF
 function _repomd_local_paths() {
   local data_file="$1"
 
-  # Treat lack of JSON fields as empty rather than as an error
+  # []?: Treat lack of JSON fields as empty rather than as an error
   # https://github.com/jqlang/jq/issues/354#issuecomment-43147898
   jq -r \
-    '.meta_repo.repositories[]?.path' \
+    '.meta_repo.local_repositories[]?.path' \
     "$data_file"
 }
 
