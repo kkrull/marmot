@@ -33,12 +33,11 @@ function _repomd_add_local_paths() {
     repositories+=("$repository")
   done
 
-  #TODO KDK: Rename to local_repositories
   _jq_update "$data_file" \
     --argjson repositories "$(jo -a "${repositories[@]}")" \
     --sort-keys <<-'EOF'
     .
-      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
+      | .meta_repo.local_repositories |= (. + $repositories | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
@@ -52,12 +51,11 @@ function _repomd_add_remote() {
   repository="$(__repomd_repository_from_url "$ssh_url")"
   repositories+=("$repository")
 
-  #TODO KDK: Rename to remote_repositories
   _jq_update "$data_file" \
     --argjson repositories "$(jo -a "${repositories[@]}")" \
     --sort-keys <<-'EOF'
     .
-      | .meta_repo.repositories |= (. + $repositories | unique_by(.path))
+      | .meta_repo.remote_repositories |= (. + $repositories | unique_by(.path))
       | .meta_repo.updated |= (now | todate)
 EOF
 }
