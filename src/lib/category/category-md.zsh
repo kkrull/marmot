@@ -65,6 +65,18 @@ function _categorymd_remove_repositories_as_ssh_urls() {
 EOF
 }
 
+function _categorymd_remote_urls_for_category() {
+  local config_file="$1" category_full_name="$2" ; shift 2
+
+  jq \
+    --arg category_full_name "$category_full_name" \
+    -r \
+    '. | (.meta_repo.categories[]
+           | select(.full_name == $category_full_name)
+           | .repository_ssh_urls[])' \
+    "$config_file"
+}
+
 ## private
 
 function __categorymd_category_from_name() {

@@ -8,10 +8,7 @@ function _repocmd_list_all() {
 function _repocmd_list_category() {
   local category_id="$1"
 
-  # TODO KDK [1]: Get _categorymd_ssh_urls, then _repomd_local_paths_for_urls
-  # TODO KDK [2]: _categorymd_ssh_urls "$(_fs_metadata_file)" | _repomd_local_paths_for_urls "$(_fs_localdata_file)"
-  # TODO KDK [3]: Make union tmpfile with jq and query it once
-  _repomd_local_paths_for_category "$(_fs_metadata_file)" "$category_id"
+  _categorymd_remote_urls_for_category "$(_fs_metadata_file)" "$category_id"
 }
 
 function _repocmd_prune_missing() {
