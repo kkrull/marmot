@@ -50,24 +50,17 @@ function _categorymd_full_names() {
     "$config_file"
 }
 
-# TODO KDK: Doesn't make sense anymore since categories persist even when local clone gone
-function _categorymd_remove_repositories_as_local_paths() {
+function _categorymd_remove_repositories_as_ssh_urls() {
   local config_file="$1" category_full_name="$2" ; shift 2
-
-  declare -a repository_paths=()
-  for some_repo_path in "${@:#}"
-  do
-    repository_paths+=("$(_repofs_normalize_path "$some_repo_path")")
-  done
 
   _jq_update "$config_file" \
     --arg category_full_name "$category_full_name" \
-    --argjson repository_paths "$(jo -a "${repository_paths[@]}")" \
+    --argjson repository_ssh_urls "$(jo -a "${@:#}")" \
     --sort-keys <<-'EOF'
     . | (.meta_repo.categories[]
           | select(.full_name == $category_full_name)
-          | .repository_paths)
-        |= (. - $repository_paths | unique)
+          | .repository_ssh_urls)
+        |= (. - $repository_ssh_urls | unique)
       | .meta_repo.updated |= (now | todate)
 EOF
 }

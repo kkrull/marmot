@@ -33,10 +33,17 @@ function _categorycmd_list() {
 function _categorycmd_rm_repository_paths() {
   local category_id="$1" ; shift 1
 
-  _categorymd_remove_repositories_as_local_paths \
+  local local_path
+  declare -a repository_ssh_urls=()
+  for local_path in "${@:#}"
+  do
+    repository_ssh_urls+=("$(_git_ssh_url "$local_path")")
+  done
+
+  _categorymd_remove_repositories_as_ssh_urls \
     "$(_fs_metadata_file)" \
     "$category_id" \
-    "${@:#}"
+    "${repository_ssh_urls[@]}"
   __categorycmd_rm_links_to_local_paths "$category_id" "${@:#}"
 }
 
