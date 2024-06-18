@@ -57,6 +57,7 @@ function _selected_repositories_reply() {
 
   if [[ -n "$category_or_subcategory" ]]
   then
+    # TODO KDK: work here
     # shellcheck disable=SC2296
     reply=("${(@f)"$(_repomd_local_paths_for_category "$config_file" "$category_or_subcategory")"}")
   else
