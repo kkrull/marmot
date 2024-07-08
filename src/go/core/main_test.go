@@ -5,11 +5,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("core", func() {
-	Describe("main", func() {
-		It("exists", func() {
-			answer := 42
-			Expect(answer).To(Equal(42))
-		})
+var _ = Describe("main", func() {
+	It("exists", func() {
+		answer := 42
+		Expect(answer).To(Equal(42))
 	})
 })

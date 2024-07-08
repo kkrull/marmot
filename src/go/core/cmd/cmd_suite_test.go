@@ -1,4 +1,4 @@
-package main_test
+package cmd_test
 
 import (
 	"testing"
@@ -9,5 +9,5 @@ import (
 
 func TestCore(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Core Suite")
+	RunSpecs(t, "cmd suite")
 }
