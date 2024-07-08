@@ -1,0 +1,19 @@
+name: Pandoc Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  manuals-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pandoc/actions/setup@main
+        with:
+          version: 3.2
+
+      - name: Build
+        run: make -C man all

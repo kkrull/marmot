@@ -106,7 +106,7 @@ Source: <https://unix.stackexchange.com/a/365417/37734>
 
 #### Location of shared code
 
-- Put shared code in `src/lib/`.
+- Put shared code in `lib/`.
 - Gather together shared functions that operate on the same bounded context (e.g. the same data).
   Explore a convention of making that bounded context the first parameter in each function.
 - Name files according to their bounded context.

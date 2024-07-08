@@ -39,23 +39,23 @@ PRECOMMIT ?= pre-commit
 .PHONY: all clean install test uninstall
 all: #> Build everything
 	$(MAKE) -C man all
-	$(MAKE) -C src all
+	$(MAKE) -C src/zsh all
 
 clean: pre-commit-clean #> Remove files built by running make earlier
 	$(MAKE) -C man clean
-	$(MAKE) -C src clean
+	$(MAKE) -C src/zsh clean
 
 install: #> Install programs and manuals made here
 	$(MAKE) -C man install
-	$(MAKE) -C src install
+	$(MAKE) -C src/zsh install
 
 test: pre-commit-run #> Run all tests and checks
 	$(MAKE) -C man test
-	$(MAKE) -C src test
+	$(MAKE) -C src/zsh test
 
 uninstall: #> Uninstall programs and manuals made here
 	$(MAKE) -C man uninstall
-	$(MAKE) -C src uninstall
+	$(MAKE) -C src/zsh uninstall
 
 #. OTHER TARGETS
 
