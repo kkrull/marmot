@@ -1,0 +1,62 @@
+name: Go Build
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  core:
+    defaults:
+      run:
+        working-directory: ./src/go/core
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          cache-dependency-path: src/go/core/go.sum
+          go-version-file: src/go/core/go.mod
+
+      - run: go version
+      - run: go get -t -v .
+
+  core-build:
+    defaults:
+      run:
+        working-directory: ./src/go/core
+    needs: core
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          cache-dependency-path: src/go/core/go.sum
+          go-version-file: src/go/core/go.mod
+
+      #      - run: go get -v .
+      - run: go build -v ./...
+
+  core-test:
+    defaults:
+      run:
+        working-directory: ./src/go/core
+    needs: core
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          cache-dependency-path: src/go/core/go.sum
+          go-version-file: src/go/core/go.mod
+
+      #     - run: go get -v .
+      - run: go test -v ./...
