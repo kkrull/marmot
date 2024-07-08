@@ -54,7 +54,7 @@ Tools used by some part of this project's build, deployment, or development proc
 
 - `Makefile`: targets to build everything and tasks to help set up your environment
 - `man/Makefile`: targets to build manuals
-- `src/Makefile`: targets to build programs
+- `src/zsh/Makefile`: targets to build programs with scripts
 
 ## Homebrew
 
