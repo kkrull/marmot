@@ -35,6 +35,14 @@ debug:
 format:
 	gofumpt -l -w .
 
+.PHONY: ginkgo-run
+ginkgo-run:
+	ginkgo run -r
+
+.PHONY: ginkgo-watch
+ginkgo-watch:
+	ginkgo watch -r
+
 .PHONY: install-tools
 install-tools:
 	go install github.com/onsi/ginkgo/v2/ginkgo
@@ -43,14 +51,6 @@ install-tools:
 .PHONY: run
 run:
 	go run .
-
-.PHONY: ginkgo-run
-ginkgo-run:
-	ginkgo run -r
-
-.PHONY: ginkgo-watch
-ginkgo-watch:
-	ginkgo watch -r
 
 .PHONY: tidy
 tidy:
