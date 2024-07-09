@@ -8,6 +8,10 @@ import (
 	"path/filepath"
 )
 
+func NewJsonMetaDataSource(repositoryPath string) *JsonMetaDataSource {
+	return &JsonMetaDataSource{RepositoryPath: repositoryPath}
+}
+
 // Stores meta data in JSON files in a directory that Marmot manages
 type JsonMetaDataSource struct {
 	RepositoryPath string
