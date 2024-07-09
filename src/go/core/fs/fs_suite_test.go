@@ -1,4 +1,4 @@
-package cmd_test
+package fs_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestCore(t *testing.T) {
+func TestFs(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "cmd")
+	RunSpecs(t, "fs")
 }
