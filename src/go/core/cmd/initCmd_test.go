@@ -9,13 +9,35 @@ import (
 
 var _ = Describe("cmd.InitCmd", func() {
 	Describe("#Run", func() {
-		It("exists", func() {
-			subject := cmd.InitCmd{}
+		It("succeeds, given valid conditions", func() {
+			fsMock := &MockMarmotFileSystem{}
+			subject := cmd.InitCmd{FileSystem: fsMock}
 			Expect(subject.Run()).To(Succeed())
 		})
 
-		// Test the logic only, using an interface to check for the existence of the directory and data files
-		PIt("creates a directory, when none exists")
+		It("creates a directory, when none exists", func() {
+			fsMock := &MockMarmotFileSystem{}
+			subject := cmd.InitCmd{FileSystem: fsMock}
+
+			_ = subject.Run()
+			fsMock.EnsureExistsExpected("/path/to/meta")
+		})
+
 		PIt("initializes meta data, when none exists")
+
+		PIt("does nothing or returns an error when the repository already exists")
 	})
 })
+
+type MockMarmotFileSystem struct {
+	EnsureExistsReceived []string
+}
+
+func (fs *MockMarmotFileSystem) EnsureExists(path string) {
+	fs.EnsureExistsReceived = append(fs.EnsureExistsReceived, path)
+}
+
+func (fs *MockMarmotFileSystem) EnsureExistsExpected(expectedPath string) {
+	GinkgoHelper()
+	Expect(fs.EnsureExistsReceived).To(ContainElement(expectedPath))
+}
