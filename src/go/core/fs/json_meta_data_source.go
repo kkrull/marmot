@@ -13,14 +13,21 @@ type JsonMetaDataSource struct {
 }
 
 func (source *JsonMetaDataSource) Init() error {
-	stat, err := os.Stat(source.Path)
-	if errors.Is(err, fs.ErrNotExist) {
+	stat, statErr := os.Stat(source.Path)
+	if errors.Is(statErr, fs.ErrNotExist) {
+		fmt.Printf("[prod] creating directories: %s\n", source.Path)
+		dirErr := os.MkdirAll(source.Path, fs.ModePerm)
+		if dirErr != nil {
+			fmt.Printf("[prod] failed to make directories: %s\n", source.Path)
+			fmt.Println(dirErr.Error())
+		}
+
 		return nil
-	} else if err != nil {
-		return err
-	} else if stat != nil && stat.IsDir() {
+	} else if statErr != nil {
+		return statErr
+	} else if stat != nil {
 		return fmt.Errorf("%s: path already exists", source.Path)
 	}
 
-	return nil
+	return fmt.Errorf("%s: undefined behavior", source.Path)
 }

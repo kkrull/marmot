@@ -31,25 +31,30 @@ var _ = Describe("JsonMetaDataSource", func() {
 			}
 		})
 
-		It("returns an error when unable to check if the given path exists", func() {
-			subject := fs.JsonMetaDataSource{Path: "\000x"}
-			invalidPathErr := subject.Init()
-			Expect(invalidPathErr).NotTo(BeNil())
-		})
-
 		It("returns an error, given a path that already exists", func() {
-			Expect(os.MkdirAll(metaDataPath, os.ModePerm)).To(Succeed())
+			Expect(os.Create(metaDataPath)).NotTo(BeNil())
 
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
 			Expect(subject.Init()).To(
 				MatchError(fmt.Sprintf("%s: path already exists", metaDataPath)))
 		})
 
+		It("returns an error when unable to check if the given path exists", func() {
+			subject := fs.JsonMetaDataSource{Path: "\000x"}
+			invalidPathErr := subject.Init()
+			Expect(invalidPathErr).NotTo(BeNil())
+		})
+
 		PIt("returns an error when creating files fails")
 
-		It("returns nil, otherwise", func() {
+		It("creates a meta repository directory and returns nil, otherwise", func() {
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
 			Expect(subject.Init()).To(BeNil())
+
+			fmt.Printf("[test] looking for: %s\n", metaDataPath)
+			stat, statErr := os.Stat(metaDataPath)
+			Expect(statErr).To(BeNil())
+			Expect(stat).NotTo(BeNil())
 		})
 	})
 })
