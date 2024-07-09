@@ -1,11 +1,11 @@
 package cmd
 
 // Initializes a new meta repo where none existed before
-type InitCmd struct {
+type InitCommand struct {
 	MetaDataSource MetaDataSource
 }
 
-func (command InitCmd) Run() error {
+func (command InitCommand) Run() error {
 	return command.MetaDataSource.Init()
 }
 
