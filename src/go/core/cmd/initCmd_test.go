@@ -10,17 +10,17 @@ import (
 var _ = Describe("cmd.InitCmd", func() {
 	Describe("#Run", func() {
 		It("succeeds, given valid conditions", func() {
-			fsMock := &MockMetaDataStore{}
-			subject := cmd.InitCmd{MetaDataStore: fsMock}
+			metaDataMock := &MockMetaDataSource{}
+			subject := cmd.InitCmd{MetaDataSource: metaDataMock}
 			Expect(subject.Run()).To(Succeed())
 		})
 
 		It("ensures there is a place to store meta data", func() {
-			dataStoreMock := &MockMetaDataStore{}
-			subject := cmd.InitCmd{MetaDataStore: dataStoreMock}
+			metaDataMock := &MockMetaDataSource{}
+			subject := cmd.InitCmd{MetaDataSource: metaDataMock}
 
 			_ = subject.Run()
-			dataStoreMock.EnsureCreatedExpected()
+			metaDataMock.EnsureCreatedExpected()
 		})
 
 		PIt("initializes meta data, when none exists")
@@ -29,14 +29,14 @@ var _ = Describe("cmd.InitCmd", func() {
 	})
 })
 
-type MockMetaDataStore struct {
+type MockMetaDataSource struct {
 	EnsureCreatedCount int
 }
 
-func (fs *MockMetaDataStore) EnsureCreated() {
+func (fs *MockMetaDataSource) EnsureCreated() {
 	fs.EnsureCreatedCount += 1
 }
 
-func (fs *MockMetaDataStore) EnsureCreatedExpected() {
+func (fs *MockMetaDataSource) EnsureCreatedExpected() {
 	Expect(fs.EnsureCreatedCount).To(BeNumerically(">", 0))
 }

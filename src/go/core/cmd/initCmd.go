@@ -1,14 +1,14 @@
 package cmd
 
 type InitCmd struct {
-	MetaDataStore MetaDataStore
+	MetaDataSource MetaDataSource
 }
 
 func (command InitCmd) Run() error {
-	command.MetaDataStore.EnsureCreated()
+	command.MetaDataSource.EnsureCreated()
 	return nil
 }
 
-type MetaDataStore interface {
+type MetaDataSource interface {
 	EnsureCreated()
 }
