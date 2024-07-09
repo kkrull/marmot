@@ -22,7 +22,7 @@ func (source *JsonMetaDataSource) Init() error {
 	// }
 
 	if stat != nil && stat.IsDir() {
-		return errors.New(fmt.Sprintf("%s: path already exists", source.Path))
+		return fmt.Errorf("%s: path already exists", source.Path)
 	}
 
 	return nil

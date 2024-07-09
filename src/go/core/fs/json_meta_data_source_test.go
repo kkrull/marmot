@@ -14,15 +14,14 @@ import (
 var _ = Describe("JsonMetaDataSource", func() {
 	Describe("#Init", func() {
 		var (
-			testFsRoot   string
 			metaDataPath string
+			testFsRoot   string
 		)
 
 		BeforeEach(func() {
-			testFsRoot, fsErr := os.MkdirTemp("", "JsonMetaDataSource-")
-			Expect(fsErr).To(BeNil())
+			testFsRoot, err := os.MkdirTemp("", "JsonMetaDataSource-")
+			Expect(err).To(BeNil())
 			metaDataPath = filepath.Join(testFsRoot, "meta")
-			// fmt.Printf("metaDataPath: %s\n", metaDataPath)
 		})
 
 		AfterEach(func() {
@@ -33,8 +32,6 @@ var _ = Describe("JsonMetaDataSource", func() {
 		})
 
 		It("returns an error if the directory already exists", func() {
-			// https://pkg.go.dev/os@go1.22.5#Mkdir
-			// https://stackoverflow.com/questions/37932551/mkdir-if-not-exists-using-golang
 			Expect(os.MkdirAll(metaDataPath, os.ModePerm)).To(Succeed())
 
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
