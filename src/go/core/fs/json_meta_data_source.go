@@ -3,6 +3,7 @@ package fs
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 )
 
@@ -13,11 +14,14 @@ type JsonMetaDataSource struct {
 
 func (source *JsonMetaDataSource) Init() error {
 	stat, err := os.Stat(source.Path)
-	if err != nil {
-		return err
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
 	}
+	// if err != nil {
+	// 	return err
+	// }
 
-	if stat.IsDir() {
+	if stat != nil && stat.IsDir() {
 		return errors.New(fmt.Sprintf("%s: path already exists", source.Path))
 	}
 

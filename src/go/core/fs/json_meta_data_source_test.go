@@ -19,7 +19,7 @@ var _ = Describe("JsonMetaDataSource", func() {
 		)
 
 		BeforeEach(func() {
-			testFsRoot, fsErr := os.MkdirTemp("", "JsonMetaDataSource")
+			testFsRoot, fsErr := os.MkdirTemp("", "JsonMetaDataSource-")
 			Expect(fsErr).To(BeNil())
 			metaDataPath = filepath.Join(testFsRoot, "meta")
 			// fmt.Printf("metaDataPath: %s\n", metaDataPath)
@@ -38,12 +38,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 			Expect(os.MkdirAll(metaDataPath, os.ModePerm)).To(Succeed())
 
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
-			Expect(subject.Init()).To(MatchError(fmt.Sprintf("%s: path already exists", metaDataPath)))
+			Expect(subject.Init()).To(
+				MatchError(fmt.Sprintf("%s: path already exists", metaDataPath)))
 		})
 
 		PIt("returns an error when creating files fails")
 
-		It("returns nil, otherwise", Pending, func() {
+		It("returns nil, otherwise", func() {
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
 			Expect(subject.Init()).To(BeNil())
 		})
