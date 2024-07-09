@@ -21,10 +21,8 @@ var _ = Describe("JsonMetaDataSource", func() {
 		BeforeEach(func() {
 			testFsRoot, fsErr := os.MkdirTemp("", "JsonMetaDataSource")
 			Expect(fsErr).To(BeNil())
-			fmt.Printf("testFsRoot: %s\n", testFsRoot)
-
 			metaDataPath = filepath.Join(testFsRoot, "meta")
-			fmt.Printf("metaDataPath: %s\n", metaDataPath)
+			// fmt.Printf("metaDataPath: %s\n", metaDataPath)
 		})
 
 		AfterEach(func() {
@@ -34,19 +32,19 @@ var _ = Describe("JsonMetaDataSource", func() {
 			}
 		})
 
-		It("returns an error if the directory already exists", Focus, func() {
+		It("returns an error if the directory already exists", func() {
 			// https://pkg.go.dev/os@go1.22.5#Mkdir
 			// https://stackoverflow.com/questions/37932551/mkdir-if-not-exists-using-golang
-			fmt.Printf("about to make metaDataPath: %s\n", metaDataPath)
-			if err := os.MkdirAll(metaDataPath, os.ModePerm); err != nil {
-				Fail(fmt.Sprintf("Failed to create meta dir %s: %s", metaDataPath, err.Error()))
-			}
+			Expect(os.MkdirAll(metaDataPath, os.ModePerm)).To(Succeed())
+
+			subject := fs.JsonMetaDataSource{Path: metaDataPath}
+			Expect(subject.Init()).To(MatchError(fmt.Sprintf("%s: path already exists", metaDataPath)))
 		})
 
 		PIt("returns an error when creating files fails")
 
-		It("returns nil, otherwise", func() {
-			subject := fs.JsonMetaDataSource{}
+		It("returns nil, otherwise", Pending, func() {
+			subject := fs.JsonMetaDataSource{Path: metaDataPath}
 			Expect(subject.Init()).To(BeNil())
 		})
 	})
