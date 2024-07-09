@@ -33,14 +33,6 @@ var _ = Describe("cmd.InitCmd", func() {
 	})
 })
 
-var _ = Describe("fs.JsonMetaDataSource", func() {
-	Describe("#Init", func() {
-		PIt("returns an error if the directory already exists")
-		PIt("returns an error when creating files fails")
-		PIt("returns nil, after creating files in a directory that does not exist")
-	})
-})
-
 type MockMetaDataSource struct {
 	InitCount int
 	InitError error
