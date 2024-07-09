@@ -24,10 +24,8 @@ func (source *JsonMetaDataSource) Init() error {
 }
 
 func createMetaData(path string) error {
-	dirErr := os.MkdirAll(path, fs.ModePerm)
-	if dirErr != nil {
-		fmt.Printf("[prod] failed to make directories: %s\n", path)
-		fmt.Println(dirErr.Error())
+	if dirErr := os.MkdirAll(path, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("createMetaData %s: %w", path, dirErr)
 	}
 
 	return nil
