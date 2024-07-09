@@ -16,12 +16,9 @@ func (source *JsonMetaDataSource) Init() error {
 	stat, err := os.Stat(source.Path)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
-	}
-	// if err != nil {
-	// 	return err
-	// }
-
-	if stat != nil && stat.IsDir() {
+	} else if err != nil {
+		return err
+	} else if stat != nil && stat.IsDir() {
 		return fmt.Errorf("%s: path already exists", source.Path)
 	}
 

@@ -31,7 +31,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 			}
 		})
 
-		It("returns an error if the directory already exists", func() {
+		It("returns an error when unable to check if the given path exists", func() {
+			subject := fs.JsonMetaDataSource{Path: "\000x"}
+			invalidPathErr := subject.Init()
+			Expect(invalidPathErr).NotTo(BeNil())
+		})
+
+		It("returns an error, given a path that already exists", func() {
 			Expect(os.MkdirAll(metaDataPath, os.ModePerm)).To(Succeed())
 
 			subject := fs.JsonMetaDataSource{Path: metaDataPath}
