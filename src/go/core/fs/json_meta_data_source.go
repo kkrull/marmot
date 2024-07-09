@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path/filepath"
 )
 
 // Stores meta data in JSON files in a directory that Marmot manages
@@ -15,7 +16,7 @@ type JsonMetaDataSource struct {
 func (source *JsonMetaDataSource) Init() error {
 	_, statErr := os.Stat(source.Path)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return createMetaData(source.Path)
+		return createMetaData(filepath.Join(source.Path, ".marmot"))
 	} else if statErr != nil {
 		return statErr
 	} else {
@@ -23,9 +24,14 @@ func (source *JsonMetaDataSource) Init() error {
 	}
 }
 
-func createMetaData(path string) error {
-	if dirErr := os.MkdirAll(path, fs.ModePerm); dirErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", path, dirErr)
+func createMetaData(metaDataDir string) error {
+	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("createMetaData %s: %w", metaDataDir, dirErr)
+	}
+
+	metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
+	if _, fileErr := os.Create(metaDataFile); fileErr != nil {
+		return fmt.Errorf("createMetaData %s: %w", metaDataFile, fileErr)
 	}
 
 	return nil

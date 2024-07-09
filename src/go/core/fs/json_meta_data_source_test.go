@@ -14,7 +14,7 @@ import (
 var _ = Describe("JsonMetaDataSource", func() {
 	Describe("#Init", func() {
 		var (
-			metaDataPath string
+			metaRepoPath string
 			testFsRoot   string
 		)
 
@@ -23,7 +23,7 @@ var _ = Describe("JsonMetaDataSource", func() {
 			testFsRoot, fixtureErr = os.MkdirTemp("", "JsonMetaDataSource-")
 			Expect(fixtureErr).To(BeNil())
 
-			metaDataPath = filepath.Join(testFsRoot, "meta")
+			metaRepoPath = filepath.Join(testFsRoot, "meta")
 		})
 
 		AfterEach(func() {
@@ -34,11 +34,11 @@ var _ = Describe("JsonMetaDataSource", func() {
 		})
 
 		It("returns an error, given a path that already exists", func() {
-			Expect(os.Create(metaDataPath)).NotTo(BeNil())
+			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
-			subject := fs.JsonMetaDataSource{Path: metaDataPath}
+			subject := fs.JsonMetaDataSource{Path: metaRepoPath}
 			Expect(subject.Init()).To(
-				MatchError(fmt.Sprintf("%s: path already exists", metaDataPath)))
+				MatchError(fmt.Sprintf("%s: path already exists", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
@@ -47,21 +47,23 @@ var _ = Describe("JsonMetaDataSource", func() {
 			Expect(invalidPathErr).NotTo(BeNil())
 		})
 
-		It("returns an error when creating files fails", Focus, func() {
-			Expect(os.Chmod(testFsRoot, 0o555)).To(BeNil())
+		It("returns an error when creating files fails", func() {
+			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 
-			subject := fs.JsonMetaDataSource{Path: metaDataPath}
+			subject := fs.JsonMetaDataSource{Path: metaRepoPath}
 			Expect(subject.Init()).To(
-				MatchError(ContainSubstring(fmt.Sprintf("createMetaData %s", metaDataPath))))
+				MatchError(ContainSubstring(fmt.Sprintf("createMetaData %s", metaRepoPath))))
 		})
 
 		It("creates a meta repository and returns nil, otherwise", func() {
-			subject := fs.JsonMetaDataSource{Path: metaDataPath}
-			Expect(subject.Init()).To(BeNil())
+			subject := fs.JsonMetaDataSource{Path: metaRepoPath}
+			Expect(subject.Init()).To(Succeed())
 
-			stat, statErr := os.Stat(metaDataPath)
-			Expect(statErr).To(BeNil())
-			Expect(stat).NotTo(BeNil())
+			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
+			Expect(os.Stat(metaDataDir)).NotTo(BeNil())
+
+			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
+			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
 		})
 	})
 })
