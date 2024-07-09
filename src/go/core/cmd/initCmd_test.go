@@ -10,17 +10,17 @@ import (
 var _ = Describe("cmd.InitCmd", func() {
 	Describe("#Run", func() {
 		It("succeeds, given valid conditions", func() {
-			fsMock := &MockMarmotFileSystem{}
-			subject := cmd.InitCmd{FileSystem: fsMock}
+			fsMock := &MockMetaDataStore{}
+			subject := cmd.InitCmd{MetaDataStore: fsMock}
 			Expect(subject.Run()).To(Succeed())
 		})
 
-		It("creates a directory, when none exists", func() {
-			fsMock := &MockMarmotFileSystem{}
-			subject := cmd.InitCmd{FileSystem: fsMock}
+		It("ensures there is a place to store meta data", func() {
+			dataStoreMock := &MockMetaDataStore{}
+			subject := cmd.InitCmd{MetaDataStore: dataStoreMock}
 
 			_ = subject.Run()
-			fsMock.EnsureExistsExpected("/path/to/meta")
+			dataStoreMock.EnsureCreatedExpected()
 		})
 
 		PIt("initializes meta data, when none exists")
@@ -29,15 +29,14 @@ var _ = Describe("cmd.InitCmd", func() {
 	})
 })
 
-type MockMarmotFileSystem struct {
-	EnsureExistsReceived []string
+type MockMetaDataStore struct {
+	EnsureCreatedCount int
 }
 
-func (fs *MockMarmotFileSystem) EnsureExists(path string) {
-	fs.EnsureExistsReceived = append(fs.EnsureExistsReceived, path)
+func (fs *MockMetaDataStore) EnsureCreated() {
+	fs.EnsureCreatedCount += 1
 }
 
-func (fs *MockMarmotFileSystem) EnsureExistsExpected(expectedPath string) {
-	GinkgoHelper()
-	Expect(fs.EnsureExistsReceived).To(ContainElement(expectedPath))
+func (fs *MockMetaDataStore) EnsureCreatedExpected() {
+	Expect(fs.EnsureCreatedCount).To(BeNumerically(">", 0))
 }

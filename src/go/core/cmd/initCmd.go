@@ -1,14 +1,14 @@
 package cmd
 
 type InitCmd struct {
-	FileSystem MarmotFileSystem
+	MetaDataStore MetaDataStore
 }
 
 func (command InitCmd) Run() error {
-	command.FileSystem.EnsureExists("/path/to/meta")
+	command.MetaDataStore.EnsureCreated()
 	return nil
 }
 
-type MarmotFileSystem interface {
-	EnsureExists(path string)
+type MetaDataStore interface {
+	EnsureCreated()
 }
