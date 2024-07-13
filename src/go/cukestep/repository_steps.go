@@ -11,11 +11,14 @@ import (
 
 // Add step definitions related to repositories.
 func AddRepositorySteps(ctx *godog.ScenarioContext) {
+	ctx.Given(`^I have registered local repositories$`, registerLocalRepositories)
 	ctx.When(`^I list repositories in that meta repo$`, listRepositoriesInThatMetaRepo)
+
 	ctx.Then(`^that repository listing should be empty$`, thatRepositoryListingShouldBeEmpty)
+	ctx.Then(`^that repository listing should include local repositories that were registered$`, thatRepositoryListingShouldIncludeLocalRepositories)
 }
 
-/* Listing repositories */
+/* List repositories */
 
 var thatRepositoryListing []string
 
@@ -44,4 +47,14 @@ func listRepositories(metaRepoPath string) ([]string, error) {
 
 func thatRepositoryListingShouldBeEmpty() {
 	Expect(thatRepositoryListing).To(BeEmpty())
+}
+
+func thatRepositoryListingShouldIncludeLocalRepositories() error {
+	return godog.ErrPending
+}
+
+/* Register repositories */
+
+func registerLocalRepositories() error {
+	return godog.ErrPending
 }

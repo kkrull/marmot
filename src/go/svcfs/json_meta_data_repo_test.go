@@ -78,5 +78,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 				Expect(repositories.Names()).To(BeEmpty())
 			}
 		})
+
+		It("lists each known remote repository, given a meta repo with remote repositories", Pending, func() {
+		})
 	})
 })
