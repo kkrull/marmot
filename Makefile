@@ -39,22 +39,27 @@ PRECOMMIT ?= pre-commit
 .PHONY: all clean install test uninstall
 all: #> Build everything
 	$(MAKE) -C man all
+	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
 clean: pre-commit-clean #> Remove files built by running make earlier
 	$(MAKE) -C man clean
+	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
 
 install: #> Install programs and manuals made here
 	$(MAKE) -C man install
+	$(MAKE) -C src/go install
 	$(MAKE) -C src/zsh install
 
 test: pre-commit-run #> Run all tests and checks
 	$(MAKE) -C man test
+	$(MAKE) -C src/go test
 	$(MAKE) -C src/zsh test
 
 uninstall: #> Uninstall programs and manuals made here
 	$(MAKE) -C man uninstall
+	$(MAKE) -C src/go uninstall
 	$(MAKE) -C src/zsh uninstall
 
 #. OTHER TARGETS
@@ -63,7 +68,8 @@ uninstall: #> Uninstall programs and manuals made here
 .NOTPARALLEL: debug
 debug: path-debug #> Show debugging information
 	$(MAKE) -C man debug
-	$(MAKE) -C src debug
+	$(MAKE) -C src/go debug
+	$(MAKE) -C src/zsh debug
 
 # https://stackoverflow.com/a/47107132/112682
 .PHONY: help
