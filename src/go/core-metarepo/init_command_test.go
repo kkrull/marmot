@@ -11,9 +11,11 @@ import (
 )
 
 var _ = Describe("InitCommand", func() {
-	var subject *metarepo.InitCommand
-	var cmdFactory *factory.CommandFactory
-	var metaDataSource *MockMetaDataSource
+	var (
+		subject        *metarepo.InitCommand
+		cmdFactory     *factory.CommandFactory
+		metaDataSource *MockMetaDataSource
+	)
 
 	BeforeEach(func() {
 		metaDataSource = &MockMetaDataSource{}
