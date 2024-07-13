@@ -8,8 +8,3 @@ type InitCommand struct {
 func (command InitCommand) Run() error {
 	return command.MetaDataSource.Init()
 }
-
-// Access to meta data about Git repositories
-type MetaDataSource interface {
-	Init() error
-}
