@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot/cmd"
+	metarepo "github.com/kkrull/marmot/core-metarepo"
 	support "github.com/kkrull/marmot/feature-support"
 	"github.com/kkrull/marmot/fs"
 )
@@ -43,7 +43,7 @@ func initializeNewMetaRepo() error {
 	}
 
 	jsonDataSource := fs.NewJsonMetaDataSource(thatMetaRepo)
-	initCmd := &cmd.InitCommand{MetaDataSource: jsonDataSource}
+	initCmd := &metarepo.InitCommand{MetaDataSource: jsonDataSource}
 	if runErr := initCmd.Run(); runErr != nil {
 		return fmt.Errorf("failed to initialize repository %s: %w", thatMetaRepo, runErr)
 	} else {

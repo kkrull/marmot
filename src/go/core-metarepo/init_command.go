@@ -1,4 +1,4 @@
-package cmd
+package core_metarepo
 
 // Initializes a new meta repo where none existed before
 type InitCommand struct {
