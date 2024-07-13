@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot/hooks"
+	"github.com/kkrull/marmot/feature_support"
 	"github.com/kkrull/marmot/step_definitions"
 	. "github.com/onsi/gomega"
 )
@@ -26,7 +26,7 @@ func TestFeatures(t *testing.T) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	hooks.AddTo(ctx)
+	feature_support.AddTo(ctx)
 	step_definitions.AddMetaRepoSteps(ctx)
 	step_definitions.AddRepositorySteps(ctx)
 }
