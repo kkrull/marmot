@@ -19,7 +19,7 @@ var _ = Describe("InitCommand", func() {
 
 	BeforeEach(func() {
 		metaDataSource = &MockMetaDataSource{}
-		cmdFactory = &main.CommandFactory{MetaDataSource: metaDataSource}
+		cmdFactory = &main.CommandFactory{MetaDataAdmin: metaDataSource}
 	})
 
 	Describe("#Run", func() {

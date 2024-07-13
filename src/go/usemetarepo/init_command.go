@@ -1,10 +1,12 @@
 package usemetarepo
 
-// Initializes a new meta repo where none existed before
+import core "github.com/kkrull/marmot/coremetarepo"
+
+// Initializes a new meta repo where none existed before.
 type InitCommand struct {
-	MetaDataSource MetaDataSource
+	MetaDataAdmin core.MetaDataAdmin
 }
 
-func (command InitCommand) Run() error {
-	return command.MetaDataSource.Init()
+func (cmd InitCommand) Run() error {
+	return cmd.MetaDataAdmin.Init()
 }

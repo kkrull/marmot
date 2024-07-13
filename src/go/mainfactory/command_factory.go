@@ -4,24 +4,26 @@ import (
 	"errors"
 
 	"github.com/cucumber/godog"
+	"github.com/kkrull/marmot/coremetarepo"
+	"github.com/kkrull/marmot/corerepository"
 	"github.com/kkrull/marmot/svcfs"
 	metarepo "github.com/kkrull/marmot/usemetarepo"
 	repository "github.com/kkrull/marmot/userepository"
 )
 
-// Constructs commands with configurable dependencies
+// Constructs commands with configurable dependencies.
 type CommandFactory struct {
-	MetaDataSource   metarepo.MetaDataSource
-	RepositorySource repository.RepositorySource
+	MetaDataAdmin    coremetarepo.MetaDataAdmin
+	RepositorySource corerepository.RepositorySource
 }
 
 func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
-	if factory.MetaDataSource == nil {
-		return nil, errors.New("CommandFactory: missing MetaDataSource")
+	if factory.MetaDataAdmin == nil {
+		return nil, errors.New("CommandFactory: missing MetaDataAdmin")
 	}
 
 	return &metarepo.InitCommand{
-		MetaDataSource: factory.MetaDataSource,
+		MetaDataAdmin: factory.MetaDataAdmin,
 	}, nil
 }
 
@@ -37,5 +39,5 @@ func (factory *CommandFactory) ListRepositoriesCommand() (*repository.ListReposi
 }
 
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
-	factory.MetaDataSource = svcfs.JsonMetaDataSource(metaRepoPath)
+	factory.MetaDataAdmin = svcfs.JsonMetaDataRepo(metaRepoPath)
 }

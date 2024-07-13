@@ -7,26 +7,26 @@ import (
 	"os"
 	"path/filepath"
 
-	metarepo "github.com/kkrull/marmot/usemetarepo"
+	core "github.com/kkrull/marmot/coremetarepo"
 )
 
-// Stores meta data in JSON files in a directory that Marmot manages
-func JsonMetaDataSource(repositoryPath string) metarepo.MetaDataSource {
+// A meta repo that stores meta data in JSON files on the file system.
+func JsonMetaDataRepo(repositoryPath string) core.MetaDataAdmin {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
-	return &jsonMetaDataSource{
+	return &jsonMetaDataRepo{
 		repositoryDir: repositoryPath,
 		metaDataDir:   metaDataDir,
 		metaDataFile:  filepath.Join(metaDataDir, "meta-repo.json"),
 	}
 }
 
-type jsonMetaDataSource struct {
+type jsonMetaDataRepo struct {
 	metaDataDir   string
 	metaDataFile  string
 	repositoryDir string
 }
 
-func (source *jsonMetaDataSource) Init() error {
+func (source *jsonMetaDataRepo) Init() error {
 	_, statErr := os.Stat(source.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
 		return source.createMetaData()
@@ -37,7 +37,7 @@ func (source *jsonMetaDataSource) Init() error {
 	}
 }
 
-func (source *jsonMetaDataSource) createMetaData() error {
+func (source *jsonMetaDataRepo) createMetaData() error {
 	if dirErr := os.MkdirAll(source.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("createMetaData %s: %w", source.metaDataDir, dirErr)
 	} else if _, fileErr := os.Create(source.metaDataFile); fileErr != nil {
