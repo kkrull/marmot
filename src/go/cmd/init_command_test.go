@@ -3,7 +3,7 @@ package cmd_test
 import (
 	"errors"
 
-	"github.com/kkrull/marmot-core/cmd"
+	"github.com/kkrull/marmot/cmd"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

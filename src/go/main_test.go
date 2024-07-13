@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot-core/hooks"
-	"github.com/kkrull/marmot-core/step_definitions"
+	"github.com/kkrull/marmot/hooks"
+	"github.com/kkrull/marmot/step_definitions"
 	. "github.com/onsi/gomega"
 )
 

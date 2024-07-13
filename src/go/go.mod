@@ -1,4 +1,4 @@
-module github.com/kkrull/marmot-core
+module github.com/kkrull/marmot
 
 go 1.22.4
 

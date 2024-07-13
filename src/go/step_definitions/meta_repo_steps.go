@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot-core/cmd"
-	"github.com/kkrull/marmot-core/fs"
-	"github.com/kkrull/marmot-core/hooks"
+	"github.com/kkrull/marmot/cmd"
+	"github.com/kkrull/marmot/fs"
+	"github.com/kkrull/marmot/hooks"
 )
 
 // Add step definitions to manage the life cycle of a meta repo
