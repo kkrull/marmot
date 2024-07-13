@@ -5,9 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/cucumber/godog"
-	metarepo "github.com/kkrull/marmot/core-metarepo"
 	support "github.com/kkrull/marmot/feature-support"
-	"github.com/kkrull/marmot/fs"
+	main_factory "github.com/kkrull/marmot/main-factory"
 )
 
 // Add step definitions to manage the life cycle of a meta repo
@@ -42,10 +41,12 @@ func initializeNewMetaRepo() error {
 		setThatMetaRepo(filepath.Join(testDir, "meta"))
 	}
 
-	jsonDataSource := fs.JsonMetaDataSource(thatMetaRepo)
-	initCmd := &metarepo.InitCommand{MetaDataSource: jsonDataSource}
-	if runErr := initCmd.Run(); runErr != nil {
-		return fmt.Errorf("failed to initialize repository %s: %w", thatMetaRepo, runErr)
+	cmdFactory := &main_factory.CommandFactory{}
+	cmdFactory.WithJsonFileSource(thatMetaRepo)
+	if initCmd, factoryErr := cmdFactory.NewInitCommand(); factoryErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize: %w", factoryErr)
+	} else if runErr := initCmd.Run(); runErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize repository %s: %w", thatMetaRepo, runErr)
 	} else {
 		return nil
 	}
