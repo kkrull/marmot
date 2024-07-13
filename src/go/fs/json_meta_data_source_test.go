@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kkrull/marmot-core/fs"
+	"github.com/kkrull/marmot/fs"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
