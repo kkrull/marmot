@@ -11,9 +11,9 @@ type RepositoriesArray struct {
 }
 
 func (array RepositoriesArray) Names() []string {
-	names := make([]string, 0, len(array.Repositories))
-	for _, repository := range array.Repositories {
-		names = append(names, repository.Name)
+	names := make([]string, len(array.Repositories))
+	for i, repository := range array.Repositories {
+		names[i] = repository.Name
 	}
 
 	return names

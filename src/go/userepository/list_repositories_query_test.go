@@ -14,7 +14,7 @@ var _ = Describe("ListRepositoriesQuery", func() {
 	)
 
 	Describe("#Run", func() {
-		It("returns all repositories included the source can list", func() {
+		It("returns all repositories the source can list", func() {
 			source = &MockRepositorySource{Names: []string{"one", "two"}}
 			factory = &main.CommandFactory{RepositorySource: source}
 
@@ -33,9 +33,9 @@ type MockRepositorySource struct {
 }
 
 func (source *MockRepositorySource) List() (core.Repositories, error) {
-	repositories := make([]core.Repository, 0, len(source.Names))
-	for _, name := range source.Names {
-		repositories = append(repositories, core.Repository{Name: name})
+	repositories := make([]core.Repository, len(source.Names))
+	for i, name := range source.Names {
+		repositories[i] = core.Repository{Name: name}
 	}
 
 	return &core.RepositoriesArray{Repositories: repositories}, nil
