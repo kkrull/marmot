@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot/feature_support"
-	"github.com/kkrull/marmot/step_definitions"
+	steps "github.com/kkrull/marmot/feature-steps"
+	support "github.com/kkrull/marmot/feature-support"
 	. "github.com/onsi/gomega"
 )
 
@@ -26,7 +26,7 @@ func TestFeatures(t *testing.T) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	feature_support.AddTo(ctx)
-	step_definitions.AddMetaRepoSteps(ctx)
-	step_definitions.AddRepositorySteps(ctx)
+	steps.AddMetaRepoSteps(ctx)
+	steps.AddRepositorySteps(ctx)
+	support.AddTo(ctx)
 }

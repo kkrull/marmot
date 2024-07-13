@@ -1,4 +1,4 @@
-package step_definitions
+package feature_steps
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/cucumber/godog"
 	"github.com/kkrull/marmot/cmd"
-	"github.com/kkrull/marmot/feature_support"
+	support "github.com/kkrull/marmot/feature-support"
 	"github.com/kkrull/marmot/fs"
 )
 
@@ -36,7 +36,7 @@ func setThatMetaRepo(path string) {
 func initializeNewMetaRepo() error {
 	if thatMetaRepo != "" {
 		return fmt.Errorf("meta_repo_steps: meta repo has already been configured at %s", thatMetaRepo)
-	} else if testDir, mkdirErr := feature_support.TestDir(); mkdirErr != nil {
+	} else if testDir, mkdirErr := support.TestDir(); mkdirErr != nil {
 		return mkdirErr
 	} else {
 		setThatMetaRepo(filepath.Join(testDir, "meta"))
