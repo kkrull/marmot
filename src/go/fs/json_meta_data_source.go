@@ -10,8 +10,7 @@ import (
 	metarepo "github.com/kkrull/marmot/core-metarepo"
 )
 
-// Makes a JsonMetaDataSource for the meta repository at repositoryPath, using conventional paths to
-// meta data within it.
+// Stores meta data in JSON files in a directory that Marmot manages
 func JsonMetaDataSource(repositoryPath string) metarepo.MetaDataSource {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
 	return &jsonMetaDataSource{
@@ -21,7 +20,6 @@ func JsonMetaDataSource(repositoryPath string) metarepo.MetaDataSource {
 	}
 }
 
-// Stores meta data in JSON files in a directory that Marmot manages
 type jsonMetaDataSource struct {
 	metaDataDir   string
 	metaDataFile  string
