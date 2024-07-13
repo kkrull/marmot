@@ -13,7 +13,7 @@ type CommandFactory struct {
 	MetaDataSource metarepo.MetaDataSource
 }
 
-func (factory *CommandFactory) NewInitCommand() (*metarepo.InitCommand, error) {
+func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 	if factory.MetaDataSource == nil {
 		return nil, errors.New("CommandFactory: missing MetaDataSource")
 	}

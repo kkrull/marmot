@@ -43,7 +43,7 @@ func initializeNewMetaRepo() error {
 
 	cmdFactory := &main_factory.CommandFactory{}
 	cmdFactory.WithJsonFileSource(thatMetaRepo)
-	if initCmd, factoryErr := cmdFactory.NewInitCommand(); factoryErr != nil {
+	if initCmd, factoryErr := cmdFactory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize: %w", factoryErr)
 	} else if runErr := initCmd.Run(); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository %s: %w", thatMetaRepo, runErr)

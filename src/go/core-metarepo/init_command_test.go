@@ -24,20 +24,20 @@ var _ = Describe("InitCommand", func() {
 
 	Describe("#Run", func() {
 		It("initializes the given meta data source", func() {
-			subject, _ = cmdFactory.NewInitCommand()
+			subject, _ = cmdFactory.InitCommand()
 			_ = subject.Run()
 			metaDataSource.InitExpected()
 		})
 
 		It("returns nil, when everything succeeds", func() {
-			subject, _ = cmdFactory.NewInitCommand()
+			subject, _ = cmdFactory.InitCommand()
 			Expect(subject.Run()).To(BeNil())
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
 			metaDataSource.InitError = errors.New("bang!")
 
-			subject, _ = cmdFactory.NewInitCommand()
+			subject, _ = cmdFactory.InitCommand()
 			Expect(subject.Run()).To(MatchError("bang!"))
 		})
 	})

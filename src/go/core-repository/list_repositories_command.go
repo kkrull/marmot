@@ -1,10 +1,12 @@
 package core_repository
 
-import "errors"
+import (
+	"github.com/cucumber/godog"
+)
 
 // List repositories known to a meta repo
 type ListRepositoriesCommand struct {}
 
 func (cmd *ListRepositoriesCommand) Run() ([]string, error) {
-	return nil, errors.New("not implemented")
+	return nil, godog.ErrPending
 }
