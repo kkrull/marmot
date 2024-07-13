@@ -14,7 +14,7 @@ func TestFeatures(t *testing.T) {
 	suite := godog.TestSuite{
 		Options: &godog.Options{
 			Format:   "pretty",
-			Paths:    []string{"feature"},
+			Paths:    []string{"."},
 			TestingT: t,
 		},
 		ScenarioInitializer: InitializeScenario,
