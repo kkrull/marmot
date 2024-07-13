@@ -12,47 +12,47 @@ import (
 
 var _ = Describe("InitCommand", func() {
 	var (
-		subject        *metarepo.InitCommand
-		cmdFactory     *main.CommandFactory
-		metaDataSource *MockMetaDataSource
+		subject       *metarepo.InitCommand
+		factory       *main.CommandFactory
+		metaDataAdmin *MockMetaDataAdmin
 	)
 
 	BeforeEach(func() {
-		metaDataSource = &MockMetaDataSource{}
-		cmdFactory = &main.CommandFactory{MetaDataAdmin: metaDataSource}
+		metaDataAdmin = &MockMetaDataAdmin{}
+		factory = &main.CommandFactory{MetaDataAdmin: metaDataAdmin}
 	})
 
 	Describe("#Run", func() {
 		It("initializes the given meta data source", func() {
-			subject, _ = cmdFactory.InitCommand()
+			subject, _ = factory.InitCommand()
 			_ = subject.Run()
-			metaDataSource.InitExpected()
+			metaDataAdmin.InitExpected()
 		})
 
 		It("returns nil, when everything succeeds", func() {
-			subject, _ = cmdFactory.InitCommand()
+			subject, _ = factory.InitCommand()
 			Expect(subject.Run()).To(BeNil())
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
-			metaDataSource.InitError = errors.New("bang!")
+			metaDataAdmin.InitError = errors.New("bang!")
 
-			subject, _ = cmdFactory.InitCommand()
+			subject, _ = factory.InitCommand()
 			Expect(subject.Run()).To(MatchError("bang!"))
 		})
 	})
 })
 
-type MockMetaDataSource struct {
+type MockMetaDataAdmin struct {
 	InitCount int
 	InitError error
 }
 
-func (fs *MockMetaDataSource) Init() error {
+func (fs *MockMetaDataAdmin) Init() error {
 	fs.InitCount += 1
 	return fs.InitError
 }
 
-func (fs *MockMetaDataSource) InitExpected() {
+func (fs *MockMetaDataAdmin) InitExpected() {
 	Expect(fs.InitCount).To(Equal(1))
 }
