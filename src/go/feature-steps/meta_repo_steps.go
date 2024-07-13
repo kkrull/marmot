@@ -42,7 +42,7 @@ func initializeNewMetaRepo() error {
 		setThatMetaRepo(filepath.Join(testDir, "meta"))
 	}
 
-	jsonDataSource := fs.NewJsonMetaDataSource(thatMetaRepo)
+	jsonDataSource := fs.JsonMetaDataSource(thatMetaRepo)
 	initCmd := &metarepo.InitCommand{MetaDataSource: jsonDataSource}
 	if runErr := initCmd.Run(); runErr != nil {
 		return fmt.Errorf("failed to initialize repository %s: %w", thatMetaRepo, runErr)
