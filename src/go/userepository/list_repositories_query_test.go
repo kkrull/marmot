@@ -8,11 +8,11 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("ListRepositoriesCommand", func() {
+var _ = Describe("ListRepositoriesQuery", func() {
 	var (
 		factory *main.CommandFactory
 		source  *MockRepositorySource
-		subject *use.ListRepositoriesCommand
+		subject *use.ListRepositoriesQuery
 	)
 
 	Describe("#Run", func() {
@@ -20,7 +20,7 @@ var _ = Describe("ListRepositoriesCommand", func() {
 			source = &MockRepositorySource{Names: make([]string, 0)}
 			factory = &main.CommandFactory{RepositorySource: source}
 
-			subject, _ = factory.ListRepositoriesCommand()
+			subject, _ = factory.ListRepositoriesQuery()
 			repositories, _ := subject.Run()
 			Expect(repositories.Names()).To(BeEmpty())
 		})
