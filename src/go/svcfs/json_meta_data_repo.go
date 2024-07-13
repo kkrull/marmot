@@ -7,8 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cucumber/godog"
-	repository "github.com/kkrull/marmot/corerepository"
+	"github.com/kkrull/marmot/corerepository"
 )
 
 // A meta repo that stores meta data in JSON files on the file system.
@@ -52,6 +51,10 @@ func (metaRepo *JsonMetaDataRepo) createMetaData() error {
 
 /* RepositorySource */
 
-func (metaRepo *JsonMetaDataRepo) List() (repository.Repositories, error) {
-	return nil, godog.ErrPending
+func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
+	repositories := &corerepository.RepositoriesArray{
+		Repositories: make([]corerepository.Repository, 0),
+	}
+
+	return repositories, nil
 }

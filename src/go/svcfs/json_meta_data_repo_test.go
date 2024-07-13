@@ -12,27 +12,27 @@ import (
 )
 
 var _ = Describe("JsonMetaDataRepo", func() {
+	var (
+		metaRepoPath string
+		testFsRoot   string
+	)
+
+	BeforeEach(func() {
+		var fixtureErr error
+		testFsRoot, fixtureErr = os.MkdirTemp("", "JsonMetaDataRepo-")
+		Expect(fixtureErr).To(BeNil())
+
+		metaRepoPath = filepath.Join(testFsRoot, "meta")
+	})
+
+	AfterEach(func() {
+		if err := os.RemoveAll(testFsRoot); err != nil {
+			fmt.Printf("JsonMetaDataRepo test: failed to remove %s\n", testFsRoot)
+			fmt.Println(err.Error())
+		}
+	})
+
 	Describe("#Init", func() {
-		var (
-			metaRepoPath string
-			testFsRoot   string
-		)
-
-		BeforeEach(func() {
-			var fixtureErr error
-			testFsRoot, fixtureErr = os.MkdirTemp("", "JsonMetaDataRepo-")
-			Expect(fixtureErr).To(BeNil())
-
-			metaRepoPath = filepath.Join(testFsRoot, "meta")
-		})
-
-		AfterEach(func() {
-			if err := os.RemoveAll(testFsRoot); err != nil {
-				fmt.Printf("JsonMetaDataRepo test: failed to remove %s\n", testFsRoot)
-				fmt.Println(err.Error())
-			}
-		})
-
 		It("returns an error, given a path that already exists", func() {
 			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
@@ -64,6 +64,19 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
 			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
+		})
+	})
+
+	Describe("#List", func() {
+		It("returns empty repositories, given a meta repo in which none have been registered", func() {
+			subject := svcfs.NewJsonMetaDataRepo(metaRepoPath)
+			Expect(subject.Init()).To(Succeed())
+
+			if repositories, listErr := subject.List(); listErr != nil {
+				Fail(listErr.Error())
+			} else {
+				Expect(repositories.Names()).To(BeEmpty())
+			}
 		})
 	})
 })
