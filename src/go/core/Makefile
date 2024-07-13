@@ -5,7 +5,7 @@ ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
 endif
 
-# Standard targets
+# Standard-ish targets
 
 .PHONY: all
 all: $(executable)
@@ -17,6 +17,10 @@ clean:
 
 .PHONY: test
 test: ginkgo-run
+	@:
+
+.PHONY: test-watch
+test-watch: ginkgo-watch
 	@:
 
 # Go module targets
