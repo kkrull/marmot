@@ -9,7 +9,7 @@ import (
 	main "github.com/kkrull/marmot/mainfactory"
 )
 
-// Add step definitions to manage the life cycle of a meta repo
+// Add step definitions to manage the life cycle of a meta repo.
 func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 	ctx.Given(`^I have initialized a new meta repo$`, initializeNewMetaRepo)
 }

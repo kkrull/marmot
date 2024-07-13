@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-// Add step definitions related to repositories
+// Add step definitions related to repositories.
 func AddRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.When(`^I list repositories in that meta repo$`, listRepositoriesInThatMetaRepo)
 	ctx.Then(`^that repository listing should be empty$`, thatRepositoryListingShouldBeEmpty)

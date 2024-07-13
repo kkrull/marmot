@@ -1,2 +1,2 @@
-// Step definitions for cucumber tests
+// Step definitions for cucumber tests.
 package cukestep
