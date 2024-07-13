@@ -30,7 +30,7 @@ func listRepositoriesInThatMetaRepo() error {
 
 func listRepositories(metaRepoPath string) ([]string, error) {
 	fmt.Printf("[repository_steps] listing repositories in %s\n", metaRepoPath)
-	return nil, fmt.Errorf("repository_steps: not implemented")
+	return nil, godog.ErrPending
 }
 
 func thatRepositoryListingShouldBeEmpty() {
