@@ -18,7 +18,9 @@ func (factory *CommandFactory) NewInitCommand() (*metarepo.InitCommand, error) {
 		return nil, errors.New("CommandFactory: missing MetaDataSource")
 	}
 
-	return nil, nil
+	return &metarepo.InitCommand{
+		MetaDataSource: factory.MetaDataSource,
+	}, nil
 }
 
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
