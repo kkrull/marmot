@@ -1,4 +1,4 @@
-package core_metarepo_test
+package userepository_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestCmd(t *testing.T) {
+func TestUseRepository(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "cmd")
+	RunSpecs(t, "userepository")
 }

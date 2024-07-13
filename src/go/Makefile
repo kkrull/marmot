@@ -15,6 +15,10 @@ all: $(executable)
 clean:
 	$(RM) $(executable)
 
+.PHONY: install
+install: $(executable)
+	@:
+
 .PHONY: test
 test: ginkgo-run
 	@:

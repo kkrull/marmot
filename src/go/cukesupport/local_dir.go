@@ -1,4 +1,4 @@
-package feature_support
+package cukesupport
 
 import (
 	"context"
@@ -14,6 +14,8 @@ import (
 
 var testDir string
 
+// A temporary directory created for the current scenario, which will be deleted later.  Tag
+// scenarios or features with the tag in `TagName` to get started.
 func TestDir() (string, error) {
 	if testDir == "" {
 		return "", fmt.Errorf("test directory has not been created")
@@ -28,8 +30,10 @@ func setTestDir(path string) {
 
 /* Hooks */
 
+// The name of the tag to identify in feature files
 const TagName = "@LocalDir"
 
+// Add hooks for this tag so that it runs on matching scenarios
 func AddTo(ctx *godog.ScenarioContext) {
 	ctx.After(afterHook)
 	ctx.Before(beforeHook)
