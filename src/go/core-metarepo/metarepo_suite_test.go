@@ -1,4 +1,4 @@
-package main_test
+package core_metarepo_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestMain(t *testing.T) {
+func TestCoreMetaRepo(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "main")
+	RunSpecs(t, "core_metarepo")
 }
