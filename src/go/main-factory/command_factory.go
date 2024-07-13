@@ -10,7 +10,7 @@ import (
 
 // Constructs commands with configurable dependencies
 type CommandFactory struct {
-	MetaDataSource metarepo.MetaDataSource
+	MetaDataSource   metarepo.MetaDataSource
 	RepositorySource repository.RepositorySource
 }
 

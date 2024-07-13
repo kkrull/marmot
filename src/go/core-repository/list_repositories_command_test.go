@@ -10,12 +10,12 @@ import (
 var _ = Describe("ListRepositoriesCommand", func() {
 	var (
 		factory *main.CommandFactory
-		source *MockRepositorySource
+		source  *MockRepositorySource
 		subject *repository.ListRepositoriesCommand
 	)
 
-	Describe("#Run", func () {
-		It("returns an empty result set, given a meta repo with no repositories", func () {
+	Describe("#Run", func() {
+		It("returns an empty result set, given a meta repo with no repositories", func() {
 			source = &MockRepositorySource{Names: make([]string, 0)}
 			factory = &main.CommandFactory{RepositorySource: source}
 
@@ -24,7 +24,7 @@ var _ = Describe("ListRepositoriesCommand", func() {
 			Expect(repositories.Names()).To(BeEmpty())
 		})
 
-		It("returns something interesting", Pending, func ()  {
+		It("returns something interesting", Pending, func() {
 		})
 	})
 })
@@ -36,7 +36,7 @@ type MockRepositorySource struct {
 func (source *MockRepositorySource) List() (repository.Repositories, error) {
 	repositories := make([]repository.Repository, len(source.Names))
 	for _, name := range source.Names {
-		repositories = append(repositories, repository.Repository{ Name: name })
+		repositories = append(repositories, repository.Repository{Name: name})
 	}
 
 	return &RepositoriesArray{Repositories: repositories}, nil
