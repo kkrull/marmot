@@ -15,9 +15,9 @@ var _ = Describe("InitCommand", func() {
 	var cmdFactory *factory.CommandFactory
 	var metaDataSource *MockMetaDataSource
 
-	BeforeEach(func ()  {
-			metaDataSource = &MockMetaDataSource{}
-			cmdFactory = &factory.CommandFactory{MetaDataSource: metaDataSource}
+	BeforeEach(func() {
+		metaDataSource = &MockMetaDataSource{}
+		cmdFactory = &factory.CommandFactory{MetaDataSource: metaDataSource}
 	})
 
 	Describe("#Run", func() {
