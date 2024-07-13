@@ -1,4 +1,4 @@
-package hooks
+package feature_support
 
 import (
 	"context"

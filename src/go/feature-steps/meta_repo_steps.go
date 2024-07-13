@@ -1,13 +1,12 @@
-package step_definitions
+package feature_steps
 
 import (
 	"fmt"
 	"path/filepath"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot/cmd"
-	"github.com/kkrull/marmot/fs"
-	"github.com/kkrull/marmot/hooks"
+	support "github.com/kkrull/marmot/feature-support"
+	main_factory "github.com/kkrull/marmot/main-factory"
 )
 
 // Add step definitions to manage the life cycle of a meta repo
@@ -36,16 +35,18 @@ func setThatMetaRepo(path string) {
 func initializeNewMetaRepo() error {
 	if thatMetaRepo != "" {
 		return fmt.Errorf("meta_repo_steps: meta repo has already been configured at %s", thatMetaRepo)
-	} else if testDir, mkdirErr := hooks.TestDir(); mkdirErr != nil {
+	} else if testDir, mkdirErr := support.TestDir(); mkdirErr != nil {
 		return mkdirErr
 	} else {
 		setThatMetaRepo(filepath.Join(testDir, "meta"))
 	}
 
-	jsonDataSource := fs.NewJsonMetaDataSource(thatMetaRepo)
-	initCmd := &cmd.InitCommand{MetaDataSource: jsonDataSource}
-	if runErr := initCmd.Run(); runErr != nil {
-		return fmt.Errorf("failed to initialize repository %s: %w", thatMetaRepo, runErr)
+	cmdFactory := &main_factory.CommandFactory{}
+	cmdFactory.WithJsonFileSource(thatMetaRepo)
+	if initCmd, factoryErr := cmdFactory.NewInitCommand(); factoryErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize: %w", factoryErr)
+	} else if runErr := initCmd.Run(); runErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize repository %s: %w", thatMetaRepo, runErr)
 	} else {
 		return nil
 	}

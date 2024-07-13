@@ -1,4 +1,4 @@
-package cmd
+package core_metarepo
 
 // Initializes a new meta repo where none existed before
 type InitCommand struct {
@@ -7,9 +7,4 @@ type InitCommand struct {
 
 func (command InitCommand) Run() error {
 	return command.MetaDataSource.Init()
-}
-
-// Access to meta data about Git repositories
-type MetaDataSource interface {
-	Init() error
 }

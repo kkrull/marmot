@@ -1,33 +1,43 @@
-package cmd_test
+package core_metarepo_test
 
 import (
 	"errors"
 
-	"github.com/kkrull/marmot/cmd"
+	metarepo "github.com/kkrull/marmot/core-metarepo"
+	factory "github.com/kkrull/marmot/main-factory"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("InitCommand", func() {
+	var (
+		subject        *metarepo.InitCommand
+		cmdFactory     *factory.CommandFactory
+		metaDataSource *MockMetaDataSource
+	)
+
+	BeforeEach(func() {
+		metaDataSource = &MockMetaDataSource{}
+		cmdFactory = &factory.CommandFactory{MetaDataSource: metaDataSource}
+	})
+
 	Describe("#Run", func() {
 		It("initializes the given meta data source", func() {
-			metaDataSourceMock := &MockMetaDataSource{}
-			subject := cmd.InitCommand{MetaDataSource: metaDataSourceMock}
-
+			subject, _ = cmdFactory.NewInitCommand()
 			_ = subject.Run()
-			metaDataSourceMock.InitExpected()
+			metaDataSource.InitExpected()
 		})
 
 		It("returns nil, when everything succeeds", func() {
-			metaDataSourceMock := &MockMetaDataSource{}
-			subject := cmd.InitCommand{MetaDataSource: metaDataSourceMock}
+			subject, _ = cmdFactory.NewInitCommand()
 			Expect(subject.Run()).To(BeNil())
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
-			metaDataSourceMock := &MockMetaDataSource{InitError: errors.New("bang!")}
-			subject := cmd.InitCommand{MetaDataSource: metaDataSourceMock}
+			metaDataSource.InitError = errors.New("bang!")
+
+			subject, _ = cmdFactory.NewInitCommand()
 			Expect(subject.Run()).To(MatchError("bang!"))
 		})
 	})

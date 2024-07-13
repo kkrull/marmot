@@ -1,4 +1,4 @@
-package step_definitions
+package feature_steps
 
 import (
 	"fmt"

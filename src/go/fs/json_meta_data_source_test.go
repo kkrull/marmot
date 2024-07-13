@@ -36,13 +36,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 		It("returns an error, given a path that already exists", func() {
 			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
-			subject := fs.NewJsonMetaDataSource(metaRepoPath)
+			subject := fs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(
 				MatchError(fmt.Sprintf("%s: path already exists", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
-			subject := fs.NewJsonMetaDataSource("\000x")
+			subject := fs.JsonMetaDataSource("\000x")
 			invalidPathErr := subject.Init()
 			Expect(invalidPathErr).NotTo(BeNil())
 		})
@@ -50,13 +50,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 		It("returns an error when creating files fails", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 
-			subject := fs.NewJsonMetaDataSource(metaRepoPath)
+			subject := fs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(
 				MatchError(ContainSubstring(fmt.Sprintf("createMetaData %s", metaRepoPath))))
 		})
 
 		It("creates a meta repository and returns nil, otherwise", func() {
-			subject := fs.NewJsonMetaDataSource(metaRepoPath)
+			subject := fs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(Succeed())
 
 			metaDataDir := filepath.Join(metaRepoPath, ".marmot")

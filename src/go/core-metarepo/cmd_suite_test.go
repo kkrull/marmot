@@ -1,4 +1,4 @@
-package cmd_test
+package core_metarepo_test
 
 import (
 	"testing"
