@@ -7,6 +7,6 @@ import (
 // List repositories known to a meta repo
 type ListRepositoriesCommand struct {}
 
-func (cmd *ListRepositoriesCommand) Run() ([]string, error) {
+func (cmd *ListRepositoriesCommand) Run() (Repositories, error) {
 	return nil, godog.ErrPending
 }

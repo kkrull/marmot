@@ -39,7 +39,7 @@ func listRepositories(metaRepoPath string) ([]string, error) {
 	} else if repositories, listErr := listCmd.Run(); listErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to run command: %w", listErr)
 	} else {
-		return repositories, nil
+		return repositories.Names(), nil
 	}
 }
 
