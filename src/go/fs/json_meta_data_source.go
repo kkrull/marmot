@@ -6,11 +6,13 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	metarepo "github.com/kkrull/marmot/core-metarepo"
 )
 
 // Makes a JsonMetaDataSource for the meta repository at repositoryPath, using conventional paths to
 // meta data within it.
-func NewJsonMetaDataSource(repositoryPath string) *JsonMetaDataSource {
+func NewJsonMetaDataSource(repositoryPath string) metarepo.MetaDataSource {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
 	return &JsonMetaDataSource{
 		repositoryDir: repositoryPath,
