@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cucumber/godog"
-	"github.com/kkrull/marmot/cukesupport"
+	support "github.com/kkrull/marmot/cukesupport"
 	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/gomega"
 )
@@ -20,10 +20,10 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 var thatRepositoryListing []string
 
 func listRepositoriesInThatMetaRepo() error {
-	if metaRepoPath, metaRepoPathErr := cukesupport.ThatMetaRepo(); metaRepoPathErr != nil {
-		return metaRepoPathErr
-	} else if repoList, repoListErr := listRepositories(metaRepoPath); repoListErr != nil {
-		return repoListErr
+	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
+		return fmt.Errorf("repository_steps: %w", pathErr)
+	} else if repoList, listErr := listRepositories(metaRepoPath); listErr != nil {
+		return fmt.Errorf("repository_steps: failed to list repositories: %w", listErr)
 	} else {
 		thatRepositoryListing = repoList
 		return nil
@@ -32,16 +32,11 @@ func listRepositoriesInThatMetaRepo() error {
 
 func listRepositories(metaRepoPath string) ([]string, error) {
 	factory := &main.CommandFactory{}
-	if thatMetaRepo, configErr := cukesupport.ThatMetaRepo(); configErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to configure: %w", configErr)
-	} else {
-		factory.WithJsonFileSource(thatMetaRepo)
-	}
-
+	factory.WithJsonFileSource(metaRepoPath)
 	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to initialize: %w", factoryErr)
-	} else if repositories, listErr := listQuery.Run(); listErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to run query: %w", listErr)
+	} else if repositories, runErr := listQuery.Run(); runErr != nil {
+		return nil, fmt.Errorf("repository_steps: failed to run query: %w", runErr)
 	} else {
 		return repositories.Names(), nil
 	}
