@@ -11,6 +11,7 @@ import (
 // Constructs commands with configurable dependencies
 type CommandFactory struct {
 	MetaDataSource metarepo.MetaDataSource
+	RepositorySource repository.RepositorySource
 }
 
 func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
@@ -24,11 +25,13 @@ func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 }
 
 func (factory *CommandFactory) ListRepositoriesCommand() (*repository.ListRepositoriesCommand, error) {
-	if factory.MetaDataSource == nil {
-		return nil, errors.New("CommandFactory: missing MetaDataSource")
+	if factory.RepositorySource == nil {
+		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
-	return &repository.ListRepositoriesCommand{}, nil
+	return &repository.ListRepositoriesCommand{
+		Source: factory.RepositorySource,
+	}, nil
 }
 
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {

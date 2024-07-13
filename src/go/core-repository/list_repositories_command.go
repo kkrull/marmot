@@ -1,12 +1,10 @@
 package core_repository
 
-import (
-	"github.com/cucumber/godog"
-)
-
 // List repositories known to a meta repo
-type ListRepositoriesCommand struct {}
+type ListRepositoriesCommand struct {
+	Source RepositorySource
+}
 
 func (cmd *ListRepositoriesCommand) Run() (Repositories, error) {
-	return nil, godog.ErrPending
+	return cmd.Source.List()
 }
