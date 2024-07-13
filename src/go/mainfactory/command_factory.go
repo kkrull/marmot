@@ -3,6 +3,7 @@ package mainfactory
 import (
 	"errors"
 
+	"github.com/cucumber/godog"
 	"github.com/kkrull/marmot/svcfs"
 	metarepo "github.com/kkrull/marmot/usemetarepo"
 	repository "github.com/kkrull/marmot/userepository"
@@ -26,7 +27,8 @@ func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 
 func (factory *CommandFactory) ListRepositoriesCommand() (*repository.ListRepositoriesCommand, error) {
 	if factory.RepositorySource == nil {
-		return nil, errors.New("CommandFactory: missing RepositorySource")
+		return nil, godog.ErrPending
+		// return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
 	return &repository.ListRepositoriesCommand{

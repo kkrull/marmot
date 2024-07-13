@@ -30,11 +30,11 @@ func listRepositoriesInThatMetaRepo() error {
 }
 
 func listRepositories(metaRepoPath string) ([]string, error) {
-	cmdFactory := &main.CommandFactory{}
-	cmdFactory.WithJsonFileSource(thatMetaRepo)
+	factory := &main.CommandFactory{}
+	factory.WithJsonFileSource(thatMetaRepo)
 
 	fmt.Printf("[repository_steps] listing repositories in %s\n", metaRepoPath)
-	if listCmd, factoryErr := cmdFactory.ListRepositoriesCommand(); factoryErr != nil {
+	if listCmd, factoryErr := factory.ListRepositoriesCommand(); factoryErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to initialize: %w", factoryErr)
 	} else if repositories, listErr := listCmd.Run(); listErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to run command: %w", listErr)
