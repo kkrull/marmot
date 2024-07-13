@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cucumber/godog"
+	main_factory "github.com/kkrull/marmot/main-factory"
 	. "github.com/onsi/gomega"
 )
 
@@ -29,8 +30,17 @@ func listRepositoriesInThatMetaRepo() error {
 }
 
 func listRepositories(metaRepoPath string) ([]string, error) {
+	cmdFactory := &main_factory.CommandFactory{}
+	cmdFactory.WithJsonFileSource(thatMetaRepo)
+
 	fmt.Printf("[repository_steps] listing repositories in %s\n", metaRepoPath)
-	return nil, godog.ErrPending
+	if listCmd, factoryErr := cmdFactory.ListRepositoriesCommand(); factoryErr != nil {
+		return nil, fmt.Errorf("repository_steps: failed to initialize: %w", factoryErr)
+	} else if repositories, listErr := listCmd.Run(); listErr != nil {
+		return nil, fmt.Errorf("repository_steps: failed to run command: %w", listErr)
+	} else {
+		return repositories, nil
+	}
 }
 
 func thatRepositoryListingShouldBeEmpty() {
