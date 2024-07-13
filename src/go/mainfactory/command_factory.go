@@ -3,7 +3,6 @@ package mainfactory
 import (
 	"errors"
 
-	"github.com/cucumber/godog"
 	"github.com/kkrull/marmot/coremetarepo"
 	"github.com/kkrull/marmot/corerepository"
 	"github.com/kkrull/marmot/svcfs"
@@ -29,8 +28,7 @@ func (factory *CommandFactory) InitCommand() (*usemetarepo.InitCommand, error) {
 
 func (factory *CommandFactory) ListRepositoriesQuery() (*userepository.ListRepositoriesQuery, error) {
 	if factory.RepositorySource == nil {
-		return nil, godog.ErrPending
-		// return nil, errors.New("CommandFactory: missing RepositorySource")
+		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
 	return &userepository.ListRepositoriesQuery{
@@ -39,5 +37,7 @@ func (factory *CommandFactory) ListRepositoriesQuery() (*userepository.ListRepos
 }
 
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
-	factory.MetaDataAdmin = svcfs.JsonMetaDataRepo(metaRepoPath)
+	metaRepo := svcfs.NewJsonMetaDataRepo(metaRepoPath)
+	factory.MetaDataAdmin = metaRepo
+	factory.RepositorySource = metaRepo
 }

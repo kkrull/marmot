@@ -7,42 +7,51 @@ import (
 	"os"
 	"path/filepath"
 
-	core "github.com/kkrull/marmot/coremetarepo"
+	"github.com/cucumber/godog"
+	repository "github.com/kkrull/marmot/corerepository"
 )
 
 // A meta repo that stores meta data in JSON files on the file system.
-func JsonMetaDataRepo(repositoryPath string) core.MetaDataAdmin {
+func NewJsonMetaDataRepo(repositoryPath string) *JsonMetaDataRepo {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
-	return &jsonMetaDataRepo{
+	return &JsonMetaDataRepo{
 		repositoryDir: repositoryPath,
 		metaDataDir:   metaDataDir,
 		metaDataFile:  filepath.Join(metaDataDir, "meta-repo.json"),
 	}
 }
 
-type jsonMetaDataRepo struct {
+type JsonMetaDataRepo struct {
 	metaDataDir   string
 	metaDataFile  string
 	repositoryDir string
 }
 
-func (source *jsonMetaDataRepo) Init() error {
-	_, statErr := os.Stat(source.repositoryDir)
+/* MetaDataAdmin */
+
+func (metaRepo *JsonMetaDataRepo) Init() error {
+	_, statErr := os.Stat(metaRepo.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return source.createMetaData()
+		return metaRepo.createMetaData()
 	} else if statErr != nil {
 		return statErr
 	} else {
-		return fmt.Errorf("%s: path already exists", source.repositoryDir)
+		return fmt.Errorf("%s: path already exists", metaRepo.repositoryDir)
 	}
 }
 
-func (source *jsonMetaDataRepo) createMetaData() error {
-	if dirErr := os.MkdirAll(source.metaDataDir, fs.ModePerm); dirErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", source.metaDataDir, dirErr)
-	} else if _, fileErr := os.Create(source.metaDataFile); fileErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", source.metaDataFile, fileErr)
+func (metaRepo *JsonMetaDataRepo) createMetaData() error {
+	if dirErr := os.MkdirAll(metaRepo.metaDataDir, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataDir, dirErr)
+	} else if _, fileErr := os.Create(metaRepo.metaDataFile); fileErr != nil {
+		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataFile, fileErr)
 	}
 
 	return nil
+}
+
+/* RepositorySource */
+
+func (metaRepo *JsonMetaDataRepo) List() (repository.Repositories, error) {
+	return nil, godog.ErrPending
 }
