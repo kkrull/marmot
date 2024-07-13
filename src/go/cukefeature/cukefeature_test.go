@@ -1,11 +1,11 @@
-package main_test
+package cukefeature_test
 
 import (
 	"testing"
 
 	"github.com/cucumber/godog"
-	steps "github.com/kkrull/marmot/feature-steps"
-	support "github.com/kkrull/marmot/feature-support"
+	step "github.com/kkrull/marmot/cukestep"
+	support "github.com/kkrull/marmot/cukesupport"
 	. "github.com/onsi/gomega"
 )
 
@@ -26,7 +26,7 @@ func TestFeatures(t *testing.T) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	steps.AddMetaRepoSteps(ctx)
-	steps.AddRepositorySteps(ctx)
+	step.AddMetaRepoSteps(ctx)
+	step.AddRepositorySteps(ctx)
 	support.AddTo(ctx)
 }

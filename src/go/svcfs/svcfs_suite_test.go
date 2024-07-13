@@ -1,4 +1,4 @@
-package fs_test
+package svcfs_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestFs(t *testing.T) {
+func TestSvcFs(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "fs")
+	RunSpecs(t, "svcfs")
 }

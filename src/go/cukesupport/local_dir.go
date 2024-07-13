@@ -1,4 +1,4 @@
-package feature_support
+package cukesupport
 
 import (
 	"context"

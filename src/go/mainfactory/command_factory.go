@@ -1,11 +1,11 @@
-package main_factory
+package mainfactory
 
 import (
 	"errors"
 
-	metarepo "github.com/kkrull/marmot/core-metarepo"
-	repository "github.com/kkrull/marmot/core-repository"
-	"github.com/kkrull/marmot/fs"
+	"github.com/kkrull/marmot/svcfs"
+	metarepo "github.com/kkrull/marmot/usemetarepo"
+	repository "github.com/kkrull/marmot/userepository"
 )
 
 // Constructs commands with configurable dependencies
@@ -35,5 +35,5 @@ func (factory *CommandFactory) ListRepositoriesCommand() (*repository.ListReposi
 }
 
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
-	factory.MetaDataSource = fs.JsonMetaDataSource(metaRepoPath)
+	factory.MetaDataSource = svcfs.JsonMetaDataSource(metaRepoPath)
 }

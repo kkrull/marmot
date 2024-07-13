@@ -1,11 +1,11 @@
-package fs_test
+package svcfs_test
 
 import (
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/kkrull/marmot/fs"
+	"github.com/kkrull/marmot/svcfs"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -36,13 +36,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 		It("returns an error, given a path that already exists", func() {
 			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
-			subject := fs.JsonMetaDataSource(metaRepoPath)
+			subject := svcfs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(
 				MatchError(fmt.Sprintf("%s: path already exists", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
-			subject := fs.JsonMetaDataSource("\000x")
+			subject := svcfs.JsonMetaDataSource("\000x")
 			invalidPathErr := subject.Init()
 			Expect(invalidPathErr).NotTo(BeNil())
 		})
@@ -50,13 +50,13 @@ var _ = Describe("JsonMetaDataSource", func() {
 		It("returns an error when creating files fails", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 
-			subject := fs.JsonMetaDataSource(metaRepoPath)
+			subject := svcfs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(
 				MatchError(ContainSubstring(fmt.Sprintf("createMetaData %s", metaRepoPath))))
 		})
 
 		It("creates a meta repository and returns nil, otherwise", func() {
-			subject := fs.JsonMetaDataSource(metaRepoPath)
+			subject := svcfs.JsonMetaDataSource(metaRepoPath)
 			Expect(subject.Init()).To(Succeed())
 
 			metaDataDir := filepath.Join(metaRepoPath, ".marmot")

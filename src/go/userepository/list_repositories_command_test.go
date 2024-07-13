@@ -1,8 +1,9 @@
-package core_repository_test
+package userepository_test
 
 import (
-	repository "github.com/kkrull/marmot/core-repository"
-	main "github.com/kkrull/marmot/main-factory"
+	core "github.com/kkrull/marmot/corerepository"
+	main "github.com/kkrull/marmot/mainfactory"
+	use "github.com/kkrull/marmot/userepository"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -11,7 +12,7 @@ var _ = Describe("ListRepositoriesCommand", func() {
 	var (
 		factory *main.CommandFactory
 		source  *MockRepositorySource
-		subject *repository.ListRepositoriesCommand
+		subject *use.ListRepositoriesCommand
 	)
 
 	Describe("#Run", func() {
@@ -33,17 +34,17 @@ type MockRepositorySource struct {
 	Names []string
 }
 
-func (source *MockRepositorySource) List() (repository.Repositories, error) {
-	repositories := make([]repository.Repository, len(source.Names))
+func (source *MockRepositorySource) List() (core.Repositories, error) {
+	repositories := make([]core.Repository, len(source.Names))
 	for _, name := range source.Names {
-		repositories = append(repositories, repository.Repository{Name: name})
+		repositories = append(repositories, core.Repository{Name: name})
 	}
 
 	return &RepositoriesArray{Repositories: repositories}, nil
 }
 
 type RepositoriesArray struct {
-	Repositories []repository.Repository
+	Repositories []core.Repository
 }
 
 func (array RepositoriesArray) Names() []string {

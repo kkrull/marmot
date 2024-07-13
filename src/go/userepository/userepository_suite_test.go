@@ -1,4 +1,4 @@
-package core_repository_test
+package userepository_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestCoreRepository(t *testing.T) {
+func TestUseRepository(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "core_repository")
+	RunSpecs(t, "userepository")
 }

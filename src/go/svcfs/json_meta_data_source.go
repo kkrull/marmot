@@ -1,4 +1,4 @@
-package fs
+package svcfs
 
 import (
 	"errors"
@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	metarepo "github.com/kkrull/marmot/core-metarepo"
+	metarepo "github.com/kkrull/marmot/usemetarepo"
 )
 
 // Stores meta data in JSON files in a directory that Marmot manages

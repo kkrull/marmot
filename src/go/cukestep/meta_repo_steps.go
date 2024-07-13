@@ -1,12 +1,12 @@
-package feature_steps
+package cukestep
 
 import (
 	"fmt"
 	"path/filepath"
 
 	"github.com/cucumber/godog"
-	support "github.com/kkrull/marmot/feature-support"
-	main_factory "github.com/kkrull/marmot/main-factory"
+	support "github.com/kkrull/marmot/cukesupport"
+	main "github.com/kkrull/marmot/mainfactory"
 )
 
 // Add step definitions to manage the life cycle of a meta repo
@@ -41,7 +41,7 @@ func initializeNewMetaRepo() error {
 		setThatMetaRepo(filepath.Join(testDir, "meta"))
 	}
 
-	cmdFactory := &main_factory.CommandFactory{}
+	cmdFactory := &main.CommandFactory{}
 	cmdFactory.WithJsonFileSource(thatMetaRepo)
 	if initCmd, factoryErr := cmdFactory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize: %w", factoryErr)

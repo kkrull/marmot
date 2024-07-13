@@ -1,10 +1,10 @@
-package feature_steps
+package cukestep
 
 import (
 	"fmt"
 
 	"github.com/cucumber/godog"
-	main_factory "github.com/kkrull/marmot/main-factory"
+	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/gomega"
 )
 
@@ -30,7 +30,7 @@ func listRepositoriesInThatMetaRepo() error {
 }
 
 func listRepositories(metaRepoPath string) ([]string, error) {
-	cmdFactory := &main_factory.CommandFactory{}
+	cmdFactory := &main.CommandFactory{}
 	cmdFactory.WithJsonFileSource(thatMetaRepo)
 
 	fmt.Printf("[repository_steps] listing repositories in %s\n", metaRepoPath)

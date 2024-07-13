@@ -1,4 +1,4 @@
-package core_repository
+package corerepository
 
 // Any number of Git repositories
 type Repositories interface {

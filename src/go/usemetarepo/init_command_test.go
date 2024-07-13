@@ -1,10 +1,10 @@
-package core_metarepo_test
+package usemetarepo_test
 
 import (
 	"errors"
 
-	metarepo "github.com/kkrull/marmot/core-metarepo"
-	factory "github.com/kkrull/marmot/main-factory"
+	main "github.com/kkrull/marmot/mainfactory"
+	metarepo "github.com/kkrull/marmot/usemetarepo"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -13,13 +13,13 @@ import (
 var _ = Describe("InitCommand", func() {
 	var (
 		subject        *metarepo.InitCommand
-		cmdFactory     *factory.CommandFactory
+		cmdFactory     *main.CommandFactory
 		metaDataSource *MockMetaDataSource
 	)
 
 	BeforeEach(func() {
 		metaDataSource = &MockMetaDataSource{}
-		cmdFactory = &factory.CommandFactory{MetaDataSource: metaDataSource}
+		cmdFactory = &main.CommandFactory{MetaDataSource: metaDataSource}
 	})
 
 	Describe("#Run", func() {
