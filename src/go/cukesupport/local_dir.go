@@ -3,6 +3,7 @@ package cukesupport
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -47,7 +48,7 @@ func afterHook(ctx context.Context, sc *godog.Scenario, err error) (context.Cont
 	} else if rmErr := os.RemoveAll(testDir); rmErr != nil {
 		return ctx, fmt.Errorf("%s: failed to remove test data at %s: %w", TagName, testDir, rmErr)
 	} else {
-		fmt.Printf("[%s] Removed test directory: %s\n", TagName, testDir)
+		log.Printf("[%s] Removed test directory: %s\n", TagName, testDir)
 		setTestDir("")
 		return ctx, nil
 	}
@@ -61,7 +62,7 @@ func beforeHook(ctx context.Context, sc *godog.Scenario) (context.Context, error
 	} else if mkErr := os.MkdirAll(localDir, 0o777); mkErr != nil {
 		return ctx, fmt.Errorf("%s: failed to create test directory %s: %w", TagName, localDir, mkErr)
 	} else {
-		fmt.Printf("[%s] Created test directory: %s\n", TagName, localDir)
+		log.Printf("[%s] Created test directory: %s\n", TagName, localDir)
 		setTestDir(localDir)
 		return ctx, nil
 	}
