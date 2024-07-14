@@ -3,6 +3,7 @@ package cukesupport
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"github.com/cucumber/godog"
 )
@@ -15,20 +16,28 @@ func clearThatMetaRepo() {
 	thatMetaRepo = ""
 }
 
-// A path to a meta repo which has been set earlier in this scenario, or an empty string.
-func PeekThatMetaRepo() string {
+// Set a standardized path to a meta repo in the local test directory, adding a hook to clear it
+func InitThatMetaRepo(ctx *godog.ScenarioContext) (string, error) {
+	if existing := peekThatMetaRepo(); existing != "" {
+		return "", fmt.Errorf("meta_repo_helper: meta repo path already configured: %s", existing)
+	} else if testDir, testDirErr := TestDir(); testDirErr != nil {
+		return "", fmt.Errorf("meta_repo_helper: failed to access test directory; %w", testDirErr)
+	} else {
+		setThatMetaRepo(ctx, filepath.Join(testDir, "meta"))
+		return peekThatMetaRepo(), nil
+	}
+}
+
+func peekThatMetaRepo() string {
 	return thatMetaRepo
 }
 
-// Save the path to the meta repo for later use, adding an after hook that clears state afterwards
-func SetThatMetaRepo(ctx *godog.ScenarioContext, path string) string {
+func setThatMetaRepo(ctx *godog.ScenarioContext, path string) {
 	thatMetaRepo = path
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
 		clearThatMetaRepo()
 		return ctx, err
 	})
-
-	return thatMetaRepo
 }
 
 // A path to a meta repo which has been set earlier in this scenario, or an error.

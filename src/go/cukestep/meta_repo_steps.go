@@ -2,7 +2,6 @@ package cukestep
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
@@ -18,18 +17,13 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	//TODO KDK: Move this paragraph to the helper
-	var thatMetaRepo string
-	if existingMetaRepo := support.PeekThatMetaRepo(); existingMetaRepo != "" {
-		return fmt.Errorf("meta_repo_steps: meta repo has already been configured at %s", existingMetaRepo)
-	} else if testDir, mkdirErr := support.TestDir(); mkdirErr != nil {
-		return mkdirErr
+	factory := &main.CommandFactory{}
+	if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
 	} else {
-		thatMetaRepo = support.SetThatMetaRepo(ctx, filepath.Join(testDir, "meta"))
+		factory.WithJsonFileSource(thatMetaRepo)
 	}
 
-	factory := &main.CommandFactory{}
-	factory.WithJsonFileSource(thatMetaRepo)
 	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
 	} else if runErr := initCmd.Run(); runErr != nil {
