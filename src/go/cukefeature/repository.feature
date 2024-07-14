@@ -10,7 +10,7 @@ Feature: Repository
     Then that repository listing should be empty
 
   @NotLocalDirBecauseTheHooksSeemToBeCalledAsyncAndGodogDunnaLikeThat
-  Scenario: A Meta Repos remembers local repositories
+  Scenario: A Meta Repo remembers local repositories
     Given I have initialized a new meta repo
     And I have registered local repositories
     When I list repositories in that meta repo
