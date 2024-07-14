@@ -38,7 +38,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 			subject := svcfs.NewJsonMetaDataRepo(metaRepoPath)
 			Expect(subject.Init()).To(
-				MatchError(fmt.Sprintf("%s: path already exists", metaRepoPath)))
+				MatchError(fmt.Sprintf("path already exists: %s", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
@@ -52,7 +52,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 			subject := svcfs.NewJsonMetaDataRepo(metaRepoPath)
 			Expect(subject.Init()).To(
-				MatchError(ContainSubstring(fmt.Sprintf("createMetaData %s", metaRepoPath))))
+				MatchError(ContainSubstring(fmt.Sprintf("failed to make directory %s", metaRepoPath))))
 		})
 
 		It("creates a meta repository and returns nil, otherwise", func() {

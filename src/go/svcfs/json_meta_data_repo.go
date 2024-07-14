@@ -28,22 +28,22 @@ type JsonMetaDataRepo struct {
 
 /* MetaDataAdmin */
 
-func (metaRepo *JsonMetaDataRepo) Init() error {
-	_, statErr := os.Stat(metaRepo.repositoryDir)
+func (meta *JsonMetaDataRepo) Init() error {
+	_, statErr := os.Stat(meta.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return metaRepo.createMetaData()
+		return meta.createMetaData()
 	} else if statErr != nil {
-		return statErr
+		return fmt.Errorf("failed to check for existing meta repo %s; %w", meta.repositoryDir, statErr)
 	} else {
-		return fmt.Errorf("%s: path already exists", metaRepo.repositoryDir)
+		return fmt.Errorf("path already exists: %s", meta.repositoryDir)
 	}
 }
 
-func (metaRepo *JsonMetaDataRepo) createMetaData() error {
-	if dirErr := os.MkdirAll(metaRepo.metaDataDir, fs.ModePerm); dirErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataDir, dirErr)
-	} else if _, fileErr := os.Create(metaRepo.metaDataFile); fileErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataFile, fileErr)
+func (meta *JsonMetaDataRepo) createMetaData() error {
+	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
+	} else if _, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
+		return fmt.Errorf("failed to create file %s; %w", meta.metaDataFile, fileErr)
 	}
 
 	return nil

@@ -34,7 +34,7 @@ func SetThatMetaRepo(ctx *godog.ScenarioContext, path string) string {
 // A path to a meta repo which has been set earlier in this scenario, or an error.
 func ThatMetaRepo() (string, error) {
 	if thatMetaRepo == "" {
-		return "", fmt.Errorf("meta_repo_steps: no meta repo has been configured")
+		return "", fmt.Errorf("meta_repo_helper: no meta repo has been configured")
 	}
 
 	return thatMetaRepo, nil

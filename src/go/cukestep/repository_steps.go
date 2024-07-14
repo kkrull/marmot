@@ -30,9 +30,9 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 
 func listRepositoriesInThatMetaRepo() error {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
-		return fmt.Errorf("repository_steps: %w", pathErr)
+		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else if repoList, listErr := listRepositories(metaRepoPath); listErr != nil {
-		return fmt.Errorf("repository_steps: failed to list repositories: %w", listErr)
+		return fmt.Errorf("repository_steps: failed to list repositories; %w", listErr)
 	} else {
 		thatRepositoryListing = repoList
 		return nil
@@ -43,9 +43,9 @@ func listRepositories(metaRepoPath string) ([]string, error) {
 	factory := &main.CommandFactory{}
 	factory.WithJsonFileSource(metaRepoPath)
 	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to initialize: %w", factoryErr)
+		return nil, fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
 	} else if repositories, runErr := listQuery.Run(); runErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to run query: %w", runErr)
+		return nil, fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
 		return repositories.Names(), nil
 	}

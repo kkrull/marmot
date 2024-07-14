@@ -23,7 +23,7 @@ var testDir string
 // scenarios or features with the tag in `TagName` to get started.
 func TestDir() (string, error) {
 	if testDir == "" {
-		return "", fmt.Errorf("test directory has not been created")
+		return "", fmt.Errorf("[%s] not initialized", TagName)
 	}
 
 	return testDir, nil
@@ -44,15 +44,15 @@ func AddTo(ctx *godog.ScenarioContext) {
 func afterHook(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
 	matchingTag := findTag(TagName, sc.Tags)
 	if nothingToDo := testDir == ""; nothingToDo {
-		return ctx, nil
+		return ctx, err
 	} else if notApplicable := matchingTag == nil; notApplicable {
-		return ctx, nil
+		return ctx, err
 	} else if rmErr := os.RemoveAll(testDir); rmErr != nil {
-		return ctx, fmt.Errorf("%s: failed to remove test data at %s: %w", TagName, testDir, rmErr)
+		return ctx, errors.Join(err, fmt.Errorf("%s: failed to remove %s; %w", TagName, testDir, rmErr))
 	} else {
 		log.Printf("[%s] Removed test directory: %s\n", TagName, testDir)
 		setTestDir("")
-		return ctx, nil
+		return ctx, err
 	}
 }
 
@@ -60,9 +60,9 @@ func beforeHook(ctx context.Context, sc *godog.Scenario) (context.Context, error
 	if hookTag := findTag(TagName, sc.Tags); hookTag == nil {
 		return ctx, nil
 	} else if localDir, pathErr := filepath.Abs(filepath.Join(".", "localDir")); pathErr != nil {
-		return ctx, fmt.Errorf("%s: failed to determine path: %w", TagName, pathErr)
+		return ctx, fmt.Errorf("%s: failed to determine path; %w", TagName, pathErr)
 	} else if mkErr := os.MkdirAll(localDir, 0o777); mkErr != nil {
-		return ctx, fmt.Errorf("%s: failed to create test directory %s: %w", TagName, localDir, mkErr)
+		return ctx, fmt.Errorf("%s: failed to create %s; %w", TagName, localDir, mkErr)
 	} else {
 		log.Printf("[%s] Created test directory: %s\n", TagName, localDir)
 		setTestDir(localDir)
