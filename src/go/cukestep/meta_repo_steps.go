@@ -1,6 +1,7 @@
 package cukestep
 
 import (
+	"context"
 	"fmt"
 	"path/filepath"
 
@@ -12,6 +13,10 @@ import (
 // Add step definitions to manage the life cycle of a meta repo.
 func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 	ctx.Given(`^I have initialized a new meta repo$`, initializeNewMetaRepo)
+	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
+		support.ClearThatMetaRepo()
+		return ctx, nil
+	})
 }
 
 /* Steps */

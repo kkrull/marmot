@@ -20,7 +20,7 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 
 /* List repositories */
 
-var thatRepositoryListing []string
+var thatRepositoryListing []string //TODO KDK: Does this need to be reset between scenarios too?
 
 func listRepositoriesInThatMetaRepo() error {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {

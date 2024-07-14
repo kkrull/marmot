@@ -4,8 +4,18 @@ import "fmt"
 
 var thatMetaRepo string
 
+// Reset the meta repo so another scenario can make its own
+func ClearThatMetaRepo() { //TODO KDK: Call this from within SetThatMetaRepo so it's always called?
+	thatMetaRepo = ""
+}
+
 // A path to a meta repo which has been set earlier in this scenario, or an empty string.
 func PeekThatMetaRepo() string {
+	return thatMetaRepo
+}
+
+func SetThatMetaRepo(path string) string {
+	thatMetaRepo = path
 	return thatMetaRepo
 }
 
@@ -16,9 +26,4 @@ func ThatMetaRepo() (string, error) {
 	}
 
 	return thatMetaRepo, nil
-}
-
-func SetThatMetaRepo(path string) string {
-	thatMetaRepo = path
-	return thatMetaRepo
 }
