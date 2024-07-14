@@ -41,9 +41,10 @@ func AddTo(ctx *godog.ScenarioContext) {
 }
 
 func afterHook(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-	if matchingTag := findTag(TagName, sc.Tags); matchingTag == nil {
+	matchingTag := findTag(TagName, sc.Tags)
+	if nothingToDo := testDir == ""; nothingToDo {
 		return ctx, nil
-	} else if testDir == "" {
+	} else if notApplicable := matchingTag == nil; notApplicable {
 		return ctx, nil
 	} else if rmErr := os.RemoveAll(testDir); rmErr != nil {
 		return ctx, fmt.Errorf("%s: failed to remove test data at %s: %w", TagName, testDir, rmErr)
