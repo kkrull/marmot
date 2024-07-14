@@ -2,6 +2,7 @@ package cukesupport
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +11,9 @@ import (
 	"github.com/cucumber/godog"
 	messages "github.com/cucumber/messages/go/v21"
 )
+
+// The name of the tag to identify in feature files
+const TagName = "@LocalDir"
 
 /* State */
 
@@ -30,9 +34,6 @@ func setTestDir(path string) {
 }
 
 /* Hooks */
-
-// The name of the tag to identify in feature files
-const TagName = "@LocalDir"
 
 // Add hooks for this tag so that it runs on matching scenarios
 func AddTo(ctx *godog.ScenarioContext) {

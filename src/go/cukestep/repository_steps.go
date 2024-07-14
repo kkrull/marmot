@@ -1,6 +1,7 @@
 package cukestep
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/cucumber/godog"
@@ -9,6 +10,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+// State to clear between scenarios
+var thatRepositoryListing []string
+
 // Add step definitions related to repositories.
 func AddRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.Given(`^I have registered local repositories$`, registerLocalRepositories)
@@ -16,11 +20,13 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 
 	ctx.Then(`^that repository listing should be empty$`, thatRepositoryListingShouldBeEmpty)
 	ctx.Then(`^that repository listing should include local repositories that were registered$`, thatRepositoryListingShouldIncludeLocalRepositories)
+	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
+		thatRepositoryListing = nil
+		return ctx, err
+	})
 }
 
 /* List repositories */
-
-var thatRepositoryListing []string //TODO KDK: Does this need to be reset between scenarios too?
 
 func listRepositoriesInThatMetaRepo() error {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {

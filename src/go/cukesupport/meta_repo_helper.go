@@ -1,11 +1,17 @@
 package cukesupport
 
-import "fmt"
+import (
+	"context"
+	"fmt"
 
+	"github.com/cucumber/godog"
+)
+
+// State to clear between scenarios
 var thatMetaRepo string
 
 // Reset the meta repo so another scenario can make its own
-func ClearThatMetaRepo() { //TODO KDK: Call this from within SetThatMetaRepo so it's always called?
+func clearThatMetaRepo() {
 	thatMetaRepo = ""
 }
 
@@ -14,8 +20,14 @@ func PeekThatMetaRepo() string {
 	return thatMetaRepo
 }
 
-func SetThatMetaRepo(path string) string {
+// Save the path to the meta repo for later use, adding an after hook that clears state afterwards
+func SetThatMetaRepo(ctx *godog.ScenarioContext, path string) string {
 	thatMetaRepo = path
+	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
+		clearThatMetaRepo()
+		return ctx, err
+	})
+
 	return thatMetaRepo
 }
 

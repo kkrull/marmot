@@ -1,7 +1,6 @@
 package cukestep
 
 import (
-	"context"
 	"fmt"
 	"path/filepath"
 
@@ -12,23 +11,21 @@ import (
 
 // Add step definitions to manage the life cycle of a meta repo.
 func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
-	ctx.Given(`^I have initialized a new meta repo$`, initializeNewMetaRepo)
-	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-		support.ClearThatMetaRepo()
-		return ctx, nil
-	})
+	initNewMetaRepoSC := func() error { return initNewMetaRepo(ctx) }
+	ctx.Given(`^I have initialized a new meta repo$`, initNewMetaRepoSC)
 }
 
 /* Steps */
 
-func initializeNewMetaRepo() error {
+func initNewMetaRepo(ctx *godog.ScenarioContext) error {
+	//TODO KDK: Move this paragraph to the helper
 	var thatMetaRepo string
 	if existingMetaRepo := support.PeekThatMetaRepo(); existingMetaRepo != "" {
 		return fmt.Errorf("meta_repo_steps: meta repo has already been configured at %s", existingMetaRepo)
 	} else if testDir, mkdirErr := support.TestDir(); mkdirErr != nil {
 		return mkdirErr
 	} else {
-		thatMetaRepo = support.SetThatMetaRepo(filepath.Join(testDir, "meta"))
+		thatMetaRepo = support.SetThatMetaRepo(ctx, filepath.Join(testDir, "meta"))
 	}
 
 	factory := &main.CommandFactory{}
