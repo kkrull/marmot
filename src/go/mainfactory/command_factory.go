@@ -50,5 +50,11 @@ func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListReposito
 func (factory *CommandFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
-	return &repository.RegisterRemoteRepositoriesCommand{}, nil
+	if factory.RepositorySource == nil {
+		return nil, errors.New("CommandFactory: missing RepositorySource")
+	}
+
+	return &repository.RegisterRemoteRepositoriesCommand{
+		Source: factory.RepositorySource,
+	}, nil
 }

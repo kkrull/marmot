@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -57,4 +58,8 @@ func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 	}
 
 	return repositories, nil
+}
+
+func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl url.URL) error {
+	return errors.ErrUnsupported
 }

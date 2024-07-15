@@ -1,7 +1,6 @@
 package userepository_test
 
 import (
-	core "github.com/kkrull/marmot/corerepository"
 	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -27,16 +26,3 @@ var _ = Describe("ListRepositoriesQuery", func() {
 		})
 	})
 })
-
-type MockRepositorySource struct {
-	Names []string
-}
-
-func (source *MockRepositorySource) List() (core.Repositories, error) {
-	repositories := make([]core.Repository, len(source.Names))
-	for i, name := range source.Names {
-		repositories[i] = core.Repository{Name: name}
-	}
-
-	return &core.RepositoriesArray{Repositories: repositories}, nil
-}
