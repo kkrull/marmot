@@ -4,6 +4,7 @@ import (
 	"net/url"
 
 	repomock "github.com/kkrull/marmot/corerepositorymock"
+	expect "github.com/kkrull/marmot/expect"
 	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -20,12 +21,12 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 
 	Describe("#Run", func() {
 		It("succeeds, given valid URLs", func() {
-			subject := ExpectNoError(factory.RegisterRemoteRepositoriesCommand())
+			subject := expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
 
 		It("registers remote repositories at the given URLs", func() {
-			subject := ExpectNoError(factory.RegisterRemoteRepositoriesCommand())
+			subject := expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 			Expect(subject.Run(newURLs("https://github.com/actions/checkout"))).To(Succeed())
 			source.RegisterRemoteExpected("https://github.com/actions/checkout")
 		})
@@ -44,7 +45,7 @@ func newURLs(rawUrls ...string) []url.URL {
 	GinkgoHelper()
 	parsedUrls := make([]url.URL, len(rawUrls))
 	for i, rawUrl := range rawUrls {
-		parsedUrl := ExpectNoError(url.Parse(rawUrl))
+		parsedUrl := expect.NoError(url.Parse(rawUrl))
 		parsedUrls[i] = *parsedUrl
 	}
 
@@ -53,13 +54,4 @@ func newURLs(rawUrls ...string) []url.URL {
 
 func validUrls() []url.URL {
 	return newURLs("https://github.com/actions/checkout")
-}
-
-/* Test helpers */
-
-// Expect that a value (or not) was returned without an error, then carry on with(out) it.
-func ExpectNoError[V any](maybeValue V, unexpectedErr error) V {
-	GinkgoHelper()
-	Expect(unexpectedErr).To(BeNil())
-	return maybeValue
 }
