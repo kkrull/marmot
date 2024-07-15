@@ -3,7 +3,7 @@ package userepository_test
 import (
 	"net/url"
 
-	repomock "github.com/kkrull/marmot/corerepositorymock"
+	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/expect"
 	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/ginkgo/v2"
@@ -12,10 +12,10 @@ import (
 
 var _ = Describe("RegisterRepositoriesCommand", func() {
 	var factory *main.CommandFactory
-	var source *repomock.RepositorySource
+	var source *mock.RepositorySource
 
 	BeforeEach(func() {
-		source = &repomock.RepositorySource{}
+		source = &mock.RepositorySource{}
 		factory = &main.CommandFactory{RepositorySource: source}
 	})
 
