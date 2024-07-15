@@ -7,8 +7,8 @@ import (
 	"github.com/kkrull/marmot/coremetarepo"
 	"github.com/kkrull/marmot/corerepository"
 	"github.com/kkrull/marmot/svcfs"
-	"github.com/kkrull/marmot/usemetarepo"
-	"github.com/kkrull/marmot/userepository"
+	metarepo "github.com/kkrull/marmot/usemetarepo"
+	repository "github.com/kkrull/marmot/userepository"
 )
 
 // Constructs commands with configurable dependencies.
@@ -26,28 +26,30 @@ func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
 
 /* Meta repo administration */
 
-func (factory *CommandFactory) InitCommand() (*usemetarepo.InitCommand, error) {
+func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
 		return nil, errors.New("CommandFactory: missing MetaDataAdmin")
 	}
 
-	return &usemetarepo.InitCommand{
+	return &metarepo.InitCommand{
 		MetaDataAdmin: factory.MetaDataAdmin,
 	}, nil
 }
 
 /* Repositories */
 
-func (factory *CommandFactory) ListRepositoriesQuery() (*userepository.ListRepositoriesQuery, error) {
+func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRepositoriesQuery, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
-	return &userepository.ListRepositoriesQuery{
+	return &repository.ListRepositoriesQuery{
 		Source: factory.RepositorySource,
 	}, nil
 }
 
-func (factory *CommandFactory) RegisterRemoteRepositoriesCommand(hostUrls []net.Addr) (interface{}, error) {
-	return 42, nil
+func (factory *CommandFactory) RegisterRemoteRepositoriesCommand(hostUrls []net.Addr) (
+	*repository.RegisterRemoteRepositoriesCommand, error,
+) {
+	return &repository.RegisterRemoteRepositoriesCommand{}, nil
 }
