@@ -2,7 +2,7 @@ package corerepository
 
 // Any number of Git repositories.
 type Repositories interface {
-	Names() []string //TODO KDK: Make this more specific.  Is it the short name of the local repo or the remote one?
+	Names() []string // TODO KDK: Make this more specific.  Is it the short name of the local repo or the remote one?
 }
 
 // Repositories backed by an array.
