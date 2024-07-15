@@ -3,21 +3,21 @@ package userepository_test
 import (
 	"net"
 
-	"github.com/kkrull/marmot/mainfactory"
+	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("RegisterRepositoriesCommand", func() {
-	var factory *mainfactory.CommandFactory
+	var factory *main.CommandFactory
 
 	BeforeEach(func() {
-		factory = &mainfactory.CommandFactory{}
+		factory = &main.CommandFactory{}
 	})
 
 	Describe("#Run", func() {
 		It("registers the given paths as local repositories, given paths to Git repositories", func() {
-			subject, _ := factory.RegisterRemoteRepositoriesCommand([]net.Addr{})
+			subject := ExpectNoError(factory.RegisterRemoteRepositoriesCommand([]net.Addr{}))
 			Expect(subject).NotTo(BeNil())
 		})
 
@@ -28,3 +28,10 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 		})
 	})
 })
+
+// Expect that a value (or not) was returned without an error, then carry on with it.
+func ExpectNoError[V any](maybeValue V, unexpectedErr error) V {
+	GinkgoHelper()
+	Expect(unexpectedErr).To(BeNil())
+	return maybeValue
+}
