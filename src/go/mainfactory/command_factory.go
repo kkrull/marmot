@@ -2,6 +2,7 @@ package mainfactory
 
 import (
 	"errors"
+	"net"
 
 	"github.com/kkrull/marmot/coremetarepo"
 	"github.com/kkrull/marmot/corerepository"
@@ -45,4 +46,8 @@ func (factory *CommandFactory) ListRepositoriesQuery() (*userepository.ListRepos
 	return &userepository.ListRepositoriesQuery{
 		Source: factory.RepositorySource,
 	}, nil
+}
+
+func (factory *CommandFactory) RegisterRemoteRepositoriesCommand(hostUrls []net.Addr) (interface{}, error) {
+	return 42, nil
 }
