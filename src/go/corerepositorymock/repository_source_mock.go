@@ -1,4 +1,4 @@
-package userepository_test
+package corerepositorymock
 
 import (
 	"net/url"
@@ -9,12 +9,12 @@ import (
 )
 
 // Mock implementation for testing with RepositorySource.
-type MockRepositorySource struct {
+type RepositorySource struct {
 	Names               []string
 	RegisterRemoteCalls []url.URL
 }
 
-func (source *MockRepositorySource) List() (core.Repositories, error) {
+func (source *RepositorySource) List() (core.Repositories, error) {
 	repositories := make([]core.Repository, len(source.Names))
 	for i, name := range source.Names {
 		repositories[i] = core.Repository{Name: name}
@@ -23,12 +23,12 @@ func (source *MockRepositorySource) List() (core.Repositories, error) {
 	return &core.RepositoriesArray{Repositories: repositories}, nil
 }
 
-func (source *MockRepositorySource) RegisterRemote(hostUrl url.URL) error {
+func (source *RepositorySource) RegisterRemote(hostUrl url.URL) error {
 	source.RegisterRemoteCalls = append(source.RegisterRemoteCalls, hostUrl)
 	return nil
 }
 
-func (source *MockRepositorySource) RegisterRemoteExpected(expectedHref string) {
+func (source *RepositorySource) RegisterRemoteExpected(expectedHref string) {
 	ginkgo.GinkgoHelper()
 
 	actualHrefs := make([]string, len(source.RegisterRemoteCalls))
