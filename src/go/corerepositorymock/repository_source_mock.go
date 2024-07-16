@@ -10,14 +10,14 @@ import (
 
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
-	Names               []string
 	RegisterRemoteCalls []*url.URL
+	RemoteUrls          []*url.URL
 }
 
 func (source *RepositorySource) List() (core.Repositories, error) {
-	repositories := make([]core.Repository, len(source.Names))
-	for i, name := range source.Names {
-		repositories[i] = core.Repository{Name: name}
+	repositories := make([]core.Repository, len(source.RemoteUrls))
+	for i, remoteUrl := range source.RemoteUrls {
+		repositories[i] = core.Repository{RemoteUrl: remoteUrl}
 	}
 
 	return &core.RepositoriesArray{Repositories: repositories}, nil

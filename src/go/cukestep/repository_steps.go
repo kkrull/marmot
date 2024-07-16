@@ -55,7 +55,7 @@ func listRepositories(metaRepoPath string) (core.Repositories, error) {
 }
 
 func thatListingShouldBeEmpty() {
-	Expect(thatListing.Names()).To(BeEmpty())
+	Expect(thatListing.Count()).To(Equal(0))
 }
 
 func thatListingShouldHaveRemotes() {

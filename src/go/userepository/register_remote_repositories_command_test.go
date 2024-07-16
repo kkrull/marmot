@@ -6,6 +6,7 @@ import (
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/expect"
 	main "github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/testdata"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -27,7 +28,7 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 
 		It("registers remote repositories at the given URLs", func() {
 			subject := expect.NoError(factory.RegisterRemoteRepositoriesCommand())
-			Expect(subject.Run(newURLs("https://github.com/actions/checkout"))).To(Succeed())
+			Expect(subject.Run(testdata.NewURLs("https://github.com/actions/checkout"))).To(Succeed())
 			source.RegisterRemoteExpected("https://github.com/actions/checkout")
 		})
 	})
@@ -35,17 +36,6 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 
 /* Test data */
 
-func newURLs(rawUrls ...string) []*url.URL {
-	GinkgoHelper()
-	parsedUrls := make([]*url.URL, len(rawUrls))
-	for i, rawUrl := range rawUrls {
-		parsedUrl := expect.NoError(url.Parse(rawUrl))
-		parsedUrls[i] = parsedUrl
-	}
-
-	return parsedUrls
-}
-
 func validUrls() []*url.URL {
-	return newURLs("https://github.com/actions/checkout")
+	return testdata.NewURLs("https://github.com/actions/checkout")
 }

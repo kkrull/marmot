@@ -3,6 +3,7 @@ package userepository_test
 import (
 	repomock "github.com/kkrull/marmot/corerepositorymock"
 	main "github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/testdata"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -15,7 +16,11 @@ var _ = Describe("ListRepositoriesQuery", func() {
 
 	Describe("#Run", func() {
 		It("returns all repositories the source can list", func() {
-			source = &repomock.RepositorySource{Names: []string{"one", "two"}}
+			remoteUrls := testdata.NewURLs(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-up",
+			)
+			source = &repomock.RepositorySource{RemoteUrls: remoteUrls}
 			factory = &main.CommandFactory{RepositorySource: source}
 
 			subject, factoryErr := factory.ListRepositoriesQuery()
@@ -23,7 +28,10 @@ var _ = Describe("ListRepositoriesQuery", func() {
 
 			repositories, runErr := subject.Run()
 			Expect(repositories, runErr).NotTo(BeNil())
-			Expect(repositories.Names()).To(ConsistOf("one", "two"))
+			Expect(repositories.RemoteHrefs()).To(ConsistOf(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-up",
+			))
 		})
 	})
 })
