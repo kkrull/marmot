@@ -50,17 +50,41 @@ func (meta *JsonMetaDataRepo) createMetaData() error {
 		return fmt.Errorf("failed to close file %s; %w", meta.metaDataFile, closeErr)
 	}
 
+	//TODO KDK: Write a JSON skeleton
+	fmt.Printf("created %s\n", meta.metaDataFile)
 	return nil
 }
 
 /* RepositorySource */
 
 func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
-	repositories := &corerepository.RepositoriesArray{
-		Repositories: make([]corerepository.Repository, 0),
+	var decoder *json.Decoder
+	if metaDataFd, openErr := os.Open(metaRepo.metaDataFile); openErr != nil {
+		return nil, fmt.Errorf("failed to open file %s; %w", metaRepo.metaDataFile, openErr)
+	} else {
+		decoder = json.NewDecoder(metaDataFd)
+		// defer metaDataFd.Close()
 	}
 
-	return repositories, nil
+	var content MetaRepoFile
+	if decodeErr := decoder.Decode(&content); decodeErr != nil {
+		return nil, fmt.Errorf("failed to decode %s; %w", metaRepo.metaDataFile, decodeErr)
+	}
+
+	repositories := make([]corerepository.Repository, len(content.MetaRepo.RemoteRepositories))
+	for i, remoteRepositoryData := range content.MetaRepo.RemoteRepositories {
+		if remoteRepositoryUrl, parseErr := url.Parse(remoteRepositoryData.Url); parseErr != nil {
+			return nil, fmt.Errorf("failed to parse %s from %s; %w", remoteRepositoryData.Url, metaRepo.metaDataFile, parseErr)
+		} else {
+			repositories[i] = corerepository.Repository{
+				RemoteUrl: remoteRepositoryUrl,
+			}
+		}
+	}
+
+	return &corerepository.RepositoriesArray{
+		Repositories: repositories,
+	}, nil
 }
 
 func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
@@ -79,6 +103,7 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 		},
 		Version: "0.1",
 	}
+
 	if encodeErr := encoder.Encode(content); encodeErr != nil {
 		return fmt.Errorf("failed to encode content; %w", encodeErr)
 	} else {
