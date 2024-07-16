@@ -75,7 +75,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			if repositories, listErr := subject.List(); listErr != nil {
 				Fail(listErr.Error())
 			} else {
-				Expect(repositories.Names()).To(BeEmpty())
+				Expect(repositories.Count()).To(Equal(0))
 			}
 		})
 
