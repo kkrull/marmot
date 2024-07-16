@@ -1,6 +1,7 @@
 package svcfs
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -43,8 +44,10 @@ func (meta *JsonMetaDataRepo) Init() error {
 func (meta *JsonMetaDataRepo) createMetaData() error {
 	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
-	} else if _, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
+	} else if metaDataFd, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
 		return fmt.Errorf("failed to create file %s; %w", meta.metaDataFile, fileErr)
+	} else if closeErr := metaDataFd.Close(); closeErr != nil {
+		return fmt.Errorf("failed to close file %s; %w", meta.metaDataFile, closeErr)
 	}
 
 	return nil
@@ -61,5 +64,37 @@ func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 }
 
 func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
-	return errors.ErrUnsupported
+	var encoder *json.Encoder
+	if metaDataFd, openErr := os.OpenFile(metaRepo.metaDataFile, os.O_WRONLY, os.ModePerm); openErr != nil {
+		return fmt.Errorf("failed to open file %s; %w", metaRepo.metaDataFile, openErr)
+	} else {
+		encoder = json.NewEncoder(metaDataFd)
+	}
+
+	content := &MetaRepoFile{
+		MetaRepo: MetaRepo{
+			RemoteRepositories: []RemoteRepository{
+				{Url: hostUrl.String()},
+			},
+		},
+		Version: "0.1",
+	}
+	if encodeErr := encoder.Encode(content); encodeErr != nil {
+		return fmt.Errorf("failed to encode content; %w", encodeErr)
+	} else {
+		return nil
+	}
+}
+
+type MetaRepoFile struct {
+	MetaRepo MetaRepo `json:"meta_repo"`
+	Version  string   `json:"version"`
+}
+
+type MetaRepo struct {
+	RemoteRepositories []RemoteRepository `json:"remote_repositories"`
+}
+
+type RemoteRepository struct {
+	Url string `json:"url"`
 }
