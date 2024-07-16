@@ -10,8 +10,8 @@ Feature: Repository
     Then that repository listing should be empty
 
   @LocalDir
-  Scenario: A Meta Repo remembers local repositories
+  Scenario: A Meta Repo remembers remote repositories
     Given I have initialized a new meta repo
-    And I have registered local repositories
+    And I have registered remote repositories
     When I list repositories in that meta repo
-    Then that repository listing should include local repositories that were registered
+    Then that repository listing should include those remote repositories

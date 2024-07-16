@@ -11,30 +11,31 @@ import (
 )
 
 // State to clear between scenarios
-var thatRepositoryListing []string
+var thatListing []string
 
 // Add step definitions related to repositories.
 func AddRepositorySteps(ctx *godog.ScenarioContext) {
-	ctx.Given(`^I have registered local repositories$`, registerLocalRepositories)
-	ctx.When(`^I list repositories in that meta repo$`, listRepositoriesInThatMetaRepo)
-
-	ctx.Then(`^that repository listing should be empty$`, thatRepositoryListingShouldBeEmpty)
-	ctx.Then(`^that repository listing should include local repositories that were registered$`, thatRepositoryListingShouldIncludeLocalRepositories)
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
-		thatRepositoryListing = nil
+		thatListing = nil
 		return ctx, err
 	})
+
+	ctx.Given(`^I have registered remote repositories$`, registerRemote)
+	ctx.When(`^I list repositories in that meta repo$`, listInThatMetaRepo)
+
+	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
+	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
 }
 
 /* List repositories */
 
-func listRepositoriesInThatMetaRepo() error {
+func listInThatMetaRepo() error {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else if repoList, listErr := listRepositories(metaRepoPath); listErr != nil {
 		return fmt.Errorf("repository_steps: failed to list repositories; %w", listErr)
 	} else {
-		thatRepositoryListing = repoList
+		thatListing = repoList
 		return nil
 	}
 }
@@ -51,16 +52,16 @@ func listRepositories(metaRepoPath string) ([]string, error) {
 	}
 }
 
-func thatRepositoryListingShouldBeEmpty() {
-	Expect(thatRepositoryListing).To(BeEmpty())
+func thatListingShouldBeEmpty() {
+	Expect(thatListing).To(BeEmpty())
 }
 
-func thatRepositoryListingShouldIncludeLocalRepositories() error {
+func thatListingShouldHaveRemotes() error {
 	return godog.ErrPending
 }
 
 /* Register repositories */
 
-func registerLocalRepositories() error {
+func registerRemote() error {
 	return godog.ErrPending
 }

@@ -30,12 +30,6 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 			Expect(subject.Run(newURLs("https://github.com/actions/checkout"))).To(Succeed())
 			source.RegisterRemoteExpected("https://github.com/actions/checkout")
 		})
-
-		It("registers no remote URLs for a repository, given a Git repository with no remotes", Pending, func() {
-		})
-
-		It("registers the URL of each remote for a Git repository, given one with remotes", Pending, func() {
-		})
 	})
 })
 
