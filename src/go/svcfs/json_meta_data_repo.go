@@ -74,7 +74,7 @@ func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 		return nil, fmt.Errorf("failed to open file %s; %w", metaRepo.metaDataFile, openErr)
 	} else {
 		decoder = json.NewDecoder(metaDataFd)
-		// defer metaDataFd.Close()
+		// defer metaDataFd.Close() //TODO KDK: Test and restore
 	}
 
 	var content MetaRepoFile
@@ -122,6 +122,7 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 	}
 }
 
+// TODO KDK: Extract file
 type MetaRepoFile struct {
 	MetaRepo MetaRepo `json:"meta_repo"`
 	Version  string   `json:"version"`
