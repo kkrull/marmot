@@ -5,13 +5,14 @@ import (
 	"fmt"
 
 	"github.com/cucumber/godog"
+	core "github.com/kkrull/marmot/corerepository"
 	support "github.com/kkrull/marmot/cukesupport"
 	main "github.com/kkrull/marmot/mainfactory"
 	. "github.com/onsi/gomega"
 )
 
 // State to clear between scenarios
-var thatListing []string
+var thatListing core.Repositories
 
 // Add step definitions related to repositories.
 func AddRepositorySteps(ctx *godog.ScenarioContext) {
@@ -40,7 +41,7 @@ func listInThatMetaRepo() error {
 	}
 }
 
-func listRepositories(metaRepoPath string) ([]string, error) {
+func listRepositories(metaRepoPath string) (core.Repositories, error) {
 	factory := &main.CommandFactory{}
 	factory.WithJsonFileSource(metaRepoPath)
 	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
@@ -48,12 +49,12 @@ func listRepositories(metaRepoPath string) ([]string, error) {
 	} else if repositories, runErr := listQuery.Run(); runErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
-		return repositories.Names(), nil
+		return repositories, nil
 	}
 }
 
 func thatListingShouldBeEmpty() {
-	Expect(thatListing).To(BeEmpty())
+	Expect(thatListing.Names()).To(BeEmpty())
 }
 
 func thatListingShouldHaveRemotes() error {
