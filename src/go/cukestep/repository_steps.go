@@ -3,6 +3,7 @@ package cukestep
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/cucumber/godog"
 	core "github.com/kkrull/marmot/corerepository"
@@ -70,5 +71,20 @@ func thatListingShouldHaveRemotes() {
 /* Register repositories */
 
 func registerRemote() error {
-	return godog.ErrPending
+	factory := &main.CommandFactory{}
+	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
+	} else {
+		factory.WithJsonFileSource(metaRepoPath)
+	}
+
+	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
+		return parseErr
+	} else if registerCmd, factoryErr := factory.RegisterRemoteRepositoriesCommand(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
+		return fmt.Errorf("repository_steps: failed to register repositories; %w", runErr)
+	} else {
+		return nil
+	}
 }

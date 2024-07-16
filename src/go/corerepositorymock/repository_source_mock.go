@@ -11,7 +11,7 @@ import (
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
 	Names               []string
-	RegisterRemoteCalls []url.URL
+	RegisterRemoteCalls []*url.URL
 }
 
 func (source *RepositorySource) List() (core.Repositories, error) {
@@ -23,7 +23,7 @@ func (source *RepositorySource) List() (core.Repositories, error) {
 	return &core.RepositoriesArray{Repositories: repositories}, nil
 }
 
-func (source *RepositorySource) RegisterRemote(hostUrl url.URL) error {
+func (source *RepositorySource) RegisterRemote(hostUrl *url.URL) error {
 	source.RegisterRemoteCalls = append(source.RegisterRemoteCalls, hostUrl)
 	return nil
 }

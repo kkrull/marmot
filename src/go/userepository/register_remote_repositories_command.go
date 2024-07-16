@@ -11,7 +11,7 @@ type RegisterRemoteRepositoriesCommand struct {
 	Source core.RepositorySource
 }
 
-func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []url.URL) error {
+func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {
 	_ = cmd.Source.RegisterRemote(remoteUrls[0])
 	return nil
 }

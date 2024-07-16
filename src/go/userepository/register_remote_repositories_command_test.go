@@ -35,17 +35,17 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 
 /* Test data */
 
-func newURLs(rawUrls ...string) []url.URL {
+func newURLs(rawUrls ...string) []*url.URL {
 	GinkgoHelper()
-	parsedUrls := make([]url.URL, len(rawUrls))
+	parsedUrls := make([]*url.URL, len(rawUrls))
 	for i, rawUrl := range rawUrls {
 		parsedUrl := expect.NoError(url.Parse(rawUrl))
-		parsedUrls[i] = *parsedUrl
+		parsedUrls[i] = parsedUrl
 	}
 
 	return parsedUrls
 }
 
-func validUrls() []url.URL {
+func validUrls() []*url.URL {
 	return newURLs("https://github.com/actions/checkout")
 }
