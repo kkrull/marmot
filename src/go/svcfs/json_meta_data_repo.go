@@ -42,16 +42,26 @@ func (meta *JsonMetaDataRepo) Init() error {
 }
 
 func (meta *JsonMetaDataRepo) createMetaData() error {
+	var encoder json.Encoder
 	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
 	} else if metaDataFd, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
 		return fmt.Errorf("failed to create file %s; %w", meta.metaDataFile, fileErr)
-	} else if closeErr := metaDataFd.Close(); closeErr != nil {
-		return fmt.Errorf("failed to close file %s; %w", meta.metaDataFile, closeErr)
+	} else {
+		encoder = *json.NewEncoder(metaDataFd)
+		defer metaDataFd.Close()
 	}
 
-	//TODO KDK: Write a JSON skeleton
-	fmt.Printf("created %s\n", meta.metaDataFile)
+	content := &MetaRepoFile{
+		MetaRepo: MetaRepo{
+			RemoteRepositories: make([]RemoteRepository, 0),
+		},
+		Version: "0.1",
+	}
+	if encodeErr := encoder.Encode(content); encodeErr != nil {
+		return fmt.Errorf("failed to encode JSON data; %w", encodeErr)
+	}
+
 	return nil
 }
 

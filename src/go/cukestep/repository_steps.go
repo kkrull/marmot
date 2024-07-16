@@ -65,8 +65,8 @@ func thatListingShouldHaveRemotes() error {
 		remoteHrefs[i] = remoteUrl.String()
 	}
 
-	return godog.ErrPending
-	// Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
+	Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
+	return nil
 }
 
 /* Register repositories */
