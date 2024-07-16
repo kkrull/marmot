@@ -4,9 +4,9 @@ import (
 	"net/url"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
-	expect "github.com/kkrull/marmot/expect"
 	main "github.com/kkrull/marmot/mainfactory"
-	"github.com/kkrull/marmot/testdata"
+	testdata "github.com/kkrull/marmot/testsupportdata"
+	expect "github.com/kkrull/marmot/testsupportexpect"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )

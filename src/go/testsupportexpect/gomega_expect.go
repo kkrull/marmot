@@ -1,4 +1,4 @@
-package expect
+package testsupportexpect
 
 import (
 	"github.com/onsi/ginkgo/v2"

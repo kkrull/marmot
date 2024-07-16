@@ -1,9 +1,9 @@
-package testdata
+package testsupportdata
 
 import (
 	"net/url"
 
-	"github.com/kkrull/marmot/expect"
+	expect "github.com/kkrull/marmot/testsupportexpect"
 	"github.com/onsi/ginkgo/v2"
 )
 

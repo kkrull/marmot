@@ -3,7 +3,7 @@ package userepository_test
 import (
 	repomock "github.com/kkrull/marmot/corerepositorymock"
 	main "github.com/kkrull/marmot/mainfactory"
-	"github.com/kkrull/marmot/testdata"
+	testdata "github.com/kkrull/marmot/testsupportdata"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
