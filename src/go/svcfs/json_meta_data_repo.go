@@ -42,6 +42,7 @@ func (meta *JsonMetaDataRepo) Init() error {
 }
 
 func (meta *JsonMetaDataRepo) createMetaData() error {
+	//TODO KDK: Test, DRY, and clean up all this JSON I/O
 	var encoder json.Encoder
 	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
