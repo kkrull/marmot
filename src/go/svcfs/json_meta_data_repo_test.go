@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/kkrull/marmot/svcfs"
+	testdata "github.com/kkrull/marmot/testsupportdata"
 	expect "github.com/kkrull/marmot/testsupportexpect"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -73,10 +74,17 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	})
 
 	Context("when remote repositories have been registered", func() {
-		It("#List includes each registered remote", func() {
+		BeforeEach(func() {
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
 			Expect(subject.Init()).To(Succeed())
 
+			validUrl := testdata.NewURL("https://github.com/actions/checkout")
+			Expect(subject.RegisterRemote(validUrl)).To(Succeed())
+		})
+
+		It("#List includes each registered remote", func() {
+			listing := expect.NoError(subject.List())
+			Expect(listing.RemoteHrefs()).To(ConsistOf("https://github.com/actions/checkout"))
 		})
 	})
 })

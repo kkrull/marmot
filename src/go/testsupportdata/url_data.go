@@ -7,6 +7,12 @@ import (
 	"github.com/onsi/ginkgo/v2"
 )
 
+// Parse URL from valid href string, or fail
+func NewURL(rawUrl string) *url.URL {
+	ginkgo.GinkgoHelper()
+	return expect.NoError(url.Parse(rawUrl))
+}
+
 // Parse URLs from valid href strings, or fail
 func NewURLs(rawUrls ...string) []*url.URL {
 	ginkgo.GinkgoHelper()
