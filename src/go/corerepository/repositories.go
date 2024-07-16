@@ -1,9 +1,12 @@
 package corerepository
 
+import "net/url"
+
 // Any number of Git repositories.
 type Repositories interface {
 	Count() int
-	Names() []string // TODO KDK: Make this more specific.  Is it the short name of the local repo or the remote one?
+	Names() []string // TODO KDK: Remove
+	RemoteUrls() []url.URL
 }
 
 // Repositories backed by an array.
@@ -22,4 +25,13 @@ func (array RepositoriesArray) Names() []string {
 	}
 
 	return names
+}
+
+func (array RepositoriesArray) RemoteUrls() []url.URL {
+	remoteUrls := make([]url.URL, len(array.Repositories))
+	for i, repository := range array.Repositories {
+		remoteUrls[i] = repository.RemoteUrl
+	}
+
+	return remoteUrls
 }

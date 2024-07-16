@@ -57,8 +57,14 @@ func thatListingShouldBeEmpty() {
 	Expect(thatListing.Names()).To(BeEmpty())
 }
 
-func thatListingShouldHaveRemotes() error {
-	return godog.ErrPending
+func thatListingShouldHaveRemotes() {
+	remoteUrls := thatListing.RemoteUrls()
+	remoteHrefs := make([]string, len(remoteUrls))
+	for i, remoteUrl := range remoteUrls {
+		remoteHrefs[i] = remoteUrl.String()
+	}
+
+	Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
 }
 
 /* Register repositories */
