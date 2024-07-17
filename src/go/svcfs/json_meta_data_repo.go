@@ -1,7 +1,6 @@
 package svcfs
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -65,25 +64,19 @@ func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 }
 
 func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
-	var encoder *json.Encoder
-	if metaDataFd, openErr := os.OpenFile(metaRepo.metaDataFile, os.O_WRONLY, os.ModePerm); openErr != nil {
-		return fmt.Errorf("failed to open file %s; %w", metaRepo.metaDataFile, openErr)
-	} else {
-		encoder = json.NewEncoder(metaDataFd)
+	var rootObject *rootObjectData
+	rootObject, readErr := ReadMetaRepoFile(metaRepo.metaDataFile)
+	if readErr != nil {
+		return fmt.Errorf("failed to read file %s; %w", metaRepo.metaDataFile, readErr)
 	}
 
-	// TODO KDK: Read or remember other registered repositories, instead of just writing the new one
-	metaRepoFile := &rootObjectData{
-		MetaRepo: metaRepoData{
-			RemoteRepositories: []remoteRepositoryData{
-				{Url: hostUrl.String()},
-			},
-		},
-		Version: "0.1",
-	}
+	rootObject.MetaRepo.RemoteRepositories = append(
+		rootObject.MetaRepo.RemoteRepositories,
+		remoteRepositoryData{Url: hostUrl.String()},
+	)
 
-	if encodeErr := encoder.Encode(metaRepoFile); encodeErr != nil {
-		return fmt.Errorf("failed to encode content; %w", encodeErr)
+	if writeErr := rootObject.WriteTo(metaRepo.metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", metaRepo.metaDataFile, writeErr)
 	} else {
 		return nil
 	}
