@@ -55,10 +55,10 @@ func (meta *JsonMetaDataRepo) initDirectory() error {
 /* RepositorySource */
 
 func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
-	if content, readErr := ReadMetaRepoFile(metaRepo.metaDataFile); readErr != nil {
+	if rootObject, readErr := ReadMetaRepoFile(metaRepo.metaDataFile); readErr != nil {
 		return nil, fmt.Errorf("failed to read file %s; %w", metaRepo.metaDataFile, readErr)
-	} else if repositories, convertErr := content.ToCoreRepositories(); convertErr != nil {
-		return nil, fmt.Errorf("failed to map to core model; %w", convertErr)
+	} else if repositories, mappingErr := rootObject.ToCoreRepositories(); mappingErr != nil {
+		return nil, fmt.Errorf("failed to map to core model; %w", mappingErr)
 	} else {
 		return repositories, nil
 	}
@@ -73,7 +73,7 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 	}
 
 	// TODO KDK: Read or remember other registered repositories, instead of just writing the new one
-	metaRepoFile := &metaRepoFile{
+	metaRepoFile := &rootObjectData{
 		MetaRepo: metaRepoData{
 			RemoteRepositories: []remoteRepositoryData{
 				{Url: hostUrl.String()},
