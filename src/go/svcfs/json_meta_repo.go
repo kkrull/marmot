@@ -3,16 +3,12 @@ package svcfs
 import (
 	"fmt"
 	"net/url"
-	"path/filepath"
 
 	core "github.com/kkrull/marmot/corerepository"
 )
 
 func NewJsonMetaRepo(repositoryPath string) *JsonMetaRepo {
-	metaDataDir := filepath.Join(repositoryPath, ".marmot")
-	return &JsonMetaRepo{
-		metaDataFile: filepath.Join(metaDataDir, "meta-repo.json"),
-	}
+	return &JsonMetaRepo{metaDataFile: metaDataFile(repositoryPath)}
 }
 
 // A meta repo that stores meta data in JSON files in the specified directory.
