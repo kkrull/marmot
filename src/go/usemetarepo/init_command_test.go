@@ -3,8 +3,9 @@ package usemetarepo_test
 import (
 	"errors"
 
+	mock "github.com/kkrull/marmot/coremetarepomock"
 	main "github.com/kkrull/marmot/mainfactory"
-	metarepo "github.com/kkrull/marmot/usemetarepo"
+	use "github.com/kkrull/marmot/usemetarepo"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -12,13 +13,13 @@ import (
 
 var _ = Describe("InitCommand", func() {
 	var (
-		subject       *metarepo.InitCommand
+		subject       *use.InitCommand
 		factory       *main.CommandFactory
-		metaDataAdmin *MockMetaDataAdmin
+		metaDataAdmin *mock.MetaDataAdmin
 	)
 
 	BeforeEach(func() {
-		metaDataAdmin = &MockMetaDataAdmin{}
+		metaDataAdmin = &mock.MetaDataAdmin{}
 		factory = &main.CommandFactory{MetaDataAdmin: metaDataAdmin}
 	})
 
@@ -42,17 +43,3 @@ var _ = Describe("InitCommand", func() {
 		})
 	})
 })
-
-type MockMetaDataAdmin struct {
-	InitCount int
-	InitError error
-}
-
-func (fs *MockMetaDataAdmin) Init() error {
-	fs.InitCount += 1
-	return fs.InitError
-}
-
-func (fs *MockMetaDataAdmin) InitExpected() {
-	Expect(fs.InitCount).To(Equal(1))
-}

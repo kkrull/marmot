@@ -4,13 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"net/url"
 	"os"
 	"path/filepath"
 
-	"github.com/kkrull/marmot/corerepository"
+	core "github.com/kkrull/marmot/corerepository"
 )
 
-// A meta repo that stores meta data in JSON files on the file system.
+// A meta repo that stores meta data in JSON files in the specified directory.
 func NewJsonMetaDataRepo(repositoryPath string) *JsonMetaDataRepo {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
 	return &JsonMetaDataRepo{
@@ -28,33 +29,51 @@ type JsonMetaDataRepo struct {
 
 /* MetaDataAdmin */
 
-func (metaRepo *JsonMetaDataRepo) Init() error {
-	_, statErr := os.Stat(metaRepo.repositoryDir)
+func (repo *JsonMetaDataRepo) Init() error {
+	_, statErr := os.Stat(repo.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return metaRepo.createMetaData()
+		return repo.initDirectory()
 	} else if statErr != nil {
-		return statErr
+		return fmt.Errorf("failed to check for existing meta repo %s; %w", repo.repositoryDir, statErr)
 	} else {
-		return fmt.Errorf("%s: path already exists", metaRepo.repositoryDir)
+		return fmt.Errorf("path already exists: %s", repo.repositoryDir)
 	}
 }
 
-func (metaRepo *JsonMetaDataRepo) createMetaData() error {
-	if dirErr := os.MkdirAll(metaRepo.metaDataDir, fs.ModePerm); dirErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataDir, dirErr)
-	} else if _, fileErr := os.Create(metaRepo.metaDataFile); fileErr != nil {
-		return fmt.Errorf("createMetaData %s: %w", metaRepo.metaDataFile, fileErr)
+func (repo *JsonMetaDataRepo) initDirectory() error {
+	emptyFile := EmptyMetaRepoFile("0.0.1")
+	if dirErr := os.MkdirAll(repo.metaDataDir, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("failed to make directory %s; %w", repo.metaDataDir, dirErr)
+	} else if writeErr := emptyFile.WriteTo(repo.metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
+	} else {
+		return nil
 	}
-
-	return nil
 }
 
 /* RepositorySource */
 
-func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
-	repositories := &corerepository.RepositoriesArray{
-		Repositories: make([]corerepository.Repository, 0),
+func (repo *JsonMetaDataRepo) List() (core.Repositories, error) {
+	if rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile); readErr != nil {
+		return nil, fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
+	} else if repositories, mapErr := rootObject.MetaRepo.MapRemoteRepositories(); mapErr != nil {
+		return nil, fmt.Errorf("failed to map to core model; %w", mapErr)
+	} else {
+		return repositories, nil
+	}
+}
+
+func (repo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
+	var rootObject *rootObjectData
+	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
+	if readErr != nil {
+		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
 	}
 
-	return repositories, nil
+	rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
+	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
+	} else {
+		return nil
+	}
 }

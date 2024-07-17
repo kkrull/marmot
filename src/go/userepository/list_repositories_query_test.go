@@ -1,8 +1,9 @@
 package userepository_test
 
 import (
-	core "github.com/kkrull/marmot/corerepository"
+	repomock "github.com/kkrull/marmot/corerepositorymock"
 	main "github.com/kkrull/marmot/mainfactory"
+	testdata "github.com/kkrull/marmot/testsupportdata"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -10,12 +11,16 @@ import (
 var _ = Describe("ListRepositoriesQuery", func() {
 	var (
 		factory *main.CommandFactory
-		source  *MockRepositorySource
+		source  *repomock.RepositorySource
 	)
 
 	Describe("#Run", func() {
 		It("returns all repositories the source can list", func() {
-			source = &MockRepositorySource{Names: []string{"one", "two"}}
+			remoteUrls := testdata.NewURLs(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-up",
+			)
+			source = &repomock.RepositorySource{RemoteUrls: remoteUrls}
 			factory = &main.CommandFactory{RepositorySource: source}
 
 			subject, factoryErr := factory.ListRepositoriesQuery()
@@ -23,20 +28,10 @@ var _ = Describe("ListRepositoriesQuery", func() {
 
 			repositories, runErr := subject.Run()
 			Expect(repositories, runErr).NotTo(BeNil())
-			Expect(repositories.Names()).To(ConsistOf("one", "two"))
+			Expect(repositories.RemoteHrefs()).To(ConsistOf(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-up",
+			))
 		})
 	})
 })
-
-type MockRepositorySource struct {
-	Names []string
-}
-
-func (source *MockRepositorySource) List() (core.Repositories, error) {
-	repositories := make([]core.Repository, len(source.Names))
-	for i, name := range source.Names {
-		repositories[i] = core.Repository{Name: name}
-	}
-
-	return &core.RepositoriesArray{Repositories: repositories}, nil
-}

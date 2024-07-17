@@ -7,6 +7,7 @@ type ListRepositoriesQuery struct {
 	Source core.RepositorySource
 }
 
+// TODO KDK: Rename this to remote repositories
 func (cmd *ListRepositoriesQuery) Run() (core.Repositories, error) {
 	return cmd.Source.List()
 }
