@@ -74,17 +74,20 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	})
 
 	Context("when remote repositories have been registered", func() {
-		It("#List includes each registered remote", func() {
+		BeforeEach(func() {
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
 			Expect(subject.Init()).To(Succeed())
 
 			Expect(subject.RegisterRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())
-			listOnce := expect.NoError(subject.List())
-			Expect(listOnce.RemoteHrefs()).To(ConsistOf("https://github.com/me/a"))
+			listOne := expect.NoError(subject.List())
+			Expect(listOne.RemoteHrefs()).To(ConsistOf("https://github.com/me/a"))
 
 			Expect(subject.RegisterRemote(testdata.NewURL("https://github.com/me/b"))).To(Succeed())
-			listAgain := expect.NoError(subject.List())
-			Expect(listAgain.RemoteHrefs()).To(ConsistOf(
+		})
+
+		It("#List includes each registered remote", func() {
+			listTwo := expect.NoError(subject.List())
+			Expect(listTwo.RemoteHrefs()).To(ConsistOf(
 				"https://github.com/me/a",
 				"https://github.com/me/b",
 			))
