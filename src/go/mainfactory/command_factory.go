@@ -17,8 +17,8 @@ type CommandFactory struct {
 }
 
 // Configure a local, file-based meta repo at the specified path
-func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
-	factory.RepositorySource = svcfs.NewJsonMetaDataRepo(metaRepoPath)
+func (factory *CommandFactory) ForLocalMetaRepo(metaRepoPath string) {
+	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
 }
 
 /* Administration */
@@ -38,9 +38,7 @@ func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRemoteRe
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
-	return &repository.ListRemoteRepositoriesQuery{
-		Source: factory.RepositorySource,
-	}, nil
+	return &repository.ListRemoteRepositoriesQuery{Source: factory.RepositorySource}, nil
 }
 
 func (factory *CommandFactory) RegisterRemoteRepositoriesCommand() (
@@ -50,7 +48,5 @@ func (factory *CommandFactory) RegisterRemoteRepositoriesCommand() (
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
-	return &repository.RegisterRemoteRepositoriesCommand{
-		Source: factory.RepositorySource,
-	}, nil
+	return &repository.RegisterRemoteRepositoriesCommand{Source: factory.RepositorySource}, nil
 }

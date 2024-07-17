@@ -44,7 +44,7 @@ func listInThatMetaRepo() error {
 
 func listRepositories(metaRepoPath string) (core.Repositories, error) {
 	factory := &main.CommandFactory{}
-	factory.WithJsonFileSource(metaRepoPath)
+	factory.ForLocalMetaRepo(metaRepoPath)
 	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
 	} else if repositories, runErr := listQuery.Run(); runErr != nil {
@@ -76,7 +76,7 @@ func registerRemote() error {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {
-		factory.WithJsonFileSource(metaRepoPath)
+		factory.ForLocalMetaRepo(metaRepoPath)
 	}
 
 	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {

@@ -14,7 +14,7 @@ import (
 
 var _ = Describe("JsonMetaDataRepo", func() {
 	var (
-		subject      *svcfs.JsonMetaDataRepo
+		subject      *svcfs.JsonMetaRepo
 		admin        *svcfs.JsonMetaRepoAdmin
 		metaRepoPath string
 		testFsRoot   string
@@ -29,7 +29,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = svcfs.NewJsonMetaRepoAdmin()
-			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
+			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
 			Expect(admin.Create(metaRepoPath)).To(Succeed())
 		})
 
@@ -42,7 +42,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = svcfs.NewJsonMetaRepoAdmin()
-			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
+			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
 			Expect(admin.Create(metaRepoPath)).To(Succeed())
 
 			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())

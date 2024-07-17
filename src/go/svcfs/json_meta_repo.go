@@ -8,21 +8,21 @@ import (
 	core "github.com/kkrull/marmot/corerepository"
 )
 
-func NewJsonMetaDataRepo(repositoryPath string) *JsonMetaDataRepo {
+func NewJsonMetaRepo(repositoryPath string) *JsonMetaRepo {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
-	return &JsonMetaDataRepo{
+	return &JsonMetaRepo{
 		metaDataFile: filepath.Join(metaDataDir, "meta-repo.json"),
 	}
 }
 
 // A meta repo that stores meta data in JSON files in the specified directory.
-type JsonMetaDataRepo struct {
+type JsonMetaRepo struct {
 	metaDataFile string
 }
 
 /* RepositorySource */
 
-func (repo *JsonMetaDataRepo) AddRemote(hostUrl *url.URL) error {
+func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {
@@ -37,7 +37,7 @@ func (repo *JsonMetaDataRepo) AddRemote(hostUrl *url.URL) error {
 	}
 }
 
-func (repo *JsonMetaDataRepo) ListRemote() (core.Repositories, error) {
+func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
 	if rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile); readErr != nil {
 		return nil, fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
 	} else if repositories, mapErr := rootObject.MetaRepo.MapRemoteRepositories(); mapErr != nil {
