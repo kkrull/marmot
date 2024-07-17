@@ -11,19 +11,19 @@ import (
 )
 
 // Constructs commands and queries with configurable dependencies.
-type CommandFactory struct {
+type CommandQueryFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
 	RepositorySource corerepository.RepositorySource
 }
 
 // Configure a local, file-based meta repo at the specified path
-func (factory *CommandFactory) ForLocalMetaRepo(metaRepoPath string) {
+func (factory *CommandQueryFactory) ForLocalMetaRepo(metaRepoPath string) {
 	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
 }
 
 /* Administration */
 
-func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
+func (factory *CommandQueryFactory) InitCommand() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
 		factory.MetaDataAdmin = svcfs.NewJsonMetaRepoAdmin()
 	}
@@ -33,7 +33,7 @@ func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 
 /* Repositories */
 
-func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRemoteRepositoriesQuery, error) {
+func (factory *CommandQueryFactory) ListRepositoriesQuery() (*repository.ListRemoteRepositoriesQuery, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
@@ -41,7 +41,7 @@ func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRemoteRe
 	return &repository.ListRemoteRepositoriesQuery{Source: factory.RepositorySource}, nil
 }
 
-func (factory *CommandFactory) RegisterRemoteRepositoriesCommand() (
+func (factory *CommandQueryFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
 	if factory.RepositorySource == nil {

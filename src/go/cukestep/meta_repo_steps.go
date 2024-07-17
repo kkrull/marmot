@@ -22,7 +22,7 @@ func initNewMetaRepo(ctx *godog.ScenarioContext) error {
 		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
 	}
 
-	factory := &main.CommandFactory{}
+	factory := &main.CommandQueryFactory{}
 	factory.ForLocalMetaRepo(thatMetaRepo)
 	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)

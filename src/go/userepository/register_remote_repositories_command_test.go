@@ -14,14 +14,14 @@ import (
 
 var _ = Describe("RegisterRepositoriesCommand", func() {
 	var (
-		factory *main.CommandFactory
+		factory *main.CommandQueryFactory
 		source  *mock.RepositorySource
 		subject *userepository.RegisterRemoteRepositoriesCommand
 	)
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = &main.CommandFactory{RepositorySource: source}
+		factory = &main.CommandQueryFactory{RepositorySource: source}
 		subject = expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 	})
 

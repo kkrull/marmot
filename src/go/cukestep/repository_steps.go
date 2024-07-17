@@ -43,7 +43,7 @@ func listInThatMetaRepo() error {
 }
 
 func listRepositories(metaRepoPath string) (core.Repositories, error) {
-	factory := &main.CommandFactory{}
+	factory := &main.CommandQueryFactory{}
 	factory.ForLocalMetaRepo(metaRepoPath)
 	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
@@ -72,7 +72,7 @@ func thatListingShouldHaveRemotes() error {
 /* Register repositories */
 
 func registerRemote() error {
-	factory := &main.CommandFactory{}
+	factory := &main.CommandQueryFactory{}
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {

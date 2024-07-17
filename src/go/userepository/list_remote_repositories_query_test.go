@@ -10,7 +10,7 @@ import (
 
 var _ = Describe("ListRemoteRepositoriesQuery", func() {
 	var (
-		factory *main.CommandFactory
+		factory *main.CommandQueryFactory
 		source  *repomock.RepositorySource
 	)
 
@@ -21,7 +21,7 @@ var _ = Describe("ListRemoteRepositoriesQuery", func() {
 				"https://github.com/actions/setup-up",
 			)
 			source = &repomock.RepositorySource{ListRemoteUrls: remoteUrls}
-			factory = &main.CommandFactory{RepositorySource: source}
+			factory = &main.CommandQueryFactory{RepositorySource: source}
 
 			subject, factoryErr := factory.ListRepositoriesQuery()
 			Expect(subject, factoryErr).NotTo(BeNil())
