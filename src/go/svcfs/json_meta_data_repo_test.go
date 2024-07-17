@@ -26,18 +26,18 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
-	Describe("#Init", func() {
+	Describe("#Create", func() {
 		It("returns an error, given a path that already exists", func() {
 			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Init(metaRepoPath)).To(
+			Expect(subject.Create(metaRepoPath)).To(
 				MatchError(fmt.Sprintf("path already exists: %s", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
 			subject = svcfs.NewJsonMetaDataRepo("\000x")
-			invalidPathErr := subject.Init("\000x")
+			invalidPathErr := subject.Create("\000x")
 			Expect(invalidPathErr).NotTo(BeNil())
 		})
 
@@ -45,13 +45,13 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Init(metaRepoPath)).To(
+			Expect(subject.Create(metaRepoPath)).To(
 				MatchError(ContainSubstring(fmt.Sprintf("failed to make directory %s", metaRepoPath))))
 		})
 
 		It("creates a meta repository and returns nil, otherwise", func() {
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Init(metaRepoPath)).To(Succeed())
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
 
 			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
 			Expect(os.Stat(metaDataDir)).NotTo(BeNil())
@@ -64,7 +64,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Init(metaRepoPath)).To(Succeed())
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
 		It("#ListRemote returns empty", func() {
@@ -76,7 +76,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Init(metaRepoPath)).To(Succeed())
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
 
 			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())
 			listOne := expect.NoError(subject.ListRemote())
