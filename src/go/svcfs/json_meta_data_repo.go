@@ -33,7 +33,7 @@ type JsonMetaDataRepo struct {
 func (meta *JsonMetaDataRepo) Init() error {
 	_, statErr := os.Stat(meta.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return meta.createMetaData()
+		return meta.initDirectory()
 	} else if statErr != nil {
 		return fmt.Errorf("failed to check for existing meta repo %s; %w", meta.repositoryDir, statErr)
 	} else {
@@ -41,29 +41,15 @@ func (meta *JsonMetaDataRepo) Init() error {
 	}
 }
 
-func (meta *JsonMetaDataRepo) createMetaData() error {
-	// TODO KDK: Test, DRY, and clean up all this JSON I/O
-	var encoder json.Encoder
+func (meta *JsonMetaDataRepo) initDirectory() error {
 	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
 	} else if metaDataFd, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
 		return fmt.Errorf("failed to create file %s; %w", meta.metaDataFile, fileErr)
 	} else {
-		encoder = *json.NewEncoder(metaDataFd)
 		defer metaDataFd.Close()
+		return meta.writeToFile(metaDataFd, make([]remoteRepositoryData, 0))
 	}
-
-	content := &metaRepoFile{
-		MetaRepo: metaRepoData{
-			RemoteRepositories: make([]remoteRepositoryData, 0),
-		},
-		Version: "0.1",
-	}
-	if encodeErr := encoder.Encode(content); encodeErr != nil {
-		return fmt.Errorf("failed to encode JSON data; %w", encodeErr)
-	}
-
-	return nil
 }
 
 /* RepositorySource */
@@ -115,6 +101,24 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 
 	if encodeErr := encoder.Encode(metaRepoFile); encodeErr != nil {
 		return fmt.Errorf("failed to encode content; %w", encodeErr)
+	} else {
+		return nil
+	}
+}
+
+/* JSON encoding */
+
+func (meta *JsonMetaDataRepo) writeToFile(file *os.File, remoteRepositories []remoteRepositoryData) error {
+	content := &metaRepoFile{
+		MetaRepo: metaRepoData{
+			RemoteRepositories: remoteRepositories,
+		},
+		Version: "0.1",
+	}
+
+	encoder := *json.NewEncoder(file)
+	if encodeErr := encoder.Encode(content); encodeErr != nil {
+		return fmt.Errorf("failed to encode JSON data; %w", encodeErr)
 	} else {
 		return nil
 	}
