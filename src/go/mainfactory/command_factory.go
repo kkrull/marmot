@@ -10,36 +10,25 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
-// Constructs commands with configurable dependencies.
+// Constructs commands and queries with configurable dependencies.
 type CommandFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
 	RepositorySource corerepository.RepositorySource
 }
 
-// Configure a file-based meta repo at the specified path on the local file system
-// func (factory *CommandFactory) ForLocalPath(metaRepoPath string) {
-// 	// metaRepo := svcfs.NewJsonMetaDataRepo(metaRepoPath)
-// 	// factory.MetaDataAdmin = metaRepo
-// 	// factory.RepositorySource = metaRepo
-// }
-
 // Configure a local, file-based meta repo at the specified path
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
-	metaRepo := svcfs.NewJsonMetaDataRepo(metaRepoPath)
-	factory.MetaDataAdmin = metaRepo
-	factory.RepositorySource = metaRepo
+	factory.RepositorySource = svcfs.NewJsonMetaDataRepo(metaRepoPath)
 }
 
-/* Meta repo administration */
+/* Administration */
 
 func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
-		return nil, errors.New("CommandFactory: missing MetaDataAdmin")
+		factory.MetaDataAdmin = svcfs.NewJsonMetaRepoAdmin()
 	}
 
-	return &metarepo.InitCommand{
-		MetaDataAdmin: factory.MetaDataAdmin,
-	}, nil
+	return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
 }
 
 /* Repositories */

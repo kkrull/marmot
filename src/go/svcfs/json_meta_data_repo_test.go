@@ -1,7 +1,6 @@
 package svcfs_test
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -16,6 +15,7 @@ import (
 var _ = Describe("JsonMetaDataRepo", func() {
 	var (
 		subject      *svcfs.JsonMetaDataRepo
+		admin        *svcfs.JsonMetaRepoAdmin
 		metaRepoPath string
 		testFsRoot   string
 	)
@@ -26,45 +26,11 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
-	Describe("#Create", func() {
-		It("returns an error, given a path that already exists", func() {
-			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
-
-			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Create(metaRepoPath)).To(
-				MatchError(fmt.Sprintf("path already exists: %s", metaRepoPath)))
-		})
-
-		It("returns an error when unable to check if the path exists", func() {
-			subject = svcfs.NewJsonMetaDataRepo("\000x")
-			invalidPathErr := subject.Create("\000x")
-			Expect(invalidPathErr).NotTo(BeNil())
-		})
-
-		It("returns an error when creating files fails", func() {
-			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
-
-			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Create(metaRepoPath)).To(
-				MatchError(ContainSubstring(fmt.Sprintf("failed to make directory %s", metaRepoPath))))
-		})
-
-		It("creates a meta repository and returns nil, otherwise", func() {
-			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Create(metaRepoPath)).To(Succeed())
-
-			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
-			Expect(os.Stat(metaDataDir)).NotTo(BeNil())
-
-			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
-			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
-		})
-	})
-
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
+			admin = svcfs.NewJsonMetaRepoAdmin()
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Create(metaRepoPath)).To(Succeed())
+			Expect(admin.Create(metaRepoPath)).To(Succeed())
 		})
 
 		It("#ListRemote returns empty", func() {
@@ -75,8 +41,9 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
+			admin = svcfs.NewJsonMetaRepoAdmin()
 			subject = svcfs.NewJsonMetaDataRepo(metaRepoPath)
-			Expect(subject.Create(metaRepoPath)).To(Succeed())
+			Expect(admin.Create(metaRepoPath)).To(Succeed())
 
 			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())
 			listOne := expect.NoError(subject.ListRemote())
