@@ -55,31 +55,13 @@ func (meta *JsonMetaDataRepo) initDirectory() error {
 /* RepositorySource */
 
 func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
-	var decoder *json.Decoder
-	if metaDataFd, openErr := os.Open(metaRepo.metaDataFile); openErr != nil {
-		return nil, fmt.Errorf("failed to open file %s; %w", metaRepo.metaDataFile, openErr)
+	if content, readErr := ReadMetaRepoFile(metaRepo.metaDataFile); readErr != nil {
+		return nil, fmt.Errorf("failed to read file %s; %w", metaRepo.metaDataFile, readErr)
+	} else if repositories, convertErr := content.ToCoreRepositories(); convertErr != nil {
+		return nil, fmt.Errorf("failed to map to core model; %w", convertErr)
 	} else {
-		decoder = json.NewDecoder(metaDataFd)
-		// defer metaDataFd.Close() //TODO KDK: Test and restore
+		return repositories, nil
 	}
-
-	var content metaRepoFile
-	if decodeErr := decoder.Decode(&content); decodeErr != nil {
-		return nil, fmt.Errorf("failed to decode %s; %w", metaRepo.metaDataFile, decodeErr)
-	}
-
-	repositories := make([]corerepository.Repository, len(content.MetaRepo.RemoteRepositories))
-	for i, remoteRepositoryData := range content.MetaRepo.RemoteRepositories {
-		if remoteRepository, parseErr := corerepository.RemoteRepositoryS(remoteRepositoryData.Url); parseErr != nil {
-			return nil, fmt.Errorf("failed to parse %s from %s; %w", remoteRepositoryData.Url, metaRepo.metaDataFile, parseErr)
-		} else {
-			repositories[i] = remoteRepository
-		}
-	}
-
-	return &corerepository.RepositoriesArray{
-		Repositories: repositories,
-	}, nil
 }
 
 func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
@@ -90,6 +72,7 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 		encoder = json.NewEncoder(metaDataFd)
 	}
 
+	// TODO KDK: Read or remember other registered repositories, instead of just writing the new one
 	metaRepoFile := &metaRepoFile{
 		MetaRepo: metaRepoData{
 			RemoteRepositories: []remoteRepositoryData{

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/kkrull/marmot/corerepository"
 )
 
 // Construct a meta repo file with only minimal information; e.g. no Git repositories.
@@ -28,6 +30,42 @@ type metaRepoData struct {
 
 type remoteRepositoryData struct {
 	Url string `json:"url"`
+}
+
+/* Core conversion */
+
+func (objectRoot *metaRepoFile) ToCoreRepositories() (corerepository.Repositories, error) {
+	repositories := make([]corerepository.Repository, len(objectRoot.MetaRepo.RemoteRepositories))
+	for i, remoteRepositoryData := range objectRoot.MetaRepo.RemoteRepositories {
+		if remoteRepository, parseErr := corerepository.RemoteRepositoryS(remoteRepositoryData.Url); parseErr != nil {
+			return nil, fmt.Errorf("failed to parse %s; %w", remoteRepositoryData.Url, parseErr)
+		} else {
+			repositories[i] = remoteRepository
+		}
+	}
+
+	return &corerepository.RepositoriesArray{
+		Repositories: repositories,
+	}, nil
+}
+
+/* JSON decoding */
+
+func ReadMetaRepoFile(filename string) (*metaRepoFile, error) {
+	var decoder *json.Decoder
+	if file, openErr := os.Open(filename); openErr != nil {
+		return nil, fmt.Errorf("failed to open file %s; %w", filename, openErr)
+	} else {
+		// defer metaDataFd.Close() //TODO KDK: Test and restore
+		decoder = json.NewDecoder(file)
+	}
+
+	var content metaRepoFile
+	if decodeErr := decoder.Decode(&content); decodeErr != nil {
+		return nil, fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
+	} else {
+		return &content, nil
+	}
 }
 
 /* JSON encoding */

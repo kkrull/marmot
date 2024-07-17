@@ -86,5 +86,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			listing := expect.NoError(subject.List())
 			Expect(listing.RemoteHrefs()).To(ConsistOf("https://github.com/actions/checkout"))
 		})
+
+		It("can register and list two repositories", Pending, func() {
+		})
 	})
 })
