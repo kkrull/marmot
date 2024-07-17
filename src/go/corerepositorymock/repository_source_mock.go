@@ -17,7 +17,7 @@ type RepositorySource struct {
 func (source *RepositorySource) List() (core.Repositories, error) {
 	repositories := make([]core.Repository, len(source.RemoteUrls))
 	for i, remoteUrl := range source.RemoteUrls {
-		repositories[i] = core.Repository{RemoteUrl: remoteUrl}
+		repositories[i] = core.RemoteRepository(remoteUrl)
 	}
 
 	return &core.RepositoriesArray{Repositories: repositories}, nil
