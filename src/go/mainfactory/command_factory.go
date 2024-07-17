@@ -16,6 +16,13 @@ type CommandFactory struct {
 	RepositorySource corerepository.RepositorySource
 }
 
+// Configure a file-based meta repo at the specified path on the local file system
+// func (factory *CommandFactory) ForLocalPath(metaRepoPath string) {
+// 	// metaRepo := svcfs.NewJsonMetaDataRepo(metaRepoPath)
+// 	// factory.MetaDataAdmin = metaRepo
+// 	// factory.RepositorySource = metaRepo
+// }
+
 // Configure a local, file-based meta repo at the specified path
 func (factory *CommandFactory) WithJsonFileSource(metaRepoPath string) {
 	metaRepo := svcfs.NewJsonMetaDataRepo(metaRepoPath)

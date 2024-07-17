@@ -8,5 +8,5 @@ type ListRemoteRepositoriesQuery struct {
 }
 
 func (cmd *ListRemoteRepositoriesQuery) Run() (core.Repositories, error) {
-	return cmd.Source.List()
+	return cmd.Source.ListRemote()
 }

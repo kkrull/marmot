@@ -20,7 +20,7 @@ var _ = Describe("ListRemoteRepositoriesQuery", func() {
 				"https://github.com/actions/checkout",
 				"https://github.com/actions/setup-up",
 			)
-			source = &repomock.RepositorySource{RemoteUrls: remoteUrls}
+			source = &repomock.RepositorySource{ListRemoteUrls: remoteUrls}
 			factory = &main.CommandFactory{RepositorySource: source}
 
 			subject, factoryErr := factory.ListRepositoriesQuery()

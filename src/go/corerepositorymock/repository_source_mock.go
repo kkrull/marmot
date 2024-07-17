@@ -11,55 +11,55 @@ import (
 
 func NewRepositorySource() *RepositorySource {
 	return &RepositorySource{
-		RegisterRemoteCalls:  make([]*url.URL, 0),
-		RegisterRemoteErrors: make(map[string]error),
-		RemoteUrls:           make([]*url.URL, 0),
+		AddRemoteCalls:  make([]*url.URL, 0),
+		AddRemoteErrors: make(map[string]error),
+		ListRemoteUrls:  make([]*url.URL, 0),
 	}
 }
 
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
-	RegisterRemoteCalls  []*url.URL
-	RegisterRemoteErrors map[string]error
-	RemoteUrls           []*url.URL
+	AddRemoteCalls  []*url.URL
+	AddRemoteErrors map[string]error
+	ListRemoteUrls  []*url.URL
 }
 
-func (source *RepositorySource) List() (core.Repositories, error) {
-	repositories := make([]core.Repository, len(source.RemoteUrls))
-	for i, remoteUrl := range source.RemoteUrls {
-		repositories[i] = core.RemoteRepository(remoteUrl)
-	}
-
-	return &core.RepositoriesArray{Repositories: repositories}, nil
+func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
+	source.AddRemoteCalls = append(source.AddRemoteCalls, hostUrl)
+	return source.AddRemoteErrors[hostUrl.String()]
 }
 
-func (source *RepositorySource) RegisterRemote(hostUrl *url.URL) error {
-	source.RegisterRemoteCalls = append(source.RegisterRemoteCalls, hostUrl)
-	return source.RegisterRemoteErrors[hostUrl.String()]
-}
-
-func (source *RepositorySource) RegisterRemoteExpected(expectedHref string) {
+func (source *RepositorySource) AddRemoteExpected(expectedHref string) {
 	ginkgo.GinkgoHelper()
-	actualHrefs := source.registerRemoteHrefs()
+	actualHrefs := source.addRemoteHrefs()
 	Expect(actualHrefs).To(ContainElement(expectedHref))
 }
 
-func (source *RepositorySource) RegisterRemoteFails(faultyHref string, errorMsg string) {
+func (source *RepositorySource) AddRemoteFails(faultyHref string, errorMsg string) {
 	ginkgo.GinkgoHelper()
-	source.RegisterRemoteErrors[faultyHref] = errors.New(errorMsg)
+	source.AddRemoteErrors[faultyHref] = errors.New(errorMsg)
 }
 
-func (source *RepositorySource) RegisterRemoteNotExpected(unexpectedHref string) {
+func (source *RepositorySource) AddRemoteNotExpected(unexpectedHref string) {
 	ginkgo.GinkgoHelper()
-	actualHrefs := source.registerRemoteHrefs()
+	actualHrefs := source.addRemoteHrefs()
 	Expect(actualHrefs).NotTo(ContainElement(unexpectedHref))
 }
 
-func (source *RepositorySource) registerRemoteHrefs() []string {
-	actualHrefs := make([]string, len(source.RegisterRemoteCalls))
-	for i, call := range source.RegisterRemoteCalls {
+func (source *RepositorySource) addRemoteHrefs() []string {
+	actualHrefs := make([]string, len(source.AddRemoteCalls))
+	for i, call := range source.AddRemoteCalls {
 		actualHrefs[i] = call.String()
 	}
 
 	return actualHrefs
+}
+
+func (source *RepositorySource) ListRemote() (core.Repositories, error) {
+	repositories := make([]core.Repository, len(source.ListRemoteUrls))
+	for i, remoteUrl := range source.ListRemoteUrls {
+		repositories[i] = core.RemoteRepository(remoteUrl)
+	}
+
+	return &core.RepositoriesArray{Repositories: repositories}, nil
 }
