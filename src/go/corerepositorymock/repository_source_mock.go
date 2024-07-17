@@ -40,15 +40,7 @@ func (source *RepositorySource) RegisterRemote(hostUrl *url.URL) error {
 
 func (source *RepositorySource) RegisterRemoteExpected(expectedHref string) {
 	ginkgo.GinkgoHelper()
-
-	actualHrefs := make([]string, len(source.RegisterRemoteCalls))
-	for i, call := range source.RegisterRemoteCalls {
-		actualHrefs[i] = call.String()
-		if call.String() == expectedHref {
-			return
-		}
-	}
-
+	actualHrefs := source.registerRemoteHrefs()
 	Expect(actualHrefs).To(ContainElement(expectedHref))
 }
 
@@ -59,11 +51,15 @@ func (source *RepositorySource) RegisterRemoteFails(faultyHref string, errorMsg 
 
 func (source *RepositorySource) RegisterRemoteNotExpected(unexpectedHref string) {
 	ginkgo.GinkgoHelper()
+	actualHrefs := source.registerRemoteHrefs()
+	Expect(actualHrefs).NotTo(ContainElement(unexpectedHref))
+}
 
+func (source *RepositorySource) registerRemoteHrefs() []string {
 	actualHrefs := make([]string, len(source.RegisterRemoteCalls))
 	for i, call := range source.RegisterRemoteCalls {
 		actualHrefs[i] = call.String()
 	}
 
-	Expect(actualHrefs).NotTo(ContainElement(unexpectedHref))
+	return actualHrefs
 }
