@@ -42,16 +42,6 @@ func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 	}, nil
 }
 
-func (factory *CommandFactory) InitCommandP(metaRepoPath string) (*metarepo.InitCommand, error) {
-	if factory.MetaDataAdmin == nil {
-		return nil, errors.New("CommandFactory: missing MetaDataAdmin")
-	}
-
-	return &metarepo.InitCommand{
-		MetaDataAdmin: factory.MetaDataAdmin,
-	}, nil
-}
-
 /* Repositories */
 
 func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRemoteRepositoriesQuery, error) {

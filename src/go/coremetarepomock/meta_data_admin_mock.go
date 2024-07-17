@@ -11,11 +11,6 @@ type MetaDataAdmin struct {
 	InitError error
 }
 
-func (admin *MetaDataAdmin) Init() error {
-	admin.InitCount += 1
-	return admin.InitError
-}
-
 func (admin *MetaDataAdmin) InitP(metaRepoPath string) error {
 	admin.InitCalls = append(admin.InitCalls, metaRepoPath)
 	admin.InitCount += 1

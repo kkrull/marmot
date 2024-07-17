@@ -28,17 +28,6 @@ type JsonMetaDataRepo struct {
 
 /* MetaDataAdmin */
 
-func (repo *JsonMetaDataRepo) Init() error {
-	_, statErr := os.Stat(repo.repositoryDir)
-	if errors.Is(statErr, fs.ErrNotExist) {
-		return initDirectory(repo.repositoryDir)
-	} else if statErr != nil {
-		return fmt.Errorf("failed to check for existing meta repo %s; %w", repo.repositoryDir, statErr)
-	} else {
-		return fmt.Errorf("path already exists: %s", repo.repositoryDir)
-	}
-}
-
 func (*JsonMetaDataRepo) InitP(repositoryDir string) error {
 	_, statErr := os.Stat(repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
