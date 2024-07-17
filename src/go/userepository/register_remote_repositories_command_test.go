@@ -20,7 +20,7 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 	)
 
 	BeforeEach(func() {
-		source = &mock.RepositorySource{}
+		source = mock.NewRepositorySource()
 		factory = &main.CommandFactory{RepositorySource: source}
 		subject = expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 	})
@@ -35,6 +35,20 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 			subject.Run(registered)
 			source.RegisterRemoteExpected("https://github.com/actions/checkout")
 			source.RegisterRemoteExpected("https://github.com/actions/setup-go")
+		})
+
+		It("stops and returns an error, when failing to register a repository", func() {
+			registered := testdata.NewURLs(
+				"https://github.com/somebody/repo1",
+				"https://github.com/somebody/repo2",
+			)
+
+			source.RegisterRemoteFails("https://github.com/somebody/repo1", "bang!")
+			Expect(subject.Run(registered)).To(
+				MatchError(ContainSubstring("failed to register https://github.com/somebody/repo1")))
+
+			source.RegisterRemoteExpected("https://github.com/somebody/repo1")
+			source.RegisterRemoteNotExpected("https://github.com/somebody/repo2")
 		})
 
 		It("returns nil, when there are no errors", func() {

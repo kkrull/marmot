@@ -1,6 +1,7 @@
 package corerepositorymock
 
 import (
+	"errors"
 	"net/url"
 
 	core "github.com/kkrull/marmot/corerepository"
@@ -8,10 +9,19 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+func NewRepositorySource() *RepositorySource {
+	return &RepositorySource{
+		RegisterRemoteCalls:  make([]*url.URL, 0),
+		RegisterRemoteErrors: make(map[string]error),
+		RemoteUrls:           make([]*url.URL, 0),
+	}
+}
+
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
-	RegisterRemoteCalls []*url.URL
-	RemoteUrls          []*url.URL
+	RegisterRemoteCalls  []*url.URL
+	RegisterRemoteErrors map[string]error
+	RemoteUrls           []*url.URL
 }
 
 func (source *RepositorySource) List() (core.Repositories, error) {
@@ -25,7 +35,7 @@ func (source *RepositorySource) List() (core.Repositories, error) {
 
 func (source *RepositorySource) RegisterRemote(hostUrl *url.URL) error {
 	source.RegisterRemoteCalls = append(source.RegisterRemoteCalls, hostUrl)
-	return nil
+	return source.RegisterRemoteErrors[hostUrl.String()]
 }
 
 func (source *RepositorySource) RegisterRemoteExpected(expectedHref string) {
@@ -40,4 +50,20 @@ func (source *RepositorySource) RegisterRemoteExpected(expectedHref string) {
 	}
 
 	Expect(actualHrefs).To(ContainElement(expectedHref))
+}
+
+func (source *RepositorySource) RegisterRemoteFails(faultyHref string, errorMsg string) {
+	ginkgo.GinkgoHelper()
+	source.RegisterRemoteErrors[faultyHref] = errors.New(errorMsg)
+}
+
+func (source *RepositorySource) RegisterRemoteNotExpected(unexpectedHref string) {
+	ginkgo.GinkgoHelper()
+
+	actualHrefs := make([]string, len(source.RegisterRemoteCalls))
+	for i, call := range source.RegisterRemoteCalls {
+		actualHrefs[i] = call.String()
+	}
+
+	Expect(actualHrefs).NotTo(ContainElement(unexpectedHref))
 }

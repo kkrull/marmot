@@ -1,6 +1,7 @@
 package userepository
 
 import (
+	"fmt"
 	"net/url"
 
 	core "github.com/kkrull/marmot/corerepository"
@@ -13,8 +14,9 @@ type RegisterRemoteRepositoriesCommand struct {
 
 func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {
 	for _, remoteUrl := range remoteUrls {
-		// TODO KDK: Check for errors
-		_ = cmd.Source.RegisterRemote(remoteUrl)
+		if registerErr := cmd.Source.RegisterRemote(remoteUrl); registerErr != nil {
+			return fmt.Errorf("failed to register %s; %w", remoteUrl.String(), registerErr)
+		}
 	}
 
 	return nil
