@@ -6,17 +6,25 @@ import (
 	"github.com/kkrull/marmot/corerepository"
 )
 
-func (root *rootObjectData) ToCoreRepositories() (corerepository.Repositories, error) {
-	repositories := make([]corerepository.Repository, len(root.MetaRepo.RemoteRepositories))
-	for i, remoteRepositoryData := range root.MetaRepo.RemoteRepositories {
-		if remoteRepository, parseErr := corerepository.RemoteRepositoryS(remoteRepositoryData.Url); parseErr != nil {
-			return nil, fmt.Errorf("failed to parse %s; %w", remoteRepositoryData.Url, parseErr)
+func (metaRepo *metaRepoData) MapRemoteRepositories() (corerepository.Repositories, error) {
+	repositories := make([]corerepository.Repository, len(metaRepo.RemoteRepositories))
+	for i, remoteRepository := range metaRepo.RemoteRepositories {
+		if repository, mapErr := remoteRepository.ToCoreRepository(); mapErr != nil {
+			return nil, mapErr
 		} else {
-			repositories[i] = remoteRepository
+			repositories[i] = repository
 		}
 	}
 
 	return &corerepository.RepositoriesArray{
 		Repositories: repositories,
 	}, nil
+}
+
+func (remoteRepo *remoteRepositoryData) ToCoreRepository() (corerepository.Repository, error) {
+	if repository, err := corerepository.RemoteRepositoryS(remoteRepo.Url); err != nil {
+		return corerepository.Repository{}, fmt.Errorf("failed to parse %s; %w", remoteRepo.Url, err)
+	} else {
+		return repository, nil
+	}
 }

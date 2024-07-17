@@ -57,8 +57,8 @@ func (meta *JsonMetaDataRepo) initDirectory() error {
 func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 	if rootObject, readErr := ReadMetaRepoFile(metaRepo.metaDataFile); readErr != nil {
 		return nil, fmt.Errorf("failed to read file %s; %w", metaRepo.metaDataFile, readErr)
-	} else if repositories, mappingErr := rootObject.ToCoreRepositories(); mappingErr != nil {
-		return nil, fmt.Errorf("failed to map to core model; %w", mappingErr)
+	} else if repositories, mapErr := rootObject.MetaRepo.MapRemoteRepositories(); mapErr != nil {
+		return nil, fmt.Errorf("failed to map to core model; %w", mapErr)
 	} else {
 		return repositories, nil
 	}
