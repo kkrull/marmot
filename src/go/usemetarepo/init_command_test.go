@@ -14,32 +14,31 @@ import (
 var _ = Describe("InitCommand", func() {
 	var (
 		subject       *use.InitCommand
-		factory       *main.CommandFactory
+		factory       *main.CommandQueryFactory
 		metaDataAdmin *mock.MetaDataAdmin
 	)
 
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
-		factory = &main.CommandFactory{MetaDataAdmin: metaDataAdmin}
+		factory = &main.CommandQueryFactory{MetaDataAdmin: metaDataAdmin}
 	})
 
 	Describe("#Run", func() {
 		It("initializes the given meta data source", func() {
 			subject, _ = factory.InitCommand()
-			_ = subject.Run()
-			metaDataAdmin.InitExpected()
+			_ = subject.Run("/tmp")
+			metaDataAdmin.CreateExpected("/tmp")
 		})
 
 		It("returns nil, when everything succeeds", func() {
 			subject, _ = factory.InitCommand()
-			Expect(subject.Run()).To(BeNil())
+			Expect(subject.Run("/tmp")).To(BeNil())
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
-			metaDataAdmin.InitError = errors.New("bang!")
-
+			metaDataAdmin.CreateError = errors.New("bang!")
 			subject, _ = factory.InitCommand()
-			Expect(subject.Run()).To(MatchError("bang!"))
+			Expect(subject.Run("/tmp")).To(MatchError("bang!"))
 		})
 	})
 })

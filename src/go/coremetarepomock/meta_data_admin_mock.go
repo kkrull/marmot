@@ -6,16 +6,16 @@ import (
 )
 
 type MetaDataAdmin struct {
-	InitCount int
-	InitError error
+	CreateCalls []string
+	CreateError error
 }
 
-func (fs *MetaDataAdmin) Init() error {
-	fs.InitCount += 1
-	return fs.InitError
+func (admin *MetaDataAdmin) Create(metaRepoPath string) error {
+	admin.CreateCalls = append(admin.CreateCalls, metaRepoPath)
+	return admin.CreateError
 }
 
-func (fs *MetaDataAdmin) InitExpected() {
+func (admin *MetaDataAdmin) CreateExpected(expectedPath string) {
 	ginkgo.GinkgoHelper()
-	Expect(fs.InitCount).To(Equal(1))
+	Expect(admin.CreateCalls).To(ContainElement(expectedPath))
 }

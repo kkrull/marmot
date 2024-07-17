@@ -17,16 +17,12 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	factory := &main.CommandFactory{}
-	if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
-		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
-	} else {
-		factory.WithJsonFileSource(thatMetaRepo)
-	}
-
+	factory := &main.CommandQueryFactory{}
 	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
-	} else if runErr := initCmd.Run(); runErr != nil {
+	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
+	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)
 	} else {
 		return nil

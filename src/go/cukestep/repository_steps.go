@@ -32,25 +32,15 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 /* List repositories */
 
 func listInThatMetaRepo() error {
-	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
-	} else if repoList, listErr := listRepositories(metaRepoPath); listErr != nil {
-		return fmt.Errorf("repository_steps: failed to list repositories; %w", listErr)
+	if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
+	} else if listRepositories, factoryErr := factory.ListRemoteRepositoriesQuery(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+	} else if repositories, runErr := listRepositories(); runErr != nil {
+		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
-		thatListing = repoList
+		thatListing = repositories
 		return nil
-	}
-}
-
-func listRepositories(metaRepoPath string) (core.Repositories, error) {
-	factory := &main.CommandFactory{}
-	factory.WithJsonFileSource(metaRepoPath)
-	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
-	} else if repositories, runErr := listQuery.Run(); runErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to run query; %w", runErr)
-	} else {
-		return repositories, nil
 	}
 }
 
@@ -72,20 +62,27 @@ func thatListingShouldHaveRemotes() error {
 /* Register repositories */
 
 func registerRemote() error {
-	factory := &main.CommandFactory{}
-	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
-	} else {
-		factory.WithJsonFileSource(metaRepoPath)
-	}
-
 	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
 		return parseErr
+	} else if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
 	} else if registerCmd, factoryErr := factory.RegisterRemoteRepositoriesCommand(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
 	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
 		return fmt.Errorf("repository_steps: failed to register repositories; %w", runErr)
 	} else {
 		return nil
+	}
+}
+
+/* Configuration */
+
+func factoryForThatMetaRepo() (*main.CommandQueryFactory, error) {
+	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
+		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
+	} else {
+		factory := &main.CommandQueryFactory{}
+		factory.ForLocalMetaRepo(metaRepoPath)
+		return factory, nil
 	}
 }

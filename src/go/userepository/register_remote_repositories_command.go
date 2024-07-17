@@ -14,7 +14,7 @@ type RegisterRemoteRepositoriesCommand struct {
 
 func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {
 	for _, remoteUrl := range remoteUrls {
-		if registerErr := cmd.Source.RegisterRemote(remoteUrl); registerErr != nil {
+		if registerErr := cmd.Source.AddRemote(remoteUrl); registerErr != nil {
 			return fmt.Errorf("failed to register %s; %w", remoteUrl.String(), registerErr)
 		}
 	}
