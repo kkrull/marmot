@@ -7,6 +7,6 @@ type ListRemoteRepositoriesQuery struct {
 	Source core.RepositorySource
 }
 
-func (cmd *ListRemoteRepositoriesQuery) Run() (core.Repositories, error) {
-	return cmd.Source.ListRemote()
+func (query *ListRemoteRepositoriesQuery) Run() (core.Repositories, error) {
+	return query.Source.ListRemote()
 }
