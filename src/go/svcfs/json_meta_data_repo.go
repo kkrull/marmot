@@ -16,13 +16,12 @@ func NewJsonMetaDataRepo(repositoryPath string) *JsonMetaDataRepo {
 	metaDataDir := filepath.Join(repositoryPath, ".marmot")
 	return &JsonMetaDataRepo{
 		repositoryDir: repositoryPath,
-		metaDataDir:   metaDataDir,
 		metaDataFile:  filepath.Join(metaDataDir, "meta-repo.json"),
 	}
 }
 
 type JsonMetaDataRepo struct {
-	metaDataDir   string
+	// metaDataDir   string
 	metaDataFile  string
 	repositoryDir string
 }
@@ -32,7 +31,7 @@ type JsonMetaDataRepo struct {
 func (repo *JsonMetaDataRepo) Init() error {
 	_, statErr := os.Stat(repo.repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return repo.initDirectory()
+		return initDirectory(repo.repositoryDir)
 	} else if statErr != nil {
 		return fmt.Errorf("failed to check for existing meta repo %s; %w", repo.repositoryDir, statErr)
 	} else {
@@ -40,12 +39,26 @@ func (repo *JsonMetaDataRepo) Init() error {
 	}
 }
 
-func (repo *JsonMetaDataRepo) initDirectory() error {
+func (*JsonMetaDataRepo) InitP(repositoryDir string) error {
+	_, statErr := os.Stat(repositoryDir)
+	if errors.Is(statErr, fs.ErrNotExist) {
+		return initDirectory(repositoryDir)
+	} else if statErr != nil {
+		return fmt.Errorf("failed to check for existing meta repo %s; %w", repositoryDir, statErr)
+	} else {
+		return fmt.Errorf("path already exists: %s", repositoryDir)
+	}
+}
+
+func initDirectory(repositoryDir string) error {
+	metaDataDir := filepath.Join(repositoryDir, ".marmot")
+	metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
+
 	emptyFile := EmptyMetaRepoFile("0.0.1")
-	if dirErr := os.MkdirAll(repo.metaDataDir, fs.ModePerm); dirErr != nil {
-		return fmt.Errorf("failed to make directory %s; %w", repo.metaDataDir, dirErr)
-	} else if writeErr := emptyFile.WriteTo(repo.metaDataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
+	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
+		return fmt.Errorf("failed to make directory %s; %w", metaDataDir, dirErr)
+	} else if writeErr := emptyFile.WriteTo(metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", metaDataFile, writeErr)
 	} else {
 		return nil
 	}
