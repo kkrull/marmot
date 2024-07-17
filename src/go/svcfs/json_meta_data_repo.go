@@ -28,7 +28,7 @@ type JsonMetaDataRepo struct {
 
 /* MetaDataAdmin */
 
-func (*JsonMetaDataRepo) InitP(repositoryDir string) error {
+func (*JsonMetaDataRepo) Init(repositoryDir string) error {
 	_, statErr := os.Stat(repositoryDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
 		return initDirectory(repositoryDir)

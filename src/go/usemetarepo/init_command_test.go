@@ -27,7 +27,7 @@ var _ = Describe("InitCommand", func() {
 		It("initializes the given meta data source", func() {
 			subject, _ = factory.InitCommand()
 			_ = subject.RunP("/tmp")
-			metaDataAdmin.InitExpected()
+			metaDataAdmin.InitExpected("/tmp")
 		})
 
 		It("returns nil, when everything succeeds", func() {
@@ -37,7 +37,6 @@ var _ = Describe("InitCommand", func() {
 
 		It("returns an error when failing to initialize the meta data source", func() {
 			metaDataAdmin.InitError = errors.New("bang!")
-
 			subject, _ = factory.InitCommand()
 			Expect(subject.RunP("/tmp")).To(MatchError("bang!"))
 		})

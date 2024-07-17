@@ -8,5 +8,5 @@ type InitCommand struct {
 }
 
 func (cmd InitCommand) RunP(metaRepoPath string) error {
-	return cmd.MetaDataAdmin.InitP(metaRepoPath)
+	return cmd.MetaDataAdmin.Init(metaRepoPath)
 }
