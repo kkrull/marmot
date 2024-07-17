@@ -37,12 +37,12 @@ func (factory *CommandFactory) InitCommand() (*metarepo.InitCommand, error) {
 
 /* Repositories */
 
-func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRepositoriesQuery, error) {
+func (factory *CommandFactory) ListRepositoriesQuery() (*repository.ListRemoteRepositoriesQuery, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
 
-	return &repository.ListRepositoriesQuery{
+	return &repository.ListRemoteRepositoriesQuery{
 		Source: factory.RepositorySource,
 	}, nil
 }

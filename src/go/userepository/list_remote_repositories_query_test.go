@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("ListRepositoriesQuery", func() {
+var _ = Describe("ListRemoteRepositoriesQuery", func() {
 	var (
 		factory *main.CommandFactory
 		source  *repomock.RepositorySource
