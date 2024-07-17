@@ -53,9 +53,9 @@ func (meta *JsonMetaDataRepo) createMetaData() error {
 		defer metaDataFd.Close()
 	}
 
-	content := &MetaRepoFile{
-		MetaRepo: MetaRepo{
-			RemoteRepositories: make([]RemoteRepository, 0),
+	content := &metaRepoFile{
+		MetaRepo: metaRepoData{
+			RemoteRepositories: make([]remoteRepositoryData, 0),
 		},
 		Version: "0.1",
 	}
@@ -77,7 +77,7 @@ func (metaRepo *JsonMetaDataRepo) List() (corerepository.Repositories, error) {
 		// defer metaDataFd.Close() //TODO KDK: Test and restore
 	}
 
-	var content MetaRepoFile
+	var content metaRepoFile
 	if decodeErr := decoder.Decode(&content); decodeErr != nil {
 		return nil, fmt.Errorf("failed to decode %s; %w", metaRepo.metaDataFile, decodeErr)
 	}
@@ -104,32 +104,18 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 		encoder = json.NewEncoder(metaDataFd)
 	}
 
-	content := &MetaRepoFile{
-		MetaRepo: MetaRepo{
-			RemoteRepositories: []RemoteRepository{
+	metaRepoFile := &metaRepoFile{
+		MetaRepo: metaRepoData{
+			RemoteRepositories: []remoteRepositoryData{
 				{Url: hostUrl.String()},
 			},
 		},
 		Version: "0.1",
 	}
 
-	if encodeErr := encoder.Encode(content); encodeErr != nil {
+	if encodeErr := encoder.Encode(metaRepoFile); encodeErr != nil {
 		return fmt.Errorf("failed to encode content; %w", encodeErr)
 	} else {
 		return nil
 	}
-}
-
-// TODO KDK: Extract file
-type MetaRepoFile struct {
-	MetaRepo MetaRepo `json:"meta_repo"`
-	Version  string   `json:"version"`
-}
-
-type MetaRepo struct {
-	RemoteRepositories []RemoteRepository `json:"remote_repositories"`
-}
-
-type RemoteRepository struct {
-	Url string `json:"url"`
 }

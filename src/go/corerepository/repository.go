@@ -18,5 +18,5 @@ func RemoteRepositoryS(remoteUrl string) (Repository, error) {
 
 // One Git repository.
 type Repository struct {
-	RemoteUrl *url.URL // TODO KDK: Add RemoteRepository constructor
+	RemoteUrl *url.URL
 }
