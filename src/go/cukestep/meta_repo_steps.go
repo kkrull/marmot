@@ -26,7 +26,7 @@ func initNewMetaRepo(ctx *godog.ScenarioContext) error {
 	factory.WithJsonFileSource(thatMetaRepo)
 	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
-	} else if runErr := initCmd.RunP(thatMetaRepo); runErr != nil {
+	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)
 	} else {
 		return nil

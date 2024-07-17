@@ -7,6 +7,6 @@ type InitCommand struct {
 	MetaDataAdmin core.MetaDataAdmin
 }
 
-func (cmd InitCommand) RunP(metaRepoPath string) error {
+func (cmd InitCommand) Run(metaRepoPath string) error {
 	return cmd.MetaDataAdmin.Init(metaRepoPath)
 }
