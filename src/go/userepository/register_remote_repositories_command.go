@@ -12,6 +12,10 @@ type RegisterRemoteRepositoriesCommand struct {
 }
 
 func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {
-	_ = cmd.Source.RegisterRemote(remoteUrls[0]) // TODO KDK: Check for errors
+	for _, remoteUrl := range remoteUrls {
+		// TODO KDK: Check for errors
+		_ = cmd.Source.RegisterRemote(remoteUrl)
+	}
+
 	return nil
 }
