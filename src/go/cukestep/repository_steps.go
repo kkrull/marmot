@@ -45,9 +45,9 @@ func listInThatMetaRepo() error {
 func listRepositories(metaRepoPath string) (core.Repositories, error) {
 	factory := &main.CommandQueryFactory{}
 	factory.ForLocalMetaRepo(metaRepoPath)
-	if listQuery, factoryErr := factory.ListRepositoriesQuery(); factoryErr != nil {
+	if listRepositories, factoryErr := factory.ListRemoteRepositoriesQuery(); factoryErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
-	} else if repositories, runErr := listQuery.Run(); runErr != nil {
+	} else if repositories, runErr := listRepositories(); runErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
 		return repositories, nil
