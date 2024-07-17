@@ -42,13 +42,13 @@ func (meta *JsonMetaDataRepo) Init() error {
 }
 
 func (meta *JsonMetaDataRepo) initDirectory() error {
+	emptyFile := EmptyMetaRepoFile("0.0.1")
 	if dirErr := os.MkdirAll(meta.metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", meta.metaDataDir, dirErr)
-	} else if metaDataFd, fileErr := os.Create(meta.metaDataFile); fileErr != nil {
-		return fmt.Errorf("failed to create file %s; %w", meta.metaDataFile, fileErr)
+	} else if writeErr := emptyFile.WriteTo(meta.metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", meta.metaDataFile, writeErr)
 	} else {
-		defer metaDataFd.Close()
-		return meta.writeToFile(metaDataFd, make([]remoteRepositoryData, 0))
+		return nil
 	}
 }
 
@@ -101,24 +101,6 @@ func (metaRepo *JsonMetaDataRepo) RegisterRemote(hostUrl *url.URL) error {
 
 	if encodeErr := encoder.Encode(metaRepoFile); encodeErr != nil {
 		return fmt.Errorf("failed to encode content; %w", encodeErr)
-	} else {
-		return nil
-	}
-}
-
-/* JSON encoding */
-
-func (meta *JsonMetaDataRepo) writeToFile(file *os.File, remoteRepositories []remoteRepositoryData) error {
-	content := &metaRepoFile{
-		MetaRepo: metaRepoData{
-			RemoteRepositories: remoteRepositories,
-		},
-		Version: "0.1",
-	}
-
-	encoder := *json.NewEncoder(file)
-	if encodeErr := encoder.Encode(content); encodeErr != nil {
-		return fmt.Errorf("failed to encode JSON data; %w", encodeErr)
 	} else {
 		return nil
 	}
