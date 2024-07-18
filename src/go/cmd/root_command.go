@@ -28,6 +28,8 @@ func RootCommand() *cobra.Command {
 
 	// Add flags (persistent and local)
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
+	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
+
 	versionFlag = rootCmd.PersistentFlags().Bool("version", false, "print the marmot suite version")
 
 	// Add child (sub-)commands
