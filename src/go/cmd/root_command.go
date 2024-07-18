@@ -26,7 +26,7 @@ var (
 			}
 		},
 		Short: "Meta Repo Management Tool",
-		Use:   "marmot",
+		Use:   "marmot [--help|--version]",
 	}
 )
 
