@@ -4,31 +4,47 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/kkrull/marmot/cmd"
+	"github.com/spf13/cobra"
 )
 
 func main() {
-	stdout := os.Stdout
-	stderr := os.Stderr
-	if version, versionErr := readVersion("version"); versionErr != nil {
-		fmt.Fprintln(stderr, versionErr.Error())
+	var (
+		stdout io.Writer = os.Stdout
+		stderr io.Writer = os.Stderr
+	)
+
+	if rootCmd, initErr := newRootCommand(stdout, stderr); initErr != nil {
+		fmt.Fprintln(stderr, initErr.Error())
 		os.Exit(1)
-	} else if mainErr := doMain(stdout, stderr, version); mainErr != nil {
-		fmt.Fprintln(stderr, mainErr.Error())
+	} else if executeErr := rootCmd.Execute(); executeErr != nil {
+		fmt.Fprintln(stderr, executeErr.Error())
 		os.Exit(1)
 	}
 }
 
-func doMain(stdout io.Writer, stderr io.Writer, version string) error {
-	rootCmd := cmd.RootCommand(stdout, stderr, version)
-	return rootCmd.Execute()
+func newRootCommand(stdout io.Writer, stderr io.Writer) (*cobra.Command, error) {
+	if version, versionErr := readVersion("version"); versionErr != nil {
+		return nil, fmt.Errorf("failed to read version; %w", versionErr)
+	} else {
+		return cmd.RootCommand(stdout, stderr, version), nil
+	}
 }
 
 func readVersion(versionFilename string) (string, error) {
+	var version string
 	if versionBytes, readErr := os.ReadFile(versionFilename); readErr != nil {
 		return "", fmt.Errorf("failed to read version file %s; %w", versionFilename, readErr)
 	} else {
-		return string(versionBytes), nil
+		version = string(versionBytes)
+	}
+
+	trimmed := strings.TrimSpace(version)
+	if trimmed == "" {
+		return "", fmt.Errorf("version <%s> from %s is empty", version, versionFilename)
+	} else {
+		return trimmed, nil
 	}
 }
