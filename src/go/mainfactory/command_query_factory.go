@@ -2,6 +2,9 @@ package mainfactory
 
 import (
 	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/kkrull/marmot/coremetarepo"
 	"github.com/kkrull/marmot/corerepository"
@@ -9,6 +12,24 @@ import (
 	metarepo "github.com/kkrull/marmot/usemetarepo"
 	repository "github.com/kkrull/marmot/userepository"
 )
+
+func DefaultCommandQueryFactory() (*CommandQueryFactory, error) {
+	if metaRepoPath, pathErr := DefaultMetaRepoPath(); pathErr != nil {
+		return nil, pathErr
+	} else {
+		factory := &CommandQueryFactory{}
+		factory.ForLocalMetaRepo(metaRepoPath)
+		return factory, nil
+	}
+}
+
+func DefaultMetaRepoPath() (string, error) {
+	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
+		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
+	} else {
+		return filepath.Join(homeDir, "meta"), nil
+	}
+}
 
 // Constructs commands and queries with configurable dependencies.
 type CommandQueryFactory struct {
