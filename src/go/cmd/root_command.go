@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +12,7 @@ var (
 )
 
 // Root command that delegates to other commands
-func RootCommand(version string) *cobra.Command {
+func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Long: `marmot manages a Meta Repository that organizes content in other (Git) repositories.`,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -24,11 +25,16 @@ func RootCommand(version string) *cobra.Command {
 		Version: version,
 	}
 
-	// Add flags (persistent and local)
+	// Add flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
 
 	// Add child (sub-)commands
+
+	// Configure I/O
+	rootCmd.SetOut(stdout)
+	rootCmd.SetErr(stderr)
+
 	return rootCmd
 }
 
