@@ -11,7 +11,7 @@ var (
 )
 
 // Root command that delegates to other commands
-func RootCommand() *cobra.Command {
+func RootCommand(version string) *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Long: `marmot manages a Meta Repository that organizes content in other (Git) repositories.`,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -21,7 +21,7 @@ func RootCommand() *cobra.Command {
 		},
 		Short:   "Meta Repo Management Tool",
 		Use:     "marmot",
-		Version: "0.0.1",
+		Version: version,
 	}
 
 	// Add flags (persistent and local)
