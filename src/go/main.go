@@ -1,7 +1,13 @@
 package main
 
-import "github.com/kkrull/marmot/cmd"
+import (
+	"os"
+
+	"github.com/kkrull/marmot/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	if executeErr := cmd.Execute(); executeErr != nil {
+		os.Exit(1)
+	}
 }

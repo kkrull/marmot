@@ -1,16 +1,14 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
 // Root command that delegates to other commands
 var rootCmd = &cobra.Command{
-	Use:   "marmot",
+	Long:  `marmot manages a Meta Repository that organizes content in other (Git) repositories.`,
 	Short: "Meta Repo Management Tool",
-	Long:  `marmot manages a Meta Repository that organizes content in other Git repositories.`,
+	Use:   "marmot",
 	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
@@ -18,9 +16,6 @@ var rootCmd = &cobra.Command{
 func init() {}
 
 // Add child commands to this root command and set flags appropriately.
-func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
-	}
+func Execute() error {
+	return rootCmd.Execute()
 }
