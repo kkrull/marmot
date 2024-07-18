@@ -14,10 +14,15 @@ const (
 var (
 	debugFlag *bool
 	rootCmd   = &cobra.Command{
-		Long: `marmot manages a Meta Repository that organizes content in other (Git) repositories.`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
+		RunE: func(cmd *cobra.Command, args []string) error {
 			if *debugFlag {
 				printDebug()
+				return nil
+			} else if len(args) == 0 {
+				return cmd.Help()
+			} else {
+				return nil
 			}
 		},
 		Short: "Meta Repo Management Tool",
