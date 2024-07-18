@@ -1,8 +1,7 @@
 package main
 
-import "github.com/kkrull/marmot/cliversion"
+import "github.com/kkrull/marmot/cmd"
 
 func main() {
-	versionCmd := cliversion.VersionCommand()
-	versionCmd.Execute()
+	cmd.Execute()
 }
