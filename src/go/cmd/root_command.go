@@ -11,7 +11,7 @@ var (
 	debugFlag *bool
 )
 
-// Root command that delegates to other commands
+// Make a root command with the given I/O and version identifier, that delegates to other commands.
 func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Long: `marmot manages a Meta Repository that organizes content in other (Git) repositories.`,
