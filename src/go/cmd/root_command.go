@@ -7,6 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	metaRepoGroup = "meta-repo"
+)
+
 var (
 	debugFlag *bool
 	rootCmd   = &cobra.Command{
@@ -29,9 +33,20 @@ func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Comm
 	return rootCmd
 }
 
+/* Configuration */
+
 func init() {
+	initFlags()
+	initGroups()
+}
+
+func initFlags() {
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
+}
+
+func initGroups() {
+	rootCmd.AddGroup(&cobra.Group{ID: "meta-repo", Title: "Meta Repo Commands"})
 }
 
 /* Pseudo-commands */
