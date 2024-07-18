@@ -56,6 +56,7 @@ install-tools:
 	go install github.com/go-delve/delve/cmd/dlv@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go install mvdan.cc/gofumpt@latest
+	go install github.com/spf13/cobra-cli@latest
 
 .PHONY: run
 run:
