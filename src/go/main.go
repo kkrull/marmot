@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/kkrull/marmot/cmd"
@@ -12,39 +13,38 @@ import (
 
 func main() {
 	var (
-		stdout io.Writer = os.Stdout
-		stderr io.Writer = os.Stderr
+		stdout  io.Writer = os.Stdout
+		stderr  io.Writer = os.Stderr
+		rootCmd *cobra.Command
 	)
 
-	if rootCmd, initErr := newRootCommand(stdout, stderr); initErr != nil {
-		fmt.Fprintln(stderr, initErr.Error())
+	if versionFilename, pathErr := filepath.Abs("version"); pathErr != nil {
+		fmt.Fprintf(stderr, "failed to locate version file; %s\n", pathErr.Error())
 		os.Exit(1)
-	} else if executeErr := rootCmd.Execute(); executeErr != nil {
+	} else if version, versionErr := readVersion(versionFilename); versionErr != nil {
+		fmt.Fprintf(stderr, "failed to read version; %s\n", versionErr.Error())
+		os.Exit(1)
+	} else {
+		rootCmd = cmd.RootCommand(stdout, stderr, version)
+	}
+
+	if executeErr := rootCmd.Execute(); executeErr != nil {
 		fmt.Fprintln(stderr, executeErr.Error())
 		os.Exit(1)
 	}
 }
 
-func newRootCommand(stdout io.Writer, stderr io.Writer) (*cobra.Command, error) {
-	if version, versionErr := readVersion("version"); versionErr != nil {
-		return nil, fmt.Errorf("failed to read version; %w", versionErr)
-	} else {
-		return cmd.RootCommand(stdout, stderr, version), nil
-	}
-}
-
 func readVersion(versionFilename string) (string, error) {
-	var version string
+	var versionRaw string
 	if versionBytes, readErr := os.ReadFile(versionFilename); readErr != nil {
 		return "", fmt.Errorf("failed to read version file %s; %w", versionFilename, readErr)
 	} else {
-		version = string(versionBytes)
+		versionRaw = string(versionBytes)
 	}
 
-	trimmed := strings.TrimSpace(version)
-	if trimmed == "" {
-		return "", fmt.Errorf("version <%s> from %s is empty", version, versionFilename)
+	if version := strings.TrimSpace(versionRaw); version == "" {
+		return "", fmt.Errorf("version <%s> from %s is empty", versionRaw, versionFilename)
 	} else {
-		return trimmed, nil
+		return version, nil
 	}
 }
