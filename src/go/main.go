@@ -18,8 +18,7 @@ func main() {
 		rootCmd *cobra.Command
 	)
 
-	// TODO KDK: Look relative to the executable, not the current directory
-	if versionFilename, pathErr := filepath.Abs("version"); pathErr != nil {
+	if versionFilename, pathErr := versionFilePath(); pathErr != nil {
 		fmt.Fprintf(stderr, "failed to locate version file; %s\n", pathErr.Error())
 		os.Exit(1)
 	} else if version, versionErr := readVersion(versionFilename); versionErr != nil {
@@ -47,5 +46,14 @@ func readVersion(versionFilename string) (string, error) {
 		return "", fmt.Errorf("version <%s> from %s is empty", versionRaw, versionFilename)
 	} else {
 		return version, nil
+	}
+}
+
+func versionFilePath() (string, error) {
+	if executablePath, executableErr := os.Executable(); executableErr != nil {
+		return "", executableErr
+	} else {
+		programDir := filepath.Dir(executablePath)
+		return filepath.Join(programDir, "version"), nil
 	}
 }
