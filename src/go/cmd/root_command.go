@@ -38,7 +38,7 @@ func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Comm
 	return rootCmd
 }
 
-func addCommandToRoot(child *cobra.Command) {
+func AddCommandToRoot(child *cobra.Command) {
 	rootCmd.AddCommand(child)
 }
 
