@@ -14,13 +14,13 @@ import (
 var _ = Describe("InitCommand", func() {
 	var (
 		subject       *use.InitCommand
-		factory       *main.CommandQueryFactory
+		factory       *main.AppFactory
 		metaDataAdmin *mock.MetaDataAdmin
 	)
 
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
-		factory = &main.CommandQueryFactory{MetaDataAdmin: metaDataAdmin}
+		factory = &main.AppFactory{MetaDataAdmin: metaDataAdmin}
 	})
 
 	Describe("#Run", func() {

@@ -13,12 +13,11 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
-// TODO KDK: Rename to AppFactory
-func DefaultCommandQueryFactory() (*CommandQueryFactory, error) {
+func DefaultAppFactory() (*AppFactory, error) {
 	if metaRepoPath, pathErr := DefaultMetaRepoPath(); pathErr != nil {
 		return nil, pathErr
 	} else {
-		factory := &CommandQueryFactory{}
+		factory := &AppFactory{}
 		factory.ForLocalMetaRepo(metaRepoPath)
 		return factory, nil
 	}
@@ -32,20 +31,20 @@ func DefaultMetaRepoPath() (string, error) {
 	}
 }
 
-// Constructs commands and queries with configurable dependencies.
-type CommandQueryFactory struct {
+// Constructs application commands and queries with configurable services.
+type AppFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
 	RepositorySource corerepository.RepositorySource
 }
 
 // Configure a local, file-based meta repo at the specified path
-func (factory *CommandQueryFactory) ForLocalMetaRepo(metaRepoPath string) {
+func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) {
 	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
 }
 
 /* Administration */
 
-func (factory *CommandQueryFactory) InitCommand() (*metarepo.InitCommand, error) {
+func (factory *AppFactory) InitCommand() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
 		factory.MetaDataAdmin = svcfs.NewJsonMetaRepoAdmin()
 	}
@@ -55,7 +54,7 @@ func (factory *CommandQueryFactory) InitCommand() (*metarepo.InitCommand, error)
 
 /* Repositories */
 
-func (factory *CommandQueryFactory) ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error) {
+func (factory *AppFactory) ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("CommandFactory: missing RepositorySource")
 	}
@@ -63,7 +62,7 @@ func (factory *CommandQueryFactory) ListRemoteRepositoriesQuery() (repository.Li
 	return factory.RepositorySource.ListRemote, nil
 }
 
-func (factory *CommandQueryFactory) RegisterRemoteRepositoriesCommand() (
+func (factory *AppFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
 	if factory.RepositorySource == nil {

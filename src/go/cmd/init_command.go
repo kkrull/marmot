@@ -12,7 +12,7 @@ var initCmd = &cobra.Command{
 	GroupID: metaRepoGroup,
 	Long:    "Initialize a blank Meta Repo in the configured directory, if none is already present.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if factory, factoryErr := mainfactory.DefaultCommandQueryFactory(); factoryErr != nil {
+		if factory, factoryErr := mainfactory.DefaultAppFactory(); factoryErr != nil {
 			return factoryErr
 		} else if initUseCmd, initErr := factory.InitCommand(); initErr != nil {
 			return fmt.Errorf("failed to create command; %w", initErr)

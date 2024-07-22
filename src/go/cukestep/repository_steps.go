@@ -77,11 +77,11 @@ func registerRemote() error {
 
 /* Configuration */
 
-func factoryForThatMetaRepo() (*main.CommandQueryFactory, error) {
+func factoryForThatMetaRepo() (*main.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {
-		factory := &main.CommandQueryFactory{}
+		factory := &main.AppFactory{}
 		factory.ForLocalMetaRepo(metaRepoPath)
 		return factory, nil
 	}
