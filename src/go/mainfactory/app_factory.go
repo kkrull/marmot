@@ -36,13 +36,19 @@ func defaultMetaRepoPath() (string, error) {
 // Constructs application commands and queries with configurable services.
 type AppFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
+	metaRepoPath     string
 	RepositorySource corerepository.RepositorySource
 }
 
 // Configure a local, file-based meta repo at the specified path
 func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) *AppFactory {
+	factory.metaRepoPath = metaRepoPath
 	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
 	return factory
+}
+
+func (factory *AppFactory) MetaRepoPath() string {
+	return factory.metaRepoPath
 }
 
 /* Administration */
