@@ -1,4 +1,4 @@
-package cmd
+package mainfactory
 
 import (
 	"fmt"
@@ -7,19 +7,21 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
-// Construct a factory to use standard I/O.
-func NewCliFactory() *CliFactory {
-	return &CliFactory{stdout: os.Stdout, stderr: os.Stderr}
+// Construct a factory to create CLI commands.
+func NewCliFactory(appFactory *AppFactory) *CliFactory {
+	return &CliFactory{appFactory: appFactory}
 }
 
 // Creates commands for the Command Line Interface (CLI).
 type CliFactory struct {
-	stdout  io.Writer
-	stderr  io.Writer
-	version string
+	appFactory *AppFactory
+	stdout     io.Writer
+	stderr     io.Writer
+	version    string
 }
 
 func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
@@ -31,23 +33,24 @@ func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *Cli
 /* Factory methods */
 
 func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
-	rootCmd := NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
+	rootCmd := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
 
+	// initCmd := cmd.NewInitCommand()
 	return rootCmd, nil
 }
 
 /* Version configuration */
 
-func (cliFactory *CliFactory) ForExecutable() error {
+func (cliFactory *CliFactory) ForExecutable() (*CliFactory, error) {
 	if versionPath, pathErr := versionFilePath(); pathErr != nil {
-		return fmt.Errorf("failed to locate version file; %w", pathErr)
+		return nil, fmt.Errorf("failed to locate version file; %w", pathErr)
 	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
-		return fmt.Errorf("failed to read version from %s; %w", versionPath, readErr)
+		return nil, fmt.Errorf("failed to read version from %s; %w", versionPath, readErr)
 	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
-		return fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
+		return nil, fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
 	} else {
 		cliFactory.version = version
-		return nil
+		return cliFactory, nil
 	}
 }
 

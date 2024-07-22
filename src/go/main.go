@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/kkrull/marmot/cmd"
+	"github.com/kkrull/marmot/mainfactory"
 )
 
 var (
@@ -21,9 +21,10 @@ func main() {
 }
 
 func doMain() error {
-	cliFactory := cmd.NewCliFactory().WithStdIO(stdout, stderr)
-	if configErr := cliFactory.ForExecutable(); configErr != nil {
-		return configErr
+	if appFactory, appErr := mainfactory.DefaultAppFactory(); appErr != nil {
+		return appErr
+	} else if cliFactory, cliErr := newCliFactory(appFactory); cliErr != nil {
+		return cliErr
 	} else if rootCmd, buildErr := cliFactory.CommandTree(); buildErr != nil {
 		return buildErr
 	} else if executeErr := rootCmd.Execute(); executeErr != nil {
@@ -31,4 +32,11 @@ func doMain() error {
 	} else {
 		return nil
 	}
+}
+
+func newCliFactory(appFactory *mainfactory.AppFactory) (*mainfactory.CliFactory, error) {
+	return mainfactory.
+		NewCliFactory(appFactory).
+		WithStdIO(stdout, stderr).
+		ForExecutable()
 }
