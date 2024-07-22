@@ -30,5 +30,5 @@ var initCmd = &cobra.Command{
 }
 
 func init() {
-	AddCommandToRoot(initCmd)
+	AddMetaRepoCommand(initCmd)
 }

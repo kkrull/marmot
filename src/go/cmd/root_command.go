@@ -40,7 +40,8 @@ const (
 	metaRepoGroup = "meta-repo"
 )
 
-func AddCommandToRoot(child *cobra.Command) { //TODO KDK: Add group to encapsulate constant
+func AddMetaRepoCommand(child *cobra.Command) {
+	child.GroupID = metaRepoGroup
 	rootCmd.AddCommand(child)
 }
 
