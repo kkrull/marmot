@@ -18,7 +18,7 @@ var initCmd = &cobra.Command{
 		} else if metaRepoHome, pathErr := mainfactory.DefaultMetaRepoPath(); pathErr != nil {
 			return pathErr
 		} else if runErr := initUseCmd.Run(metaRepoHome); runErr != nil {
-			return fmt.Errorf("failed to initialie meta repo; %w", runErr)
+			return fmt.Errorf("failed to initialize meta repo; %w", runErr)
 		} else {
 			fmt.Printf("Initialized meta repo at %s\n", metaRepoHome)
 			return nil
