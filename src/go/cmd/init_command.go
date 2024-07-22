@@ -4,8 +4,22 @@ import (
 	"fmt"
 
 	"github.com/kkrull/marmot/mainfactory" //TODO KDK: Stop depending upon this
+	"github.com/kkrull/marmot/usemetarepo"
 	"github.com/spf13/cobra"
 )
+
+// Construct a CLI command to initialize a meta repo at the specified path
+func NewInitCommand(initAppCmd *usemetarepo.InitCommand, metaRepoHome string) *initCommand {
+	return &initCommand{
+		initAppCmd:   initAppCmd,
+		metaRepoHome: metaRepoHome,
+	}
+}
+
+type initCommand struct {
+	initAppCmd   *usemetarepo.InitCommand
+	metaRepoHome string
+}
 
 // TODO KDK: Move to package that depends upon cmd (root)
 var initCmd = &cobra.Command{
