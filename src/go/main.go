@@ -24,7 +24,7 @@ func main() {
 func doMain(cliFactory *cmd.CliFactory) error {
 	if configErr := cliFactory.ForExecutable(); configErr != nil {
 		return configErr
-	} else if rootCmd, buildErr := cliFactory.NewRootCommand(); buildErr != nil {
+	} else if rootCmd, buildErr := cliFactory.CommandTree(); buildErr != nil {
 		return buildErr
 	} else if executeErr := rootCmd.Execute(); executeErr != nil {
 		return executeErr

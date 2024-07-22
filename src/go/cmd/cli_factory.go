@@ -30,8 +30,8 @@ func (factory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFac
 
 /* Factory methods */
 
-func (factory *CliFactory) NewRootCommand() (*cobra.Command, error) {
-	return RootCommand(factory.stdout, factory.stderr, factory.version), nil
+func (factory *CliFactory) CommandTree() (*cobra.Command, error) {
+	return NewRootCommand(factory.stdout, factory.stderr, factory.version), nil
 }
 
 /* Version configuration */

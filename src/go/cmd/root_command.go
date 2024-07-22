@@ -7,10 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	metaRepoGroup = "meta-repo"
-)
-
 var (
 	debugFlag *bool
 	rootCmd   = &cobra.Command{
@@ -31,12 +27,18 @@ var (
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
-func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
+func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
 	rootCmd.Version = version
 	return rootCmd
 }
+
+/* Child commands */
+
+const (
+	metaRepoGroup = "meta-repo"
+)
 
 func AddCommandToRoot(child *cobra.Command) { //TODO KDK: Add group to encapsulate constant
 	rootCmd.AddCommand(child)
