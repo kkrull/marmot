@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/kkrull/marmot/cmd"
+	"github.com/kkrull/marmot/cmdinit"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +40,7 @@ func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 	} else if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
 		return nil, pathErr
 	} else {
-		initCliCmd := cmd.NewInitCommand(initAppCmd, metaRepoPath)
+		initCliCmd := cmdinit.NewInitCommand(initAppCmd, metaRepoPath)
 		cmd.AddMetaRepoCommand(initCliCmd.ToCobraCommand())
 		return rootCmd, nil
 	}
