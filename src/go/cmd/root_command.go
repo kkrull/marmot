@@ -58,7 +58,7 @@ func initFlags() {
 }
 
 func initGroups() {
-	rootCmd.AddGroup(&cobra.Group{ID: "meta-repo", Title: "Meta Repo Commands"})
+	rootCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
 }
 
 /* Pseudo-commands */
