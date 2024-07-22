@@ -3,10 +3,11 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/mainfactory" //TODO KDK: Stop depending upon this
 	"github.com/spf13/cobra"
 )
 
+// TODO KDK: Move to package that depends upon cmd (root)
 var initCmd = &cobra.Command{
 	GroupID: metaRepoGroup,
 	Long:    "Initialize a blank Meta Repo in the configured directory, if none is already present.",

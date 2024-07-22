@@ -13,6 +13,7 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
+// TODO KDK: Rename to AppFactory
 func DefaultCommandQueryFactory() (*CommandQueryFactory, error) {
 	if metaRepoPath, pathErr := DefaultMetaRepoPath(); pathErr != nil {
 		return nil, pathErr

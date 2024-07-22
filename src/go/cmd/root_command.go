@@ -38,7 +38,7 @@ func RootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Comm
 	return rootCmd
 }
 
-func AddCommandToRoot(child *cobra.Command) {
+func AddCommandToRoot(child *cobra.Command) { //TODO KDK: Add group to encapsulate constant
 	rootCmd.AddCommand(child)
 }
 
