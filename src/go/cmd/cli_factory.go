@@ -30,35 +30,38 @@ func (factory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFac
 
 /* Factory methods */
 
-func (factory *CliFactory) RootCommand() (*cobra.Command, error) {
+func (factory *CliFactory) NewRootCommand() (*cobra.Command, error) {
 	return RootCommand(factory.stdout, factory.stderr, factory.version), nil
 }
 
 /* Version configuration */
 
 func (factory *CliFactory) ForExecutable() error {
-	if versionPath, versionPathErr := versionFilePath(); versionPathErr != nil {
-		return fmt.Errorf("failed to locate version file; %w", versionPathErr)
-	} else if version, versionErr := readVersion(versionPath); versionErr != nil {
-		return fmt.Errorf("failed to read version from %s; %w", versionPath, versionErr)
+	if versionPath, pathErr := versionFilePath(); pathErr != nil {
+		return fmt.Errorf("failed to locate version file; %w", pathErr)
+	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
+		return fmt.Errorf("failed to read version from %s; %w", versionPath, readErr)
+	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
+		return fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
 	} else {
 		factory.version = version
 		return nil
 	}
 }
 
-func readVersion(versionFilename string) (string, error) {
-	var versionRaw string
-	if versionBytes, readErr := os.ReadFile(versionFilename); readErr != nil {
-		return "", fmt.Errorf("failed to read version file %s; %w", versionFilename, readErr)
-	} else {
-		versionRaw = string(versionBytes)
-	}
-
+func parseVersion(versionRaw string) (string, error) {
 	if version := strings.TrimSpace(versionRaw); version == "" {
-		return "", fmt.Errorf("version <%s> from %s is empty", versionRaw, versionFilename)
+		return "", fmt.Errorf("<%s> is effectively empty", versionRaw)
 	} else {
 		return version, nil
+	}
+}
+
+func readVersion(versionFilename string) (string, error) {
+	if versionBytes, readErr := os.ReadFile(versionFilename); readErr != nil {
+		return "", readErr
+	} else {
+		return string(versionBytes), nil
 	}
 }
 
