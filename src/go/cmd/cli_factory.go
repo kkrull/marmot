@@ -22,21 +22,23 @@ type CliFactory struct {
 	version string
 }
 
-func (factory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
-	factory.stdout = stdout
-	factory.stderr = stderr
-	return factory
+func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
+	cliFactory.stdout = stdout
+	cliFactory.stderr = stderr
+	return cliFactory
 }
 
 /* Factory methods */
 
-func (factory *CliFactory) CommandTree() (*cobra.Command, error) {
-	return NewRootCommand(factory.stdout, factory.stderr, factory.version), nil
+func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
+	rootCmd := NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
+
+	return rootCmd, nil
 }
 
 /* Version configuration */
 
-func (factory *CliFactory) ForExecutable() error {
+func (cliFactory *CliFactory) ForExecutable() error {
 	if versionPath, pathErr := versionFilePath(); pathErr != nil {
 		return fmt.Errorf("failed to locate version file; %w", pathErr)
 	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
@@ -44,7 +46,7 @@ func (factory *CliFactory) ForExecutable() error {
 	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
 		return fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
 	} else {
-		factory.version = version
+		cliFactory.version = version
 		return nil
 	}
 }
