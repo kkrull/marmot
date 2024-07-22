@@ -14,7 +14,7 @@ import (
 )
 
 func DefaultAppFactory() (*AppFactory, error) {
-	if metaRepoPath, pathErr := DefaultMetaRepoPath(); pathErr != nil {
+	if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
 		return nil, pathErr
 	} else {
 		return newAppFactory().ForLocalMetaRepo(metaRepoPath), nil
@@ -25,7 +25,7 @@ func newAppFactory() *AppFactory {
 	return &AppFactory{}
 }
 
-func DefaultMetaRepoPath() (string, error) {
+func defaultMetaRepoPath() (string, error) {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
 		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
