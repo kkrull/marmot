@@ -17,10 +17,12 @@ func DefaultAppFactory() (*AppFactory, error) {
 	if metaRepoPath, pathErr := DefaultMetaRepoPath(); pathErr != nil {
 		return nil, pathErr
 	} else {
-		factory := &AppFactory{}
-		factory.ForLocalMetaRepo(metaRepoPath)
-		return factory, nil
+		return newAppFactory().ForLocalMetaRepo(metaRepoPath), nil
 	}
+}
+
+func newAppFactory() *AppFactory {
+	return &AppFactory{}
 }
 
 func DefaultMetaRepoPath() (string, error) {
@@ -38,8 +40,9 @@ type AppFactory struct {
 }
 
 // Configure a local, file-based meta repo at the specified path
-func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) {
+func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) *AppFactory {
 	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
+	return factory
 }
 
 /* Administration */
