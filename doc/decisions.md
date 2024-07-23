@@ -170,31 +170,34 @@ Structure Go code along these dimensions:
 - Create additional packages such as `corerepositorymock` and `testsupport` as-needed, to separate
   test automation code from production code.
 
-This should lead to package dependencies such as the following:
+This leads to the following compile-time dependencies among top-level packages:
 
 ```mermaid
 graph LR
 
 %% Core and dependencies
-core(core)
+core(core<br/>Data structures<br/>Service interfaces)
 svc(svc<br/>Services)
 use(use<br/>Use Cases)
 
-svc --> core
-use --> core
+svc -->|implement| core
+use -->|CRUD| core
 
 %% Main program
 cmd(cmd<br/>CLI)
 mainfactory(mainfactory<br/>Factories)
+marmot(marmot<br/>main program)
 
 cmd --> core
 cmd --> mainfactory
-mainfactory --> use
-mainfactory --> svc
+mainfactory -->|create| use
+mainfactory -->|create| svc
+marmot --> cmd
+marmot --> mainfactory
 
 %% Test support
 cuke(cuke<br/>Cucumber tests)
 
 cuke --> core
-cuke --> use
+cuke --> mainfactory
 ```
