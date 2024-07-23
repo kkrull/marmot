@@ -146,3 +146,55 @@ making `marmot` more interactive and easier to use.
 
 - Sprout a new codebase written in Go, until it has enough features to replace the ZSH version.
 - Automate tests on core logic; e.g. "test from the middle".
+
+## 07: Go package structure
+
+Developers will need a safe and effective way to add new entities and CLI commands, in order to add
+new features.  Distinguishing core entities (e.g. repositories and categories) and behavior (e.g.
+categorizing Git repositories) from implementation details (e.g. interaction with the file system)
+minimizes the amount of existing code that has to be modified in order to add new entities.  It also
+offers a practical means to distinguish test automation that is more highly rewarding (e.g. tests on
+invariants and core logic, which are easier to write and tend to last longer) from that which is
+somewhat less rewarding (e.g. tests on wiring and implementation details, which tend to be harder to
+write and are more readily thrown out).
+
+### Decisions
+
+Structure Go code along these dimensions:
+
+- Put all code in one repository.  Use Go packages to distinguish the parts.
+- Create `core` packages like `corerepository` for basic entities, data structures, and interfaces.
+- Create `use` packages like `userepository` for operations upon each context.
+- Create `svc` packages like `svcfs` for service implementations, such as using the file system.
+- Create `main` package(s) like `mainfactory` to create dependencies and wire everything together.
+- Create additional packages such as `corerepositorymock` and `testsupport` as-needed, to separate
+  test automation code from production code.
+
+This should lead to package dependencies such as the following:
+
+```mermaid
+graph LR
+
+%% Core and dependencies
+core(core)
+svc(svc<br/>Services)
+use(use<br/>Use Cases)
+
+svc --> core
+use --> core
+
+%% Main program
+cmd(cmd<br/>CLI)
+mainfactory(mainfactory<br/>Factories)
+
+cmd --> core
+cmd --> mainfactory
+mainfactory --> use
+mainfactory --> svc
+
+%% Test support
+cuke(cuke<br/>Cucumber tests)
+
+cuke --> core
+cuke --> use
+```
