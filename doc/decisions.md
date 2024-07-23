@@ -23,7 +23,9 @@ Repo Management Tool, or "marmot" for short.
   shell commands for a category of repositories as if they are all part of a single unit.
 - Store meta data about categories externally, instead of in the Git repositories themselves.
 
-## 01: Target Z Shell
+## 01: ~~Target Z Shell~~
+
+Superseded by: [Implement in Go](#06-implement-in-go).
 
 Implement marmot in *nix tools that are widely-available on the platforms I use - e.g. MacOS, Linux,
 and Windows Subsystem for Linux.  Writing it in Z Shell can make it easier to try new ideas, while
@@ -119,3 +121,28 @@ Source: <https://unix.stackexchange.com/a/365417/37734>
     to `source` dependencies and transitive dependencies.
   - This is approach is intended to avoid any complexities in the same code being sourced twice.  I
     have no idea what could happen then, and I'd rather not have to find out.
+
+## 06: Implement in Go
+
+Supersedes: [Target Z Shell](#01-target-z-shell).
+
+Compartmentalizing and organizing scripts helped with maintenance and extension, but it still became
+difficult to split machine- and repository-specific data into separate files.  Use of an external
+data migration script provided a limited means to detect bugs by including some semi-formal test
+automation, but it relied heavily upon the development platform; e.g. it used real Git repositories
+on specific paths.  This approach did not offer a sufficiently-granular approach to testing, and
+prior experiences with formal testing tools–i.e.
+[`bats`](https://github.com/sstephenson/bats)–proved impractical for team sizes greater than one.
+
+These factors led to some thinking about which language could replace the shell scripts.  It would
+need to be capable of targeting the same platforms, while offering a better means to structure data,
+look up references, and refactor call sites.  It would also need robust tools for test automation
+and for creating Command Line Interfaces.  Go offers all of those, while currently being a bit
+easier to deploy to end users than Python or Ruby.  Go also has potentially-compelling libraries
+such as [`bubbletea`](https://github.com/charmbracelet/bubbletea), which raises the possibility of
+making `marmot` more interactive and easier to use.
+
+### Decisions
+
+- Sprout a new codebase written in Go, until it has enough features to replace the ZSH version.
+- Automate tests on core logic; e.g. "test from the middle".
