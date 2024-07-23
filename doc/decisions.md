@@ -187,7 +187,8 @@ subgraph ImperativeShell [Imperative Shell]
   marmot(marmot<br/>Executable)
 
   cmd -->|CRUD| core
-  cmd --> mainfactory
+  cmd --> use
+  %%mainfactory -->|create| cmd
   mainfactory -->|create| use
   mainfactory -->|create| svc
   marmot --> cmd
