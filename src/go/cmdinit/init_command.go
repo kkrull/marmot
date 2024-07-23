@@ -3,6 +3,7 @@ package cmdinit
 import (
 	"fmt"
 
+	"github.com/kkrull/marmot/cmd"
 	"github.com/kkrull/marmot/usemetarepo"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +21,11 @@ type initCommand struct {
 	path    string
 }
 
-func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
+func (cliCmd *initCommand) RegisterWithCobra() {
+	cmd.AddMetaRepoCommand(*cliCmd.toCobraCommand())
+}
+
+func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Long: "Initialize a new Meta Repo in the configured directory, if none is already present.",
 		RunE: func(cmd *cobra.Command, args []string) error {

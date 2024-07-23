@@ -40,9 +40,9 @@ const (
 	metaRepoGroup = "meta-repo"
 )
 
-func AddMetaRepoCommand(child *cobra.Command) {
+func AddMetaRepoCommand(child cobra.Command) {
 	child.GroupID = metaRepoGroup
-	rootCmd.AddCommand(child)
+	rootCmd.AddCommand(&child)
 }
 
 /* Configuration */

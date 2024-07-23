@@ -39,7 +39,7 @@ func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 		return nil, appFactoryErr
 	} else {
 		initCliCmd := cmdinit.NewInitCommand(initAppCmd, cliFactory.appFactory.MetaRepoPath())
-		cmd.AddMetaRepoCommand(initCliCmd.ToCobraCommand())
+		initCliCmd.RegisterWithCobra()
 		return rootCmd, nil
 	}
 }
