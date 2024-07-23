@@ -194,10 +194,4 @@ mainfactory -->|create| use
 mainfactory -->|create| svc
 marmot --> cmd
 marmot --> mainfactory
-
-%% Test support
-cuke(cuke<br/>Cucumber tests)
-
-cuke --> core
-cuke --> mainfactory
 ```
