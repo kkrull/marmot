@@ -180,15 +180,16 @@ core(core<br/>Data structures<br/>Service interfaces)
 svc(svc<br/>Services)
 use(use<br/>Use Cases)
 
-svc -->|implement| core
+svc -->|CRUD<br/>implement| core
 use -->|CRUD| core
+use -.->|runtime| svc
 
 %% Main program
 cmd(cmd<br/>CLI)
 mainfactory(mainfactory<br/>Factories)
-marmot(marmot<br/>main program)
+marmot(marmot<br/>Executable)
 
-cmd --> core
+cmd -->|CRUD| core
 cmd --> mainfactory
 mainfactory -->|create| use
 mainfactory -->|create| svc
