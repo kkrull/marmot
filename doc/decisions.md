@@ -52,7 +52,7 @@ back, or even share with teammates.
 ### Decisions
 
 - Store meta data in JSON files.
-- Use tools like `jq` and `jo` to query and construct JSON data from marmot.
+- ~~Use tools like `jq` and `jo` to query and construct JSON data from marmot.~~
 - Store meta data in its own Git repository.
 
 ## 03: Directory Structure in the Meta Repo
@@ -84,7 +84,9 @@ over what changes merit what kind of version bump.
 - Minor version: Increment when adding a new feature (e.g. a command or sub-command).
 - Patch version: Increment when refactoring to prepare for another feature.
 
-## 05: Apply Single Responsibility Principle to scripts
+## 05: ~~Apply Single Responsibility Principle to scripts~~
+
+Superseded by: [Implement in Go](#06-implement-in-go).
 
 Scripts are getting more complex, leading to duplication of concepts and algorithms.  Applying the
 Single Responsibility Principle (SRP) can help manage complexity and avoid unnecessary duplication.
@@ -130,9 +132,7 @@ Compartmentalizing and organizing scripts helped with maintenance and extension,
 difficult to split machine- and repository-specific data into separate files.  Use of an external
 data migration script provided a limited means to detect bugs by including some semi-formal test
 automation, but it relied heavily upon the development platform; e.g. it used real Git repositories
-on specific paths.  This approach did not offer a sufficiently-granular approach to testing, and
-prior experiences with formal testing tools–i.e.
-[`bats`](https://github.com/sstephenson/bats)–proved impractical for team sizes greater than one.
+on specific paths.
 
 These factors led to some thinking about which language could replace the shell scripts.  It would
 need to be capable of targeting the same platforms, while offering a better means to structure data,
@@ -142,21 +142,16 @@ easier to deploy to end users than Python or Ruby.  Go also has potentially-comp
 such as [`bubbletea`](https://github.com/charmbracelet/bubbletea), which raises the possibility of
 making `marmot` more interactive and easier to use.
 
-### Decisions
+### Decision
 
-- Sprout a new codebase written in Go, until it has enough features to replace the ZSH version.
-- Automate tests on core logic; e.g. "test from the middle".
+Sprout a new codebase written in Go, until it has enough features to replace the ZSH version.
 
 ## 07: Go package structure
 
 Developers will need a safe and effective way to add new entities and CLI commands, in order to add
 new features.  Distinguishing core entities (e.g. repositories and categories) and behavior (e.g.
 categorizing Git repositories) from implementation details (e.g. interaction with the file system)
-minimizes the amount of existing code that has to be modified in order to add new entities.  It also
-offers a practical means to distinguish test automation that is more highly rewarding (e.g. tests on
-invariants and core logic, which are easier to write and tend to last longer) from that which is
-somewhat less rewarding (e.g. tests on wiring and implementation details, which tend to be harder to
-write and are more readily thrown out).
+minimizes the amount of existing code that has to be modified in order to add new entities.
 
 ### Decisions
 
@@ -167,10 +162,9 @@ Structure Go code along these dimensions:
 - Create `use` packages like `userepository` for operations upon each context.
 - Create `svc` packages like `svcfs` for service implementations, such as using the file system.
 - Create `main` package(s) like `mainfactory` to create dependencies and wire everything together.
-- Create additional packages such as `corerepositorymock` and `testsupport` as-needed, to separate
-  test automation code from production code.
 
-This leads to the following compile-time dependencies among top-level packages:
+This leads to the following dependencies (compile-time; runtime dependencies are dashed lines) among
+top-level packages:
 
 ```mermaid
 graph LR
@@ -195,4 +189,88 @@ mainfactory -->|create| use
 mainfactory -->|create| svc
 marmot --> cmd
 marmot --> mainfactory
+```
+
+## 08: Go test strategy
+
+As described in [Implement in Go](#06-implement-in-go), using a script-based architecture did not
+offer a sufficiently-granular approach to testing.  Prior experiences with formal testing tools–i.e.
+[`bats`](https://github.com/sstephenson/bats)–proved impractical for team sizes greater than one.
+
+Another factor involved in [Go package structure](#07-go-package-structure) relates to test
+automation: Separating packages by bounded context also offers a practical means to distinguish test
+automation that is more highly rewarding from that which is somewhat less rewarding.  In other
+words, tests on invariants and core logic tend to be easier to write and survive refactoring, while
+tests on wiring and implementation details tend to be harder to write and are more readily thrown
+out during refactoring.
+
+### Decisions
+
+- Focus test automation on core logic; e.g. "test from the middle".
+- For small- to medium-sized tests of regular code:
+  - **Sources**: Co-locate with production code and package as `_test`, according to Go conventions.
+  - **Support code**: Add `testsupport` packages as necessary.
+  - **Test doubles**: Create additional `*mock` packages as necessary, such as `corerepositorymock`.
+  - **Tools**: Use `ginkgo` to clearly describe behavior.
+- For medium- to large-sized tests of user-facing features:
+  - **Sources**: place sources in separate `cuke*` packages.
+  - **Support code**: Add `cukesupport` as necessary.
+  - **Tools**: Use `godog` to clearly describe features in Gherkin.
+
+### Control Flow
+
+```mermaid
+graph LR
+
+%% Production code: Core and dependencies
+
+subgraph MarmotCore [Production Code: Functional Core]
+  core(core<br/>Data structures)
+  mainfactory(mainfactory<br/>Factories)
+  svc(svc<br/>Services)
+  use(use<br/>Use Cases)
+end
+
+svc -.-> core
+use -.-> core
+use -.-> svc
+
+%% Tests
+
+subgraph SmallTests [Small Tests]
+  direction TB
+  ginkgotests(_test<br/>Ginkgo tests)
+  ginkgomocks(*mock<br/>Test doubles)
+  ginkgosupport(testsupport*<br/>Test support)
+
+  ginkgotests -.-> ginkgomocks
+  ginkgotests -.-> ginkgosupport
+end
+
+SmallTests -->|verify| svc
+SmallTests -->|verify| use
+
+subgraph LargeTests [Large Tests]
+  direction LR
+  godogfeatures(cukefeature<br/>godog scenarios)
+  godogsteps(cukesteps<br/>Step definitions)
+  godogsupport(cukesupport<br/>Helpers<br/>Hooks)
+
+  godogfeatures -.-> godogsupport
+  godogfeatures -.-> godogsteps
+  godogsteps -.-> godogsupport
+end
+
+LargeTests -->|validate| MarmotCore
+```
+
+### Not Tested
+
+```mermaid
+graph LR
+
+subgraph ImperativeShell [Production Code: Imperative Shell]
+  cmd(cmd<br/>CLI)
+  marmot(marmot<br/>Executable)
+end
 ```
