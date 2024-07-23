@@ -31,6 +31,7 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 		Version: version,
 	}
 
+	//TODO KDK: Add flag for using a different home directory
 	// Flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
