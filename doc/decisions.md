@@ -228,48 +228,45 @@ out during refactoring.
 ### Control Flow
 
 ```mermaid
-graph LR
+graph TB
 
-%% Production code: Core and dependencies
-
-subgraph MarmotCore [Production Code: Functional Core]
+subgraph MarmotCore [Functional Core]
+  direction LR
   core(core<br/>Data structures)
-  mainfactory(mainfactory<br/>Factories)
   svc(svc<br/>Services)
   use(use<br/>Use Cases)
+
+  svc -.-> core
+  use -.-> core
+  use -.-> svc
 end
 
-svc -.-> core
-use -.-> core
-use -.-> svc
+subgraph Tests
+  subgraph SmallTests [Small Tests]
+    direction LR
+    ginkgotests(_test<br/>Ginkgo tests)
+    ginkgomocks(*mock<br/>Test doubles)
+    ginkgosupport(testsupport*<br/>Test support)
 
-%% Tests
+    ginkgotests -.-> ginkgomocks
+    ginkgotests -.-> ginkgosupport
+  end
 
-subgraph SmallTests [Small Tests]
-  direction TB
-  ginkgotests(_test<br/>Ginkgo tests)
-  ginkgomocks(*mock<br/>Test doubles)
-  ginkgosupport(testsupport*<br/>Test support)
+  subgraph LargeTests [Large Tests]
+    direction LR
+    godogfeatures(cukefeature<br/>godog scenarios)
+    godogsteps(cukesteps<br/>Step definitions)
+    godogsupport(cukesupport<br/>Helpers<br/>Hooks)
 
-  ginkgotests -.-> ginkgomocks
-  ginkgotests -.-> ginkgosupport
-end
-
-SmallTests -->|verify| svc
-SmallTests -->|verify| use
-
-subgraph LargeTests [Large Tests]
-  direction LR
-  godogfeatures(cukefeature<br/>godog scenarios)
-  godogsteps(cukesteps<br/>Step definitions)
-  godogsupport(cukesupport<br/>Helpers<br/>Hooks)
-
-  godogfeatures -.-> godogsupport
-  godogfeatures -.-> godogsteps
-  godogsteps -.-> godogsupport
+    godogfeatures -.-> godogsupport
+    godogfeatures -.-> godogsteps
+    godogsteps -.-> godogsupport
+  end
 end
 
 LargeTests -->|validate| MarmotCore
+SmallTests -->|verify| svc
+SmallTests -->|verify| use
 ```
 
 ### Not Tested
