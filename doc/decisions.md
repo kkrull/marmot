@@ -170,26 +170,33 @@ top-level packages:
 graph LR
 
 %% Core and dependencies
-core(core<br/>Data structures<br/>Service interfaces)
-svc(svc<br/>Services)
-use(use<br/>Use Cases)
+subgraph FunctionalCore [Functional Core]
+  core(core<br/>Data structures<br/>Service interfaces)
+  svc(svc<br/>Services)
+  use(use<br/>Use Cases)
 
-svc -->|CRUD<br/>implement| core
-use -->|CRUD| core
-use -.->|runtime| svc
+  svc -->|CRUD<br/>implement| core
+  use -->|CRUD| core
+  use -.->|runtime| svc
+end
 
 %% Main program
-cmd(cmd<br/>CLI)
-mainfactory(mainfactory<br/>Factories)
-marmot(marmot<br/>Executable)
+subgraph ImperativeShell [Imperative Shell]
+  cmd(cmd<br/>CLI)
+  mainfactory(mainfactory<br/>Factories)
+  marmot(marmot<br/>Executable)
 
-cmd -->|CRUD| core
-cmd --> mainfactory
-mainfactory -->|create| use
-mainfactory -->|create| svc
-marmot --> cmd
-marmot --> mainfactory
+  cmd -->|CRUD| core
+  cmd --> mainfactory
+  mainfactory -->|create| use
+  mainfactory -->|create| svc
+  marmot --> cmd
+  marmot --> mainfactory
+end
 ```
+
+Note: The code in the "functional core" is not always necessarily written in a functional style,
+although that's an idea worth considering.
 
 ## 08: Go test strategy
 
