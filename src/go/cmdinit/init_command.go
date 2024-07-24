@@ -36,7 +36,7 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 				return nil
 			}
 		},
-		Short: "initialize a meta repo",
+		Short: "Initialize a meta repo",
 		Use:   "init",
 	}
 }
