@@ -8,7 +8,7 @@ import (
 
 // Application configuration that doesn't have anything particular to do with the CLI.
 type AppConfig interface {
-	AppFactory() *use.AppFactory
+	AppFactory() use.AppFactory
 	Debug() bool
 	MetaRepoPath() string
 	PrintDebug(writer io.Writer)

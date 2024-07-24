@@ -19,7 +19,7 @@ var _ = Describe("InitCommand", func() {
 
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
-		factory := &use.AppFactory{MetaDataAdmin: metaDataAdmin}
+		factory := use.NewAppFactory().WithMetaDataAdmin(metaDataAdmin)
 		subject = factory.InitCommand()
 	})
 

@@ -78,11 +78,11 @@ func registerRemote() error {
 
 /* Configuration */
 
-func factoryForThatMetaRepo() (*use.AppFactory, error) {
+func factoryForThatMetaRepo() (use.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {
-		factory := use.NewAppFactory()
-		return factory.WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)), nil
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
+		return use.NewAppFactory().WithRepositorySource(jsonMetaRepo), nil
 	}
 }
