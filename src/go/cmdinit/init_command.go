@@ -14,9 +14,9 @@ func NewInitCommand() *initCommand {
 
 type initCommand struct{}
 
-func (cliCmd *initCommand) RegisterWithCobra() {
+func (cliCmd *initCommand) RegisterWithCobra(parentCmd *cobra.Command) {
 	cobraCmd := cliCmd.toCobraCommand()
-	cmd.AddMetaRepoCommand(*cobraCmd)
+	cmd.AddMetaRepoCommand(parentCmd, *cobraCmd)
 }
 
 func (cliCmd *initCommand) toCobraCommand() *cobra.Command {

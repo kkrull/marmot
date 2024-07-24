@@ -38,7 +38,7 @@ func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 	} else {
 		cmdinit.
 			NewInitCommand().
-			RegisterWithCobra()
+			RegisterWithCobra(rootCmd)
 		return rootCmd, nil
 	}
 }

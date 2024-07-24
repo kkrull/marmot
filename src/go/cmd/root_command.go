@@ -6,13 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	rootCmd *cobra.Command
-)
-
 // Configure the root command with the given I/O and version identifier, then return for use.
 func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.Command, error) {
-	rootCmd = &cobra.Command{
+	rootCmd := &cobra.Command{
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE:    runRoot,
 		Short:   "Meta Repo Management Tool",
@@ -20,13 +16,8 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 		Version: version,
 	}
 
-	// Flags
 	AddFlags(rootCmd)
-
-	// Groups
-	rootCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
-
-	// I/O
+	addGroups(rootCmd)
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
 	return rootCmd, nil
@@ -51,7 +42,11 @@ const (
 	metaRepoGroup = "meta-repo"
 )
 
-func AddMetaRepoCommand(child cobra.Command) {
+func addGroups(cobraCmd *cobra.Command) {
+	cobraCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
+}
+
+func AddMetaRepoCommand(parent *cobra.Command, child cobra.Command) {
 	child.GroupID = metaRepoGroup
-	rootCmd.AddCommand(&child)
+	parent.AddCommand(&child)
 }
