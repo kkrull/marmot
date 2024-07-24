@@ -29,17 +29,19 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 			} else if config.Debug {
 				config.PrintDebug(cobraCmd.OutOrStdout())
 				return nil
+			} else if runErr := run(config); runErr != nil {
+				return runErr
 			} else {
-				initAppCmd := config.AppFactory.InitCommand()
-				if runErr := initAppCmd.Run(config.MetaRepoPath); runErr != nil {
-					return runErr
-				} else {
-					fmt.Printf("Initialized meta repo at %s\n", config.MetaRepoPath)
-					return nil
-				}
+				fmt.Printf("Initialized meta repo at %s\n", config.MetaRepoPath)
+				return nil
 			}
 		},
 		Short: "Initialize a meta repo",
 		Use:   "init",
 	}
+}
+
+func run(config *cmd.Config) error {
+	initAppCmd := config.AppFactory.InitCommand()
+	return initAppCmd.Run(config.MetaRepoPath)
 }

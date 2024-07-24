@@ -14,21 +14,29 @@ import (
 /* Configuration */
 
 func AddFlags(cobraCmd *cobra.Command) error {
-	cobraCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
-	cobraCmd.PersistentFlags().Lookup("debug").Hidden = true
-	if defaultPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
-		return pathErr
+	addDebugFlag(cobraCmd)
+	if metaRepoErr := addMetaRepoFlag(cobraCmd); metaRepoErr != nil {
+		return metaRepoErr
 	} else {
-		cobraCmd.PersistentFlags().String("meta-repo", defaultPath, "Meta repo to use")
 		return nil
 	}
 }
 
-func defaultMetaRepoPath() (string, error) {
+func addDebugFlag(cobraCmd *cobra.Command) {
+	cobraCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
+	cobraCmd.PersistentFlags().Lookup("debug").Hidden = true
+}
+
+func addMetaRepoFlag(cobraCmd *cobra.Command) error {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
-		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
+		return fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
-		return filepath.Join(homeDir, "meta"), nil
+		cobraCmd.PersistentFlags().String(
+			"meta-repo",
+			filepath.Join(homeDir, "meta"),
+			"Meta repo to use",
+		)
+		return nil
 	}
 }
 
