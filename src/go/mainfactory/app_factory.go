@@ -25,29 +25,33 @@ func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) *AppFactory {
 /* Administration */
 
 func (factory *AppFactory) InitCommand() (*metarepo.InitCommand, error) {
-	if factory.MetaDataAdmin == nil {
-		factory.MetaDataAdmin = svcfs.NewJsonMetaRepoAdmin()
-	}
-
 	return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
 }
 
 /* Repositories */
 
 func (factory *AppFactory) ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error) {
-	if factory.RepositorySource == nil {
-		return nil, errors.New("AppFactory: missing RepositorySource")
+	if repositorySource, err := factory.repositorySource(); err != nil {
+		return nil, err
+	} else {
+		return repositorySource.ListRemote, nil
 	}
-
-	return factory.RepositorySource.ListRemote, nil
 }
 
 func (factory *AppFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
+	if repositorySource, err := factory.repositorySource(); err != nil {
+		return nil, err
+	} else {
+		return &repository.RegisterRemoteRepositoriesCommand{Source: repositorySource}, nil
+	}
+}
+
+func (factory *AppFactory) repositorySource() (corerepository.RepositorySource, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("AppFactory: missing RepositorySource")
+	} else {
+		return factory.RepositorySource, nil
 	}
-
-	return &repository.RegisterRemoteRepositoriesCommand{Source: factory.RepositorySource}, nil
 }
