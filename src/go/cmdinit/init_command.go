@@ -27,6 +27,7 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Long: "Initialize a new Meta Repo, if none is already present in the configured directory.",
 		RunE: func(cobraCmd *cobra.Command, _args []string) error {
+			//TODO KDK: Look up flags and apply default configuration, for meta repo path
 			if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
 				return pathErr
 			} else if runErr := cliCmd.initAppCmd.Run(metaRepoPath); runErr != nil {
