@@ -24,7 +24,7 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := ParseFlags(cobraCmd.Flags()); parseErr != nil {
+	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
