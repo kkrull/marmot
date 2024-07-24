@@ -67,6 +67,7 @@ func AddMetaRepoCommand(child cobra.Command) {
 /* Pseudo-commands */
 
 func printDebug() {
-	fmt.Printf("--debug: %v\n", *debugFlag)
-	fmt.Printf("--meta-home: %v\n", *metaRepoHomeFlag)
+	fmt.Printf("Flags:\n")
+	fmt.Printf("- debug [%v]: %v\n", rootCmd.Flags().Lookup("debug").DefValue, *debugFlag)
+	fmt.Printf("- meta-home [%v]: %v\n", rootCmd.Flags().Lookup("meta-home").DefValue, *metaRepoHomeFlag)
 }
