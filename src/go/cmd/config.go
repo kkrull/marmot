@@ -17,7 +17,6 @@ import (
 func AddFlags(cobraCmd *cobra.Command) error {
 	cobraCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	cobraCmd.PersistentFlags().Lookup("debug").Hidden = true
-
 	if defaultPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
 		return pathErr
 	} else {

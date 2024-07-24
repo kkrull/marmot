@@ -21,6 +21,7 @@ func (cliCmd *initCommand) RegisterWithCobra() {
 
 func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
+		Args: cobra.NoArgs,
 		Long: "Initialize a new Meta Repo, if none is already present.",
 		RunE: func(cobraCmd *cobra.Command, _args []string) error {
 			config := cmd.ParseFlags(cobraCmd)
