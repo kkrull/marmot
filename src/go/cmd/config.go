@@ -1,29 +1,33 @@
 package cmd
 
+/* Configuration */
+
 func AppConfig() Config {
-	return &TheConfig{}
+	return &theConfig{}
 }
 
-type TheConfig struct{}
+type Config interface {
+	MetaRepoHome() Setting[string]
+}
 
-func (config *TheConfig) MetaRepoHome() Setting[string] {
+type theConfig struct{}
+
+func (config *theConfig) MetaRepoHome() Setting[string] {
 	return &StringSetting{
 		Def: "/home/me/meta-default",
 		Val: "/home/me/meta",
 	}
 }
 
+/* Settings */
+
 type StringSetting struct {
 	Def string
 	Val string
 }
 
-func (setting *StringSetting) DefaultValue() string { return setting.Def }
-func (setting *StringSetting) Value() string        { return setting.Val }
-
-type Config interface {
-	MetaRepoHome() Setting[string]
-}
+func (setting StringSetting) DefaultValue() string { return setting.Def }
+func (setting StringSetting) Value() string        { return setting.Val }
 
 type Setting[V Value] interface {
 	DefaultValue() V
