@@ -25,13 +25,14 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Long: "Initialize a new Meta Repo, if none is already present in the configured directory.",
 		RunE: func(cobraCmd *cobra.Command, _args []string) error {
-			config := cmd.ParseGlobalFlags(cobraCmd)
-			fmt.Printf("- meta-home: %s\n", config.MetaRepoHome)
+			metaHomeFlag := cobraCmd.Flags().Lookup("meta-home")
+			metaHomePath := metaHomeFlag.Value.String()
+			fmt.Printf("[init_command] meta-home: %s\n", metaHomePath)
 
-			if runErr := cliCmd.initAppCmd.Run(config.MetaRepoHome); runErr != nil {
-				return fmt.Errorf("failed to initialize meta repo at %s; %w", config.MetaRepoHome, runErr)
+			if runErr := cliCmd.initAppCmd.Run(metaHomePath); runErr != nil {
+				return fmt.Errorf("failed to initialize meta repo at %s; %w", metaHomePath, runErr)
 			} else {
-				fmt.Printf("Initialized meta repo at %s\n", config.MetaRepoHome)
+				fmt.Printf("Initialized meta repo at %s\n", metaHomePath)
 				return nil
 			}
 		},

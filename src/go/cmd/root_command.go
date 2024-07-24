@@ -32,14 +32,12 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 		Version: version,
 	}
 
-	defaultValues := DefaultGlobalFlags()
-
 	// Flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
 	metaRepoHomeFlag = rootCmd.PersistentFlags().String(
 		"meta-home",
-		defaultValues.MetaRepoHome,
+		"/home/me/meta-default",
 		"set Marmot meta repo directory",
 	)
 
