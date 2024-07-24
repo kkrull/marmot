@@ -16,8 +16,8 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 		Version: version,
 	}
 
-	AddFlags(rootCmd)
-	addGroups(rootCmd)
+	AddRootFlags(rootCmd)
+	addCommandGroups(rootCmd)
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
 	return rootCmd, nil
@@ -42,7 +42,7 @@ const (
 	metaRepoGroup = "meta-repo"
 )
 
-func addGroups(cobraCmd *cobra.Command) {
+func addCommandGroups(cobraCmd *cobra.Command) {
 	cobraCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
 }
 

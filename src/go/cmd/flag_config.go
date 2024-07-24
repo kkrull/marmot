@@ -13,25 +13,25 @@ import (
 
 /* Configuration */
 
-func AddFlags(cobraCmd *cobra.Command) error {
-	addDebugFlag(cobraCmd)
-	if metaRepoErr := addMetaRepoFlag(cobraCmd); metaRepoErr != nil {
+func AddRootFlags(rootCmd *cobra.Command) error {
+	addDebugFlag(rootCmd.PersistentFlags())
+	if metaRepoErr := addMetaRepoFlag(rootCmd.PersistentFlags()); metaRepoErr != nil {
 		return metaRepoErr
 	} else {
 		return nil
 	}
 }
 
-func addDebugFlag(cobraCmd *cobra.Command) {
-	cobraCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
-	cobraCmd.PersistentFlags().Lookup("debug").Hidden = true
+func addDebugFlag(flags *pflag.FlagSet) {
+	flags.Bool("debug", false, "print CLI debugging information")
+	flags.Lookup("debug").Hidden = true
 }
 
-func addMetaRepoFlag(cobraCmd *cobra.Command) error {
+func addMetaRepoFlag(flags *pflag.FlagSet) error {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
 		return fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
-		cobraCmd.PersistentFlags().String(
+		flags.String(
 			"meta-repo",
 			filepath.Join(homeDir, "meta"),
 			"Meta repo to use",
@@ -42,6 +42,7 @@ func addMetaRepoFlag(cobraCmd *cobra.Command) error {
 
 /* Use */
 
+// Parse application configuration from flags passed to the CLI
 func ParseFlags(flags *pflag.FlagSet) (AppConfig, error) {
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
