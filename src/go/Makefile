@@ -55,8 +55,9 @@ ginkgo-watch:
 install-tools:
 	go install github.com/go-delve/delve/cmd/dlv@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
-	go install mvdan.cc/gofumpt@latest
 	go install github.com/spf13/cobra-cli@latest
+	go install golang.org/x/tools/cmd/godoc@latest
+	go install mvdan.cc/gofumpt@latest
 
 .PHONY: run
 run:

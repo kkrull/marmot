@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	mock "github.com/kkrull/marmot/coremetarepomock"
-	main "github.com/kkrull/marmot/mainfactory"
-	use "github.com/kkrull/marmot/usemetarepo"
+	"github.com/kkrull/marmot/use"
+	"github.com/kkrull/marmot/usemetarepo"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -13,31 +13,28 @@ import (
 
 var _ = Describe("InitCommand", func() {
 	var (
-		subject       *use.InitCommand
-		factory       *main.AppFactory
+		subject       *usemetarepo.InitCommand
 		metaDataAdmin *mock.MetaDataAdmin
 	)
 
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
-		factory = &main.AppFactory{MetaDataAdmin: metaDataAdmin}
+		factory := &use.AppFactory{MetaDataAdmin: metaDataAdmin}
+		subject = factory.InitCommand()
 	})
 
 	Describe("#Run", func() {
 		It("initializes the given meta data source", func() {
-			subject, _ = factory.InitCommand()
 			_ = subject.Run("/tmp")
 			metaDataAdmin.CreateExpected("/tmp")
 		})
 
 		It("returns nil, when everything succeeds", func() {
-			subject, _ = factory.InitCommand()
 			Expect(subject.Run("/tmp")).To(BeNil())
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
 			metaDataAdmin.CreateError = errors.New("bang!")
-			subject, _ = factory.InitCommand()
 			Expect(subject.Run("/tmp")).To(MatchError("bang!"))
 		})
 	})

@@ -3,35 +3,49 @@ package cmdinit
 import (
 	"fmt"
 
-	"github.com/kkrull/marmot/usemetarepo"
+	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
-// Construct a CLI command to initialize a meta repo at the specified path
-func NewInitCommand(initApp *usemetarepo.InitCommand, metaRepoHome string) *initCommand {
-	return &initCommand{
-		initApp: initApp,
-		path:    metaRepoHome,
+// Construct a CLI command to initialize a meta repo
+func NewInitCommand() *initCommand {
+	return &initCommand{}
+}
+
+type initCommand struct{}
+
+func (cliCmd *initCommand) RegisterWithCobra(parentCmd *cobra.Command) {
+	cobraCmd := cliCmd.toCobraCommand()
+	cmd.AddMetaRepoCommand(parentCmd, *cobraCmd)
+}
+
+func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
+	return &cobra.Command{
+		Args:  cobra.NoArgs,
+		Long:  "Initialize a new Meta Repo, if none is already present.",
+		RunE:  runInit,
+		Short: "Initialize a meta repo",
+		Use:   "init",
 	}
 }
 
-type initCommand struct {
-	initApp *usemetarepo.InitCommand
-	path    string
+func runInit(cobraCmd *cobra.Command, _args []string) error {
+	if config, parseErr := cmd.ParseFlags(cobraCmd); parseErr != nil {
+		return parseErr
+	} else if config.Debug {
+		config.PrintDebug(cobraCmd.OutOrStdout())
+		return nil
+	} else {
+		return runInitAppCmd(cobraCmd, config)
+	}
 }
 
-func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
-	return &cobra.Command{
-		Long: "Initialize a new Meta Repo in the configured directory, if none is already present.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if runErr := cliCmd.initApp.Run(cliCmd.path); runErr != nil {
-				return fmt.Errorf("failed to initialize meta repo at %s; %w", cliCmd.path, runErr)
-			} else {
-				fmt.Printf("Initialized meta repo at %s\n", cliCmd.path)
-				return nil
-			}
-		},
-		Short: "initialize a meta repo",
-		Use:   "init",
+func runInitAppCmd(cobraCmd *cobra.Command, config *cmd.Config) error {
+	initAppCmd := config.AppFactory.InitCommand()
+	if runErr := initAppCmd.Run(config.MetaRepoPath); runErr != nil {
+		return runErr
+	} else {
+		fmt.Fprintf(cobraCmd.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath)
+		return nil
 	}
 }

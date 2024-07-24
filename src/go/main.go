@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -15,15 +14,12 @@ var (
 
 func main() {
 	if err := doMain(); err != nil {
-		fmt.Fprintln(stderr, err.Error())
 		os.Exit(1)
 	}
 }
 
 func doMain() error {
-	if appFactory, appErr := mainfactory.DefaultAppFactory(); appErr != nil {
-		return appErr
-	} else if cliFactory, cliErr := newCliFactory(appFactory); cliErr != nil {
+	if cliFactory, cliErr := newCliFactory(); cliErr != nil {
 		return cliErr
 	} else if rootCmd, buildErr := cliFactory.CommandTree(); buildErr != nil {
 		return buildErr
@@ -34,9 +30,9 @@ func doMain() error {
 	}
 }
 
-func newCliFactory(appFactory *mainfactory.AppFactory) (*mainfactory.CliFactory, error) {
+func newCliFactory() (*mainfactory.CliFactory, error) {
 	return mainfactory.
-		NewCliFactory(appFactory).
+		NewCliFactory().
 		WithStdIO(stdout, stderr).
 		ForExecutable()
 }

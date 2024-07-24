@@ -5,7 +5,7 @@ import (
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
-	main "github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/use"
 )
 
 // Add step definitions to manage the life cycle of a meta repo.
@@ -17,10 +17,9 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	factory := &main.AppFactory{}
-	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
-		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
-	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
+	factory := use.NewAppFactory()
+	initCmd := factory.InitCommand()
+	if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
 	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)
