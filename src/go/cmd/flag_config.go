@@ -13,6 +13,7 @@ import (
 
 /* Root command flags */
 
+// Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
 func RootFlagSet() CommandFlagSet {
 	return &rootFlagSet{}
 }
@@ -44,7 +45,9 @@ func addMetaRepoFlag(flags *pflag.FlagSet) error {
 
 /* Flag configuration */
 
+// Flag configuration for a single CLI command
 type CommandFlagSet interface {
+	//Add the implemented flags to the given CLI command
 	AddTo(cmd *cobra.Command) error
 }
 
