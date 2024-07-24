@@ -39,14 +39,21 @@ func runRoot(cobraCmd *cobra.Command, args []string) error {
 /* Child commands */
 
 const (
-	metaRepoGroup = "meta-repo-group"
+	metaRepoGroup   = "meta-repo-group"
+	repositoryGroup = "repository-group"
 )
 
 func addCommandGroups(cobraCmd *cobra.Command) {
 	cobraCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
+	cobraCmd.AddGroup(&cobra.Group{ID: repositoryGroup, Title: "Repository Commands"})
 }
 
 func AddMetaRepoCommand(parent *cobra.Command, child cobra.Command) {
 	child.GroupID = metaRepoGroup
+	parent.AddCommand(&child)
+}
+
+func AddRepositoryCommand(parent *cobra.Command, child cobra.Command) {
+	child.GroupID = repositoryGroup
 	parent.AddCommand(&child)
 }
