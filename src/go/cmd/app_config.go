@@ -6,7 +6,7 @@ import (
 	"github.com/kkrull/marmot/use"
 )
 
-// Application configuration that doesn't have anything particular to do with the CLI.
+// Abstract factory that creates various application factories from a CLI configuration.
 type AppConfig interface {
 	AppFactory() use.AppFactory
 	Debug() bool

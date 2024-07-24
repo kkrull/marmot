@@ -5,13 +5,12 @@ import (
 
 	"github.com/kkrull/marmot/coremetarepo"
 	"github.com/kkrull/marmot/corerepository"
-	"github.com/kkrull/marmot/svcfs"
 	metarepo "github.com/kkrull/marmot/usemetarepo"
 	repository "github.com/kkrull/marmot/userepository"
 )
 
 func NewAppFactory() *appFactory {
-	return &appFactory{MetaDataAdmin: svcfs.NewJsonMetaRepoAdmin()}
+	return &appFactory{}
 }
 
 // Constructs application commands and queries with configurable services.
