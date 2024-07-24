@@ -8,8 +8,8 @@ import (
 	"github.com/cucumber/godog"
 	core "github.com/kkrull/marmot/corerepository"
 	support "github.com/kkrull/marmot/cukesupport"
-	main "github.com/kkrull/marmot/mainfactory"
 	"github.com/kkrull/marmot/svcfs"
+	"github.com/kkrull/marmot/use"
 	. "github.com/onsi/gomega"
 )
 
@@ -78,12 +78,11 @@ func registerRemote() error {
 
 /* Configuration */
 
-func factoryForThatMetaRepo() (*main.AppFactory, error) {
+func factoryForThatMetaRepo() (*use.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {
-		factory := main.NewAppFactory()
-		factory.WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath))
-		return factory, nil
+		factory := use.NewAppFactory()
+		return factory.WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)), nil
 	}
 }

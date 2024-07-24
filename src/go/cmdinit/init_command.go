@@ -2,22 +2,17 @@ package cmdinit
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/kkrull/marmot/cmd"
-	"github.com/kkrull/marmot/usemetarepo"
 	"github.com/spf13/cobra"
 )
 
 // Construct a CLI command to initialize a meta repo
-func NewInitCommand(initAppCmd *usemetarepo.InitCommand) *initCommand {
-	return &initCommand{initAppCmd: initAppCmd}
+func NewInitCommand() *initCommand {
+	return &initCommand{}
 }
 
-type initCommand struct {
-	initAppCmd *usemetarepo.InitCommand
-}
+type initCommand struct{}
 
 func (cliCmd *initCommand) RegisterWithCobra() {
 	cmd.AddMetaRepoCommand(*cliCmd.toCobraCommand())
@@ -27,10 +22,11 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Long: "Initialize a new Meta Repo, if none is already present in the configured directory.",
 		RunE: func(cobraCmd *cobra.Command, _args []string) error {
-			//TODO KDK: Look up flags and apply default configuration, for meta repo path
-			if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
+			config := cmd.ParseFlags(cobraCmd)
+			initAppCmd := config.AppFactory.InitCommand()
+			if metaRepoPath, pathErr := config.MetaRepoPath(); pathErr != nil {
 				return pathErr
-			} else if runErr := cliCmd.initAppCmd.Run(metaRepoPath); runErr != nil {
+			} else if runErr := initAppCmd.Run(metaRepoPath); runErr != nil {
 				return runErr
 			} else {
 				fmt.Printf("Initialized meta repo at %s\n", metaRepoPath)
@@ -39,13 +35,5 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 		},
 		Short: "Initialize a meta repo",
 		Use:   "init",
-	}
-}
-
-func defaultMetaRepoPath() (string, error) {
-	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
-		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
-	} else {
-		return filepath.Join(homeDir, "meta"), nil
 	}
 }

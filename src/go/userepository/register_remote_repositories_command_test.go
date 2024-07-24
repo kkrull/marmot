@@ -4,9 +4,9 @@ import (
 	"net/url"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
-	main "github.com/kkrull/marmot/mainfactory"
 	testdata "github.com/kkrull/marmot/testsupportdata"
 	expect "github.com/kkrull/marmot/testsupportexpect"
+	"github.com/kkrull/marmot/use"
 	"github.com/kkrull/marmot/userepository"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -14,14 +14,14 @@ import (
 
 var _ = Describe("RegisterRepositoriesCommand", func() {
 	var (
-		factory *main.AppFactory
+		factory *use.AppFactory
 		source  *mock.RepositorySource
 		subject *userepository.RegisterRemoteRepositoriesCommand
 	)
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = main.NewAppFactory().WithRepositorySource(source)
+		factory = use.NewAppFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 	})
 

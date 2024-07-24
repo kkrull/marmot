@@ -1,4 +1,4 @@
-package mainfactory
+package use
 
 import (
 	"errors"
@@ -27,8 +27,8 @@ func (factory *AppFactory) WithRepositorySource(repositorySource corerepository.
 
 /* Administration */
 
-func (factory *AppFactory) InitCommand() (*metarepo.InitCommand, error) {
-	return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
+func (factory *AppFactory) InitCommand() *metarepo.InitCommand {
+	return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}
 }
 
 /* Repositories */

@@ -34,14 +34,10 @@ func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *Cli
 
 func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 	rootCmd := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
-	if initAppCmd, initAppErr := NewAppFactory().InitCommand(); initAppErr != nil {
-		return nil, initAppErr
-	} else {
-		cmdinit.
-			NewInitCommand(initAppCmd).
-			RegisterWithCobra()
-		return rootCmd, nil
-	}
+	cmdinit.
+		NewInitCommand().
+		RegisterWithCobra()
+	return rootCmd, nil
 }
 
 /* Version configuration */
