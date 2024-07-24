@@ -39,6 +39,7 @@ func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 		cmdinit.
 			NewInitCommand().
 			RegisterWithCobra(rootCmd)
+		cmdremote.NewRemoteCommand().RegisterWithCobra(rootCmd)
 		return rootCmd, nil
 	}
 }
