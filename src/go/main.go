@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 
 	"github.com/kkrull/marmot/mainfactory"
 )
@@ -22,9 +21,7 @@ func main() {
 }
 
 func doMain() error {
-	if appFactory, appErr := defaultAppFactory(); appErr != nil {
-		return appErr
-	} else if cliFactory, cliErr := newCliFactory(appFactory); cliErr != nil {
+	if cliFactory, cliErr := newCliFactory(); cliErr != nil {
 		return cliErr
 	} else if rootCmd, buildErr := cliFactory.CommandTree(); buildErr != nil {
 		return buildErr
@@ -35,33 +32,9 @@ func doMain() error {
 	}
 }
 
-/* App factory */
-
-func defaultAppFactory() (*mainfactory.AppFactory, error) {
-	if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
-		return nil, pathErr
-	} else {
-		return newAppFactory().ForLocalMetaRepo(metaRepoPath), nil
-	}
-}
-
-func defaultMetaRepoPath() (string, error) {
-	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
-		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
-	} else {
-		return filepath.Join(homeDir, "meta"), nil
-	}
-}
-
-func newAppFactory() *mainfactory.AppFactory {
-	return &mainfactory.AppFactory{}
-}
-
-/* CLI factory */
-
-func newCliFactory(appFactory *mainfactory.AppFactory) (*mainfactory.CliFactory, error) {
+func newCliFactory() (*mainfactory.CliFactory, error) {
 	return mainfactory.
-		NewCliFactory(appFactory).
+		NewCliFactory().
 		WithStdIO(stdout, stderr).
 		ForExecutable()
 }

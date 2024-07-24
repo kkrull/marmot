@@ -8,9 +8,8 @@ import (
 )
 
 var (
-	debugFlag        *bool
-	metaRepoHomeFlag *string
-	rootCmd          *cobra.Command
+	debugFlag *bool
+	rootCmd   *cobra.Command
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
@@ -35,11 +34,6 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 	// Flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
-	metaRepoHomeFlag = rootCmd.PersistentFlags().String(
-		"meta-home",
-		"/home/me/meta-default",
-		"set Marmot meta repo directory",
-	)
 
 	// Groups
 	rootCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
@@ -66,5 +60,4 @@ func AddMetaRepoCommand(child cobra.Command) {
 func printDebug() {
 	fmt.Printf("Flags:\n")
 	fmt.Printf("- debug [%v]: %v\n", rootCmd.Flags().Lookup("debug").DefValue, *debugFlag)
-	fmt.Printf("- meta-home [%v]: %v\n", rootCmd.Flags().Lookup("meta-home").DefValue, *metaRepoHomeFlag)
 }
