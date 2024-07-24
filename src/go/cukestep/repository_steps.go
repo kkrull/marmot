@@ -9,6 +9,7 @@ import (
 	core "github.com/kkrull/marmot/corerepository"
 	support "github.com/kkrull/marmot/cukesupport"
 	main "github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/svcfs"
 	. "github.com/onsi/gomega"
 )
 
@@ -81,8 +82,8 @@ func factoryForThatMetaRepo() (*main.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
 	} else {
-		factory := &main.AppFactory{}
-		factory.ForLocalMetaRepo(metaRepoPath)
+		factory := main.NewAppFactory()
+		factory.WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath))
 		return factory, nil
 	}
 }

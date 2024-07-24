@@ -10,15 +10,18 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
+func NewAppFactory() *AppFactory {
+	return &AppFactory{MetaDataAdmin: svcfs.NewJsonMetaRepoAdmin()}
+}
+
 // Constructs application commands and queries with configurable services.
 type AppFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
 	RepositorySource corerepository.RepositorySource
 }
 
-// Configure a local, file-based meta repo at the specified path
-func (factory *AppFactory) ForLocalMetaRepo(metaRepoPath string) *AppFactory {
-	factory.RepositorySource = svcfs.NewJsonMetaRepo(metaRepoPath)
+func (factory *AppFactory) WithRepositorySource(repositorySource corerepository.RepositorySource) *AppFactory {
+	factory.RepositorySource = repositorySource
 	return factory
 }
 

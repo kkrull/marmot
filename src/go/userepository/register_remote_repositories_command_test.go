@@ -21,7 +21,7 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = &main.AppFactory{RepositorySource: source}
+		factory = main.NewAppFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.RegisterRemoteRepositoriesCommand())
 	})
 
