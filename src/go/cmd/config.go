@@ -42,30 +42,35 @@ func addMetaRepoFlag(cobraCmd *cobra.Command) error {
 
 /* Use */
 
-func ParseFlags(cobraCmd *cobra.Command) (*Config, error) {
+func ParseFlags(cobraCmd *cobra.Command) (AppConfig, error) {
 	flags := cobraCmd.Flags()
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
 		return nil, metaRepoPathErr
 	} else {
-		return &Config{
-			AppFactory:   *use.NewAppFactory(),
-			Debug:        debug,
-			MetaRepoPath: metaRepoPath,
+		config := &FlagAppConfig{
+			appFactory:   use.NewAppFactory(),
+			debug:        debug,
 			flagSet:      flags,
-		}, nil
+			metaRepoPath: metaRepoPath,
+		}
+		return config, nil
 	}
 }
 
-type Config struct {
-	AppFactory   use.AppFactory
-	Debug        bool
-	MetaRepoPath string
+// Application configuration derived from flags passed to the CLI.
+type FlagAppConfig struct {
+	appFactory   *use.AppFactory
+	debug        bool
 	flagSet      *pflag.FlagSet
+	metaRepoPath string
 }
 
-func (config Config) PrintDebug(writer io.Writer) {
+func (config FlagAppConfig) AppFactory() *use.AppFactory { return config.appFactory }
+func (config FlagAppConfig) Debug() bool                 { return config.debug }
+func (config FlagAppConfig) MetaRepoPath() string        { return config.metaRepoPath }
+func (config FlagAppConfig) PrintDebug(writer io.Writer) {
 	fmt.Fprintf(writer, "Flags:\n")
 
 	debugFlag := config.flagSet.Lookup("debug")
