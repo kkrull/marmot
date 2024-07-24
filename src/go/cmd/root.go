@@ -16,7 +16,7 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 		Version: version,
 	}
 
-	AddRootFlags(rootCmd)
+	RootFlagSet().AddTo(rootCmd)
 	addCommandGroups(rootCmd)
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
@@ -39,7 +39,7 @@ func runRoot(cobraCmd *cobra.Command, args []string) error {
 /* Child commands */
 
 const (
-	metaRepoGroup = "meta-repo"
+	metaRepoGroup = "meta-repo-group"
 )
 
 func addCommandGroups(cobraCmd *cobra.Command) {

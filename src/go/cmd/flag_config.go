@@ -11,15 +11,21 @@ import (
 	"github.com/spf13/pflag"
 )
 
-/* Configuration */
+/* Root command flags */
 
-func AddRootFlags(rootCmd *cobra.Command) error {
+func RootFlagSet() CommandFlagSet {
+	return &rootFlagSet{}
+}
+
+type rootFlagSet struct{}
+
+func (rootFlagSet) AddTo(rootCmd *cobra.Command) error {
 	addDebugFlag(rootCmd.PersistentFlags())
 	if metaRepoErr := addMetaRepoFlag(rootCmd.PersistentFlags()); metaRepoErr != nil {
 		return metaRepoErr
-	} else {
-		return nil
 	}
+
+	return nil
 }
 
 func addDebugFlag(flags *pflag.FlagSet) {
@@ -31,13 +37,15 @@ func addMetaRepoFlag(flags *pflag.FlagSet) error {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
 		return fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
-		flags.String(
-			"meta-repo",
-			filepath.Join(homeDir, "meta"),
-			"Meta repo to use",
-		)
+		flags.String("meta-repo", filepath.Join(homeDir, "meta"), "Meta repo to use")
 		return nil
 	}
+}
+
+/* Flag configuration */
+
+type CommandFlagSet interface {
+	AddTo(cmd *cobra.Command) error
 }
 
 /* Use */
