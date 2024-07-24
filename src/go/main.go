@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/kkrull/marmot/mainfactory"
 )
@@ -21,7 +22,7 @@ func main() {
 }
 
 func doMain() error {
-	if appFactory, appErr := mainfactory.DefaultAppFactory(); appErr != nil {
+	if appFactory, appErr := defaultAppFactory(); appErr != nil {
 		return appErr
 	} else if cliFactory, cliErr := newCliFactory(appFactory); cliErr != nil {
 		return cliErr
@@ -33,6 +34,30 @@ func doMain() error {
 		return nil
 	}
 }
+
+/* App factory */
+
+func defaultAppFactory() (*mainfactory.AppFactory, error) {
+	if metaRepoPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
+		return nil, pathErr
+	} else {
+		return newAppFactory().ForLocalMetaRepo(metaRepoPath), nil
+	}
+}
+
+func newAppFactory() *mainfactory.AppFactory {
+	return &mainfactory.AppFactory{}
+}
+
+func defaultMetaRepoPath() (string, error) {
+	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
+		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
+	} else {
+		return filepath.Join(homeDir, "meta"), nil
+	}
+}
+
+/* CLI factory */
 
 func newCliFactory(appFactory *mainfactory.AppFactory) (*mainfactory.CliFactory, error) {
 	return mainfactory.
