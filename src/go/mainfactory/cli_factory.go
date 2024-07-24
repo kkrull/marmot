@@ -33,11 +33,14 @@ func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *Cli
 /* Factory methods */
 
 func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
-	rootCmd := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
-	cmdinit.
-		NewInitCommand().
-		RegisterWithCobra()
-	return rootCmd, nil
+	if rootCmd, rootCmdErr := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version); rootCmdErr != nil {
+		return nil, rootCmdErr
+	} else {
+		cmdinit.
+			NewInitCommand().
+			RegisterWithCobra()
+		return rootCmd, nil
+	}
 }
 
 /* Version configuration */

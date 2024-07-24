@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -13,7 +15,7 @@ var (
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
-func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
+func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.Command, error) {
 	rootCmd = &cobra.Command{
 		Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -34,6 +36,11 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 	// Flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
+	if defaultPath, pathErr := defaultMetaRepoPath(); pathErr != nil {
+		return nil, pathErr
+	} else {
+		rootCmd.PersistentFlags().String("meta-repo", defaultPath, "Meta repo to use")
+	}
 
 	// Groups
 	rootCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
@@ -41,7 +48,15 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 	// I/O
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
-	return rootCmd
+	return rootCmd, nil
+}
+
+func defaultMetaRepoPath() (string, error) {
+	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
+		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
+	} else {
+		return filepath.Join(homeDir, "meta"), nil
+	}
 }
 
 /* Child commands */
