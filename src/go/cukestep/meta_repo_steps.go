@@ -5,6 +5,7 @@ import (
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
+	"github.com/kkrull/marmot/svcfs"
 	"github.com/kkrull/marmot/use"
 )
 
@@ -17,9 +18,10 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	factory := use.NewAppFactory()
-	initCmd := factory.InitCommand()
-	if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
+	factory := use.NewAppFactory().WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin())
+	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
+	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
 	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)

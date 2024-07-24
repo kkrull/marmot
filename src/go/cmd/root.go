@@ -16,17 +16,17 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 		Version: version,
 	}
 
-	AddFlags(rootCmd)
-	addGroups(rootCmd)
+	RootFlagSet().AddTo(rootCmd)
+	addCommandGroups(rootCmd)
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
 	return rootCmd, nil
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := ParseFlags(cobraCmd); parseErr != nil {
+	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
-	} else if config.Debug {
+	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
 		return nil
 	} else if len(args) == 0 {
@@ -39,10 +39,10 @@ func runRoot(cobraCmd *cobra.Command, args []string) error {
 /* Child commands */
 
 const (
-	metaRepoGroup = "meta-repo"
+	metaRepoGroup = "meta-repo-group"
 )
 
-func addGroups(cobraCmd *cobra.Command) {
+func addCommandGroups(cobraCmd *cobra.Command) {
 	cobraCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
 }
 

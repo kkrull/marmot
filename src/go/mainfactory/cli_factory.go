@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/kkrull/marmot/cmd"
-	"github.com/kkrull/marmot/cmdinit"
 	"github.com/spf13/cobra"
 )
 
@@ -36,9 +35,8 @@ func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 	if rootCmd, rootCmdErr := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version); rootCmdErr != nil {
 		return nil, rootCmdErr
 	} else {
-		cmdinit.
-			NewInitCommand().
-			RegisterWithCobra(rootCmd)
+		cmd.NewInitCommand().RegisterWithCobra(rootCmd)
+		// cmdremote.NewRemoteCommand().RegisterWithCobra(rootCmd)
 		return rootCmd, nil
 	}
 }

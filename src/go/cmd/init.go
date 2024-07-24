@@ -1,13 +1,12 @@
-package cmdinit
+package cmd
 
 import (
 	"fmt"
 
-	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
-// Construct a CLI command to initialize a meta repo
+// Construct a CLI command to initialize a meta repo.
 func NewInitCommand() *initCommand {
 	return &initCommand{}
 }
@@ -16,7 +15,7 @@ type initCommand struct{}
 
 func (cliCmd *initCommand) RegisterWithCobra(parentCmd *cobra.Command) {
 	cobraCmd := cliCmd.toCobraCommand()
-	cmd.AddMetaRepoCommand(parentCmd, *cobraCmd)
+	AddMetaRepoCommand(parentCmd, *cobraCmd)
 }
 
 func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
@@ -29,10 +28,10 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	}
 }
 
-func runInit(cobraCmd *cobra.Command, _args []string) error {
-	if config, parseErr := cmd.ParseFlags(cobraCmd); parseErr != nil {
+func runInit(cobraCmd *cobra.Command, args []string) error {
+	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
-	} else if config.Debug {
+	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
 		return nil
 	} else {
@@ -40,12 +39,13 @@ func runInit(cobraCmd *cobra.Command, _args []string) error {
 	}
 }
 
-func runInitAppCmd(cobraCmd *cobra.Command, config *cmd.Config) error {
-	initAppCmd := config.AppFactory.InitCommand()
-	if runErr := initAppCmd.Run(config.MetaRepoPath); runErr != nil {
+func runInitAppCmd(cobraCmd *cobra.Command, config AppConfig) error {
+	if initAppCmd, initErr := config.AppFactory().InitCommand(); initErr != nil {
+		return initErr
+	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
 	} else {
-		fmt.Fprintf(cobraCmd.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath)
+		fmt.Fprintf(cobraCmd.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath())
 		return nil
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	mock "github.com/kkrull/marmot/coremetarepomock"
+	expect "github.com/kkrull/marmot/testsupportexpect"
 	"github.com/kkrull/marmot/use"
 	"github.com/kkrull/marmot/usemetarepo"
 
@@ -19,8 +20,8 @@ var _ = Describe("InitCommand", func() {
 
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
-		factory := &use.AppFactory{MetaDataAdmin: metaDataAdmin}
-		subject = factory.InitCommand()
+		factory := use.NewAppFactory().WithMetaDataAdmin(metaDataAdmin)
+		subject = expect.NoError(factory.InitCommand())
 	})
 
 	Describe("#Run", func() {
