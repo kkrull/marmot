@@ -20,15 +20,15 @@ type CommandFlagSet interface {
 
 // Application configuration derived from flags passed to the CLI.
 type FlagAppConfig struct {
-	appFactory   *use.AppFactory
+	appFactory   use.AppFactory
 	debug        bool
 	flagSet      *pflag.FlagSet
 	metaRepoPath string
 }
 
-func (config FlagAppConfig) AppFactory() *use.AppFactory { return config.appFactory }
-func (config FlagAppConfig) Debug() bool                 { return config.debug }
-func (config FlagAppConfig) MetaRepoPath() string        { return config.metaRepoPath }
+func (config FlagAppConfig) AppFactory() use.AppFactory { return config.appFactory }
+func (config FlagAppConfig) Debug() bool                { return config.debug }
+func (config FlagAppConfig) MetaRepoPath() string       { return config.metaRepoPath }
 func (config FlagAppConfig) PrintDebug(writer io.Writer) {
 	fmt.Fprintf(writer, "Flags:\n")
 
