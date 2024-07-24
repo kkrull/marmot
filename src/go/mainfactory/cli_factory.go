@@ -13,16 +13,15 @@ import (
 )
 
 // Construct a factory to create CLI commands.
-func NewCliFactory(appFactory *AppFactory) *CliFactory {
-	return &CliFactory{appFactory: appFactory}
+func NewCliFactory() *CliFactory {
+	return &CliFactory{}
 }
 
 // Creates commands for the Command Line Interface (CLI).
 type CliFactory struct {
-	appFactory *AppFactory
-	stdout     io.Writer
-	stderr     io.Writer
-	version    string
+	stdout  io.Writer
+	stderr  io.Writer
+	version string
 }
 
 func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
@@ -35,14 +34,10 @@ func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *Cli
 
 func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
 	rootCmd := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version)
-	if initAppCmd, appFactoryErr := cliFactory.appFactory.InitCommand(); appFactoryErr != nil {
-		return nil, appFactoryErr
-	} else {
-		cmdinit.
-			NewInitCommand(initAppCmd).
-			RegisterWithCobra()
-		return rootCmd, nil
-	}
+	cmdinit.
+		NewInitCommand().
+		RegisterWithCobra()
+	return rootCmd, nil
 }
 
 /* Version configuration */

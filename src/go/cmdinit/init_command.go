@@ -11,8 +11,8 @@ import (
 )
 
 // Construct a CLI command to initialize a meta repo
-func NewInitCommand(initApp *usemetarepo.InitCommand) *initCommand {
-	return &initCommand{initAppCmd: initApp}
+func NewInitCommand(initAppCmd *usemetarepo.InitCommand) *initCommand {
+	return &initCommand{initAppCmd: initAppCmd}
 }
 
 type initCommand struct {
