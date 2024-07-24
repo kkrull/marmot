@@ -24,6 +24,11 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 		Long: "Initialize a new Meta Repo, if none is already present.",
 		RunE: func(cobraCmd *cobra.Command, _args []string) error {
 			config := cmd.ParseFlags(cobraCmd)
+			if config.Debug() {
+				config.PrintDebug(cobraCmd.OutOrStdout())
+				return nil
+			}
+
 			initAppCmd := config.AppFactory.InitCommand()
 			metaRepoPath := config.MetaRepoPath()
 			if runErr := initAppCmd.Run(metaRepoPath); runErr != nil {
