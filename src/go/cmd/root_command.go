@@ -32,15 +32,14 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 		Version: version,
 	}
 
-	appConfig := AppConfig()
+	defaultValues := DefaultGlobalFlags()
 
-	// TODO KDK: Add flag for using a different home directory
 	// Flags
 	debugFlag = rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
 	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
 	metaRepoHomeFlag = rootCmd.PersistentFlags().String(
 		"meta-home",
-		appConfig.MetaRepoHome().DefaultValue(),
+		defaultValues.MetaRepoHome,
 		"set Marmot meta repo directory",
 	)
 

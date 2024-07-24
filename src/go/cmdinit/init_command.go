@@ -8,17 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Construct a CLI command to initialize a meta repo at the specified path
-func NewInitCommand(initApp *usemetarepo.InitCommand, metaRepoHome string) *initCommand {
-	return &initCommand{
-		initApp: initApp,
-		path:    metaRepoHome,
-	}
+// Construct a CLI command to initialize a meta repo
+func NewInitCommand(initApp *usemetarepo.InitCommand) *initCommand {
+	return &initCommand{initAppCmd: initApp}
 }
 
 type initCommand struct {
-	initApp *usemetarepo.InitCommand
-	path    string
+	initAppCmd *usemetarepo.InitCommand
 }
 
 func (cliCmd *initCommand) RegisterWithCobra() {
@@ -27,15 +23,15 @@ func (cliCmd *initCommand) RegisterWithCobra() {
 
 func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
-		Long: "Initialize a new Meta Repo in the configured directory, if none is already present.",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			metaHomeFlag := cmd.Flags().Lookup("meta-home")
-			fmt.Printf("- meta-home: %s\n", metaHomeFlag.Value)
+		Long: "Initialize a new Meta Repo, if none is already present in the configured directory.",
+		RunE: func(cobraCmd *cobra.Command, _args []string) error {
+			config := cmd.ParseGlobalFlags(cobraCmd)
+			fmt.Printf("- meta-home: %s\n", config.MetaRepoHome)
 
-			if runErr := cliCmd.initApp.Run(cliCmd.path); runErr != nil {
-				return fmt.Errorf("failed to initialize meta repo at %s; %w", cliCmd.path, runErr)
+			if runErr := cliCmd.initAppCmd.Run(config.MetaRepoHome); runErr != nil {
+				return fmt.Errorf("failed to initialize meta repo at %s; %w", config.MetaRepoHome, runErr)
 			} else {
-				fmt.Printf("Initialized meta repo at %s\n", cliCmd.path)
+				fmt.Printf("Initialized meta repo at %s\n", config.MetaRepoHome)
 				return nil
 			}
 		},
