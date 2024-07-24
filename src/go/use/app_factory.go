@@ -15,7 +15,7 @@ func NewAppFactory() *appFactory {
 
 // Constructs application commands and queries with configurable services.
 type AppFactory interface {
-	InitCommand() *metarepo.InitCommand
+	InitCommand() (*metarepo.InitCommand, error)
 	ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error)
 	RegisterRemoteRepositoriesCommand() (*repository.RegisterRemoteRepositoriesCommand, error)
 }
@@ -37,8 +37,12 @@ func (factory *appFactory) WithRepositorySource(repositorySource corerepository.
 
 /* Administration */
 
-func (factory *appFactory) InitCommand() *metarepo.InitCommand {
-	return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}
+func (factory *appFactory) InitCommand() (*metarepo.InitCommand, error) {
+	if factory.MetaDataAdmin == nil {
+		return nil, errors.New("AppFactory: missing MetaDataAdmin")
+	} else {
+		return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
+	}
 }
 
 /* Repositories */

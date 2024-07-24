@@ -40,8 +40,9 @@ func runInit(cobraCmd *cobra.Command, args []string) error {
 }
 
 func runInitAppCmd(cobraCmd *cobra.Command, config AppConfig) error {
-	initAppCmd := config.AppFactory().InitCommand()
-	if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
+	if initAppCmd, initErr := config.AppFactory().InitCommand(); initErr != nil {
+		return initErr
+	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
 	} else {
 		fmt.Fprintf(cobraCmd.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath())

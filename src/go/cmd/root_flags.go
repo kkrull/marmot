@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/kkrull/marmot/svcfs"
 	"github.com/kkrull/marmot/use"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -28,7 +29,9 @@ func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, _args []string) (AppConf
 		return nil, metaRepoPathErr
 	} else {
 		config := &FlagAppConfig{
-			appFactory:   use.NewAppFactory(),
+			appFactory: use.NewAppFactory().
+				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin()).
+				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
 			debug:        debug,
 			flagSet:      flags,
 			metaRepoPath: metaRepoPath,

@@ -19,8 +19,9 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
 	factory := use.NewAppFactory().WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin())
-	initCmd := factory.InitCommand()
-	if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
+	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
+		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
+	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
 	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)
