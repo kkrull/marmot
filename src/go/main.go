@@ -45,16 +45,16 @@ func defaultAppFactory() (*mainfactory.AppFactory, error) {
 	}
 }
 
-func newAppFactory() *mainfactory.AppFactory {
-	return &mainfactory.AppFactory{}
-}
-
 func defaultMetaRepoPath() (string, error) {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
 		return "", fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
 		return filepath.Join(homeDir, "meta"), nil
 	}
+}
+
+func newAppFactory() *mainfactory.AppFactory {
+	return &mainfactory.AppFactory{}
 }
 
 /* CLI factory */
