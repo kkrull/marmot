@@ -42,8 +42,7 @@ func addMetaRepoFlag(cobraCmd *cobra.Command) error {
 
 /* Use */
 
-func ParseFlags(cobraCmd *cobra.Command) (AppConfig, error) {
-	flags := cobraCmd.Flags()
+func ParseFlags(flags *pflag.FlagSet) (AppConfig, error) {
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {

@@ -29,7 +29,7 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 }
 
 func runInit(cobraCmd *cobra.Command, _args []string) error {
-	if config, parseErr := ParseFlags(cobraCmd); parseErr != nil {
+	if config, parseErr := ParseFlags(cobraCmd.Flags()); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
