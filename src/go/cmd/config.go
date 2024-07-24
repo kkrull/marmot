@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strconv"
 
 	"github.com/kkrull/marmot/use"
 	"github.com/spf13/cobra"
@@ -35,26 +34,27 @@ func defaultMetaRepoPath() (string, error) {
 
 /* Use */
 
-func ParseFlags(cobraCmd *cobra.Command) *Config {
-	return &Config{
-		AppFactory: *use.NewAppFactory(),
-		flagSet:    cobraCmd.Flags(),
+func ParseFlags(cobraCmd *cobra.Command) (*Config, error) {
+	flags := cobraCmd.Flags()
+	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
+		return nil, debugErr
+	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
+		return nil, metaRepoPathErr
+	} else {
+		return &Config{
+			AppFactory:   *use.NewAppFactory(),
+			Debug:        debug,
+			MetaRepoPath: metaRepoPath,
+			flagSet:      flags,
+		}, nil
 	}
 }
 
 type Config struct {
-	AppFactory use.AppFactory
-	flagSet    *pflag.FlagSet
-}
-
-func (config Config) Debug() bool {
-	rawValue := config.flagSet.Lookup("debug").Value.String()
-	parsed, _ := strconv.ParseBool(rawValue)
-	return parsed
-}
-
-func (config Config) MetaRepoPath() string {
-	return config.flagSet.Lookup("meta-repo").Value.String()
+	AppFactory   use.AppFactory
+	Debug        bool
+	MetaRepoPath string
+	flagSet      *pflag.FlagSet
 }
 
 func (config Config) PrintDebug(writer io.Writer) {

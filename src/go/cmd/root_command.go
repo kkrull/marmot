@@ -15,8 +15,9 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 	rootCmd = &cobra.Command{
 		Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			config := ParseFlags(cmd)
-			if config.Debug() {
+			if config, parseErr := ParseFlags(cmd); parseErr != nil {
+				return parseErr
+			} else if config.Debug {
 				config.PrintDebug(stdout)
 				return nil
 			} else if len(args) == 0 {
@@ -26,7 +27,7 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 			}
 		},
 		Short:   "Meta Repo Management Tool",
-		Use:     "marmot [--help|--version]",
+		Use:     "marmot",
 		Version: version,
 	}
 
