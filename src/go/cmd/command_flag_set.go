@@ -11,7 +11,7 @@ import (
 
 // Flag configuration for a single CLI command
 type CommandFlagSet interface {
-	//Add the implemented flags to the given CLI command
+	// Add the implemented flags to the given CLI command
 	AddTo(cmd *cobra.Command) error
 
 	// Parse application configuration from flags passed to the CLI
