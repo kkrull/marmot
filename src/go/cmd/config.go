@@ -1,37 +1,22 @@
 package cmd
 
-/* Configuration */
+import "github.com/spf13/cobra"
 
-func AppConfig() Config {
-	return &theConfig{}
-}
+/* Flags */
 
-type Config interface {
-	MetaRepoHome() Setting[string]
-}
-
-type theConfig struct{}
-
-func (config *theConfig) MetaRepoHome() Setting[string] {
-	return &StringSetting{
-		Def: "/home/me/meta-default",
-		Val: "/home/me/meta",
+func DefaultGlobalFlags() *GlobalConfig {
+	return &GlobalConfig{
+		MetaRepoHome: "/home/me/meta-default",
 	}
 }
 
-/* Settings */
-
-type StringSetting struct {
-	Def string
-	Val string
+func ParseGlobalFlags(cmd *cobra.Command) *GlobalConfig {
+	metaHomeFlag := cmd.Flags().Lookup("meta-home")
+	return &GlobalConfig{
+		MetaRepoHome: metaHomeFlag.Value.String(),
+	}
 }
 
-func (setting StringSetting) DefaultValue() string { return setting.Def }
-func (setting StringSetting) Value() string        { return setting.Val }
-
-type Setting[V Value] interface {
-	DefaultValue() V
-	Value() V
+type GlobalConfig struct {
+	MetaRepoHome string
 }
-
-type Value interface{ string }
