@@ -29,6 +29,9 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Long: "Initialize a new Meta Repo in the configured directory, if none is already present.",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			metaHomeFlag := cmd.Flags().Lookup("meta-home")
+			fmt.Printf("- meta-home: %s\n", metaHomeFlag.Value)
+
 			if runErr := cliCmd.initApp.Run(cliCmd.path); runErr != nil {
 				return fmt.Errorf("failed to initialize meta repo at %s; %w", cliCmd.path, runErr)
 			} else {
