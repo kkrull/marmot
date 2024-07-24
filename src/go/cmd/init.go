@@ -1,9 +1,8 @@
-package cmdinit
+package cmd
 
 import (
 	"fmt"
 
-	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +15,7 @@ type initCommand struct{}
 
 func (cliCmd *initCommand) RegisterWithCobra(parentCmd *cobra.Command) {
 	cobraCmd := cliCmd.toCobraCommand()
-	cmd.AddMetaRepoCommand(parentCmd, *cobraCmd)
+	AddMetaRepoCommand(parentCmd, *cobraCmd)
 }
 
 func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
@@ -30,7 +29,7 @@ func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 }
 
 func runInit(cobraCmd *cobra.Command, _args []string) error {
-	if config, parseErr := cmd.ParseFlags(cobraCmd); parseErr != nil {
+	if config, parseErr := ParseFlags(cobraCmd); parseErr != nil {
 		return parseErr
 	} else if config.Debug {
 		config.PrintDebug(cobraCmd.OutOrStdout())
@@ -40,7 +39,7 @@ func runInit(cobraCmd *cobra.Command, _args []string) error {
 	}
 }
 
-func runInitAppCmd(cobraCmd *cobra.Command, config *cmd.Config) error {
+func runInitAppCmd(cobraCmd *cobra.Command, config *Config) error {
 	initAppCmd := config.AppFactory.InitCommand()
 	if runErr := initAppCmd.Run(config.MetaRepoPath); runErr != nil {
 		return runErr
