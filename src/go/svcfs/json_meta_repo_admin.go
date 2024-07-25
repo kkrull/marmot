@@ -7,9 +7,8 @@ import (
 	"os"
 )
 
-func NewJsonMetaRepoAdmin() *JsonMetaRepoAdmin {
-	// TODO KDK: Add version parameter
-	return &JsonMetaRepoAdmin{}
+func NewJsonMetaRepoAdmin(version string) *JsonMetaRepoAdmin {
+	return &JsonMetaRepoAdmin{version: version}
 }
 
 // Creates meta repos that store meta data in JSON files on the local file system.

@@ -23,6 +23,7 @@ type rootFlagSet struct{}
 /* App configuration */
 
 func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
+	version := "0.0.1" // TODO KDK: Get this from somewhere
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
@@ -30,7 +31,7 @@ func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfi
 	} else {
 		config := &FlagAppConfig{
 			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin()).
+				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(version)).
 				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
 			args:         args,
 			debug:        debug,
