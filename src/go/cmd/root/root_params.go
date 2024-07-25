@@ -30,10 +30,10 @@ type rootParamParser struct {
 }
 
 func (parser rootParamParser) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
-	if debug, debugErr := flags.GetBool(debugFlag.Id()); debugErr != nil {
+	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
 		return nil, debugErr
-	} else if metaRepoPath, metaRepoPathErr := flags.GetString(metaRepoFlag.Id()); metaRepoPathErr != nil {
-		return nil, metaRepoPathErr
+	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
+		return nil, pathErr
 	} else {
 		config := &globalParams{
 			appFactory: use.NewAppFactory().

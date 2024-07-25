@@ -48,6 +48,14 @@ func (flag rootFlag) Find(flags *pflag.FlagSet) string {
 	}
 }
 
+func (flag rootFlag) GetBool(flags *pflag.FlagSet) (bool, error) {
+	return flags.GetBool(flag.Id())
+}
+
+func (flag rootFlag) GetString(flags *pflag.FlagSet) (string, error) {
+	return flags.GetString(flag.Id())
+}
+
 func (flag rootFlag) Id() string {
 	return string(flag)
 }
