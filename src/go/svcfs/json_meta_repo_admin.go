@@ -28,7 +28,7 @@ func (*JsonMetaRepoAdmin) Create(repositoryDir string) error {
 }
 
 func initDirectory(metaDataDirS string, metaDataFileS string) error {
-	emptyFile := EmptyMetaRepoFile("0.0.1")
+	emptyFile := EmptyMetaRepoFile("0.0.1") //TODO KDK: Get the real version number
 	if dirErr := os.MkdirAll(metaDataDirS, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", metaDataDirS, dirErr)
 	} else if writeErr := emptyFile.WriteTo(metaDataFileS); writeErr != nil {
