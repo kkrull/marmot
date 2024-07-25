@@ -1,6 +1,7 @@
 package cmdroot
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,12 +10,36 @@ import (
 	"github.com/spf13/pflag"
 )
 
-type rootFlag = string
+type rootFlag string
 
 const (
 	debugFlag    rootFlag = "debug"
 	metaRepoFlag rootFlag = "meta-repo"
 )
+
+func (flag rootFlag) AddTo(flags *pflag.FlagSet) error {
+	switch flag {
+	case debugFlag:
+		flags.Bool(flag.Id(), false, "print CLI debugging information")
+		flags.Lookup(flag.Id()).Hidden = true
+		return nil
+
+	case metaRepoFlag:
+		if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
+			return fmt.Errorf("failed to locate home directory; %w", homeErr)
+		} else {
+			flags.String(flag.Id(), filepath.Join(homeDir, "meta"), "Meta repo to use")
+			return nil
+		}
+
+	default:
+		return errors.Join(errors.ErrUnsupported, fmt.Errorf("unknown flag: %s", flag.Id()))
+	}
+}
+
+func (flag rootFlag) Id() string {
+	return string(flag)
+}
 
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
 func RootFlagSet() CommandFlags {
@@ -30,24 +55,6 @@ type CommandFlags interface {
 type rootFlags struct{}
 
 func (rootFlags) AddTo(rootCmd *cobra.Command) error {
-	addDebugFlag(rootCmd.PersistentFlags())
-	if metaRepoErr := addMetaRepoFlag(rootCmd.PersistentFlags()); metaRepoErr != nil {
-		return metaRepoErr
-	}
-
-	return nil
-}
-
-func addDebugFlag(flags *pflag.FlagSet) {
-	flags.Bool(debugFlag, false, "print CLI debugging information")
-	flags.Lookup(debugFlag).Hidden = true
-}
-
-func addMetaRepoFlag(flags *pflag.FlagSet) error {
-	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
-		return fmt.Errorf("failed to locate home directory; %w", homeErr)
-	} else {
-		flags.String(metaRepoFlag, filepath.Join(homeDir, "meta"), "Meta repo to use")
-		return nil
-	}
+	debugFlag.AddTo(rootCmd.PersistentFlags())
+	return metaRepoFlag.AddTo(rootCmd.PersistentFlags())
 }

@@ -30,9 +30,9 @@ type rootParamParser struct {
 }
 
 func (parser rootParamParser) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
-	if debug, debugErr := flags.GetBool(debugFlag); debugErr != nil {
+	if debug, debugErr := flags.GetBool(debugFlag.Id()); debugErr != nil {
 		return nil, debugErr
-	} else if metaRepoPath, metaRepoPathErr := flags.GetString(metaRepoFlag); metaRepoPathErr != nil {
+	} else if metaRepoPath, metaRepoPathErr := flags.GetString(metaRepoFlag.Id()); metaRepoPathErr != nil {
 		return nil, metaRepoPathErr
 	} else {
 		config := &globalParams{
@@ -81,9 +81,9 @@ func (params globalParams) PrintDebug(writer io.Writer) {
 		fmt.Fprintf(writer, "[%d]: %s\n", i, arg)
 	}
 
-	debugFlag := params.flagSet.Lookup(debugFlag)
+	debugFlag := params.flagSet.Lookup(debugFlag.Id())
 	fmt.Fprintf(writer, "--debug [%v]: %v\n", debugFlag.DefValue, debugFlag.Value)
 
-	metaRepoFlag := params.flagSet.Lookup(metaRepoFlag)
+	metaRepoFlag := params.flagSet.Lookup(metaRepoFlag.Id())
 	fmt.Fprintf(writer, "--meta-repo [%v]: %v\n", metaRepoFlag.DefValue, metaRepoFlag.Value)
 }
