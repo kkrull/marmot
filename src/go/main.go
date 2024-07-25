@@ -21,7 +21,7 @@ func main() {
 func doMain() error {
 	if cliFactory, cliErr := newCliFactory(); cliErr != nil {
 		return cliErr
-	} else if rootCmd, buildErr := cliFactory.CommandTree(); buildErr != nil {
+	} else if rootCmd, buildErr := cliFactory.ToRootCobraCommand(); buildErr != nil {
 		return buildErr
 	} else if executeErr := rootCmd.Execute(); executeErr != nil {
 		return executeErr
