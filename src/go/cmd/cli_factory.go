@@ -1,4 +1,4 @@
-package mainfactory
+package cmd
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -23,27 +22,15 @@ type CliFactory struct {
 	version string
 }
 
-func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
-	cliFactory.stdout = stdout
-	cliFactory.stderr = stderr
-	return cliFactory
-}
-
-/* Factory methods */
-
-func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
-	if rootCmd, rootCmdErr := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version); rootCmdErr != nil {
-		return nil, rootCmdErr
-	} else {
-		cmd.NewInitCommand().RegisterWithCobra(rootCmd)
-		// cmdremote.NewRemoteCommand().RegisterWithCobra(rootCmd)
-		return rootCmd, nil
-	}
+func (factory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *CliFactory {
+	factory.stdout = stdout
+	factory.stderr = stderr
+	return factory
 }
 
 /* Version configuration */
 
-func (cliFactory *CliFactory) ForExecutable() (*CliFactory, error) {
+func (factory *CliFactory) ForExecutable() (*CliFactory, error) {
 	if versionPath, pathErr := versionFilePath(); pathErr != nil {
 		return nil, fmt.Errorf("failed to locate version file; %w", pathErr)
 	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
@@ -51,8 +38,8 @@ func (cliFactory *CliFactory) ForExecutable() (*CliFactory, error) {
 	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
 		return nil, fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
 	} else {
-		cliFactory.version = version
-		return cliFactory, nil
+		factory.version = version
+		return factory, nil
 	}
 }
 
@@ -79,4 +66,10 @@ func versionFilePath() (string, error) {
 		programDir := filepath.Dir(executablePath)
 		return filepath.Join(programDir, "version"), nil
 	}
+}
+
+/* Factory methods */
+
+func (factory *CliFactory) ToRootCobraCommand() *cobra.Command {
+	return NewRootCommand(factory.stdout, factory.stderr, factory.version).ToCobraCommand()
 }

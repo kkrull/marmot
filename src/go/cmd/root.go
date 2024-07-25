@@ -3,28 +3,53 @@ package cmd
 import (
 	"io"
 
+	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
-func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.Command, error) {
+func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *rootCliCommand {
+	return &rootCliCommand{
+		stderr:  stderr,
+		stdout:  stdout,
+		version: version,
+	}
+}
+
+type rootCliCommand struct {
+	stderr  io.Writer
+	stdout  io.Writer
+	version string
+}
+
+func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE:    runRoot,
 		Short:   "Meta Repo Management Tool",
 		Use:     "marmot",
-		Version: version,
+		Version: root.version,
 	}
 
-	RootFlagSet().AddTo(rootCmd)
-	addCommandGroups(rootCmd)
-	rootCmd.SetOut(stdout)
-	rootCmd.SetErr(stderr)
-	return rootCmd, nil
+	cmdroot.RootFlagSet().AddTo(rootCmd)
+	for _, group := range commandGroups {
+		rootCmd.AddGroup(group.toCobraGroup())
+	}
+
+	rootCmd.AddCommand(
+		NewInitCommand().ToCobraCommand(),
+		NewRemoteCommand().ToCobraCommand(),
+	)
+
+	rootCmd.SetOut(root.stdout)
+	rootCmd.SetErr(root.stderr)
+
+	return rootCmd
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	flags := cmdroot.RootFlagSet()
+	if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
@@ -34,19 +59,4 @@ func runRoot(cobraCmd *cobra.Command, args []string) error {
 	} else {
 		return nil
 	}
-}
-
-/* Child commands */
-
-const (
-	metaRepoGroup = "meta-repo-group"
-)
-
-func addCommandGroups(cobraCmd *cobra.Command) {
-	cobraCmd.AddGroup(&cobra.Group{ID: metaRepoGroup, Title: "Meta Repo Commands"})
-}
-
-func AddMetaRepoCommand(parent *cobra.Command, child cobra.Command) {
-	child.GroupID = metaRepoGroup
-	parent.AddCommand(&child)
 }
