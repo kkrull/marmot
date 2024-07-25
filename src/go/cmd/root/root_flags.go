@@ -5,56 +5,24 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kkrull/marmot/core"
-	"github.com/kkrull/marmot/svcfs"
-	"github.com/kkrull/marmot/use"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
-/* CLI command flag configuration */
-
-// Parameters passed to the root command
-func RootCliParams() (CommandFlagSet, error) {
-	if version, versionErr := core.MarmotVersion(); versionErr != nil {
-		return nil, versionErr
-	} else {
-		return &rootFlagSet{version: version}, nil
-	}
-}
-
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
-func RootFlagSet() CommandFlagSet {
-	return &rootFlagSet{}
+func RootFlagSet() CommandFlags {
+	return &rootFlags{}
 }
 
-type rootFlagSet struct {
-	version string
+// Flags that can be passed to a CLI command.
+type CommandFlags interface {
+	// Add the implemented flags to the given CLI command.
+	AddTo(cmd *cobra.Command) error
 }
 
-/* App configuration */
+type rootFlags struct{}
 
-func (rootFlags rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
-	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
-		return nil, debugErr
-	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
-		return nil, metaRepoPathErr
-	} else {
-		config := &FlagAppConfig{
-			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(rootFlags.version)).
-				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
-			args:         args,
-			debug:        debug,
-			flagSet:      flags,
-			metaRepoPath: metaRepoPath,
-		}
-
-		return config, nil
-	}
-}
-
-func (rootFlagSet) AddTo(rootCmd *cobra.Command) error {
+func (rootFlags) AddTo(rootCmd *cobra.Command) error {
 	addDebugFlag(rootCmd.PersistentFlags())
 	if metaRepoErr := addMetaRepoFlag(rootCmd.PersistentFlags()); metaRepoErr != nil {
 		return metaRepoErr
