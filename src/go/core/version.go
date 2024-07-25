@@ -10,6 +10,18 @@ import (
 
 var marmotVersion string
 
+func ExecutableVersion() (string, error) {
+	if versionPath, pathErr := versionFilePath(); pathErr != nil {
+		return "", fmt.Errorf("failed to locate version file; %w", pathErr)
+	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
+		return "", fmt.Errorf("failed to read version from %s; %w", versionPath, readErr)
+	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
+		return "", fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
+	} else {
+		return version, nil
+	}
+}
+
 func InitMarmotVersion(version string) error {
 	if marmotVersion != "" {
 		return fmt.Errorf("marmot version already set to <%s> but given <%s>", marmotVersion, version)
@@ -24,20 +36,6 @@ func MarmotVersion() (string, error) {
 		return "", errors.New("marmot version not set")
 	} else {
 		return marmotVersion, nil
-	}
-}
-
-/* */
-
-func ExecutableVersion() (string, error) {
-	if versionPath, pathErr := versionFilePath(); pathErr != nil {
-		return "", fmt.Errorf("failed to locate version file; %w", pathErr)
-	} else if rawVersion, readErr := readVersion(versionPath); readErr != nil {
-		return "", fmt.Errorf("failed to read version from %s; %w", versionPath, readErr)
-	} else if version, parseErr := parseVersion(rawVersion); parseErr != nil {
-		return "", fmt.Errorf("failed to parse version from %s; %w", versionPath, parseErr)
-	} else {
-		return version, nil
 	}
 }
 

@@ -31,8 +31,9 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runRemote(cobraCmd *cobra.Command, args []string) error {
-	flags := cmdroot.RootFlagSet()
-	if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	if flags, flagErr := cmdroot.RootFlagSet(); flagErr != nil {
+		return flagErr
+	} else if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())

@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/kkrull/marmot/core"
 	"github.com/kkrull/marmot/svcfs"
 	"github.com/kkrull/marmot/use"
 	"github.com/spf13/cobra"
@@ -14,16 +15,21 @@ import (
 /* CLI command flag configuration */
 
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
-func RootFlagSet() CommandFlagSet {
-	return &rootFlagSet{}
+func RootFlagSet() (CommandFlagSet, error) {
+	if version, versionErr := core.MarmotVersion(); versionErr != nil {
+		return nil, versionErr
+	} else {
+		return &rootFlagSet{version: version}, nil
+	}
 }
 
-type rootFlagSet struct{}
+type rootFlagSet struct {
+	version string
+}
 
 /* App configuration */
 
-func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
-	version := "0.0.1" // TODO KDK: Get this from somewhere
+func (rootFlags rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
@@ -31,7 +37,7 @@ func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfi
 	} else {
 		config := &FlagAppConfig{
 			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(version)).
+				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(rootFlags.version)).
 				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
 			args:         args,
 			debug:        debug,

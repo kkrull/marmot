@@ -22,8 +22,10 @@ func main() {
 }
 
 func mainE() error {
-	if version, versionErr := core.MarmotVersion(); versionErr != nil {
-		return versionErr
+	if version, readErr := core.ExecutableVersion(); readErr != nil {
+		return readErr
+	} else if initErr := core.InitMarmotVersion(version); initErr != nil {
+		return initErr
 	} else {
 		cliFactory := cmd.
 			NewCliFactory(version).
