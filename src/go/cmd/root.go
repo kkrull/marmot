@@ -3,6 +3,7 @@ package cmd
 import (
 	"io"
 
+	cmdcore "github.com/kkrull/marmot/cmd/core"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 		Version: root.version,
 	}
 
-	RootFlagSet().AddTo(rootCmd)
+	cmdcore.RootFlagSet().AddTo(rootCmd)
 	for _, group := range commandGroups {
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
@@ -47,7 +48,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	if config, parseErr := cmdcore.RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	cmdcore "github.com/kkrull/marmot/cmd/core"
 	cmdremote "github.com/kkrull/marmot/cmd/remote"
 	"github.com/spf13/cobra"
 )
@@ -27,7 +28,7 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runRemote(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	if config, parseErr := cmdcore.RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
