@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kkrull/marmot/cmd"
+	"github.com/kkrull/marmot/core"
 )
 
 var (
@@ -19,17 +20,13 @@ func main() {
 }
 
 func mainE() error {
-	if cliFactory, cliErr := newCliFactory(); cliErr != nil {
-		return cliErr
+	if version, versionErr := core.ExecutableVersion(); versionErr != nil {
+		return versionErr
 	} else {
+		cliFactory := cmd.
+			NewCliFactory(version).
+			WithStdIO(stdout, stderr)
 		rootCmd := cliFactory.ToRootCobraCommand()
 		return rootCmd.Execute()
 	}
-}
-
-func newCliFactory() (*cmd.CliFactory, error) {
-	return cmd.
-		NewCliFactory().
-		WithStdIO(stdout, stderr).
-		ForExecutable()
 }
