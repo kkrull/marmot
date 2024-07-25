@@ -81,9 +81,8 @@ func (params globalParams) PrintDebug(writer io.Writer) {
 		fmt.Fprintf(writer, "[%d]: %s\n", i, arg)
 	}
 
-	debugFlag := params.flagSet.Lookup(debugFlag.Id())
-	fmt.Fprintf(writer, "--debug [%v]: %v\n", debugFlag.DefValue, debugFlag.Value)
+	fmt.Fprintf(writer, "--%s=%s\n", debugFlag.LongName(), debugFlag.Find(params.flagSet))
 
-	metaRepoFlag := params.flagSet.Lookup(metaRepoFlag.Id())
-	fmt.Fprintf(writer, "--meta-repo [%v]: %v\n", metaRepoFlag.DefValue, metaRepoFlag.Value)
+	metaRepoFlagObj := params.flagSet.Lookup(metaRepoFlag.Id())
+	fmt.Fprintf(writer, "--meta-repo [%v]: %v\n", metaRepoFlagObj.DefValue, metaRepoFlagObj.Value)
 }
