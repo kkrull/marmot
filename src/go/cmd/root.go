@@ -7,13 +7,27 @@ import (
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
-func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
+func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *rootCliCommand {
+	return &rootCliCommand{
+		stderr:  stderr,
+		stdout:  stdout,
+		version: version,
+	}
+}
+
+type rootCliCommand struct {
+	stderr  io.Writer
+	stdout  io.Writer
+	version string
+}
+
+func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE:    runRoot,
 		Short:   "Meta Repo Management Tool",
 		Use:     "marmot",
-		Version: version,
+		Version: root.version,
 	}
 
 	RootFlagSet().AddTo(rootCmd)
@@ -21,8 +35,14 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.C
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
 
-	rootCmd.SetOut(stdout)
-	rootCmd.SetErr(stderr)
+	rootCmd.AddCommand(
+		NewInitCommand().toCobraCommand(),
+		NewRemoteCommand().toCobraCommand(),
+	)
+
+	rootCmd.SetOut(root.stdout)
+	rootCmd.SetErr(root.stderr)
+
 	return rootCmd
 }
 

@@ -8,6 +8,7 @@ import (
 
 var commandGroups = []commandGroup{metaRepoGroup, repositoryGroup}
 
+// A group to which a top-level command may optionally belong.
 type commandGroup string
 
 const (
