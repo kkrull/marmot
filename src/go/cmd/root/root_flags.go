@@ -22,7 +22,7 @@ type rootFlagSet struct{}
 
 /* App configuration */
 
-func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, _args []string) (AppConfig, error) {
+func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
 	if debug, debugErr := flags.GetBool("debug"); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, metaRepoPathErr := flags.GetString("meta-repo"); metaRepoPathErr != nil {
@@ -32,10 +32,12 @@ func (rootFlagSet) ParseAppConfig(flags *pflag.FlagSet, _args []string) (AppConf
 			appFactory: use.NewAppFactory().
 				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin()).
 				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
+			args:         args,
 			debug:        debug,
 			flagSet:      flags,
 			metaRepoPath: metaRepoPath,
 		}
+
 		return config, nil
 	}
 }

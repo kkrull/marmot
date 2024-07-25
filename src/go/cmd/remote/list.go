@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Construct a CLI command to list remote repositories.
 func NewListCommand() *listCommand {
 	return &listCommand{}
 }
