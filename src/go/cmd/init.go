@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	cmdcore "github.com/kkrull/marmot/cmd/core"
+	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,8 @@ func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runInit(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := cmdcore.RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	flags := cmdroot.RootFlagSet()
+	if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
@@ -36,7 +37,7 @@ func runInit(cobraCmd *cobra.Command, args []string) error {
 	}
 }
 
-func runInitAppCmd(cobraCmd *cobra.Command, config cmdcore.AppConfig) error {
+func runInitAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
 	if initAppCmd, initErr := config.AppFactory().InitCommand(); initErr != nil {
 		return initErr
 	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {

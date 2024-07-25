@@ -1,4 +1,4 @@
-package cmdcore
+package cmdroot
 
 import (
 	"fmt"

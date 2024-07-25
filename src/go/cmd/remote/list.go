@@ -3,7 +3,7 @@ package cmdremote
 import (
 	"fmt"
 
-	cmdcore "github.com/kkrull/marmot/cmd/core"
+	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +24,8 @@ func (listCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runList(cobraCmd *cobra.Command, args []string) error {
-	if config, parseErr := cmdcore.RootFlagSet().ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	flags := cmdroot.RootFlagSet()
+	if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
@@ -34,7 +35,7 @@ func runList(cobraCmd *cobra.Command, args []string) error {
 	}
 }
 
-func runListAppCmd(cobraCmd *cobra.Command, config cmdcore.AppConfig) error {
+func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
 	if listAppCmd, factoryErr := config.AppFactory().ListRemoteRepositoriesQuery(); factoryErr != nil {
 		return factoryErr
 	} else if repositories, runErr := listAppCmd(); runErr != nil {
