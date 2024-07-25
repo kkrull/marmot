@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/pflag"
 )
 
+var globalFlags = []rootFlag{debugFlag, metaRepoFlag}
+
 type rootFlag string
 
 const (
