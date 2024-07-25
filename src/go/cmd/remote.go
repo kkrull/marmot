@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"errors"
-
+	cmdremote "github.com/kkrull/marmot/cmd/remote"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +13,7 @@ func NewRemoteCommand() *remoteCommand {
 type remoteCommand struct{}
 
 func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
-	return &cobra.Command{
+	remoteCobraCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),
 		Long:    "Deal with repositories on remote hosts.",
@@ -22,6 +21,9 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 		Short:   "Deal with remote repositories",
 		Use:     "remote",
 	}
+
+	remoteCobraCmd.AddCommand(cmdremote.NewListCommand().ToCobraCommand())
+	return remoteCobraCmd
 }
 
 func runRemote(cobraCmd *cobra.Command, args []string) error {
@@ -30,7 +32,9 @@ func runRemote(cobraCmd *cobra.Command, args []string) error {
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
 		return nil
+	} else if len(args) == 0 {
+		return cobraCmd.Help()
 	} else {
-		return errors.ErrUnsupported
+		return nil
 	}
 }
