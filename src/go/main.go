@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/kkrull/marmot/mainfactory"
+	"github.com/kkrull/marmot/cmd"
 )
 
 var (
@@ -30,8 +30,8 @@ func doMain() error {
 	}
 }
 
-func newCliFactory() (*mainfactory.CliFactory, error) {
-	return mainfactory.
+func newCliFactory() (*cmd.CliFactory, error) {
+	return cmd.
 		NewCliFactory().
 		WithStdIO(stdout, stderr).
 		ForExecutable()

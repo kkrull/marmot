@@ -1,4 +1,4 @@
-package mainfactory
+package cmd
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kkrull/marmot/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -32,11 +31,11 @@ func (cliFactory *CliFactory) WithStdIO(stdout io.Writer, stderr io.Writer) *Cli
 /* Factory methods */
 
 func (cliFactory *CliFactory) CommandTree() (*cobra.Command, error) {
-	if rootCmd, rootCmdErr := cmd.NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version); rootCmdErr != nil {
+	if rootCmd, rootCmdErr := NewRootCommand(cliFactory.stdout, cliFactory.stderr, cliFactory.version); rootCmdErr != nil {
 		return nil, rootCmdErr
 	} else {
-		cmd.NewInitCommand().RegisterWithCobra(rootCmd)
-		cmd.NewRemoteCommand().RegisterWithCobra(rootCmd)
+		NewInitCommand().RegisterWithCobra(rootCmd)
+		NewRemoteCommand().RegisterWithCobra(rootCmd)
 		return rootCmd, nil
 	}
 }
