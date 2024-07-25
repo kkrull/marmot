@@ -17,18 +17,21 @@ type registerCommand struct{}
 
 func (registerCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
-		Args:  cobra.MinimumNArgs(1),
-		Long:  "Register Git repositories on remote hosts with Marmot.",
-		RunE:  runRegister,
-		Short: "Register remote repositories",
-		Use:   "register",
+		Args:    cobra.MinimumNArgs(1),
+		Example: `marmot remote register ssh://git@github.com/drwily/skull-fortress`,
+		Long:    "Register Git repositories on remote hosts with Marmot.",
+		RunE:    runRegister,
+		Short:   "Register remote repositories",
+		Use:     "register URL...",
 	}
 }
 
 func anyNotUrl(args []string) error {
 	for _, arg := range args {
-		if _, parseErr := url.Parse(arg); parseErr != nil {
-			return fmt.Errorf("url expected: %s; %w", arg, parseErr)
+		if urlArg, parseErr := url.Parse(arg); parseErr != nil {
+			return fmt.Errorf("URL expected: %s; %w", arg, parseErr)
+		} else if !urlArg.IsAbs() {
+			return fmt.Errorf("absolute URL expected: %s", arg)
 		}
 	}
 
