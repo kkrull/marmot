@@ -29,7 +29,8 @@ test-watch: ginkgo-watch
 
 # Go module targets
 
-sources := $(wildcard *.go **/*.go)
+# NB: the wildcard function is not recursive: https://stackoverflow.com/a/2483203/112682
+sources := $(shell find . -type f -name '*.go' | sort)
 source_main := main.go
 
 .PHONY: debug
