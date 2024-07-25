@@ -24,12 +24,8 @@ func RootCliParams() (CommandFlagSet, error) {
 }
 
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
-func RootFlagSet() (CommandFlagSet, error) {
-	if version, versionErr := core.MarmotVersion(); versionErr != nil {
-		return nil, versionErr
-	} else {
-		return &rootFlagSet{version: version}, nil
-	}
+func RootFlagSet() CommandFlagSet {
+	return &rootFlagSet{}
 }
 
 type rootFlagSet struct {

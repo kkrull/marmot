@@ -31,8 +31,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 		Version: root.version,
 	}
 
-	rootFlags, _ := cmdroot.RootFlagSet() //TODO KDK: Irrelevant error.  Split type in two?
-	rootFlags.AddTo(rootCmd)
+	cmdroot.RootFlagSet().AddTo(rootCmd)
 	for _, group := range commandGroups {
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
