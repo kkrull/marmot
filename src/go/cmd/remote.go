@@ -13,7 +13,7 @@ func NewRemoteCommand() *remoteCommand {
 
 type remoteCommand struct{}
 
-func (cliCmd *remoteCommand) toCobraCommand() *cobra.Command {
+func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),

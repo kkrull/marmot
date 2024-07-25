@@ -13,7 +13,7 @@ func NewInitCommand() *initCommand {
 
 type initCommand struct{}
 
-func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
+func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: metaRepoGroup.id(),
