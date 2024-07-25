@@ -9,6 +9,13 @@ import (
 	"github.com/spf13/pflag"
 )
 
+type rootFlag = string
+
+const (
+	debugFlag    rootFlag = "debug"
+	metaRepoFlag rootFlag = "meta-repo"
+)
+
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
 func RootFlagSet() CommandFlags {
 	return &rootFlags{}
@@ -32,15 +39,15 @@ func (rootFlags) AddTo(rootCmd *cobra.Command) error {
 }
 
 func addDebugFlag(flags *pflag.FlagSet) {
-	flags.Bool("debug", false, "print CLI debugging information")
-	flags.Lookup("debug").Hidden = true
+	flags.Bool(debugFlag, false, "print CLI debugging information")
+	flags.Lookup(debugFlag).Hidden = true
 }
 
 func addMetaRepoFlag(flags *pflag.FlagSet) error {
 	if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
 		return fmt.Errorf("failed to locate home directory; %w", homeErr)
 	} else {
-		flags.String("meta-repo", filepath.Join(homeDir, "meta"), "Meta repo to use")
+		flags.String(metaRepoFlag, filepath.Join(homeDir, "meta"), "Meta repo to use")
 		return nil
 	}
 }
