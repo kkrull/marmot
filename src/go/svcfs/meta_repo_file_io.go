@@ -29,7 +29,8 @@ func (root *rootObjectData) WriteTo(filename string) error {
 		return fmt.Errorf("failed to create file %s; %w", filename, fileErr)
 	} else {
 		defer file.Close()
-		encoder = json.NewEncoder(file) //TODO KDK: Use MarshalIndent or Indent here to pretty print
+		encoder = json.NewEncoder(file)
+		encoder.SetIndent("", "  ")
 	}
 
 	if encodeErr := encoder.Encode(root); encodeErr != nil {
