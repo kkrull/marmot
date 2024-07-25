@@ -49,7 +49,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if flags, flagErr := cmdroot.RootFlagSet(); flagErr != nil {
+	if flags, flagErr := cmdroot.RootCliParams(); flagErr != nil {
 		return flagErr
 	} else if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr

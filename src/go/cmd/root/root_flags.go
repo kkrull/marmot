@@ -14,6 +14,15 @@ import (
 
 /* CLI command flag configuration */
 
+// Parameters passed to the root command
+func RootCliParams() (CommandFlagSet, error) {
+	if version, versionErr := core.MarmotVersion(); versionErr != nil {
+		return nil, versionErr
+	} else {
+		return &rootFlagSet{version: version}, nil
+	}
+}
+
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
 func RootFlagSet() (CommandFlagSet, error) {
 	if version, versionErr := core.MarmotVersion(); versionErr != nil {
