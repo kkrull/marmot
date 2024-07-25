@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Construct a CLI command to list remote repositories.
 func NewListCommand() *listCommand {
 	return &listCommand{}
 }
@@ -24,8 +25,9 @@ func (listCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runList(cobraCmd *cobra.Command, args []string) error {
-	flags := cmdroot.RootFlagSet()
-	if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+		return newErr
+	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())

@@ -3,7 +3,7 @@ package svcfs
 /* Constructors */
 
 // Construct a meta repo file with only minimal information; e.g. no Git repositories.
-func EmptyMetaRepoFile(version string) *rootObjectData {
+func InitMetaRepoData(version string) *rootObjectData {
 	return &rootObjectData{
 		MetaRepo: &metaRepoData{
 			RemoteRepositories: make([]remoteRepositoryData, 0),

@@ -18,7 +18,7 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	factory := use.NewAppFactory().WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin())
+	factory := use.NewAppFactory().WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin("42"))
 	if initCmd, factoryErr := factory.InitCommand(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
 	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {

@@ -29,13 +29,13 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		It("returns an error, given a path that already exists", func() {
 			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
 
-			subject = svcfs.NewJsonMetaRepoAdmin()
+			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(
 				MatchError(fmt.Sprintf("path already exists: %s", metaRepoPath)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
-			subject = svcfs.NewJsonMetaRepoAdmin()
+			subject = jsonMetaRepoAdmin(nil)
 			invalidPathErr := subject.Create("\000x")
 			Expect(invalidPathErr).NotTo(BeNil())
 		})
@@ -43,13 +43,13 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		It("returns an error when creating files fails", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 
-			subject = svcfs.NewJsonMetaRepoAdmin()
+			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(
 				MatchError(ContainSubstring(fmt.Sprintf("failed to make directory %s", metaRepoPath))))
 		})
 
 		It("creates files in the meta repository and returns nil, otherwise", func() {
-			subject = svcfs.NewJsonMetaRepoAdmin()
+			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(Succeed())
 
 			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
@@ -60,3 +60,23 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		})
 	})
 })
+
+func jsonMetaRepoAdmin(args *jsonMetaRepoAdminArgs) *svcfs.JsonMetaRepoAdmin {
+	if args == nil {
+		args = &jsonMetaRepoAdminArgs{}
+	}
+
+	return svcfs.NewJsonMetaRepoAdmin(args.Version())
+}
+
+type jsonMetaRepoAdminArgs struct {
+	version string
+}
+
+func (args jsonMetaRepoAdminArgs) Version() string {
+	if args.version == "" {
+		return "42"
+	} else {
+		return args.version
+	}
+}

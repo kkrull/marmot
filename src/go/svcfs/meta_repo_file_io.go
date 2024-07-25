@@ -30,6 +30,7 @@ func (root *rootObjectData) WriteTo(filename string) error {
 	} else {
 		defer file.Close()
 		encoder = json.NewEncoder(file)
+		encoder.SetIndent("", "  ")
 	}
 
 	if encodeErr := encoder.Encode(root); encodeErr != nil {
