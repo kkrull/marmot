@@ -6,11 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
-var globalFlags = []rootFlag{debugFlag, metaRepoFlag}
+var rootFlags = []rootFlag{debugFlag, metaRepoFlag}
 
 type rootFlag string
 
@@ -69,22 +68,4 @@ func (flag rootFlag) LongName() string {
 	default:
 		return fmt.Sprintf("unknown flag: %s", flag.Id())
 	}
-}
-
-// Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
-func RootFlagSet() CommandFlags {
-	return &rootFlags{}
-}
-
-// Flags that can be passed to a CLI command.
-type CommandFlags interface {
-	// Add the implemented flags to the given CLI command.
-	AddTo(cmd *cobra.Command) error
-}
-
-type rootFlags struct{}
-
-func (rootFlags) AddTo(rootCmd *cobra.Command) error {
-	debugFlag.AddTo(rootCmd.PersistentFlags())
-	return metaRepoFlag.AddTo(rootCmd.PersistentFlags())
 }

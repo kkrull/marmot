@@ -39,9 +39,9 @@ func anyNotUrl(args []string) error {
 }
 
 func runRegister(cobraCmd *cobra.Command, args []string) error {
-	if flags, flagErr := cmdroot.RootCliParams(); flagErr != nil {
-		return flagErr
-	} else if config, parseErr := flags.ParseAppConfig(cobraCmd.Flags(), args); parseErr != nil {
+	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+		return newErr
+	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())

@@ -12,7 +12,7 @@ import (
 )
 
 // Parameters passed to the root command
-func RootCliParams() (CommandParamParser, error) {
+func RootCommandParser() (CommandParser, error) {
 	if version, versionErr := core.MarmotVersion(); versionErr != nil {
 		return nil, versionErr
 	} else {
@@ -21,21 +21,21 @@ func RootCliParams() (CommandParamParser, error) {
 }
 
 // Parses parameters passed to a CLI command through environment, flags, and positional arguments.
-type CommandParamParser interface {
-	ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error)
+type CommandParser interface {
+	Parse(flags *pflag.FlagSet, args []string) (AppConfig, error)
 }
 
 type rootParamParser struct {
 	version string
 }
 
-func (parser rootParamParser) ParseAppConfig(flags *pflag.FlagSet, args []string) (AppConfig, error) {
+func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppConfig, error) {
 	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
-		config := &globalParams{
+		config := &rootParams{
 			appFactory: use.NewAppFactory().
 				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
 				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
@@ -50,7 +50,7 @@ func (parser rootParamParser) ParseAppConfig(flags *pflag.FlagSet, args []string
 }
 
 // Application configuration derived from flags passed to the CLI.
-type globalParams struct {
+type rootParams struct {
 	appFactory   use.AppFactory
 	args         []string
 	debug        bool
@@ -58,10 +58,10 @@ type globalParams struct {
 	metaRepoPath string
 }
 
-func (params globalParams) AppFactory() use.AppFactory { return params.appFactory }
-func (params globalParams) Args() []string             { return params.args }
+func (params rootParams) AppFactory() use.AppFactory { return params.appFactory }
+func (params rootParams) Args() []string             { return params.args }
 
-func (params globalParams) ArgsAsUrls() ([]*url.URL, error) {
+func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
 	urls := make([]*url.URL, len(params.args))
 	for i, rawArg := range params.args {
 		if urlArg, parseErr := url.Parse(rawArg); parseErr != nil {
@@ -74,14 +74,14 @@ func (params globalParams) ArgsAsUrls() ([]*url.URL, error) {
 	return urls, nil
 }
 
-func (params globalParams) Debug() bool          { return params.debug }
-func (params globalParams) MetaRepoPath() string { return params.metaRepoPath }
-func (params globalParams) PrintDebug(writer io.Writer) {
+func (params rootParams) Debug() bool          { return params.debug }
+func (params rootParams) MetaRepoPath() string { return params.metaRepoPath }
+func (params rootParams) PrintDebug(writer io.Writer) {
 	for i, arg := range params.args {
 		fmt.Fprintf(writer, "[%d]: %s\n", i, arg)
 	}
 
-	for _, flag := range globalFlags {
+	for _, flag := range rootFlags {
 		fmt.Fprintf(writer, "--%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
 	}
 }
