@@ -7,7 +7,7 @@ import (
 )
 
 // Configure the root command with the given I/O and version identifier, then return for use.
-func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.Command, error) {
+func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE:    runRoot,
@@ -17,10 +17,13 @@ func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) (*cobra.
 	}
 
 	RootFlagSet().AddTo(rootCmd)
-	addCommandGroups(rootCmd)
+	for _, group := range commandGroups {
+		rootCmd.AddGroup(group.toCobraGroup())
+	}
+
 	rootCmd.SetOut(stdout)
 	rootCmd.SetErr(stderr)
-	return rootCmd, nil
+	return rootCmd
 }
 
 func runRoot(cobraCmd *cobra.Command, args []string) error {

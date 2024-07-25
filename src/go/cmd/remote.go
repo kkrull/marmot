@@ -13,18 +13,14 @@ func NewRemoteCommand() *remoteCommand {
 
 type remoteCommand struct{}
 
-func (cliCmd *remoteCommand) RegisterWithCobra(parentCmd *cobra.Command) {
-	cobraCmd := cliCmd.toCobraCommand()
-	AddRepositoryCommand(parentCmd, *cobraCmd)
-}
-
 func (cliCmd *remoteCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
-		Args:  cobra.NoArgs,
-		Long:  "Deal with repositories on remote hosts.",
-		RunE:  runRemote,
-		Short: "Deal with remote repositories",
-		Use:   "remote",
+		Args:    cobra.NoArgs,
+		GroupID: repositoryGroup.id(),
+		Long:    "Deal with repositories on remote hosts.",
+		RunE:    runRemote,
+		Short:   "Deal with remote repositories",
+		Use:     "remote",
 	}
 }
 

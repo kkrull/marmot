@@ -70,12 +70,12 @@ func versionFilePath() (string, error) {
 
 /* Factory methods */
 
-func (factory *CliFactory) ToRootCobraCommand() (*cobra.Command, error) {
-	if rootCmd, err := NewRootCommand(factory.stdout, factory.stderr, factory.version); err != nil {
-		return nil, err
-	} else {
-		NewInitCommand().RegisterWithCobra(rootCmd)
-		NewRemoteCommand().RegisterWithCobra(rootCmd)
-		return rootCmd, nil
-	}
+func (factory *CliFactory) ToRootCobraCommand() *cobra.Command {
+	rootCmd := NewRootCommand(factory.stdout, factory.stderr, factory.version)
+	rootCmd.AddCommand(
+		NewInitCommand().toCobraCommand(),
+		NewRemoteCommand().toCobraCommand(),
+	)
+
+	return rootCmd
 }

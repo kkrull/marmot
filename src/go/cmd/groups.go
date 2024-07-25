@@ -6,10 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	metaRepoGrp   = "meta-repo-group"
-	repositoryGrp = "repository-group"
-)
+var commandGroups = []commandGroup{metaRepoGroup, repositoryGroup}
 
 type commandGroup string
 
@@ -35,23 +32,4 @@ func (group commandGroup) title() string {
 
 func (group commandGroup) toCobraGroup() *cobra.Group {
 	return &cobra.Group{ID: group.id(), Title: group.title()}
-}
-
-/* Child commands */
-
-func addCommandGroups(cobraCmd *cobra.Command) {
-	cobraCmd.AddGroup(
-		metaRepoGroup.toCobraGroup(),
-		repositoryGroup.toCobraGroup(),
-	)
-}
-
-func AddMetaRepoCommand(parent *cobra.Command, child cobra.Command) {
-	child.GroupID = metaRepoGrp
-	parent.AddCommand(&child)
-}
-
-func AddRepositoryCommand(parent *cobra.Command, child cobra.Command) {
-	child.GroupID = repositoryGrp
-	parent.AddCommand(&child)
 }
