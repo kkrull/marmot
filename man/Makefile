@@ -9,10 +9,6 @@ default: all
 
 ### Paths
 
-prefix ?= /usr/local
-exec_prefix ?= $(prefix)
-bindir := $(exec_prefix)/bin
-
 datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
@@ -20,11 +16,6 @@ man7dir := $(mandir)/man7
 
 .PHONY: debug-path
 debug-path:
-	$(info Installation paths:)
-	$(info - prefix: $(prefix))
-	$(info - exec_prefix: $(exec_prefix))
-	$(info - bindir: $(bindir))
-
 	$(info Data paths:)
 	$(info - datarootdir: $(datarootdir))
 	$(info - mandir: $(mandir))
@@ -33,8 +24,6 @@ debug-path:
 
 ### Programs
 
-FSWATCH ?= fswatch
-MANDOC ?= mandoc
 PANDOC ?= pandoc
 PANDOCFLAGS := -f markdown+definition_lists+line_blocks
 
@@ -91,6 +80,9 @@ install-tools:
 
 #. GROFF MANUAL TARGETS
 
+FSWATCH ?= fswatch
+MANDOC ?= mandoc
+
 groff_manual_installed := $(wildcard $(man1dir)/marmot* $(man7dir)/marmot*)
 groff_man1_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man1))
 groff_man7_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man7))
@@ -99,18 +91,18 @@ groff_man7_objects := $(patsubst pandoc/%.md,groff/%,$(sources_man7))
 groff-manual: $(groff_man1_objects) $(groff_man7_objects) #> Build man pages
 
 .PHONY: groff-manual-clean
-groff-manual-clean:
+groff-manual-clean: #> Remove built man pages
 	$(RM) groff/**
 
 .PHONY: debug-groff-manual
-debug-groff-manual:
+debug-groff-manual: #> Show debugging information for groff
 	$(info Groff Manual (man pages):)
 	$(info - groff_manual_installed: $(groff_manual_installed))
 	$(info - groff_man1_objects: $(groff_man1_objects))
 	$(info - groff_man7_objects: $(groff_man7_objects))
 
 .PHONY: groff-manual-install
-groff-manual-install: $(groff_man1_objects) $(groff_man7_objects)
+groff-manual-install: $(groff_man1_objects) $(groff_man7_objects) #> Install man pages
 	mkdir -p $(man1dir) $(man7dir)
 	install -g 0 -o 0 -m 0644 $(groff_man1_objects) $(man1dir)
 	install -g 0 -o 0 -m 0644 $(groff_man7_objects) $(man7dir)
@@ -121,7 +113,7 @@ groff-manual-preview: #> Render man pages without building or installing
 		| $(MANDOC)
 
 .PHONY: groff-manual-uninstall
-groff-manual-uninstall:
+groff-manual-uninstall: #> Uninstall man pages
 	$(RM) $(groff_manual_installed)
 
 .PHONY: groff-manual-watch
@@ -142,11 +134,11 @@ markdown_manual_objects_dir := markdown
 markdown-manual: $(markdown_manual_objects) #> Build Markdown manuals which are part of this repo
 
 .PHONY: markdown-manual-clean
-markdown-manual-clean:
+markdown-manual-clean: #> Remove local markdown manuals
 	$(RM) markdown/**.md
 
 .PHONY: debug-markdown-manual
-debug-markdown-manual:
+debug-markdown-manual: #> Show debugging information for markdown manual
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
 	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
