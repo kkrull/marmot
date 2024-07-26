@@ -14,7 +14,6 @@ func NewRegisterCommand() *registerCommand {
 	return &registerCommand{}
 }
 
-// TODO KDK: Read from stdin/pipe
 type registerCommand struct{}
 
 func (registerCommand) ToCobraCommand() *cobra.Command {
