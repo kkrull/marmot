@@ -18,7 +18,11 @@ ignoreWords: []
 import: []
 version: "0.2"
 words:
+  - cmdremote
+  - cmdroot
   - fswatch
   - kkrull
   - Krull
   - Pandoc
+  - pflag
+  - svcfs
