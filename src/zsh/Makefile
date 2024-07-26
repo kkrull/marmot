@@ -51,6 +51,10 @@ install: #> Install symlink from $(bindir) to sources
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
+.PHONY: install-tools
+install-tools:
+	@:
+
 test:
 	@:
 

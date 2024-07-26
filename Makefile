@@ -29,9 +29,6 @@ path-debug:
 
 ### Programs
 
-BREW ?= brew
-PRECOMMIT ?= pre-commit
-
 ### Sources
 
 #. STANDARD TARGETS
@@ -80,7 +77,14 @@ help: #> Show this help
 		$(MAKEFILE_LIST) \
 	| column -ts : | sed -e 's/_margin_//'
 
+install-tools: pre-commit-install #> Install development tools
+	$(MAKE) -C man install-tools
+	$(MAKE) -C src/go install-tools
+	$(MAKE) -C src/zsh install-tools
+
 #. HOMEBREW TARGETS
+
+BREW ?= brew
 
 .NOTPARALLEL: brew-install
 .PHONY: brew-install
@@ -96,6 +100,8 @@ brew-install-user: #> Install end-user dependencies with HomeBrew
 	$(BREW) bundle install --file=./etc/macos/Brewfile.user
 
 #. PRE-COMMIT TARGETS
+
+PRECOMMIT ?= pre-commit
 
 .PHONY: pre-commit-gc
 pre-commit-gc: #> Remove stale pre-commit files

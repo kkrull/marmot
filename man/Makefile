@@ -84,6 +84,10 @@ help: #> Show this help
 		$(MAKEFILE_LIST) \
 		| column -ts :
 
+.PHONY: install-tools
+install-tools:
+	@:
+
 #. GROFF MANUAL TARGETS
 
 groff_manual_installed := $(wildcard $(man1dir)/marmot* $(man7dir)/marmot*)
