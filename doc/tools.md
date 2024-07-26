@@ -10,6 +10,19 @@ Tools used by some part of this project's build, deployment, or development proc
 
 - `cspell.config.yaml`: Configuration and dictionary
 
+### Documentation
+
+- Configuration file:
+  - `enableFiletypes`:
+    <https://streetsidesoftware.com/vscode-spell-checker/docs/configuration/#cspellenabledfiletypes>
+
+### Interactions
+
+- VS Code extension:
+  <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
+
+---
+
 ## EditorConfig
 
 <https://editorconfig.org/>
@@ -21,6 +34,9 @@ Tools used by some part of this project's build, deployment, or development proc
 ### Interactions
 
 - [`pre-commit`](#pre-commit) includes hooks to ensure files comply with EditorConfig
+- VS Code extension: <https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig>
+
+---
 
 ## `fswatch`
 
@@ -29,6 +45,8 @@ Tools used by some part of this project's build, deployment, or development proc
 ### Interactions
 
 - [GNU Make](#gnu-make) includes tasks that use `fswatch`
+
+---
 
 ## GitHub Actions
 
@@ -42,11 +60,15 @@ Tools used by some part of this project's build, deployment, or development proc
 
 ### Files
 
-- `.github/workflows/`: Job definitions.
+- `.github/workflows/`: Job definitions
 
 ### Interactions
 
 - [`pre-commit`](#pre-commit) checks are also run during some jobs
+- VS Code extension:
+  <https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions>
+
+---
 
 ## GNU Make
 
@@ -62,7 +84,31 @@ Tools used by some part of this project's build, deployment, or development proc
 
 - `Makefile`: targets to build everything and tasks to help set up your environment
 - `man/Makefile`: targets to build manuals
+- `src/go/Makefile`: targets to build the Go version of marmot
 - `src/zsh/Makefile`: targets to build programs with scripts
+
+### Interactions
+
+- VS Code extension: <https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools>
+
+---
+
+## Go
+
+<https://go.dev/>
+
+### Documentation
+
+- A Tour of Go: <https://go.dev/tour/>
+- Effective Go: <https://go.dev/doc/effective_go>
+- Package and documentation index: <https://pkg.go.dev/>
+
+### Interactions
+
+- [GNU Make](#gnu-make) builds binaries from Go sources and automates other common development tasks
+- VS Code extension: <https://marketplace.visualstudio.com/items?itemName=golang.Go>
+
+---
 
 ## Homebrew
 
@@ -77,9 +123,11 @@ Tools used by some part of this project's build, deployment, or development proc
 In `etc/macos/`:
 
 - `Brewfile.developer` and `Brewfile.developer.lock.json`: packages for developers, to work on this
-  project.
+  project
 - `Brewfile.user` and `Brewfile.user.lock.json`: packages for end users, to run the programs built
-  from these sources.
+  from these sources
+
+---
 
 ## `jo`
 
@@ -90,6 +138,8 @@ In `etc/macos/`:
 - GitHub: <https://github.com/jpmens/jo>
 - Installation: <https://github.com/jpmens/jo?tab=readme-ov-file#install>
 
+---
+
 ## `jq`
 
 <https://jqlang.github.io/jq/>
@@ -98,7 +148,26 @@ In `etc/macos/`:
 
 - Manual: <https://jqlang.github.io/jq/manual/v1.7/>
 
-## `markdownlint-cli2`
+---
+
+## Markdown
+
+<https://www.markdownguide.org/>
+
+### Documentation
+
+- Syntax: <https://www.markdownguide.org/basic-syntax/>
+
+### Interactions
+
+- [Mermaid](#mermaid) is embedded in some Markdown documents
+- VS Code extensions
+  - Markdown All in One:
+    <https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one>
+
+---
+
+## Markdownlint
 
 <https://github.com/DavidAnson/markdownlint-cli2>
 
@@ -106,6 +175,8 @@ In `etc/macos/`:
 
 - Configuration JSON schema:
   <https://github.com/DavidAnson/markdownlint-cli2#markdownlint-cli2jsonc>
+- Main: <https://github.com/DavidAnson/markdownlint>
+- Rules: <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>
 - `pre-commit` hook: <https://github.com/DavidAnson/markdownlint-cli2?tab=readme-ov-file#pre-commit>
 
 ### Files
@@ -115,6 +186,27 @@ In `etc/macos/`:
 ### Interactions
 
 - [`pre-commit`](#pre-commit) includes hooks to ensure files comply with linting rules
+- VS Code extension:
+  <https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint>
+
+---
+
+## Mermaid
+
+<https://mermaid-js.github.io/mermaid>
+
+### Documentation
+
+- Customized styling directives: <https://stackoverflow.com/q/71864287/112682>
+- Syntax: <https://mermaid.js.org/intro/n00b-syntaxReference.html>
+
+### Interactions
+
+- VS Code extensions
+  - Markdown Preview Mermaid Support:
+    <https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid>
+  - Mermaid Editor:
+    <https://marketplace.visualstudio.com/items?itemName=tomoyukim.vscode-mermaid-editor>
 
 ## Pandoc
 
@@ -128,6 +220,8 @@ In `etc/macos/`:
 ### Interactions
 
 - [GNU Make](#gnu-make) runs Pandoc to convert command documentation to manuals
+
+---
 
 ## `pre-commit`
 
@@ -150,8 +244,10 @@ In `etc/macos/`:
 - [EditorConfig](#editorconfig) is checked by `pre-commit`
 - [GNU Make](#gnu-make) contains [tasks](./task-automation.md#pre-commit-targets) to install Git
   hooks and update `pre-commit` repositories
-- [`markdownlint-cli2`](#markdownlint-cli2) is run by `pre-commit`
+- [`markdownlint-cli2`](#markdownlint) is run by `pre-commit`
 - [ShellCheck](#shellcheck) is run by `pre-commit`
+
+---
 
 ## ShellCheck
 
@@ -170,6 +266,8 @@ In `etc/macos/`:
 ### Interactions
 
 - [`pre-commit`](#pre-commit) includes hooks to ensure files comply with ShellCheck
+
+---
 
 ## Z Shell
 
