@@ -37,17 +37,17 @@ PRECOMMIT ?= pre-commit
 #. STANDARD TARGETS
 
 .PHONY: all clean install test uninstall
-all: #> Build everything
+all: #> Build all sources
 	$(MAKE) -C man all
 	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
-clean: pre-commit-clean #> Remove files built by running make earlier
+clean: pre-commit-clean #> Remove files that make built
 	$(MAKE) -C man clean
 	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
 
-install: #> Install programs and manuals made here
+install: #> Install programs and manuals
 	$(MAKE) -C man install
 	$(MAKE) -C src/go install
 	$(MAKE) -C src/zsh install
