@@ -42,7 +42,7 @@ all: #> Build all sources
 	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
-clean: pre-commit-gc #> Remove local files from builds
+clean: pre-commit-gc #> Remove local build files
 	$(MAKE) -C man clean
 	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
@@ -52,12 +52,12 @@ install: #> Install programs and manuals
 	$(MAKE) -C src/go install
 	$(MAKE) -C src/zsh install
 
-test: pre-commit-run #> Run all tests and checks
+test: pre-commit-run #> Run tests and checks
 	$(MAKE) -C man test
 	$(MAKE) -C src/go test
 	$(MAKE) -C src/zsh test
 
-uninstall: #> Uninstall programs and manuals made here
+uninstall: #> Uninstall programs and manuals
 	$(MAKE) -C man uninstall
 	$(MAKE) -C src/go uninstall
 	$(MAKE) -C src/zsh uninstall
@@ -84,15 +84,15 @@ help: #> Show this help
 
 .NOTPARALLEL: brew-install
 .PHONY: brew-install
-brew-install: brew-developer-install brew-user-install pre-commit-install #> Install dependencies with Homebrew
+brew-install: brew-install-dev brew-install-user pre-commit-install #> Install dependencies with Homebrew
 	@:
 
-.PHONY: brew-developer-install
-brew-developer-install: #> Use HomeBrew to install dependencies that developers need to work here
+.PHONY: brew-install-dev
+brew-install-dev: #> Install development tools with HomeBrew
 	$(BREW) bundle install --file=./etc/macos/Brewfile.developer
 
-.PHONY: brew-user-install
-brew-user-install: #> Use HomeBrew to install dependencies that users need to run this
+.PHONY: brew-install-user
+brew-install-user: #> Install end-user dependencies with HomeBrew
 	$(BREW) bundle install --file=./etc/macos/Brewfile.user
 
 #. PRE-COMMIT TARGETS
