@@ -5,7 +5,7 @@ default: all
 
 ## Environment
 
-### Installation directories
+### Paths
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
@@ -15,8 +15,8 @@ datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 
-.PHONY: path-debug
-path-debug:
+.PHONY: debug-path
+debug-path:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -63,7 +63,7 @@ uninstall: #> Uninstall programs and manuals
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: path-debug #> Show debugging information
+debug: debug-path #> Show debugging information
 	$(MAKE) -C man debug
 	$(MAKE) -C src/go debug
 	$(MAKE) -C src/zsh debug

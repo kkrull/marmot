@@ -15,8 +15,8 @@ datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 
-.PHONY: path-debug
-path-debug:
+.PHONY: debug-path
+debug-path:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -33,8 +33,8 @@ path-debug:
 
 srcdir := $(realpath .)
 
-.PHONY: source-debug
-source-debug:
+.PHONY: debug-sources
+debug-sources:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
@@ -65,7 +65,7 @@ uninstall: #> Delete symlink from $(bindir)
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: path-debug source-debug #> Show debugging information
+debug: debug-path debug-sources #> Show debugging information
 	@:
 
 .PHONY: help
