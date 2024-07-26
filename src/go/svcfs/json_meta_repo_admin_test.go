@@ -2,6 +2,7 @@ package svcfs_test
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -26,12 +27,20 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 	})
 
 	Describe("#Create", func() {
-		It("returns an error, given a path that already exists", func() {
-			Expect(os.Create(metaRepoPath)).NotTo(BeNil())
+		It("is cool with an existing path in which marmot has not been initialized", func() {
+			Expect(os.MkdirAll(metaRepoPath, fs.ModePerm)).To(Succeed())
+
+			subject = jsonMetaRepoAdmin(nil)
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
+		})
+
+		It("returns an error, given a path containing marmot data", func() {
+			marmotDataDir := filepath.Join(metaRepoPath, ".marmot")
+			Expect(os.MkdirAll(marmotDataDir, fs.ModePerm)).To(Succeed())
 
 			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(
-				MatchError(fmt.Sprintf("path already exists: %s", metaRepoPath)))
+				MatchError(fmt.Sprintf("path already exists: %s", marmotDataDir)))
 		})
 
 		It("returns an error when unable to check if the path exists", func() {

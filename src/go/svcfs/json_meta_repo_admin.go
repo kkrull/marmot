@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 )
 
 func NewJsonMetaRepoAdmin(version string) *JsonMetaRepoAdmin {
@@ -19,21 +20,19 @@ type JsonMetaRepoAdmin struct {
 /* MetaDataAdmin */
 
 func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
-	_, statErr := os.Stat(repositoryDir)
+	marmotDataDir := metaDataDir(repositoryDir)
+	_, statErr := os.Stat(marmotDataDir)
 	if errors.Is(statErr, fs.ErrNotExist) {
-		return initDirectory(
-			metaDataDir(repositoryDir),
-			metaDataFile(repositoryDir),
-			InitMetaRepoData(admin.version),
-		)
+		return initDirectory(metaDataFile(repositoryDir), InitMetaRepoData(admin.version))
 	} else if statErr != nil {
 		return fmt.Errorf("failed to check for existing meta repo %s; %w", repositoryDir, statErr)
 	} else {
-		return fmt.Errorf("path already exists: %s", repositoryDir)
+		return fmt.Errorf("path already exists: %s", marmotDataDir)
 	}
 }
 
-func initDirectory(metaDataDir string, metaDataFile string, rootObject *rootObjectData) error {
+func initDirectory(metaDataFile string, rootObject *rootObjectData) error {
+	metaDataDir := path.Dir(metaDataFile)
 	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", metaDataDir, dirErr)
 	} else if writeErr := rootObject.WriteTo(metaDataFile); writeErr != nil {
