@@ -3,6 +3,7 @@ package cmdremote
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
@@ -30,12 +31,15 @@ When URL is -, stop processing arguments and read newline-delimited URLs from st
 	}
 }
 
-func anyNotUrl(args []string) error {
-	for _, arg := range args {
-		if urlArg, parseErr := url.Parse(arg); parseErr != nil {
-			return fmt.Errorf("URL expected: %s; %w", arg, parseErr)
+func anyNotUrlOrBlank(inputs []string) error {
+	for _, rawInput := range inputs {
+		trimmedInput := strings.TrimSpace(rawInput)
+		if trimmedInput == "" {
+			continue
+		} else if urlArg, parseErr := url.Parse(trimmedInput); parseErr != nil {
+			return fmt.Errorf("URL expected: <%s>; %w", rawInput, parseErr)
 		} else if !urlArg.IsAbs() {
-			return fmt.Errorf("absolute URL expected: %s", arg)
+			return fmt.Errorf("absolute URL expected: <%s>", rawInput)
 		}
 	}
 
@@ -50,9 +54,10 @@ func runRegister(cobraCmd *cobra.Command, args []string) error {
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
 		return nil
-	} else if argErr := anyNotUrl(config.Args()); argErr != nil {
+	} else if argErr := anyNotUrlOrBlank(config.Args()); argErr != nil {
 		return argErr
-	} else if stdInErr := anyNotUrl(config.InputLines()); stdInErr != nil {
+	} else if stdInErr := anyNotUrlOrBlank(config.InputLines()); stdInErr != nil {
+		return stdInErr
 	} else {
 		return runRegisterAppCmd(config)
 	}

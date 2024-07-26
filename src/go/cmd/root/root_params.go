@@ -1,9 +1,11 @@
 package cmdroot
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"net/url"
+	"strings"
 
 	"github.com/kkrull/marmot/core"
 	"github.com/kkrull/marmot/svcfs"
@@ -43,6 +45,7 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 			args:         args,
 			debug:        debug,
 			flagSet:      flags,
+			inputLines:   make([]string, 0),
 			metaRepoPath: metaRepoPath,
 		}
 
@@ -56,13 +59,33 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
+		argsBeforeDash := make([]string, 0)
+		for _, arg := range args {
+			if strings.TrimSpace(arg) == "-" {
+				break
+			} else {
+				argsBeforeDash = append(argsBeforeDash, arg)
+			}
+		}
+
+		inputLines := make([]string, 0)
+		scanner := bufio.NewScanner(stdin)
+		for scanner.Scan() {
+			line := scanner.Text()
+			inputLines = append(inputLines, line)
+		}
+		if scanErr := scanner.Err(); scanErr != nil {
+			return nil, scanErr
+		}
+
 		config := &rootParams{
 			appFactory: use.NewAppFactory().
 				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
 				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
-			args:         args,
+			args:         argsBeforeDash,
 			debug:        debug,
 			flagSet:      flags,
+			inputLines:   inputLines,
 			metaRepoPath: metaRepoPath,
 		}
 
@@ -76,17 +99,18 @@ type rootParams struct {
 	args         []string
 	debug        bool
 	flagSet      *pflag.FlagSet
+	inputLines   []string
 	metaRepoPath string
 }
 
 func (params rootParams) AppFactory() use.AppFactory { return params.appFactory }
-func (params rootParams) Args() []string             { return params.args }
 
+func (params rootParams) Args() []string { return params.args }
 func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
 	urls := make([]*url.URL, len(params.args))
 	for i, rawArg := range params.args {
 		if urlArg, parseErr := url.Parse(rawArg); parseErr != nil {
-			return nil, fmt.Errorf("url expected: %s; %w", rawArg, parseErr)
+			return nil, fmt.Errorf("url expected: <%s>; %w", rawArg, parseErr)
 		} else {
 			urls[i] = urlArg
 		}
@@ -95,14 +119,36 @@ func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
 	return urls, nil
 }
 
-func (params rootParams) Debug() bool          { return params.debug }
+func (params rootParams) Debug() bool { return params.debug }
+
+func (params rootParams) InputLines() []string { return params.inputLines }
+func (params rootParams) InputLinesAsUrls() ([]*url.URL, error) {
+	urls := make([]*url.URL, 0)
+	for _, rawLine := range params.inputLines {
+		trimmedLine := strings.TrimSpace(rawLine)
+		if trimmedLine == "" {
+			continue
+		} else if urlLine, parseErr := url.Parse(rawLine); parseErr != nil {
+			return nil, fmt.Errorf("url expected: <%s>; %w", rawLine, parseErr)
+		} else {
+			urls = append(urls, urlLine)
+		}
+	}
+
+	return urls, nil
+}
+
 func (params rootParams) MetaRepoPath() string { return params.metaRepoPath }
 func (params rootParams) PrintDebug(writer io.Writer) {
 	for i, arg := range params.args {
-		fmt.Fprintf(writer, "[%d]: %s\n", i, arg)
+		fmt.Fprintf(writer, "arg [%d]: %s\n", i, arg)
 	}
 
 	for _, flag := range rootFlags {
-		fmt.Fprintf(writer, "--%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
+		fmt.Fprintf(writer, "flag --%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
+	}
+
+	for i, line := range params.inputLines {
+		fmt.Fprintf(writer, "stdin [%d]: %s\n", i, line)
 	}
 }
