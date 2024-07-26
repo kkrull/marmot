@@ -45,24 +45,27 @@ func anyNotUrl(args []string) error {
 func runRegister(cobraCmd *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.ParseR(cobraCmd.Flags(), args, cobraCmd.InOrStdin()); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
 		config.PrintDebug(cobraCmd.OutOrStdout())
 		return nil
-	} else if validationErr := anyNotUrl(config.Args()); validationErr != nil {
-		return validationErr
+	} else if argErr := anyNotUrl(config.Args()); argErr != nil {
+		return argErr
+	} else if stdInErr := anyNotUrl(config.InputLines()); stdInErr != nil {
 	} else {
 		return runRegisterAppCmd(config)
 	}
 }
 
 func runRegisterAppCmd(config cmdroot.AppConfig) error {
-	if urls, argErr := config.ArgsAsUrls(); argErr != nil {
-		return argErr
-	} else if registerAppCmd, appErr := config.AppFactory().RegisterRemoteRepositoriesCommand(); appErr != nil {
+	if appCmd, appErr := config.AppFactory().RegisterRemoteRepositoriesCommand(); appErr != nil {
 		return appErr
-	} else if runErr := registerAppCmd.Run(urls); runErr != nil {
+	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
+		return argErr
+	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
+		return stdInErr
+	} else if runErr := appCmd.Run(append(urlsFromArgs, urlsFromInput...)); runErr != nil {
 		return runErr
 	} else {
 		return nil

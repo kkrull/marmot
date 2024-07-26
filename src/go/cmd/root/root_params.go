@@ -23,6 +23,7 @@ func RootCommandParser() (CommandParser, error) {
 // Parses parameters passed to a CLI command through environment, flags, and positional arguments.
 type CommandParser interface {
 	Parse(flags *pflag.FlagSet, args []string) (AppConfig, error)
+	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (AppConfig, error)
 }
 
 type rootParamParser struct {
@@ -30,6 +31,26 @@ type rootParamParser struct {
 }
 
 func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppConfig, error) {
+	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
+		return nil, debugErr
+	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
+		return nil, pathErr
+	} else {
+		config := &rootParams{
+			appFactory: use.NewAppFactory().
+				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
+				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
+			args:         args,
+			debug:        debug,
+			flagSet:      flags,
+			metaRepoPath: metaRepoPath,
+		}
+
+		return config, nil
+	}
+}
+
+func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (AppConfig, error) {
 	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
