@@ -13,18 +13,20 @@ func NewRegisterCommand() *registerCommand {
 	return &registerCommand{}
 }
 
-// TODO KDK: Read from stdin/pipe: gh repo list --json url | jq -r '.[].url' | ./marmot remote register
+// TODO KDK: Read from stdin/pipe
 type registerCommand struct{}
 
 func (registerCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
-		Args: cobra.MinimumNArgs(1),
+		Args:                  cobra.MinimumNArgs(1),
+		DisableFlagsInUseLine: true,
 		Example: `marmot remote register https://github.com/drwily/skull-fortress
 gh repo list --json url | jq -r '.[].url' | marmot remote register -`,
-		Long:  "Register Git repositories on remote hosts with Marmot.",
+		Long: `Register Git repositories on remote hosts at each [URL].
+When URL is -, stop processing arguments and read newline-delimited URLs from standard input.`,
 		RunE:  runRegister,
 		Short: "Register remote repositories",
-		Use:   "register URL...",
+		Use:   "register [flags] [URL]... [-]",
 	}
 }
 
