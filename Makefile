@@ -42,7 +42,7 @@ all: #> Build all sources
 	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
-clean: pre-commit-clean #> Remove files that make built
+clean: pre-commit-clean #> Remove local files from builds
 	$(MAKE) -C man clean
 	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
@@ -75,16 +75,17 @@ debug: path-debug #> Show debugging information
 .PHONY: help
 help: #> Show this help
 	@sed -n \
-		-e '/@sed/!s/#[.] *//p' \
+		-e '/@sed/!s/#[.] */_\n/p' \
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
-		| column -ts :
+	| column -ts :
+
 
 #. HOMEBREW TARGETS
 
 .NOTPARALLEL: brew-install
 .PHONY: brew-install
-brew-install: brew-developer-install brew-user-install pre-commit-install #> Install depenedencies with Homebrew
+brew-install: brew-developer-install brew-user-install pre-commit-install #> Install dependencies with Homebrew
 	@:
 
 .PHONY: brew-developer-install
