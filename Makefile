@@ -77,6 +77,12 @@ help: #> Show this help
 		$(MAKEFILE_LIST) \
 	| column -ts : | sed -e 's/_margin_//'
 
+.PHONY: help-all
+help-all: help #> Show help for all Makefiles
+	$(MAKE) -C man help
+	$(MAKE) -C src/go help
+	$(MAKE) -C src/zsh help
+
 install-tools: pre-commit-install #> Install development tools
 	$(MAKE) -C man install-tools
 	$(MAKE) -C src/go install-tools

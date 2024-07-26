@@ -68,10 +68,11 @@ uninstall: #> Delete symlink from $(bindir)
 debug: debug-path debug-sources #> Show debugging information
 	@:
 
+# https://stackoverflow.com/a/47107132/112682
 .PHONY: help
 help: #> Show this help
 	@sed -n \
-		-e '/@sed/!s/#[.] *//p' \
+		-e '/@sed/!s/#[.] */_margin_\n/p' \
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
-		| column -ts :
+	| column -ts : | sed -e 's/_margin_//'

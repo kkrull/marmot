@@ -14,6 +14,26 @@ endif
 
 ### Paths
 
+prefix ?= /usr/local
+exec_prefix ?= $(prefix)
+bindir := $(exec_prefix)/bin
+
+datarootdir := $(prefix)/share
+mandir := $(datarootdir)/man
+man1dir := $(mandir)/man1
+
+.PHONY: debug-path
+debug-path:
+	$(info Installation paths:)
+	$(info - prefix: $(prefix))
+	$(info - exec_prefix: $(exec_prefix))
+	$(info - bindir: $(bindir))
+
+	$(info Data paths:)
+	$(info - datarootdir: $(datarootdir))
+	$(info - mandir: $(mandir))
+	$(info - man1dir: $(man1dir))
+
 ### Programs
 
 ### Sources
@@ -25,25 +45,31 @@ sources := $(shell find . -type f -name '*.go' | sort)
 #. STANDARD TARGETS
 
 .PHONY: all
-all: $(executable)
+all: $(executable) #> Build all sources
 	@:
 
 .PHONY: clean
-clean:
+clean: #> Remove local build files
 	$(RM) $(executable)
 
+# TODO KDK: Implement install
 .PHONY: install
-install: $(executable)
+install: $(executable) #> Install program
 	@:
 
 .PHONY: test
-test:
+test: #> Run tests
 	ginkgo run -r
+
+# TODO KDK: Implement uninstall
+.PHONY: uninstall
+uninstall: #> Uninstall program
+	$(RM) $(bindir)/marmot
 
 #. OTHER TARGETS
 
 .PHONY: debug
-debug:
+debug: #> Show debugging information
 	$(info OS: $(OS))
 	$(info - executable: $(executable))
 	$(info - source_main: $(source_main))
@@ -60,7 +86,7 @@ help: #> Show this help
 	| column -ts : | sed -e 's/_margin_//'
 
 .PHONY: install-tools
-install-tools:
+install-tools: #> Install Go development tools
 	go install github.com/go-delve/delve/cmd/dlv@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go install github.com/spf13/cobra-cli@latest
@@ -68,25 +94,25 @@ install-tools:
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: test-watch
-test-watch: ginkgo-watch
+test-watch: ginkgo-watch #> Run tests in watch mode
 	ginkgo watch -r
 
 #. GO TARGETS
 
 .PHONY: format
-format:
+format: #> Format sources
 	gofumpt -l -w .
 
 .PHONY: run
-run:
+run: #> Run the program
 	go run .
 
 .PHONY: tidy
-tidy:
+tidy: #> Tidy Go module dependencies
 	go mod tidy
 
 .PHONY: update
-update:
+update: #> Update Go dependencies
 	go get -t -u -v
 
 $(executable): $(sources)
