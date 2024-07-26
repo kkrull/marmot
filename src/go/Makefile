@@ -23,6 +23,7 @@ debug-artifacts:
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
+artifactdir := $(prefix)/marmot
 
 .PHONY: debug-paths
 debug-paths:
@@ -30,6 +31,7 @@ debug-paths:
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - bindir: $(bindir))
+	$(info - artifactdir: $(artifactdir))
 
 ### Programs
 
@@ -55,19 +57,22 @@ all: $(executable) #> Build all sources
 clean: #> Remove local build files
 	$(RM) $(executable)
 
-# TODO KDK: Implement install
 .PHONY: install
 install: $(executable) #> Install program
-	@:
+	mkdir -p $(artifactdir)
+	install -g 0 -o 0 -m 0644 $(executable) $(artifactdir)
+
+	mkdir -p $(bindir)
+	ln -f -s $(artifactdir)/$(executable) $(bindir)/marmot
 
 .PHONY: test
 test: #> Run tests
 	ginkgo run -r
 
-# TODO KDK: Implement uninstall
 .PHONY: uninstall
 uninstall: #> Uninstall program
 	$(RM) $(bindir)/marmot
+	$(RM) -Rf $(artifactdir)
 
 #. OTHER TARGETS
 
