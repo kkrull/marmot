@@ -18,12 +18,13 @@ type registerCommand struct{}
 
 func (registerCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
-		Args:    cobra.MinimumNArgs(1),
-		Example: `marmot remote register ssh://git@github.com/drwily/skull-fortress`,
-		Long:    "Register Git repositories on remote hosts with Marmot.",
-		RunE:    runRegister,
-		Short:   "Register remote repositories",
-		Use:     "register URL...",
+		Args: cobra.MinimumNArgs(1),
+		Example: `marmot remote register https://github.com/drwily/skull-fortress
+gh repo list --json url | jq -r '.[].url' | marmot remote register -`,
+		Long:  "Register Git repositories on remote hosts with Marmot.",
+		RunE:  runRegister,
+		Short: "Register remote repositories",
+		Use:   "register URL...",
 	}
 }
 
