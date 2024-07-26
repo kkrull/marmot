@@ -2,6 +2,14 @@
 
 Tools used by some part of this project's build, deployment, or development processes.
 
+## Code Spell Checker
+
+<https://cspell.org/>
+
+### Files
+
+- `cspell.config.yaml`: Configuration and dictionary
+
 ## EditorConfig
 
 <https://editorconfig.org/>
