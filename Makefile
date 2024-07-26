@@ -75,11 +75,10 @@ debug: path-debug #> Show debugging information
 .PHONY: help
 help: #> Show this help
 	@sed -n \
-		-e '/@sed/!s/#[.] */_\n/p' \
+		-e '/@sed/!s/#[.] */_margin_\n/p' \
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
-	| column -ts :
-
+	| column -ts : | sed -e 's/_margin_//'
 
 #. HOMEBREW TARGETS
 
