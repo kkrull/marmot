@@ -13,8 +13,7 @@ func NewRegisterCommand() *registerCommand {
 	return &registerCommand{}
 }
 
-// TODO KDK: This worked and produced https URLS: ./marmot remote register $(gh repo list --json url | jq -r '.[].url | @sh' | xargs)
-// TODO KDK: This did not work, because it lacks a scheme: ./marmot remote register $(gh repo list --json sshUrl | jq -r '.[].sshUrl | @sh' | xargs)
+// TODO KDK: Read from stdin/pipe: gh repo list --json url | jq -r '.[].url' | ./marmot remote register
 type registerCommand struct{}
 
 func (registerCommand) ToCobraCommand() *cobra.Command {
