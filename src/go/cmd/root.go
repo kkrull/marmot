@@ -24,6 +24,7 @@ type rootCliCommand struct {
 
 func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
+		Args:    cobra.NoArgs,
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		RunE:    runRoot,
 		Short:   "Meta Repo Management Tool",

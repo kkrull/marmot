@@ -1,0 +1,28 @@
+$schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json
+dictionaries: []
+dictionaryDefinitions: []
+enableFiletypes:
+  - github-actions-workflow
+  - go
+  - json
+  - makefile
+  - markdown
+  - plaintext
+  - shellscript
+  - text
+  - yaml
+ignorePaths:
+  - .gitignore
+  - cspell.config.yaml
+ignoreWords: []
+import: []
+version: "0.2"
+words:
+  - cmdremote
+  - cmdroot
+  - fswatch
+  - kkrull
+  - Krull
+  - Pandoc
+  - pflag
+  - svcfs

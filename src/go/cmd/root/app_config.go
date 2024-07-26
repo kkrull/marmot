@@ -13,6 +13,8 @@ type AppConfig interface {
 	Args() []string
 	ArgsAsUrls() ([]*url.URL, error)
 	Debug() bool
+	InputLines() []string
+	InputLinesAsUrls() ([]*url.URL, error)
 	MetaRepoPath() string
 	PrintDebug(writer io.Writer)
 }
