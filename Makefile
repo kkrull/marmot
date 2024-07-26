@@ -42,7 +42,7 @@ all: #> Build all sources
 	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
-clean: pre-commit-clean #> Remove local files from builds
+clean: pre-commit-gc #> Remove local files from builds
 	$(MAKE) -C man clean
 	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
@@ -97,16 +97,16 @@ brew-user-install: #> Use HomeBrew to install dependencies that users need to ru
 
 #. PRE-COMMIT TARGETS
 
-.PHONY: pre-commit-clean
-pre-commit-clean: #> Remove pre-commit files that are no longer referenced
+.PHONY: pre-commit-gc
+pre-commit-gc: #> Remove stale pre-commit files
 	$(PRECOMMIT) gc
 
 .PHONY: pre-commit-install
-pre-commit-install: #> Install Git hooks
+pre-commit-install: #> Install Git pre-commit hook
 	$(PRECOMMIT) install
 
 .PHONY: pre-commit-run
-pre-commit-run: #> Run pre-commit hooks on all Git files
+pre-commit-run: #> Run pre-commit on all sources
 	$(PRECOMMIT) run --all-files
 
 .PHONY: pre-commit-update
