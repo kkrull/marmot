@@ -12,27 +12,24 @@ ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
 endif
 
+debug-artifacts:
+	$(info Artifacts:)
+	$(info - executable: $(executable))
+	$(info - OS: $(OS))
+	@:
+
 ### Paths
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
 
-datarootdir := $(prefix)/share
-mandir := $(datarootdir)/man
-man1dir := $(mandir)/man1
-
-.PHONY: debug-path
-debug-path:
+.PHONY: debug-paths
+debug-paths:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - bindir: $(bindir))
-
-	$(info Data paths:)
-	$(info - datarootdir: $(datarootdir))
-	$(info - mandir: $(mandir))
-	$(info - man1dir: $(man1dir))
 
 ### Programs
 
@@ -41,6 +38,12 @@ debug-path:
 # NB: the wildcard function is not recursive: https://stackoverflow.com/a/2483203/112682
 source_main := main.go
 sources := $(shell find . -type f -name '*.go' | sort)
+
+debug-sources: #> Show debugging information
+	$(info Sources:)
+	$(info - source_main: $(source_main))
+	$(info - sources: $(sources))
+	@:
 
 #. STANDARD TARGETS
 
@@ -69,11 +72,7 @@ uninstall: #> Uninstall program
 #. OTHER TARGETS
 
 .PHONY: debug
-debug: #> Show debugging information
-	$(info OS: $(OS))
-	$(info - executable: $(executable))
-	$(info - source_main: $(source_main))
-	$(info - sources: $(sources))
+debug: debug-artifacts debug-paths debug-sources #> Show debugging information
 	@:
 
 # https://stackoverflow.com/a/47107132/112682

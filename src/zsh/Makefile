@@ -11,21 +11,12 @@ prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
 
-datarootdir := $(prefix)/share
-mandir := $(datarootdir)/man
-man1dir := $(mandir)/man1
-
-.PHONY: debug-path
-debug-path:
+.PHONY: debug-paths
+debug-paths:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - bindir: $(bindir))
-
-	$(info Data paths:)
-	$(info - datarootdir: $(datarootdir))
-	$(info - mandir: $(mandir))
-	$(info - man1dir: $(man1dir))
 
 ### Programs
 
@@ -65,7 +56,7 @@ uninstall: #> Delete symlink from $(bindir)
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: debug-path debug-sources #> Show debugging information
+debug: debug-paths debug-sources #> Show debugging information
 	@:
 
 # https://stackoverflow.com/a/47107132/112682

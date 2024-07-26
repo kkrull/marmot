@@ -7,26 +7,6 @@ default: all
 
 ### Paths
 
-prefix ?= /usr/local
-exec_prefix ?= $(prefix)
-bindir := $(exec_prefix)/bin
-
-datarootdir := $(prefix)/share
-mandir := $(datarootdir)/man
-man1dir := $(mandir)/man1
-
-.PHONY: debug-path
-debug-path:
-	$(info Installation paths:)
-	$(info - prefix: $(prefix))
-	$(info - exec_prefix: $(exec_prefix))
-	$(info - bindir: $(bindir))
-
-	$(info Data paths:)
-	$(info - datarootdir: $(datarootdir))
-	$(info - mandir: $(mandir))
-	$(info - man1dir: $(man1dir))
-
 ### Programs
 
 ### Sources
@@ -63,7 +43,7 @@ uninstall: #> Uninstall programs and manuals
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: debug-path #> Show debugging information
+debug: #> Show debugging information
 	$(MAKE) -C man debug
 	$(MAKE) -C src/go debug
 	$(MAKE) -C src/zsh debug

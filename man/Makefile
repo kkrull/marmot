@@ -14,8 +14,8 @@ mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 man7dir := $(mandir)/man7
 
-.PHONY: debug-path
-debug-path:
+.PHONY: debug-paths
+debug-paths:
 	$(info Data paths:)
 	$(info - datarootdir: $(datarootdir))
 	$(info - mandir: $(mandir))
@@ -62,7 +62,7 @@ uninstall: groff-manual-uninstall #> Uninstall man pages
 
 .PHONY: debug
 .NOTPARALLEL: debug
-debug: debug-path debug-sources debug-groff-manual debug-markdown-manual #> Show debugging information
+debug: debug-paths debug-sources debug-groff-manual debug-markdown-manual #> Show debugging information
 	@:
 
 # https://stackoverflow.com/a/47107132/112682
