@@ -1,11 +1,11 @@
-# Marmot programs
+# Scripts
 
 .PHONY: default
 default: all
 
 ## Environment
 
-### Installation directories
+### Paths
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)

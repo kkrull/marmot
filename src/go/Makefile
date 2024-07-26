@@ -1,11 +1,28 @@
-# Artifact
+# Go
+
+.PHONY: default
+default: all
+
+## Environment
+
+### Artifact
 
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
 endif
 
-# Standard-ish targets
+### Paths
+
+### Programs
+
+### Sources
+
+# NB: the wildcard function is not recursive: https://stackoverflow.com/a/2483203/112682
+source_main := main.go
+sources := $(shell find . -type f -name '*.go' | sort)
+
+#. STANDARD TARGETS
 
 .PHONY: all
 all: $(executable)
@@ -20,37 +37,27 @@ install: $(executable)
 	@:
 
 .PHONY: test
-test: ginkgo-run
-	@:
+test:
+	ginkgo run -r
 
-.PHONY: test-watch
-test-watch: ginkgo-watch
-	@:
-
-# Go module targets
-
-# NB: the wildcard function is not recursive: https://stackoverflow.com/a/2483203/112682
-sources := $(shell find . -type f -name '*.go' | sort)
-source_main := main.go
+#. OTHER TARGETS
 
 .PHONY: debug
 debug:
 	$(info OS: $(OS))
 	$(info - executable: $(executable))
+	$(info - source_main: $(source_main))
 	$(info - sources: $(sources))
 	@:
 
-.PHONY: format
-format:
-	gofumpt -l -w .
-
-.PHONY: ginkgo-run
-ginkgo-run:
-	ginkgo run -r
-
-.PHONY: ginkgo-watch
-ginkgo-watch:
-	ginkgo watch -r
+# https://stackoverflow.com/a/47107132/112682
+.PHONY: help
+help: #> Show this help
+	@sed -n \
+		-e '/@sed/!s/#[.] */_margin_\n/p' \
+		-e '/@sed/!s/:.*#> /:/p' \
+		$(MAKEFILE_LIST) \
+	| column -ts : | sed -e 's/_margin_//'
 
 .PHONY: install-tools
 install-tools:
@@ -59,6 +66,16 @@ install-tools:
 	go install github.com/spf13/cobra-cli@latest
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install mvdan.cc/gofumpt@latest
+
+.PHONY: test-watch
+test-watch: ginkgo-watch
+	ginkgo watch -r
+
+#. GO TARGETS
+
+.PHONY: format
+format:
+	gofumpt -l -w .
 
 .PHONY: run
 run:

@@ -1,4 +1,4 @@
-# Marmot
+# Project
 
 .PHONY: default
 default: all
