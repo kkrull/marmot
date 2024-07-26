@@ -57,10 +57,11 @@ all: $(executable) #> Build all sources
 clean: #> Remove local build files
 	$(RM) $(executable)
 
+# TODO KDK: Find a place for the version file to go in /usr/local/marmot and then read that
 .PHONY: install
 install: $(executable) #> Install program
 	mkdir -p $(artifactdir)
-	install -g 0 -o 0 -m 0644 $(executable) $(artifactdir)
+	install -g 0 -o 0 -m 0755 $(executable) $(artifactdir)
 
 	mkdir -p $(bindir)
 	ln -f -s $(artifactdir)/$(executable) $(bindir)/marmot
@@ -71,8 +72,8 @@ test: #> Run tests
 
 .PHONY: uninstall
 uninstall: #> Uninstall program
+	$(RM) -R $(artifactdir)
 	$(RM) $(bindir)/marmot
-	$(RM) -Rf $(artifactdir)
 
 #. OTHER TARGETS
 
