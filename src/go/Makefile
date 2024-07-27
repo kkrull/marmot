@@ -78,12 +78,13 @@ clean: #> Remove local build files
 install: $(executable) #> Install program
 	mkdir -p $(libexecdirpkg)
 	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
+	install -g 0 -o 0 -m 0644 $(versionfile) $(libexecdirpkg)
 
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
-	mkdir -p $(datadirpkg)
-	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
+#	mkdir -p $(datadirpkg)
+#	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
 
 .PHONY: test
 test: #> Run tests
@@ -91,7 +92,7 @@ test: #> Run tests
 
 .PHONY: uninstall
 uninstall: #> Uninstall program
-	$(RM) -R $(datadirpkg)
+#	$(RM) -R $(datadirpkg)
 	$(RM) -R $(libexecdirpkg)
 	$(RM) $(bindir)/marmot
 
