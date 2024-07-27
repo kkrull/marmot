@@ -7,6 +7,8 @@ default: all
 
 ### Artifact
 
+autocompletezsh := marmot.zsh
+
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
@@ -14,6 +16,7 @@ endif
 
 artifact-info:
 	$(info Artifacts:)
+	$(info - autocompletezsh: $(autocompletezsh))
 	$(info - executable: $(executable))
 	$(info - OS: $(OS))
 	@:
@@ -35,12 +38,17 @@ datarootdir := $(prefix)/share
 datadir := $(datarootdir)
 datadirpkg := $(datadir)/marmot
 
+# Autocomplete scripts
+# https://unix.stackexchange.com/a/607810/37734
+datadirzshfn := $(datadir)/zsh/site-functions
+
 .PHONY: path-info
 path-info:
 	$(info Paths:)
 	$(info - bindir: $(bindir))
 	$(info - datadir: $(datadir))
 	$(info - datadirpkg: $(datadirpkg))
+	$(info - datadirzshfn: $(datadirzshfn))
 	$(info - datarootdir: $(datarootdir))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - libexecdir: $(libexecdir))
@@ -65,24 +73,28 @@ source-info:
 
 #. STANDARD TARGETS
 
+.NOTPARALLEL: all
 .PHONY: all
-all: $(executable) #> Build all sources
+all: $(executable) $(autocompletezsh) #> Build all sources
 	@:
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(executable)
+	$(RM) $(autocompletezsh) $(executable)
 
 .PHONY: install
-install: $(executable) #> Install program
-	mkdir -p $(libexecdirpkg)
-	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
-
+install: $(autocompletezsh) $(executable) #> Install program
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
 	mkdir -p $(datadirpkg)
 	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
+
+	mkdir -p $(datadirzshfn)
+	install -g 0 -o 0 -m 0644 $(autocompletezsh) $(datadirzshfn)
+
+	mkdir -p $(libexecdirpkg)
+	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
 
 .PHONY: test
 test: #> Run tests
@@ -92,6 +104,7 @@ test: #> Run tests
 uninstall: #> Uninstall program
 	$(RM) $(bindir)/marmot
 	$(RM) -R $(datadirpkg)
+	$(RM) $(datadirzshfn)/$(autocompletezsh)
 	$(RM) -R $(libexecdirpkg)
 
 #. OTHER TARGETS
@@ -139,6 +152,9 @@ tidy: #> Tidy Go module dependencies
 .PHONY: update
 update: #> Update Go dependencies
 	go get -t -u -v
+
+$(autocompletezsh): $(executable)
+	./$(executable) completion zsh > $(autocompletezsh)
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)
