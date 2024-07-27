@@ -58,8 +58,15 @@ func readVersion(versionFilename string) (string, error) {
 func versionFilePath() (string, error) {
 	if executablePath, executableErr := os.Executable(); executableErr != nil {
 		return "", executableErr
+	} else if linkTarget, err := filepath.EvalSymlinks(executablePath); err != nil {
+		return "", err
 	} else {
-		programDir := filepath.Dir(executablePath)
-		return filepath.Join(programDir, "version"), nil
+		fmt.Printf("executablePath=%s\n", executablePath)
+		fmt.Printf("linkTarget=%s\n", linkTarget)
+
+		programDir := filepath.Dir(linkTarget)
+		versionPath := filepath.Join(programDir, "version")
+		fmt.Printf("versionPath=%s\n", versionPath)
+		return versionPath, nil
 	}
 }
