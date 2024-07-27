@@ -41,13 +41,6 @@ uninstall: #> Uninstall programs and manuals
 
 #. OTHER TARGETS
 
-.PHONY: debug
-.NOTPARALLEL: debug
-debug: #> Show debugging information
-	$(MAKE) -C man debug
-	$(MAKE) -C src/go debug
-	$(MAKE) -C src/zsh debug
-
 # https://stackoverflow.com/a/47107132/112682
 .PHONY: help
 help: #> Show this help
@@ -62,6 +55,13 @@ help-all: help #> Show help for all Makefiles
 	$(MAKE) -C man help
 	$(MAKE) -C src/go help
 	$(MAKE) -C src/zsh help
+
+.PHONY: info
+.NOTPARALLEL: info
+info: #> Show build information
+	$(MAKE) -C man info
+	$(MAKE) -C src/go info
+	$(MAKE) -C src/zsh info
 
 install-tools: pre-commit-install #> Install development tools
 	$(MAKE) -C man install-tools

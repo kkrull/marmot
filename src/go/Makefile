@@ -12,7 +12,7 @@ ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
 endif
 
-debug-artifacts:
+artifact-info:
 	$(info Artifacts:)
 	$(info - executable: $(executable))
 	$(info - OS: $(OS))
@@ -25,8 +25,8 @@ exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
 artifactdir := $(prefix)/marmot
 
-.PHONY: debug-paths
-debug-paths:
+.PHONY: path-info
+path-info:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -41,7 +41,7 @@ debug-paths:
 source_main := main.go
 sources := $(shell find . -type f -name '*.go' | sort)
 
-debug-sources: #> Show debugging information
+source-info:
 	$(info Sources:)
 	$(info - source_main: $(source_main))
 	$(info - sources: $(sources))
@@ -77,10 +77,6 @@ uninstall: #> Uninstall program
 
 #. OTHER TARGETS
 
-.PHONY: debug
-debug: debug-artifacts debug-paths debug-sources #> Show debugging information
-	@:
-
 # https://stackoverflow.com/a/47107132/112682
 .PHONY: help
 help: #> Show this help
@@ -89,6 +85,11 @@ help: #> Show this help
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
 	| column -ts : | sed -e 's/_margin_//'
+
+.PHONY: info
+.NOTPARALLEL: info
+info: artifact-info path-info source-info #> Show build information
+	@:
 
 .PHONY: install-tools
 install-tools: #> Install Go development tools

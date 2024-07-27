@@ -11,8 +11,8 @@ prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
 
-.PHONY: debug-paths
-debug-paths:
+.PHONY: path-info
+path-info:
 	$(info Installation paths:)
 	$(info - prefix: $(prefix))
 	$(info - exec_prefix: $(exec_prefix))
@@ -24,8 +24,8 @@ debug-paths:
 
 srcdir := $(realpath .)
 
-.PHONY: debug-sources
-debug-sources:
+.PHONY: source-info
+source-info:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
@@ -54,9 +54,9 @@ uninstall: #> Delete symlink from $(bindir)
 
 #. OTHER TARGETS
 
-.PHONY: debug
-.NOTPARALLEL: debug
-debug: debug-paths debug-sources #> Show debugging information
+.PHONY: info
+.NOTPARALLEL: info
+info: path-info source-info #> Show build information
 	@:
 
 # https://stackoverflow.com/a/47107132/112682

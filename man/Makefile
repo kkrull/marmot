@@ -14,9 +14,9 @@ mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
 man7dir := $(mandir)/man7
 
-.PHONY: debug-paths
-debug-paths:
-	$(info Data paths:)
+.PHONY: path-info
+path-info:
+	$(info Paths:)
 	$(info - datarootdir: $(datarootdir))
 	$(info - mandir: $(mandir))
 	$(info - man1dir: $(man1dir))
@@ -33,8 +33,8 @@ sources := $(wildcard pandoc/**.md)
 sources_man1 := $(filter %.1.md,$(sources))
 sources_man7 := $(filter %.7.md,$(sources))
 
-.PHONY: debug-sources
-debug-sources:
+.PHONY: source-info
+source-info:
 	$(info Sources:)
 	$(info - sources: $(sources))
 	$(info - sources_man1: $(sources_man1))
@@ -60,11 +60,6 @@ uninstall: groff-manual-uninstall #> Uninstall man pages
 
 #. OTHER TARGETS
 
-.PHONY: debug
-.NOTPARALLEL: debug
-debug: debug-paths debug-sources debug-groff-manual debug-markdown-manual #> Show debugging information
-	@:
-
 # https://stackoverflow.com/a/47107132/112682
 .PHONY: help
 help: #> Show this help
@@ -73,6 +68,11 @@ help: #> Show this help
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
 	| column -ts : | sed -e 's/_margin_//'
+
+.PHONY: info
+.NOTPARALLEL: info
+info: path-info source-info groff-manual-info markdown-manual-info #> Show build information
+	@:
 
 .PHONY: install-tools
 install-tools:
@@ -94,8 +94,8 @@ groff-manual: $(groff_man1_objects) $(groff_man7_objects) #> Build man pages
 groff-manual-clean: #> Remove built man pages
 	$(RM) groff/**
 
-.PHONY: debug-groff-manual
-debug-groff-manual: #> Show debugging information for groff
+.PHONY: groff-manual-info
+groff-manual-info: #> Show build information for groff
 	$(info Groff Manual (man pages):)
 	$(info - groff_manual_installed: $(groff_manual_installed))
 	$(info - groff_man1_objects: $(groff_man1_objects))
@@ -137,8 +137,8 @@ markdown-manual: $(markdown_manual_objects) #> Build Markdown manuals which are 
 markdown-manual-clean: #> Remove local markdown manuals
 	$(RM) markdown/**.md
 
-.PHONY: debug-markdown-manual
-debug-markdown-manual: #> Show debugging information for markdown manual
+.PHONY: markdown-manual-info
+markdown-manual-info: #> Show build information for the markdown manual
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
 	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
