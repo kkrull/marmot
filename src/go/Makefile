@@ -22,15 +22,29 @@ artifact-info:
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
+
+# Executable programs that users can run (including symlinks)
 bindir := $(exec_prefix)/bin
-artifactdir := $(prefix)/marmot
+
+# Executable programs to be run by other programs, in a subdirectory thereof
+libexecdir := $(exec_prefix)/libexec
+libexecdirpkg := $(libexecdir)/marmot
+
+# Read-only architecture-independent data files, in a subdirectory thereof
+datarootdir := $(prefix)/share
+datadir := $(datarootdir)
+datadirpkg := $(datadir)/marmot
 
 .PHONY: path-info
 path-info:
 	$(info Paths:)
-	$(info - artifactdir: $(artifactdir))
 	$(info - bindir: $(bindir))
+	$(info - datadir: $(datadir))
+	$(info - datadirpkg: $(datadirpkg))
+	$(info - datarootdir: $(datarootdir))
 	$(info - exec_prefix: $(exec_prefix))
+	$(info - libexecdir: $(libexecdir))
+	$(info - libexecdirpkg: $(libexecdirpkg))
 	$(info - prefix: $(prefix))
 
 ### Programs
@@ -40,11 +54,13 @@ path-info:
 # NB: the wildcard function is not recursive: https://stackoverflow.com/a/2483203/112682
 source_main := main.go
 sources := $(shell find . -type f -name '*.go' | sort)
+versionfile := version
 
 source-info:
 	$(info Sources:)
 	$(info - source_main: $(source_main))
 	$(info - sources: $(sources))
+	$(info - versionfile: $(versionfile))
 	@:
 
 #. STANDARD TARGETS
@@ -60,11 +76,14 @@ clean: #> Remove local build files
 # TODO KDK: Find a place for the version file to go in /usr/local/marmot and then read that
 .PHONY: install
 install: $(executable) #> Install program
-	mkdir -p $(artifactdir)
-	install -g 0 -o 0 -m 0755 $(executable) $(artifactdir)
+	mkdir -p $(libexecdirpkg)
+	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
 
 	mkdir -p $(bindir)
-	ln -f -s $(artifactdir)/$(executable) $(bindir)/marmot
+	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
+
+	mkdir -p $(datadirpkg)
+	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
 
 .PHONY: test
 test: #> Run tests
@@ -72,7 +91,8 @@ test: #> Run tests
 
 .PHONY: uninstall
 uninstall: #> Uninstall program
-	$(RM) -R $(artifactdir)
+	$(RM) -R $(datadirpkg)
+	$(RM) -R $(libexecdirpkg)
 	$(RM) $(bindir)/marmot
 
 #. OTHER TARGETS
