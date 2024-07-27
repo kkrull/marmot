@@ -7,6 +7,8 @@ default: all
 
 ### Artifact
 
+autocomplete := _marmot
+
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
 	executable ?= marmot.exe
@@ -14,6 +16,7 @@ endif
 
 artifact-info:
 	$(info Artifacts:)
+	$(info - autocomplete: $(autocomplete))
 	$(info - executable: $(executable))
 	$(info - OS: $(OS))
 	@:
@@ -35,12 +38,17 @@ datarootdir := $(prefix)/share
 datadir := $(datarootdir)
 datadirpkg := $(datadir)/marmot
 
+# Autocomplete scripts
+# https://unix.stackexchange.com/a/607810/37734
+datadirzshfn := $(datadir)/zsh/site-functions
+
 .PHONY: path-info
 path-info:
 	$(info Paths:)
 	$(info - bindir: $(bindir))
 	$(info - datadir: $(datadir))
 	$(info - datadirpkg: $(datadirpkg))
+	$(info - datadirzshfn: $(datadirzshfn))
 	$(info - datarootdir: $(datarootdir))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - libexecdir: $(libexecdir))
@@ -65,24 +73,22 @@ source-info:
 
 #. STANDARD TARGETS
 
+.NOTPARALLEL: all
 .PHONY: all
-all: $(executable) #> Build all sources
+all: $(executable) $(autocomplete) #> Build all sources
 	@:
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(executable)
+	$(RM) $(autocomplete) $(executable)
 
 .PHONY: install
 install: $(executable) #> Install program
-	mkdir -p $(libexecdirpkg)
-	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
-
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
-	mkdir -p $(datadirpkg)
-	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
+	install -D -g 0 -o 0 -m 0644 -t $(datadirpkg) $(versionfile)
+	install -D -g 0 -o 0 -m 0755 -t $(libexecdirpkg) $(executable)
 
 .PHONY: test
 test: #> Run tests
@@ -92,6 +98,7 @@ test: #> Run tests
 uninstall: #> Uninstall program
 	$(RM) $(bindir)/marmot
 	$(RM) -R $(datadirpkg)
+	$(RM) $(datadirzshfn)/$(autocomplete)
 	$(RM) -R $(libexecdirpkg)
 
 #. OTHER TARGETS
@@ -109,6 +116,11 @@ help: #> Show this help
 .NOTPARALLEL: info
 info: artifact-info path-info source-info #> Show build information
 	@:
+
+.PHONY: install-autocomplete-zsh
+install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
+	install -D -g 0 -o 0 -m 0644 -t $(datadirzshfn) $(autocomplete)
+	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
 .PHONY: install-tools
 install-tools: #> Install Go development tools
@@ -139,6 +151,9 @@ tidy: #> Tidy Go module dependencies
 .PHONY: update
 update: #> Update Go dependencies
 	go get -t -u -v
+
+$(autocomplete): $(executable)
+	./$(executable) completion zsh > $(autocomplete)
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)

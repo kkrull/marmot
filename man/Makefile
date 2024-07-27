@@ -9,6 +9,8 @@ default: all
 
 ### Paths
 
+prefix ?= /usr/local
+
 datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
 man1dir := $(mandir)/man1
@@ -21,6 +23,7 @@ path-info:
 	$(info - mandir: $(mandir))
 	$(info - man1dir: $(man1dir))
 	$(info - man7dir: $(man7dir))
+	$(info - prefix: $(prefix))
 
 ### Programs
 
