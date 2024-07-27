@@ -13,27 +13,31 @@ default: all
 
 #. STANDARD TARGETS
 
-.PHONY: all clean install test uninstall
+.PHONY: all
 all: #> Build all sources
 	$(MAKE) -C man all
 	$(MAKE) -C src/go all
 	$(MAKE) -C src/zsh all
 
+.PHONY: clean
 clean: pre-commit-gc #> Remove local build files
 	$(MAKE) -C man clean
 	$(MAKE) -C src/go clean
 	$(MAKE) -C src/zsh clean
 
+.PHONY: install
 install: #> Install programs and manuals
 	$(MAKE) -C man install
 	$(MAKE) -C src/go install
 	$(MAKE) -C src/zsh install
 
+.PHONY: test
 test: pre-commit-run #> Run tests and checks
 	$(MAKE) -C man test
 	$(MAKE) -C src/go test
 	$(MAKE) -C src/zsh test
 
+.PHONY: uninstall
 uninstall: #> Uninstall programs and manuals
 	$(MAKE) -C man uninstall
 	$(MAKE) -C src/go uninstall

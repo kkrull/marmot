@@ -27,11 +27,11 @@ artifactdir := $(prefix)/marmot
 
 .PHONY: path-info
 path-info:
-	$(info Installation paths:)
-	$(info - prefix: $(prefix))
-	$(info - exec_prefix: $(exec_prefix))
-	$(info - bindir: $(bindir))
+	$(info Paths:)
 	$(info - artifactdir: $(artifactdir))
+	$(info - bindir: $(bindir))
+	$(info - exec_prefix: $(exec_prefix))
+	$(info - prefix: $(prefix))
 
 ### Programs
 

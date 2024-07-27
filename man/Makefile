@@ -42,19 +42,23 @@ source-info:
 
 #. STANDARD TARGETS
 
-.PHONY: all clean install test uninstall
+.PHONY: all
 all: groff-manual markdown-manual #> Build all manuals
 	@:
 
+.PHONY: clean
 clean: groff-manual-clean markdown-manual-clean #> Remove built manuals
 	@:
 
+.PHONY: install
 install: groff-manual-install #> Install man pages to $(mandir)
 	@:
 
+.PHONY: test
 test:
 	@:
 
+.PHONY: uninstall
 uninstall: groff-manual-uninstall #> Uninstall man pages
 	@:
 
@@ -96,10 +100,10 @@ groff-manual-clean: #> Remove built man pages
 
 .PHONY: groff-manual-info
 groff-manual-info: #> Show build information for groff
-	$(info Groff Manual (man pages):)
-	$(info - groff_manual_installed: $(groff_manual_installed))
+	$(info Groff Manual:)
 	$(info - groff_man1_objects: $(groff_man1_objects))
 	$(info - groff_man7_objects: $(groff_man7_objects))
+	$(info - groff_manual_installed: $(groff_manual_installed))
 
 .PHONY: groff-manual-install
 groff-manual-install: $(groff_man1_objects) $(groff_man7_objects) #> Install man pages

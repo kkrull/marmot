@@ -13,10 +13,10 @@ bindir := $(exec_prefix)/bin
 
 .PHONY: path-info
 path-info:
-	$(info Installation paths:)
-	$(info - prefix: $(prefix))
-	$(info - exec_prefix: $(exec_prefix))
+	$(info Paths:)
 	$(info - bindir: $(bindir))
+	$(info - exec_prefix: $(exec_prefix))
+	$(info - prefix: $(prefix))
 
 ### Programs
 
@@ -31,33 +31,28 @@ source-info:
 
 #. STANDARD TARGETS
 
-.PHONY: all clean install test uninstall
+.PHONY: all
 all:
 	@:
 
+.PHONY: clean
 clean:
 	@:
 
-install: #> Install symlink from $(bindir) to sources
+.PHONY: install
+install: #> Install symlink to sources
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
-.PHONY: install-tools
-install-tools:
-	@:
-
+.PHONY: test
 test:
 	@:
 
-uninstall: #> Delete symlink from $(bindir)
+.PHONY: uninstall
+uninstall: #> Delete symlink
 	$(RM) $(bindir)/marmot
 
 #. OTHER TARGETS
-
-.PHONY: info
-.NOTPARALLEL: info
-info: path-info source-info #> Show build information
-	@:
 
 # https://stackoverflow.com/a/47107132/112682
 .PHONY: help
@@ -67,3 +62,12 @@ help: #> Show this help
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
 	| column -ts : | sed -e 's/_margin_//'
+
+.PHONY: info
+.NOTPARALLEL: info
+info: path-info source-info #> Show build information
+	@:
+
+.PHONY: install-tools
+install-tools:
+	@:
