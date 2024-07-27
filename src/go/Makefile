@@ -83,15 +83,12 @@ clean: #> Remove local build files
 	$(RM) $(autocomplete) $(executable)
 
 .PHONY: install
-install: $(autocomplete) $(executable) #> Install program
+install: $(executable) #> Install program
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
 	mkdir -p $(datadirpkg)
 	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
-
-	mkdir -p $(datadirzshfn)
-	install -g 0 -o 0 -m 0644 $(autocomplete) $(datadirzshfn)
 
 	mkdir -p $(libexecdirpkg)
 	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
@@ -122,6 +119,12 @@ help: #> Show this help
 .NOTPARALLEL: info
 info: artifact-info path-info source-info #> Show build information
 	@:
+
+.PHONY: install-autocomplete-zsh
+install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
+	mkdir -p $(datadirzshfn)
+	install -g 0 -o 0 -m 0644 $(autocomplete) $(datadirzshfn)
+	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
 .PHONY: install-tools
 install-tools: #> Install Go development tools
