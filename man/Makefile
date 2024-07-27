@@ -8,6 +8,7 @@ default: all
 ## Environment
 
 ### Paths
+
 prefix ?= /usr/local
 
 datarootdir := $(prefix)/share
