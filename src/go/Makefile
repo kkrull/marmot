@@ -7,7 +7,7 @@ default: all
 
 ### Artifact
 
-autocompletezsh := marmot.zsh
+autocomplete := _marmot
 
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
@@ -16,7 +16,7 @@ endif
 
 artifact-info:
 	$(info Artifacts:)
-	$(info - autocompletezsh: $(autocompletezsh))
+	$(info - autocomplete: $(autocomplete))
 	$(info - executable: $(executable))
 	$(info - OS: $(OS))
 	@:
@@ -75,15 +75,15 @@ source-info:
 
 .NOTPARALLEL: all
 .PHONY: all
-all: $(executable) $(autocompletezsh) #> Build all sources
+all: $(executable) $(autocomplete) #> Build all sources
 	@:
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(autocompletezsh) $(executable)
+	$(RM) $(autocomplete) $(executable)
 
 .PHONY: install
-install: $(autocompletezsh) $(executable) #> Install program
+install: $(autocomplete) $(executable) #> Install program
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
@@ -91,7 +91,7 @@ install: $(autocompletezsh) $(executable) #> Install program
 	install -g 0 -o 0 -m 0644 $(versionfile) $(datadirpkg)
 
 	mkdir -p $(datadirzshfn)
-	install -g 0 -o 0 -m 0644 $(autocompletezsh) $(datadirzshfn)
+	install -g 0 -o 0 -m 0644 $(autocomplete) $(datadirzshfn)
 
 	mkdir -p $(libexecdirpkg)
 	install -g 0 -o 0 -m 0755 $(executable) $(libexecdirpkg)
@@ -104,7 +104,7 @@ test: #> Run tests
 uninstall: #> Uninstall program
 	$(RM) $(bindir)/marmot
 	$(RM) -R $(datadirpkg)
-	$(RM) $(datadirzshfn)/$(autocompletezsh)
+	$(RM) $(datadirzshfn)/$(autocomplete)
 	$(RM) -R $(libexecdirpkg)
 
 #. OTHER TARGETS
@@ -153,8 +153,8 @@ tidy: #> Tidy Go module dependencies
 update: #> Update Go dependencies
 	go get -t -u -v
 
-$(autocompletezsh): $(executable)
-	./$(executable) completion zsh > $(autocompletezsh)
+$(autocomplete): $(executable)
+	./$(executable) completion zsh > $(autocomplete)
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)
