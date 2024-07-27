@@ -61,11 +61,9 @@ func versionFilePath() (string, error) {
 	} else if executablePath, linkErr := filepath.EvalSymlinks(maybeSymlinkPath); linkErr != nil {
 		return "", linkErr
 	} else {
-		fmt.Printf("executablePath=%s\n", executablePath)
 		searchPaths := versionFileSearchPaths(executablePath)
 		for _, maybeVersionPath := range searchPaths {
 			if _, statErr := os.Stat(maybeVersionPath); statErr == nil {
-				fmt.Printf("versionFilePath=%s\n", maybeVersionPath)
 				return maybeVersionPath, nil
 			}
 		}
