@@ -1,31 +1,22 @@
-# Marmot programs
+# Scripts
 
 .PHONY: default
 default: all
 
 ## Environment
 
-### Installation directories
+### Paths
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
 bindir := $(exec_prefix)/bin
 
-datarootdir := $(prefix)/share
-mandir := $(datarootdir)/man
-man1dir := $(mandir)/man1
-
-.PHONY: path-debug
-path-debug:
-	$(info Installation paths:)
-	$(info - prefix: $(prefix))
-	$(info - exec_prefix: $(exec_prefix))
+.PHONY: path-info
+path-info:
+	$(info Paths:)
 	$(info - bindir: $(bindir))
-
-	$(info Data paths:)
-	$(info - datarootdir: $(datarootdir))
-	$(info - mandir: $(mandir))
-	$(info - man1dir: $(man1dir))
+	$(info - exec_prefix: $(exec_prefix))
+	$(info - prefix: $(prefix))
 
 ### Programs
 
@@ -33,41 +24,50 @@ path-debug:
 
 srcdir := $(realpath .)
 
-.PHONY: source-debug
-source-debug:
+.PHONY: source-info
+source-info:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
 
 #. STANDARD TARGETS
 
-.PHONY: all clean install test uninstall
+.PHONY: all
 all:
 	@:
 
+.PHONY: clean
 clean:
 	@:
 
-install: #> Install symlink from $(bindir) to sources
+.PHONY: install
+install: #> Install symlink to sources
 	mkdir -p $(bindir)
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
+.PHONY: test
 test:
 	@:
 
-uninstall: #> Delete symlink from $(bindir)
+.PHONY: uninstall
+uninstall: #> Delete symlink
 	$(RM) $(bindir)/marmot
 
 #. OTHER TARGETS
 
-.PHONY: debug
-.NOTPARALLEL: debug
-debug: path-debug source-debug #> Show debugging information
-	@:
-
+# https://stackoverflow.com/a/47107132/112682
 .PHONY: help
 help: #> Show this help
 	@sed -n \
-		-e '/@sed/!s/#[.] *//p' \
+		-e '/@sed/!s/#[.] */_margin_\n/p' \
 		-e '/@sed/!s/:.*#> /:/p' \
 		$(MAKEFILE_LIST) \
-		| column -ts :
+	| column -ts : | sed -e 's/_margin_//'
+
+.PHONY: info
+.NOTPARALLEL: info
+info: path-info source-info #> Show build information
+	@:
+
+.PHONY: install-tools
+install-tools:
+	@:
