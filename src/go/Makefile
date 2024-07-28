@@ -104,8 +104,8 @@ install: $(executable) #> Install program
 	mkdir -p $(bindir)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
-	install -D -g 0 -o 0 -m 0644 -t $(datadirpkg) $(versionfile)
-	install -D -g 0 -o 0 -m 0755 -t $(libexecdirpkg) $(executable)
+	install $(INSTALLFLAGS) -m 0644 $(datadirpkg) $(versionfile)
+	install $(INSTALLFLAGS) -m 0755 $(libexecdirpkg) $(executable)
 
 .PHONY: test
 test: #> Run tests
@@ -136,7 +136,7 @@ info: artifact-info path-info program-info source-info #> Show build information
 
 .PHONY: install-autocomplete-zsh
 install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
-	install -D -g 0 -o 0 -m 0644 -t $(datadirzshfn) $(autocomplete)
+	install $(INSTALLFLAGS) -m 0644 $(datadirzshfn) $(autocomplete)
 	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
 .PHONY: install-tools
