@@ -17,6 +17,7 @@ path-info:
 	$(info - bindir: $(bindir))
 	$(info - exec_prefix: $(exec_prefix))
 	$(info - prefix: $(prefix))
+	@:
 
 ### Programs
 
@@ -28,6 +29,7 @@ srcdir := $(realpath .)
 source-info:
 	$(info Sources:)
 	$(info - srcdir: $(srcdir))
+	@:
 
 #. STANDARD TARGETS
 
