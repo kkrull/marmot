@@ -9,11 +9,14 @@ default: all
 
 autocomplete := _marmot
 
+# Indentation must be spaces, when not part of a target's commands
+# https://stackoverflow.com/a/4713737/112682
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
-	executable ?= marmot.exe
+  executable ?= marmot.exe
 endif
 
+.PHONY: artifact-info
 artifact-info:
 	$(info Artifacts:)
 	$(info - autocomplete: $(autocomplete))
@@ -54,8 +57,17 @@ path-info:
 	$(info - libexecdir: $(libexecdir))
 	$(info - libexecdirpkg: $(libexecdirpkg))
 	$(info - prefix: $(prefix))
+	@:
 
 ### Programs
+
+INSTALLFLAGS := -g 0 -o 0
+
+.PHONY: program-info
+program-info:
+	$(info Programs:)
+	$(info - INSTALLFLAGS: $(INSTALLFLAGS))
+	@:
 
 ### Sources
 
@@ -64,6 +76,7 @@ source_main := main.go
 sources := $(shell find . -type f -name '*.go' | sort)
 versionfile := version
 
+.PHONY: source-info
 source-info:
 	$(info Sources:)
 	$(info - source_main: $(source_main))
@@ -84,11 +97,11 @@ clean: #> Remove local build files
 
 .PHONY: install
 install: $(executable) #> Install program
-	mkdir -p $(bindir)
+	mkdir -p $(bindir) $(datadirpkg) $(libexecdirpkg)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
-	install -D -g 0 -o 0 -m 0644 -t $(datadirpkg) $(versionfile)
-	install -D -g 0 -o 0 -m 0755 -t $(libexecdirpkg) $(executable)
+	install $(INSTALLFLAGS) -m 0644 $(versionfile) $(datadirpkg)
+	install $(INSTALLFLAGS) -m 0755 $(executable) $(libexecdirpkg)
 
 .PHONY: test
 test: #> Run tests
@@ -114,12 +127,13 @@ help: #> Show this help
 
 .PHONY: info
 .NOTPARALLEL: info
-info: artifact-info path-info source-info #> Show build information
+info: artifact-info path-info program-info source-info #> Show build information
 	@:
 
 .PHONY: install-autocomplete-zsh
 install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
-	install -D -g 0 -o 0 -m 0644 -t $(datadirzshfn) $(autocomplete)
+	mkdir -p $(datadirzshfn)
+	install $(INSTALLFLAGS) -m 0644 $(autocomplete) $(datadirzshfn)
 	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
 .PHONY: install-tools

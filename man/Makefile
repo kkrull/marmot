@@ -24,6 +24,7 @@ path-info:
 	$(info - man1dir: $(man1dir))
 	$(info - man7dir: $(man7dir))
 	$(info - prefix: $(prefix))
+	@:
 
 ### Programs
 
@@ -42,6 +43,7 @@ source-info:
 	$(info - sources: $(sources))
 	$(info - sources_man1: $(sources_man1))
 	$(info - sources_man7: $(sources_man7))
+	@:
 
 #. STANDARD TARGETS
 
@@ -107,6 +109,7 @@ groff-manual-info: #> Show build information for groff
 	$(info - groff_man1_objects: $(groff_man1_objects))
 	$(info - groff_man7_objects: $(groff_man7_objects))
 	$(info - groff_manual_installed: $(groff_manual_installed))
+	@:
 
 .PHONY: groff-manual-install
 groff-manual-install: $(groff_man1_objects) $(groff_man7_objects) #> Install man pages
@@ -149,6 +152,7 @@ markdown-manual-info: #> Show build information for the markdown manual
 	$(info Markdown Manual:)
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
 	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
+	@:
 
 # Make sure directory exists before building targets
 # https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
