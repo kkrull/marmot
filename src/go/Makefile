@@ -101,7 +101,7 @@ clean: #> Remove local build files
 
 .PHONY: install
 install: $(executable) #> Install program
-	mkdir -p $(bindir)
+	mkdir -p $(bindir) $(datadirpkg) $(libexecdirpkg)
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
 
 	install $(INSTALLFLAGS) -m 0644 $(datadirpkg) $(versionfile)
@@ -136,6 +136,7 @@ info: artifact-info path-info program-info source-info #> Show build information
 
 .PHONY: install-autocomplete-zsh
 install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
+	mkdir -p $(datadirzshfn)
 	install $(INSTALLFLAGS) -m 0644 $(datadirzshfn) $(autocomplete)
 	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
