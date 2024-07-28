@@ -61,11 +61,7 @@ path-info:
 
 ### Programs
 
-ifeq ($(shell uname -s),Darwin)
-  INSTALLFLAGS := -g 0 -o 0
-else
-  INSTALLFLAGS := -D -g 0 -o 0
-endif
+INSTALLFLAGS := -g 0 -o 0
 
 .PHONY: program-info
 program-info:
