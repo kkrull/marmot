@@ -13,7 +13,10 @@ trim_trailing_whitespace = false
 indent_size = off
 
 [Makefile]
-indent_style = tab
+# Indentation outside of a target's commands must be spaces, leading to mixed tabs/spaces
+# https://stackoverflow.com/a/4713737/112682
+indent_size =
+indent_style =
 
 [{*.go,*.mod,*.sum}]
 indent_style = tab
