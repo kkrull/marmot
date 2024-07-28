@@ -9,11 +9,14 @@ default: all
 
 autocomplete := _marmot
 
+# Indentation must be spaces, when not part of a target's commands
+# https://stackoverflow.com/a/4713737/112682
 executable ?= marmot
 ifeq ($(OS),Windows_NT)
-	executable ?= marmot.exe
+  executable ?= marmot.exe
 endif
 
+.PHONY: artifact-info
 artifact-info:
 	$(info Artifacts:)
 	$(info - autocomplete: $(autocomplete))
@@ -54,8 +57,21 @@ path-info:
 	$(info - libexecdir: $(libexecdir))
 	$(info - libexecdirpkg: $(libexecdirpkg))
 	$(info - prefix: $(prefix))
+	@:
 
 ### Programs
+
+ifeq ($(shell uname -s),Darwin)
+  INSTALLFLAGS := -d -g 0 -o 0
+else
+  INSTALLFLAGS := -D -g 0 -o 0
+endif
+
+.PHONY: program-info
+program-info:
+	$(info Programs:)
+	$(info - INSTALLFLAGS: $(INSTALLFLAGS))
+	@:
 
 ### Sources
 
@@ -64,6 +80,7 @@ source_main := main.go
 sources := $(shell find . -type f -name '*.go' | sort)
 versionfile := version
 
+.PHONY: source-info
 source-info:
 	$(info Sources:)
 	$(info - source_main: $(source_main))
@@ -114,7 +131,7 @@ help: #> Show this help
 
 .PHONY: info
 .NOTPARALLEL: info
-info: artifact-info path-info source-info #> Show build information
+info: artifact-info path-info program-info source-info #> Show build information
 	@:
 
 .PHONY: install-autocomplete-zsh
