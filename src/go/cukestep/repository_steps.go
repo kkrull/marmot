@@ -50,10 +50,10 @@ func listLocal() error {
 /* Remote repositories */
 
 func listRemote() error {
-	if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
-	} else if listRepositories, factoryErr := factory.ListRemoteRepositoriesQuery(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+	if factory, configErr := queryFactoryForThatMetaRepo(); configErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+	} else if listRepositories, appErr := factory.ListRemoteRepositoriesQuery(); appErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
 	} else if repositories, runErr := listRepositories(); runErr != nil {
 		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
@@ -65,7 +65,7 @@ func listRemote() error {
 func registerRemote() error {
 	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
 		return parseErr
-	} else if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
+	} else if factory, factoryErr := commandFactoryForThatMetaRepo(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
 	} else if registerCmd, factoryErr := factory.RegisterRemoteRepositoriesCommand(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
@@ -89,11 +89,20 @@ func thatListingShouldHaveRemotes() error {
 
 /* Configuration */
 
-func factoryForThatMetaRepo() (use.AppFactory, error) {
+func commandFactoryForThatMetaRepo() (use.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		return use.NewAppFactory().WithRepositorySource(jsonMetaRepo), nil
+	}
+}
+
+func queryFactoryForThatMetaRepo() (use.QueryFactory, error) {
+	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
+		return nil, pathErr
+	} else {
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
+		return use.NewQueryFactory().WithRepositorySource(jsonMetaRepo), nil
 	}
 }

@@ -16,7 +16,6 @@ func NewAppFactory() *appFactory {
 // Constructs application commands and queries with configurable services.
 type AppFactory interface {
 	InitCommand() (*metarepo.InitCommand, error)
-	ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error)
 	RegisterRemoteRepositoriesCommand() (*repository.RegisterRemoteRepositoriesCommand, error)
 }
 
@@ -46,14 +45,6 @@ func (factory *appFactory) InitCommand() (*metarepo.InitCommand, error) {
 }
 
 /* Repositories */
-
-func (factory *appFactory) ListRemoteRepositoriesQuery() (repository.ListRemoteRepositoriesQuery, error) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
-		return nil, err
-	} else {
-		return repositorySource.ListRemote, nil
-	}
-}
 
 func (factory *appFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
