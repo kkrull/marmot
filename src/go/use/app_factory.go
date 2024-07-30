@@ -34,6 +34,14 @@ func (factory *appFactory) WithRepositorySource(repositorySource corerepository.
 	return factory
 }
 
+func (factory *appFactory) repositorySource() (corerepository.RepositorySource, error) {
+	if factory.RepositorySource == nil {
+		return nil, errors.New("AppFactory: missing RepositorySource")
+	} else {
+		return factory.RepositorySource, nil
+	}
+}
+
 /* Administration */
 
 func (factory *appFactory) InitCommand() (*metarepo.InitCommand, error) {
@@ -44,7 +52,7 @@ func (factory *appFactory) InitCommand() (*metarepo.InitCommand, error) {
 	}
 }
 
-/* Repositories */
+/* Remote repositories */
 
 func (factory *appFactory) RegisterRemoteRepositoriesCommand() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
@@ -53,13 +61,5 @@ func (factory *appFactory) RegisterRemoteRepositoriesCommand() (
 		return nil, err
 	} else {
 		return &repository.RegisterRemoteRepositoriesCommand{Source: repositorySource}, nil
-	}
-}
-
-func (factory *appFactory) repositorySource() (corerepository.RepositorySource, error) {
-	if factory.RepositorySource == nil {
-		return nil, errors.New("AppFactory: missing RepositorySource")
-	} else {
-		return factory.RepositorySource, nil
 	}
 }
