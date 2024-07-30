@@ -9,32 +9,32 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
-func NewAppFactory() *appFactory {
-	return &appFactory{}
+func NewCommandFactory() *cmdFactory {
+	return &cmdFactory{}
 }
 
 // Constructs application commands and queries with configurable services.
-type AppFactory interface {
+type CommandFactory interface {
 	NewInitMetaRepo() (*metarepo.InitCommand, error)
 	NewRegisterRemoteRepositories() (*repository.RegisterRemoteRepositoriesCommand, error)
 }
 
-type appFactory struct {
+type cmdFactory struct {
 	MetaDataAdmin    coremetarepo.MetaDataAdmin
 	RepositorySource corerepository.RepositorySource
 }
 
-func (factory *appFactory) WithMetaDataAdmin(metadataAdmin coremetarepo.MetaDataAdmin) *appFactory {
+func (factory *cmdFactory) WithMetaDataAdmin(metadataAdmin coremetarepo.MetaDataAdmin) *cmdFactory {
 	factory.MetaDataAdmin = metadataAdmin
 	return factory
 }
 
-func (factory *appFactory) WithRepositorySource(repositorySource corerepository.RepositorySource) *appFactory {
+func (factory *cmdFactory) WithRepositorySource(repositorySource corerepository.RepositorySource) *cmdFactory {
 	factory.RepositorySource = repositorySource
 	return factory
 }
 
-func (factory *appFactory) repositorySource() (corerepository.RepositorySource, error) {
+func (factory *cmdFactory) repositorySource() (corerepository.RepositorySource, error) {
 	if factory.RepositorySource == nil {
 		return nil, errors.New("AppFactory: missing RepositorySource")
 	} else {
@@ -44,7 +44,7 @@ func (factory *appFactory) repositorySource() (corerepository.RepositorySource, 
 
 /* Administration */
 
-func (factory *appFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
+func (factory *cmdFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
 		return nil, errors.New("AppFactory: missing MetaDataAdmin")
 	} else {
@@ -54,7 +54,7 @@ func (factory *appFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
 
 /* Remote repositories */
 
-func (factory *appFactory) NewRegisterRemoteRepositories() (
+func (factory *cmdFactory) NewRegisterRemoteRepositories() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
 	if repositorySource, err := factory.repositorySource(); err != nil {

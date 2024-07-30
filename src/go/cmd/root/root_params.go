@@ -41,10 +41,10 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
-			appFactory: use.NewAppFactory().
+			args: args,
+			cmdFactory: use.NewCommandFactory().
 				WithMetaDataAdmin(metaRepoAdmin).
 				WithRepositorySource(jsonMetaRepo),
-			args:         args,
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   make([]string, 0),
@@ -86,10 +86,10 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
-			appFactory: use.NewAppFactory().
+			args: argsBeforeDash,
+			cmdFactory: use.NewCommandFactory().
 				WithMetaDataAdmin(metaRepoAdmin).
 				WithRepositorySource(jsonMetaRepo),
-			args:         argsBeforeDash,
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   inputLines,
@@ -106,7 +106,7 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 // Application configuration derived from flags passed to the CLI.
 type rootParams struct {
 	//Application interface
-	appFactory   use.AppFactory
+	cmdFactory   use.CommandFactory
 	queryFactory use.QueryFactory
 
 	//CLI arguments
@@ -123,8 +123,8 @@ type rootParams struct {
 
 /* Application interface */
 
-func (params rootParams) CommandFactory() use.AppFactory { return params.appFactory }
-func (params rootParams) QueryFactory() use.QueryFactory { return params.queryFactory }
+func (params rootParams) CommandFactory() use.CommandFactory { return params.cmdFactory }
+func (params rootParams) QueryFactory() use.QueryFactory     { return params.queryFactory }
 
 /* CLI arguments */
 

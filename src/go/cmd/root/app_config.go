@@ -12,7 +12,7 @@ type AppConfig interface {
 	/* Application interface */
 
 	//Constructs application commands.
-	CommandFactory() use.AppFactory
+	CommandFactory() use.CommandFactory
 
 	//Constructs application queries.
 	QueryFactory() use.QueryFactory

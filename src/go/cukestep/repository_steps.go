@@ -89,12 +89,12 @@ func thatListingShouldHaveRemotes() error {
 
 /* Configuration */
 
-func commandFactoryForThatMetaRepo() (use.AppFactory, error) {
+func commandFactoryForThatMetaRepo() (use.CommandFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
 		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		return use.NewAppFactory().WithRepositorySource(jsonMetaRepo), nil
+		return use.NewCommandFactory().WithRepositorySource(jsonMetaRepo), nil
 	}
 }
 
