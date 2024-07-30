@@ -38,9 +38,10 @@ func runList(cobraCmd *cobra.Command, args []string) error {
 }
 
 func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
-	if listAppCmd, factoryErr := config.AppFactory().ListRemoteRepositoriesQuery(); factoryErr != nil {
-		return factoryErr
-	} else if repositories, runErr := listAppCmd(); runErr != nil {
+	queryFactory := config.QueryFactory()
+	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
+		return appErr
+	} else if repositories, runErr := listRemoteRepositories(); runErr != nil {
 		return runErr
 	} else {
 		for _, repository := range repositories.RemoteHrefs() {

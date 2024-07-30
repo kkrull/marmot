@@ -63,7 +63,7 @@ func runRegister(cobraCmd *cobra.Command, args []string) error {
 }
 
 func runRegisterAppCmd(config cmdroot.AppConfig) error {
-	if appCmd, appErr := config.AppFactory().RegisterRemoteRepositoriesCommand(); appErr != nil {
+	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
 		return appErr
 	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
 		return argErr

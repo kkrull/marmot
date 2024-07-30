@@ -23,20 +23,31 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 		return ctx, err
 	})
 
-	ctx.Given(`^I have registered remote repositories$`, registerRemote)
-	ctx.When(`^I list repositories in that meta repo$`, listInThatMetaRepo)
-
+	//All kinds of repositories
 	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
+
+	//Local repositories
+	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
+
+	//Remote repositories
+	ctx.Given(`^I have registered remote repositories$`, registerRemote)
+	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
 	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
 }
 
-/* List repositories */
+/* All kinds of repositories */
 
-func listInThatMetaRepo() error {
-	if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
-	} else if listRepositories, factoryErr := factory.ListRemoteRepositoriesQuery(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+func thatListingShouldBeEmpty() {
+	Expect(thatListing.Count()).To(Equal(0))
+}
+
+/* Local repositories */
+
+func listLocal() error {
+	if factory, configErr := queryFactoryForThatMetaRepo(); configErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+	} else if listRepositories, appErr := factory.NewListLocalRepositories(); appErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
 	} else if repositories, runErr := listRepositories(); runErr != nil {
 		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
 	} else {
@@ -45,8 +56,33 @@ func listInThatMetaRepo() error {
 	}
 }
 
-func thatListingShouldBeEmpty() {
-	Expect(thatListing.Count()).To(Equal(0))
+/* Remote repositories */
+
+func listRemote() error {
+	if factory, configErr := queryFactoryForThatMetaRepo(); configErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+	} else if listRepositories, appErr := factory.NewListRemoteRepositories(); appErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
+	} else if repositories, runErr := listRepositories(); runErr != nil {
+		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
+	} else {
+		thatListing = repositories
+		return nil
+	}
+}
+
+func registerRemote() error {
+	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
+		return parseErr
+	} else if factory, factoryErr := commandFactoryForThatMetaRepo(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
+	} else if registerCmd, factoryErr := factory.NewRegisterRemoteRepositories(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
+		return fmt.Errorf("repository_steps: failed to register repositories; %w", runErr)
+	} else {
+		return nil
+	}
 }
 
 func thatListingShouldHaveRemotes() error {
@@ -60,29 +96,22 @@ func thatListingShouldHaveRemotes() error {
 	return nil
 }
 
-/* Register repositories */
+/* Configuration */
 
-func registerRemote() error {
-	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
-		return parseErr
-	} else if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
-	} else if registerCmd, factoryErr := factory.RegisterRemoteRepositoriesCommand(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
-	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
-		return fmt.Errorf("repository_steps: failed to register repositories; %w", runErr)
+func commandFactoryForThatMetaRepo() (use.CommandFactory, error) {
+	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
+		return nil, pathErr
 	} else {
-		return nil
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
+		return use.NewCommandFactory().WithRepositorySource(jsonMetaRepo), nil
 	}
 }
 
-/* Configuration */
-
-func factoryForThatMetaRepo() (use.AppFactory, error) {
+func queryFactoryForThatMetaRepo() (use.QueryFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
+		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		return use.NewAppFactory().WithRepositorySource(jsonMetaRepo), nil
+		return use.NewQueryFactory().WithRepositorySource(jsonMetaRepo), nil
 	}
 }

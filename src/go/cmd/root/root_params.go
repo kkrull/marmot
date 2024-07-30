@@ -38,15 +38,20 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
+		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
-			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
-				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
-			args:         args,
+			args: args,
+			cmdFactory: use.NewCommandFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   make([]string, 0),
 			metaRepoPath: metaRepoPath,
+			queryFactory: use.NewQueryFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -78,15 +83,20 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 			return nil, scanErr
 		}
 
+		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
-			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
-				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
-			args:         argsBeforeDash,
+			args: argsBeforeDash,
+			cmdFactory: use.NewCommandFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   inputLines,
 			metaRepoPath: metaRepoPath,
+			queryFactory: use.NewQueryFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -95,15 +105,28 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 
 // Application configuration derived from flags passed to the CLI.
 type rootParams struct {
-	appFactory   use.AppFactory
-	args         []string
+	//Application interface
+	cmdFactory   use.CommandFactory
+	queryFactory use.QueryFactory
+
+	//CLI arguments
+	args []string
+
+	//CLI flags
 	debug        bool
 	flagSet      *pflag.FlagSet
-	inputLines   []string
 	metaRepoPath string
+
+	//CLI input
+	inputLines []string
 }
 
-func (params rootParams) AppFactory() use.AppFactory { return params.appFactory }
+/* Application interface */
+
+func (params rootParams) CommandFactory() use.CommandFactory { return params.cmdFactory }
+func (params rootParams) QueryFactory() use.QueryFactory     { return params.queryFactory }
+
+/* CLI arguments */
 
 func (params rootParams) Args() []string { return params.args }
 func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
@@ -119,7 +142,28 @@ func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
 	return urls, nil
 }
 
+/* CLI debugging */
+
 func (params rootParams) Debug() bool { return params.debug }
+func (params rootParams) PrintDebug(writer io.Writer) {
+	for i, arg := range params.args {
+		fmt.Fprintf(writer, "arg [%d]: %s\n", i, arg)
+	}
+
+	for _, flag := range rootFlags {
+		fmt.Fprintf(writer, "flag --%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
+	}
+
+	for i, line := range params.inputLines {
+		fmt.Fprintf(writer, "stdin [%d]: %s\n", i, line)
+	}
+}
+
+/* CLI flags */
+
+func (params rootParams) MetaRepoPath() string { return params.metaRepoPath }
+
+/* CLI input */
 
 func (params rootParams) InputLines() []string { return params.inputLines }
 func (params rootParams) InputLinesAsUrls() ([]*url.URL, error) {
@@ -136,19 +180,4 @@ func (params rootParams) InputLinesAsUrls() ([]*url.URL, error) {
 	}
 
 	return urls, nil
-}
-
-func (params rootParams) MetaRepoPath() string { return params.metaRepoPath }
-func (params rootParams) PrintDebug(writer io.Writer) {
-	for i, arg := range params.args {
-		fmt.Fprintf(writer, "arg [%d]: %s\n", i, arg)
-	}
-
-	for _, flag := range rootFlags {
-		fmt.Fprintf(writer, "flag --%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
-	}
-
-	for i, line := range params.inputLines {
-		fmt.Fprintf(writer, "stdin [%d]: %s\n", i, line)
-	}
 }
