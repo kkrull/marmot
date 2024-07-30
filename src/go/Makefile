@@ -145,7 +145,7 @@ install-tools: #> Install Go development tools
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: test-watch
-test-watch: ginkgo-watch #> Run tests in watch mode
+test-watch: #> Run tests in watch mode
 	ginkgo watch -r
 
 #. GO TARGETS
