@@ -23,14 +23,19 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 		return ctx, err
 	})
 
+	//All kinds of repositories
+	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
+
+	//Local repositories
 	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
 
+	//Remote repositories
 	ctx.Given(`^I have registered remote repositories$`, registerRemote)
 	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
 	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
-
-	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
 }
+
+/* All kinds of repositories */
 
 func thatListingShouldBeEmpty() {
 	Expect(thatListing.Count()).To(Equal(0))
