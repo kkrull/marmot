@@ -24,7 +24,7 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 	})
 
 	ctx.Given(`^I have registered remote repositories$`, registerRemote)
-	ctx.When(`^I list repositories in that meta repo$`, listInThatMetaRepo)
+	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
 
 	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
 	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
@@ -32,7 +32,7 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 
 /* List repositories */
 
-func listInThatMetaRepo() error {
+func listRemote() error {
 	if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
 	} else if listRepositories, factoryErr := factory.ListRemoteRepositoriesQuery(); factoryErr != nil {
