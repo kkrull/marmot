@@ -123,7 +123,7 @@ type rootParams struct {
 
 /* Application interface */
 
-func (params rootParams) AppFactory() use.AppFactory     { return params.appFactory }
+func (params rootParams) CommandFactory() use.AppFactory { return params.appFactory }
 func (params rootParams) QueryFactory() use.QueryFactory { return params.queryFactory }
 
 /* CLI arguments */

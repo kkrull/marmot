@@ -39,7 +39,7 @@ func runInit(cobraCmd *cobra.Command, args []string) error {
 }
 
 func runInitAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
-	if initAppCmd, initErr := config.AppFactory().NewInitMetaRepo(); initErr != nil {
+	if initAppCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
 		return initErr
 	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
