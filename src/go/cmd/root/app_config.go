@@ -9,9 +9,9 @@ import (
 
 // Abstract factory that creates various application factories from a CLI configuration.
 type AppConfig interface {
-	/* Application */
+	/* Application interface */
 
-	//Constructs application commands
+	//Constructs application commands.
 	AppFactory() use.AppFactory
 
 	/* CLI arguments */
@@ -22,7 +22,7 @@ type AppConfig interface {
 	//Positional arguments parsed as URLs.
 	ArgsAsUrls() ([]*url.URL, error)
 
-	/* CLI Debugging */
+	/* CLI debugging */
 
 	//Print information for debugging CLI parsing to the given writer.
 	PrintDebug(writer io.Writer)
