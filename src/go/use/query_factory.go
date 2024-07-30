@@ -14,7 +14,7 @@ func NewQueryFactory() *queryFactory {
 
 // Constructs application queries with configurable services.
 type QueryFactory interface {
-	ListRemoteRepositoriesQuery() (userepository.ListRemoteRepositoriesQuery, error) //TODO KDK: Remove "Query"
+	NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error)
 }
 
 type queryFactory struct {
@@ -34,7 +34,7 @@ func (factory *queryFactory) WithRepositorySource(source corerepository.Reposito
 
 /* Repositories */
 
-func (factory *queryFactory) ListRemoteRepositoriesQuery() (userepository.ListRemoteRepositoriesQuery, error) {
+func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
 	if repositorySource, err := factory.repositorySource(); err != nil {
 		return nil, err
 	} else {

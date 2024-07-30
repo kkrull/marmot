@@ -52,7 +52,7 @@ func listLocal() error {
 func listRemote() error {
 	if factory, configErr := queryFactoryForThatMetaRepo(); configErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
-	} else if listRepositories, appErr := factory.ListRemoteRepositoriesQuery(); appErr != nil {
+	} else if listRepositories, appErr := factory.NewListRemoteRepositories(); appErr != nil {
 		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
 	} else if repositories, runErr := listRepositories(); runErr != nil {
 		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
