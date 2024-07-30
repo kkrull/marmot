@@ -23,14 +23,26 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 		return ctx, err
 	})
 
+	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
+
 	ctx.Given(`^I have registered remote repositories$`, registerRemote)
 	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
+	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
 
 	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
-	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
 }
 
-/* List repositories */
+func thatListingShouldBeEmpty() {
+	Expect(thatListing.Count()).To(Equal(0))
+}
+
+/* Local repositories */
+
+func listLocal() error {
+	return godog.ErrPending
+}
+
+/* Remote repositories */
 
 func listRemote() error {
 	if factory, factoryErr := factoryForThatMetaRepo(); factoryErr != nil {
@@ -45,23 +57,6 @@ func listRemote() error {
 	}
 }
 
-func thatListingShouldBeEmpty() {
-	Expect(thatListing.Count()).To(Equal(0))
-}
-
-func thatListingShouldHaveRemotes() error {
-	remoteUrls := thatListing.RemoteUrls()
-	remoteHrefs := make([]string, len(remoteUrls))
-	for i, remoteUrl := range remoteUrls {
-		remoteHrefs[i] = remoteUrl.String()
-	}
-
-	Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
-	return nil
-}
-
-/* Register repositories */
-
 func registerRemote() error {
 	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
 		return parseErr
@@ -74,6 +69,17 @@ func registerRemote() error {
 	} else {
 		return nil
 	}
+}
+
+func thatListingShouldHaveRemotes() error {
+	remoteUrls := thatListing.RemoteUrls()
+	remoteHrefs := make([]string, len(remoteUrls))
+	for i, remoteUrl := range remoteUrls {
+		remoteHrefs[i] = remoteUrl.String()
+	}
+
+	Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
+	return nil
 }
 
 /* Configuration */
