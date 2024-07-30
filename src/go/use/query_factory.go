@@ -14,6 +14,7 @@ func NewQueryFactory() *queryFactory {
 
 // Constructs application queries with configurable services.
 type QueryFactory interface {
+	NewListLocalRepositories() (userepository.ListRemoteRepositoriesQuery, error)
 	NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error)
 }
 
@@ -33,6 +34,16 @@ func (factory *queryFactory) WithRepositorySource(source corerepository.Reposito
 }
 
 /* Repositories */
+
+func (factory *queryFactory) NewListLocalRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
+	//Awaiting a way to register local repositories
+	localRepositoriesAlwaysEmpty := func() (corerepository.Repositories, error) {
+		repositories := make([]corerepository.Repository, 0)
+		return &corerepository.RepositoriesArray{Repositories: repositories}, nil
+	}
+
+	return localRepositoriesAlwaysEmpty, nil
+}
 
 func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
 	if repositorySource, err := factory.repositorySource(); err != nil {

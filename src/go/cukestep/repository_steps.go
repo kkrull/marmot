@@ -44,7 +44,16 @@ func thatListingShouldBeEmpty() {
 /* Local repositories */
 
 func listLocal() error {
-	return godog.ErrPending
+	if factory, configErr := queryFactoryForThatMetaRepo(); configErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+	} else if listRepositories, appErr := factory.NewListLocalRepositories(); appErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
+	} else if repositories, runErr := listRepositories(); runErr != nil {
+		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
+	} else {
+		thatListing = repositories
+		return nil
+	}
 }
 
 /* Remote repositories */
