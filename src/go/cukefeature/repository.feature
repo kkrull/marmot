@@ -12,6 +12,14 @@ Feature: Repository
     Then that repository listing should be empty
 
   @LocalDir
+  #TODO KDK: Just implement the application command to register and the applicaiton query; leave CLI for another PR
+  Scenario: A Meta Repo remembers local repositories
+    Given I have initialized a new meta repo
+    And I have registered local repositories that have been cloned on the local filesystem
+    When I list local repositories in that meta repo
+    Then that repository listing should include those local repositories
+
+  @LocalDir
   Scenario: A Meta Repo remembers remote repositories
     Given I have initialized a new meta repo
     And I have registered remote repositories
