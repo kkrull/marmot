@@ -38,15 +38,20 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
+		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
 			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
-				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 			args:         args,
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   make([]string, 0),
 			metaRepoPath: metaRepoPath,
+			queryFactory: use.NewQueryFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -78,15 +83,20 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 			return nil, scanErr
 		}
 
+		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootParams{
 			appFactory: use.NewAppFactory().
-				WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin(parser.version)).
-				WithRepositorySource(svcfs.NewJsonMetaRepo(metaRepoPath)),
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 			args:         argsBeforeDash,
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   inputLines,
 			metaRepoPath: metaRepoPath,
+			queryFactory: use.NewQueryFactory().
+				WithMetaDataAdmin(metaRepoAdmin).
+				WithRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -96,7 +106,8 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 // Application configuration derived from flags passed to the CLI.
 type rootParams struct {
 	//Application interface
-	appFactory use.AppFactory
+	appFactory   use.AppFactory
+	queryFactory use.QueryFactory
 
 	//CLI arguments
 	args []string
@@ -112,7 +123,8 @@ type rootParams struct {
 
 /* Application interface */
 
-func (params rootParams) AppFactory() use.AppFactory { return params.appFactory }
+func (params rootParams) AppFactory() use.AppFactory     { return params.appFactory }
+func (params rootParams) QueryFactory() use.QueryFactory { return params.queryFactory }
 
 /* CLI arguments */
 

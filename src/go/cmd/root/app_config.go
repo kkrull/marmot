@@ -14,6 +14,9 @@ type AppConfig interface {
 	//Constructs application commands.
 	AppFactory() use.AppFactory
 
+	//Constructs application queries.
+	QueryFactory() use.QueryFactory
+
 	/* CLI arguments */
 
 	//Positional arguments that weren't parsed as flags, as raw text.
