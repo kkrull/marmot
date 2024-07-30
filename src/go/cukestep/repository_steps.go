@@ -91,7 +91,7 @@ func thatListingShouldHaveRemotes() error {
 
 func factoryForThatMetaRepo() (use.AppFactory, error) {
 	if metaRepoPath, pathErr := support.ThatMetaRepo(); pathErr != nil {
-		return nil, fmt.Errorf("repository_steps: failed to configure; %w", pathErr)
+		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		return use.NewAppFactory().WithRepositorySource(jsonMetaRepo), nil
