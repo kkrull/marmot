@@ -21,7 +21,7 @@ var _ = Describe("InitCommand", func() {
 	BeforeEach(func() {
 		metaDataAdmin = &mock.MetaDataAdmin{}
 		factory := use.NewAppFactory().WithMetaDataAdmin(metaDataAdmin)
-		subject = expect.NoError(factory.InitCommand())
+		subject = expect.NoError(factory.NewInitMetaRepo())
 	})
 
 	Describe("#Run", func() {

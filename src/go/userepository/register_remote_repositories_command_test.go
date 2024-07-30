@@ -22,7 +22,7 @@ var _ = Describe("RegisterRepositoriesCommand", func() {
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
 		factory = use.NewAppFactory().WithRepositorySource(source)
-		subject = expect.NoError(factory.RegisterRemoteRepositoriesCommand())
+		subject = expect.NoError(factory.NewRegisterRemoteRepositories())
 	})
 
 	Describe("#Run", func() {
