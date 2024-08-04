@@ -12,7 +12,6 @@ Feature: Repository
     Then that repository listing should be empty
 
   @LocalDir
-  #TODO KDK: Just implement the application command to register and the applicaiton query; leave CLI for another PR
   Scenario: A Meta Repo remembers local repositories
     Given Git repositories on the local filesystem
     And I have initialized a new meta repo

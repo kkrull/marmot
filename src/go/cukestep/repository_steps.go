@@ -60,6 +60,7 @@ func registerLocal() error {
 	return godog.ErrPending
 }
 
+// TODO KDK: Just implement the application command to register and the application query; leave CLI for another PR
 func thatListingShouldHaveLocals() error {
 	return godog.ErrPending
 }
