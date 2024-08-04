@@ -25,7 +25,9 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
 
 	//Local repositories
+	ctx.Given(`^I have registered those local repositories with a meta repo$`, registerLocal)
 	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
+	ctx.Then(`^that repository listing should include those local repositories$`, thatListingShouldHaveLocals)
 
 	//Remote repositories
 	ctx.Given(`^I have registered remote repositories$`, registerRemote)
@@ -52,6 +54,14 @@ func listLocal() error {
 		thatListing = repositories
 		return nil
 	}
+}
+
+func registerLocal() error {
+	return godog.ErrPending
+}
+
+func thatListingShouldHaveLocals() error {
+	return godog.ErrPending
 }
 
 /* Remote repositories */
