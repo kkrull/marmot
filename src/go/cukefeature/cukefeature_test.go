@@ -28,6 +28,7 @@ func TestFeatures(t *testing.T) {
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	step.AddLocalRepositorySteps(ctx)
 	step.AddMetaRepoSteps(ctx)
+	step.AddRemoteRepositorySteps(ctx)
 	step.AddRepositorySteps(ctx)
 	support.AddTo(ctx)
 }
