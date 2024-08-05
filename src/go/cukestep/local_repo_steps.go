@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"os"
-	"path/filepath"
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
@@ -32,7 +31,6 @@ func (localRepo *LocalRepository) Delete() error {
 
 // Add step definitions related to repositories on the local filesystem.
 func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
-	//TODO KDK: Delete directories containing local repositories, in a Before hook (not After)
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
 		var totalErr error = err
 		for _, localRepo := range thoseLocalRepositories {
@@ -47,10 +45,10 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 }
 
 func localGitRepositories() error {
-	if testDir, pathErr := support.TestDir(); pathErr != nil {
+	if repoDir, pathErr := support.TestSubDir("empty-dir"); pathErr != nil {
 		return pathErr
-	} else if repo, initErr := InitLocalRepository(filepath.Join(testDir, "empty-dir")); initErr != nil {
-		return initErr
+	} else if repo, repoErr := InitLocalRepository(repoDir); repoErr != nil {
+		return repoErr
 	} else {
 		thoseLocalRepositories = []*LocalRepository{repo}
 		return nil
