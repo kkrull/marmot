@@ -12,15 +12,14 @@ var thoseLocalRepositories *support.LocalRepositories = support.NoLocalRepositor
 
 // Add step definitions related to repositories on the local filesystem.
 func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
+	ctx.Given(`^Git repositories on the local filesystem$`, localGitRepositories)
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
 		if err != nil {
 			return ctx, err
+		} else {
+			return ctx, thoseLocalRepositories.DeleteAll()
 		}
-
-		return ctx, thoseLocalRepositories.DeleteAll()
 	})
-
-	ctx.Given(`^Git repositories on the local filesystem$`, localGitRepositories)
 }
 
 func localGitRepositories() error {

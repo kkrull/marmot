@@ -28,10 +28,12 @@ func (localRepo *LocalRepository) Delete() error {
 
 /* Container */
 
+// Create an empty container for local repositories.
 func NoLocalRepositories() *LocalRepositories {
 	return &LocalRepositories{repositories: make([]*LocalRepository, 0)}
 }
 
+// Create a container for local repositories.
 func SomeLocalRepositories(repositories ...*LocalRepository) *LocalRepositories {
 	return &LocalRepositories{repositories: repositories}
 }
