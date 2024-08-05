@@ -34,7 +34,7 @@ func (localRepo *LocalRepository) Delete() error {
 func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 	//TODO KDK: Delete directories containing local repositories, in a Before hook (not After)
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
-		var totalErr error = nil
+		var totalErr error = err
 		for _, localRepo := range thoseLocalRepositories {
 			totalErr = errors.Join(totalErr, localRepo.Delete())
 		}
