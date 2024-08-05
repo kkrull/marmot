@@ -26,7 +26,6 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.Given(`^Git repositories on the local filesystem$`, createLocalGitRepositories)
 	ctx.Given(`^I have registered those local repositories with a meta repo$`, registerLocal)
 
-	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
 	ctx.Then(`^that repository listing should include those local repositories$`, thatListingShouldHaveLocals)
 }
 

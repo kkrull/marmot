@@ -20,6 +20,8 @@ func AddRepositorySteps(ctx *godog.ScenarioContext) {
 	})
 
 	ctx.Then(`^that repository listing should be empty$`, thatListingShouldBeEmpty)
+	ctx.When(`^I list local repositories in that meta repo$`, listLocal)
+	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
 }
 
 /* State */
@@ -66,4 +68,14 @@ func listRemote() error {
 
 func thatListingShouldBeEmpty() {
 	Expect(thatListing().Count()).To(Equal(0))
+}
+
+func thatListingShouldHaveRemotes(expectedHrefs ...string) {
+	remoteUrls := thatListing().RemoteUrls()
+	remoteHrefs := make([]string, len(remoteUrls))
+	for i, remoteUrl := range remoteUrls {
+		remoteHrefs[i] = remoteUrl.String()
+	}
+
+	Expect(remoteHrefs).To(ConsistOf(expectedHrefs))
 }

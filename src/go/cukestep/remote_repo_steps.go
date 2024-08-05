@@ -6,22 +6,25 @@ import (
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
-	. "github.com/onsi/gomega"
 )
 
 /* Configuration */
 
 // Add step definitions related to remote repositories.
 func AddRemoteRepositorySteps(ctx *godog.ScenarioContext) {
-	ctx.Given(`^I have registered remote repositories$`, registerRemote)
-	ctx.When(`^I list remote repositories in that meta repo$`, listRemote)
-	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
+	ctx.Given(`^I have registered remote repositories$`, func() error {
+		return registerRemote("https://github.com/actions/checkout")
+	})
+
+	ctx.Then(`^that repository listing should include those remote repositories$`, func() {
+		thatListingShouldHaveRemotes("https://github.com/actions/checkout")
+	})
 }
 
 /* Steps */
 
-func registerRemote() error {
-	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
+func registerRemote(remoteHref string) error {
+	if remoteUrl, parseErr := url.Parse(remoteHref); parseErr != nil {
 		return parseErr
 	} else if factory, factoryErr := support.ThatCommandFactory(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
@@ -32,15 +35,4 @@ func registerRemote() error {
 	} else {
 		return nil
 	}
-}
-
-func thatListingShouldHaveRemotes() error {
-	remoteUrls := thatListing().RemoteUrls()
-	remoteHrefs := make([]string, len(remoteUrls))
-	for i, remoteUrl := range remoteUrls {
-		remoteHrefs[i] = remoteUrl.String()
-	}
-
-	Expect(remoteHrefs).To(ConsistOf("https://github.com/actions/checkout"))
-	return nil
 }
