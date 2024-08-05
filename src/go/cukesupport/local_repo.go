@@ -3,12 +3,17 @@ package cukesupport
 import (
 	"errors"
 	"os"
+	"path/filepath"
 )
 
 // Initialize a Git repository at the specified path on the local filesystem.
 func InitLocalRepository(path string) (*LocalRepository, error) {
-	repo := &LocalRepository{path: path}
-	return repo, repo.Create()
+	if absPath, pathErr := filepath.Abs(path); pathErr != nil {
+		return nil, pathErr
+	} else {
+		repo := &LocalRepository{path: absPath}
+		return repo, repo.Create()
+	}
 }
 
 // A Git repository on the local filesystem.
@@ -50,4 +55,14 @@ func (container *LocalRepositories) DeleteAll() error {
 	}
 
 	return totalErr
+}
+
+// Paths on the local filesystem, to each repository.
+func (container *LocalRepositories) LocalPaths() []string {
+	localPaths := make([]string, len(container.repositories))
+	for i, repository := range container.repositories {
+		localPaths[i] = repository.path
+	}
+
+	return localPaths
 }

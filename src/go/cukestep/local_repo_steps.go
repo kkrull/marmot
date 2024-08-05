@@ -2,6 +2,7 @@ package cukestep
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
@@ -24,11 +25,10 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 	})
 
 	ctx.Given(`^Git repositories on the local filesystem$`, func() error {
-		return createLocalGitRepository("empty-dir")
+		return createLocalRepo("empty-dir")
 	})
 
-	// TODO KDK: Just implement the application command to register and the application query; leave CLI for another PR
-	ctx.Given(`^I have registered those local repositories with a meta repo$`, registerLocal)
+	ctx.Given(`^I have registered those local repositories with a meta repo$`, registerThoseLocals)
 
 	ctx.Then(`^that repository listing should include those local repositories$`, func() error {
 		if repoDir, pathErr := support.TestSubDir("empty-dir"); pathErr != nil {
@@ -42,7 +42,7 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 
 /* Steps */
 
-func createLocalGitRepository(repoDir string) error {
+func createLocalRepo(repoDir string) error {
 	if repo, repoErr := support.InitLocalRepository(repoDir); repoErr != nil {
 		return repoErr
 	} else {
@@ -51,6 +51,12 @@ func createLocalGitRepository(repoDir string) error {
 	}
 }
 
-func registerLocal() error {
-	return godog.ErrPending
+func registerThoseLocals() error {
+	if factory, factoryErr := support.ThatCommandFactory(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
+	} else if registerCmd, factoryErr := factory.NewRegisterLocalRepositories(); factoryErr != nil {
+		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+	} else {
+		return registerCmd.Run(thoseLocalRepositories.LocalPaths())
+	}
 }
