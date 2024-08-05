@@ -3,31 +3,13 @@ package cukestep
 import (
 	"context"
 	"errors"
-	"os"
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
 )
 
 // State to clear between scenarios
-var thoseLocalRepositories []*LocalRepository
-
-func InitLocalRepository(path string) (*LocalRepository, error) {
-	repo := &LocalRepository{path: path}
-	return repo, repo.Create()
-}
-
-type LocalRepository struct {
-	path string
-}
-
-func (localRepo *LocalRepository) Create() error {
-	return os.MkdirAll(localRepo.path, 0o777)
-}
-
-func (localRepo *LocalRepository) Delete() error {
-	return os.RemoveAll(localRepo.path)
-}
+var thoseLocalRepositories []*support.LocalRepository
 
 // Add step definitions related to repositories on the local filesystem.
 func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
@@ -47,10 +29,10 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 func localGitRepositories() error {
 	if repoDir, pathErr := support.TestSubDir("empty-dir"); pathErr != nil {
 		return pathErr
-	} else if repo, repoErr := InitLocalRepository(repoDir); repoErr != nil {
+	} else if repo, repoErr := support.InitLocalRepository(repoDir); repoErr != nil {
 		return repoErr
 	} else {
-		thoseLocalRepositories = []*LocalRepository{repo}
+		thoseLocalRepositories = []*support.LocalRepository{repo}
 		return nil
 	}
 }
