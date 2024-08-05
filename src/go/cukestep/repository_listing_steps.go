@@ -70,6 +70,10 @@ func thatListingShouldBeEmpty() {
 	Expect(thatListing().Count()).To(Equal(0))
 }
 
+func thatListingShouldHaveLocals(expectedPaths ...string) error {
+	return godog.ErrPending
+}
+
 func thatListingShouldHaveRemotes(expectedHrefs ...string) {
 	remoteUrls := thatListing().RemoteUrls()
 	remoteHrefs := make([]string, len(remoteUrls))

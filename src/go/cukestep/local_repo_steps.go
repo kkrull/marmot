@@ -23,18 +23,27 @@ func AddLocalRepositorySteps(ctx *godog.ScenarioContext) {
 		}
 	})
 
-	ctx.Given(`^Git repositories on the local filesystem$`, createLocalGitRepositories)
+	ctx.Given(`^Git repositories on the local filesystem$`, func() error {
+		return createLocalGitRepository("empty-dir")
+	})
+
+	// TODO KDK: Just implement the application command to register and the application query; leave CLI for another PR
 	ctx.Given(`^I have registered those local repositories with a meta repo$`, registerLocal)
 
-	ctx.Then(`^that repository listing should include those local repositories$`, thatListingShouldHaveLocals)
+	ctx.Then(`^that repository listing should include those local repositories$`, func() error {
+		if repoDir, pathErr := support.TestSubDir("empty-dir"); pathErr != nil {
+			return pathErr
+		} else {
+			thatListingShouldHaveLocals(repoDir)
+			return nil
+		}
+	})
 }
 
 /* Steps */
 
-func createLocalGitRepositories() error {
-	if repoDir, pathErr := support.TestSubDir("empty-dir"); pathErr != nil {
-		return pathErr
-	} else if repo, repoErr := support.InitLocalRepository(repoDir); repoErr != nil {
+func createLocalGitRepository(repoDir string) error {
+	if repo, repoErr := support.InitLocalRepository(repoDir); repoErr != nil {
 		return repoErr
 	} else {
 		thoseLocalRepositories = support.SomeLocalRepositories(repo)
@@ -43,10 +52,5 @@ func createLocalGitRepositories() error {
 }
 
 func registerLocal() error {
-	return godog.ErrPending
-}
-
-// TODO KDK: Just implement the application command to register and the application query; leave CLI for another PR
-func thatListingShouldHaveLocals() error {
 	return godog.ErrPending
 }
