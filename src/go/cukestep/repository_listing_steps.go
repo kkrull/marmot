@@ -70,8 +70,8 @@ func thatListingShouldBeEmpty() {
 	Expect(thatListing().Count()).To(Equal(0))
 }
 
-func thatListingShouldHaveLocals(expectedPaths ...string) error {
-	return godog.ErrPending
+func thatListingShouldHaveLocals(expectedPaths ...string) {
+	Expect(thatListing().LocalPaths()).To(ConsistOf(expectedPaths))
 }
 
 func thatListingShouldHaveRemotes(expectedHrefs ...string) {

@@ -7,6 +7,9 @@ type Repositories interface {
 	// How many repositories are in this collection
 	Count() int
 
+	// Paths to each repository on the local file system
+	LocalPaths() []string
+
 	// String versions of each remote's URL
 	RemoteHrefs() []string
 
@@ -21,6 +24,15 @@ type RepositoriesArray struct {
 
 func (array RepositoriesArray) Count() int {
 	return len(array.Repositories)
+}
+
+func (array RepositoriesArray) LocalPaths() []string {
+	localPaths := make([]string, len(array.Repositories))
+	for i, repository := range array.Repositories {
+		localPaths[i] = repository.LocalPath
+	}
+
+	return localPaths
 }
 
 func (array RepositoriesArray) RemoteHrefs() []string {

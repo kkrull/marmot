@@ -18,5 +18,6 @@ func RemoteRepositoryS(remoteUrl string) (Repository, error) {
 
 // One Git repository.
 type Repository struct {
+	LocalPath string
 	RemoteUrl *url.URL
 }
