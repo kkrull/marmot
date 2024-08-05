@@ -9,6 +9,8 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+/* Configuration */
+
 // Add step definitions related to remote repositories.
 func AddRemoteRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.Given(`^I have registered remote repositories$`, registerRemote)
@@ -16,18 +18,7 @@ func AddRemoteRepositorySteps(ctx *godog.ScenarioContext) {
 	ctx.Then(`^that repository listing should include those remote repositories$`, thatListingShouldHaveRemotes)
 }
 
-func listRemote() error {
-	if factory, configErr := support.ThatQueryFactory(); configErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
-	} else if listRepositories, appErr := factory.NewListRemoteRepositories(); appErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
-	} else if repositories, runErr := listRepositories(); runErr != nil {
-		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
-	} else {
-		thatListing = repositories
-		return nil
-	}
-}
+/* Steps */
 
 func registerRemote() error {
 	if remoteUrl, parseErr := url.Parse("https://github.com/actions/checkout"); parseErr != nil {
@@ -44,7 +35,7 @@ func registerRemote() error {
 }
 
 func thatListingShouldHaveRemotes() error {
-	remoteUrls := thatListing.RemoteUrls()
+	remoteUrls := thatListing().RemoteUrls()
 	remoteHrefs := make([]string, len(remoteUrls))
 	for i, remoteUrl := range remoteUrls {
 		remoteHrefs[i] = remoteUrl.String()
