@@ -28,6 +28,9 @@ type CliConfig interface {
 	// Positional arguments parsed as URLs.
 	ArgsAsUrls() ([]*url.URL, error)
 
+	// Positional arguments trimmed for whitespace.
+	ArgsTrimmed() []string
+
 	/* CLI debugging */
 
 	// Print information for debugging CLI parsing to the given writer.
@@ -46,8 +49,11 @@ type CliConfig interface {
 	// Lines of text input from another process–e.g. through a pipe to standard input–as raw text.
 	InputLines() []string
 
-	// Lines of text input from another process–e.g. through a pipe to standard input–parsed as URLs.
+	// Lines of text input from another process–e.g. read from standard input–parsed as URLs.
 	InputLinesAsUrls() ([]*url.URL, error)
+
+	// Lines of text input from another process–e.g. read from standard input–trimmed for whitespace.
+	InputLinesTrimmed() []string
 }
 
 // Application configuration derived from flags passed to the CLI.
@@ -90,6 +96,15 @@ func (params rootCliConfig) ArgsAsUrls() ([]*url.URL, error) {
 	return urls, nil
 }
 
+func (params rootCliConfig) ArgsTrimmed() []string {
+	trimmed := make([]string, len(params.args))
+	for i, rawArg := range params.args {
+		trimmed[i] = strings.TrimSpace(rawArg)
+	}
+
+	return trimmed
+}
+
 /* CLI debugging */
 
 func (params rootCliConfig) Debug() bool { return params.debug }
@@ -130,4 +145,13 @@ func (params rootCliConfig) InputLinesAsUrls() ([]*url.URL, error) {
 	}
 
 	return urls, nil
+}
+
+func (params rootCliConfig) InputLinesTrimmed() []string {
+	trimmed := make([]string, len(params.inputLines))
+	for i, rawLine := range params.inputLines {
+		trimmed[i] = strings.TrimSpace(rawLine)
+	}
+
+	return trimmed
 }
