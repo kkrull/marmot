@@ -21,7 +21,7 @@ func (cliCmd *localCommand) AddToCobra(cobraCmd *cobra.Command) {
 }
 
 func (cliCmd *localCommand) toCobraCommand() *cobra.Command {
-	remoteCobraCmd := &cobra.Command{
+	localCobraCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),
 		Long:    "Deal with repositories on the local filesystem.",
@@ -30,9 +30,9 @@ func (cliCmd *localCommand) toCobraCommand() *cobra.Command {
 		Use:     "local",
 	}
 
-	cmdlocal.NewListCommand().AddToCobra(remoteCobraCmd)
-	cmdlocal.NewRegisterCommand().AddToCobra(remoteCobraCmd)
-	return remoteCobraCmd
+	cmdlocal.NewListCommand().AddToCobra(localCobraCmd)
+	cmdlocal.NewRegisterCommand().AddToCobra(localCobraCmd)
+	return localCobraCmd
 }
 
 func runLocalCobra(cli *cobra.Command, args []string) error {
