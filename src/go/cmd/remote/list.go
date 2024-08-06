@@ -2,6 +2,7 @@ package cmdremote
 
 import (
 	"fmt"
+	"io"
 
 	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
@@ -34,11 +35,11 @@ func runListCobra(cli *cobra.Command, args []string) error {
 		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else {
-		return runList(cli, config)
+		return runList(config, cli.OutOrStdout())
 	}
 }
 
-func runList(cli *cobra.Command, config cmdroot.AppConfig) error {
+func runList(config cmdroot.AppConfig, stdout io.Writer) error {
 	queryFactory := config.QueryFactory()
 	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
 		return appErr
@@ -46,7 +47,7 @@ func runList(cli *cobra.Command, config cmdroot.AppConfig) error {
 		return runErr
 	} else {
 		for _, repository := range repositories.RemoteHrefs() {
-			fmt.Fprintf(cli.OutOrStdout(), "%s\n", repository)
+			fmt.Fprintf(stdout, "%s\n", repository)
 		}
 		return nil
 	}
