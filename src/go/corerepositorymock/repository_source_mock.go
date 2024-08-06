@@ -28,6 +28,11 @@ type RepositorySource struct {
 
 /* Local repositories */
 
+func (source *RepositorySource) AddLocal(localPath string) error {
+	source.AddLocalCalls = append(source.AddLocalCalls, localPath)
+	return nil
+}
+
 func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
 	ginkgo.GinkgoHelper()
 	Expect(source.AddLocalCalls).To(ConsistOf(expectedPaths))
@@ -47,7 +52,6 @@ func (source *RepositorySource) AddRemoteExpected(expectedHref string) {
 }
 
 func (source *RepositorySource) AddRemoteFails(faultyHref string, errorMsg string) {
-	ginkgo.GinkgoHelper()
 	source.AddRemoteErrors[faultyHref] = errors.New(errorMsg)
 }
 
