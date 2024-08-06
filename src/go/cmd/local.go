@@ -31,7 +31,7 @@ func (cliCmd *localCommand) toCobraCommand() *cobra.Command {
 	}
 
 	cmdlocal.NewListCommand().AddToCobra(remoteCobraCmd)
-	// cmdremote.NewRegisterCommand().AddToCobra(remoteCobraCmd)
+	cmdlocal.NewRegisterCommand().AddToCobra(remoteCobraCmd)
 	return remoteCobraCmd
 }
 
