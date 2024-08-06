@@ -36,7 +36,7 @@ func (factory *queryFactory) WithRepositorySource(source corerepository.Reposito
 /* Repositories */
 
 func (factory *queryFactory) NewListLocalRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
-	//Awaiting a way to register local repositories
+	// TODO KDK: Awaiting a way to register local repositories
 	localRepositoriesAlwaysEmpty := func() (corerepository.Repositories, error) {
 		repositories := make([]corerepository.Repository, 0)
 		return &corerepository.RepositoriesArray{Repositories: repositories}, nil
