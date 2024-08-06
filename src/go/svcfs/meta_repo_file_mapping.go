@@ -11,11 +11,7 @@ import (
 func (metaRepo *metaRepoData) MapLocalRepositories() (corerepository.Repositories, error) {
 	repositories := make([]corerepository.Repository, len(metaRepo.LocalRepositories))
 	for i, localRepositoryData := range metaRepo.LocalRepositories {
-		if repository, mapErr := localRepositoryData.ToCoreRepository(); mapErr != nil {
-			return nil, mapErr
-		} else {
-			repositories[i] = repository
-		}
+		repositories[i] = corerepository.LocalRepository(localRepositoryData.Path)
 	}
 
 	return corerepository.SomeRepositories(repositories), nil
