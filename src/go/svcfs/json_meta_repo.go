@@ -16,7 +16,13 @@ type JsonMetaRepo struct {
 	metaDataFile string
 }
 
-/* RepositorySource */
+/* Local repositories */
+
+func (repo *JsonMetaRepo) AddLocal(localPath string) error {
+	return nil
+}
+
+/* Remote repositories */
 
 func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {
 	var rootObject *rootObjectData
