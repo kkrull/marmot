@@ -38,6 +38,10 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 			source.AddLocalFails("/path/to/faulty-repo", errors.New("bang!"))
 			Expect(subject.Run("/path/to/faulty-repo")).To(MatchError("failed to add local repository /path/to/faulty-repo: bang!"))
 		})
+
+		It("rejects invalid paths", Pending, func() {})
+		It("rejects paths that do not exist", Pending, func() {})
+		It("resolves relative paths", Pending, func() {})
 	})
 })
 
