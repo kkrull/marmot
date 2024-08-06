@@ -11,7 +11,7 @@ import (
 )
 
 // Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
-func RootFlagSet() *rootFlagSet {
+func FlagSet() *rootFlagSet {
 	return &rootFlagSet{}
 }
 

@@ -33,7 +33,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 		Version: root.version,
 	}
 
-	cmdroot.RootFlagSet().AddTo(rootCmd)
+	cmdroot.FlagSet().AddTo(rootCmd)
 	for _, group := range commandGroups {
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
