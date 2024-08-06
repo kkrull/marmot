@@ -8,8 +8,9 @@ import (
 	"strings"
 )
 
-var marmotVersion string
+var _marmotVersion string
 
+// Read the suite version from file(s) located at known paths relative to the current executable.
 func ExecutableVersion() (string, error) {
 	if versionPath, pathErr := versionFilePath(); pathErr != nil {
 		return "", fmt.Errorf("failed to locate version file; %w", pathErr)
@@ -22,20 +23,22 @@ func ExecutableVersion() (string, error) {
 	}
 }
 
-func InitMarmotVersion(version string) error {
-	if marmotVersion != "" {
-		return fmt.Errorf("marmot version already set to <%s> but given <%s>", marmotVersion, version)
+// Set the Marmot suite version to the specified version, if it has not already been set.
+func SetMarmotVersion(version string) error {
+	if _marmotVersion != "" {
+		return fmt.Errorf("marmot version already set to <%s> but given <%s>", _marmotVersion, version)
 	} else {
-		marmotVersion = version
+		_marmotVersion = version
 		return nil
 	}
 }
 
+// Return the Marmot suite version, or an error if it is not been initialized yet.
 func MarmotVersion() (string, error) {
-	if marmotVersion == "" {
+	if _marmotVersion == "" {
 		return "", errors.New("marmot version not set")
 	} else {
-		return marmotVersion, nil
+		return _marmotVersion, nil
 	}
 }
 

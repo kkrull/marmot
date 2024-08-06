@@ -24,7 +24,7 @@ func main() {
 func mainE() error {
 	if version, readErr := core.ExecutableVersion(); readErr != nil {
 		return readErr
-	} else if initErr := core.InitMarmotVersion(version); initErr != nil {
+	} else if initErr := core.SetMarmotVersion(version); initErr != nil {
 		return initErr
 	} else {
 		cliFactory := cmd.
