@@ -52,7 +52,7 @@ func (source *RepositorySource) ListLocal() (core.Repositories, error) {
 		repositories[i] = core.LocalRepository(localPath)
 	}
 
-	return &core.RepositoriesArray{Repositories: repositories}, nil
+	return core.SomeRepositories(repositories), nil
 }
 
 /* Remote repositories */
@@ -93,5 +93,5 @@ func (source *RepositorySource) ListRemote() (core.Repositories, error) {
 		repositories[i] = core.RemoteRepository(remoteUrl)
 	}
 
-	return &core.RepositoriesArray{Repositories: repositories}, nil
+	return core.SomeRepositories(repositories), nil
 }
