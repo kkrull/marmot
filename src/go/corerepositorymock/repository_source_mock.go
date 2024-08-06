@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+// Construct a test double of RepositorySource.
 func NewRepositorySource() *RepositorySource {
 	return &RepositorySource{
 		addLocalCalls:   make([]string, 0),
@@ -37,11 +38,13 @@ func (source *RepositorySource) AddLocal(localPath string) error {
 	return source.addLocalErrors[localPath]
 }
 
+// Assert that repositories with these local paths were added.
 func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
 	ginkgo.GinkgoHelper()
 	Expect(source.addLocalCalls).To(ConsistOf(expectedPaths))
 }
 
+// Stub #AddLocal to fail for the specified path with the given error.
 func (source *RepositorySource) AddLocalFails(path string, err error) {
 	source.addLocalErrors[path] = err
 }
@@ -62,16 +65,19 @@ func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
 	return source.addRemoteErrors[hostUrl.String()]
 }
 
+// Assert that repositories with this remote URL was added.
 func (source *RepositorySource) AddRemoteExpected(expectedHref string) {
 	ginkgo.GinkgoHelper()
 	actualHrefs := source.addRemoteHrefs()
 	Expect(actualHrefs).To(ContainElement(expectedHref))
 }
 
+// Stub #AddRemote to fail for the specified URL with the given error.
 func (source *RepositorySource) AddRemoteFails(faultyHref string, errorMsg string) {
 	source.addRemoteErrors[faultyHref] = errors.New(errorMsg)
 }
 
+// Assert that a repository with this remote URL was not added.
 func (source *RepositorySource) AddRemoteNotExpected(unexpectedHref string) {
 	ginkgo.GinkgoHelper()
 	actualHrefs := source.addRemoteHrefs()
