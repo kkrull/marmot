@@ -41,7 +41,7 @@ func (array repositoriesArray) Count() int {
 func (array repositoriesArray) LocalPaths() []string {
 	localPaths := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		localPaths[i] = repository.LocalPath
+		localPaths[i] = repository.LocalPath()
 	}
 
 	return localPaths
@@ -50,7 +50,7 @@ func (array repositoriesArray) LocalPaths() []string {
 func (array repositoriesArray) RemoteHrefs() []string {
 	remoteHrefs := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		remoteHrefs[i] = repository.RemoteUrl.String()
+		remoteHrefs[i] = repository.RemoteHref()
 	}
 
 	return remoteHrefs
@@ -59,7 +59,7 @@ func (array repositoriesArray) RemoteHrefs() []string {
 func (array repositoriesArray) RemoteUrls() []*url.URL {
 	remoteUrls := make([]*url.URL, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		remoteUrls[i] = repository.RemoteUrl
+		remoteUrls[i] = repository.RemoteUrl()
 	}
 
 	return remoteUrls
