@@ -2,18 +2,6 @@ package corerepository
 
 import "net/url"
 
-// Construct a container containing the given repositories.
-func SomeRepositories(repositories []Repository) Repositories {
-	return &RepositoriesArray{Repositories: repositories}
-}
-
-// Construct a container containing no repositories of any kind.
-func NoRepositories() Repositories {
-	return &RepositoriesArray{
-		Repositories: make([]Repository, 0),
-	}
-}
-
 // Any number of Git repositories.
 type Repositories interface {
 	// How many repositories are in this collection
@@ -29,37 +17,49 @@ type Repositories interface {
 	RemoteUrls() []*url.URL
 }
 
+// Construct a container containing the given repositories.
+func SomeRepositories(repositories []Repository) Repositories {
+	return &repositoriesArray{Repositories: repositories}
+}
+
+// Construct a container containing no repositories of any kind.
+func NoRepositories() Repositories {
+	return &repositoriesArray{
+		Repositories: make([]Repository, 0),
+	}
+}
+
 // Repositories backed by an array.
-type RepositoriesArray struct {
+type repositoriesArray struct {
 	Repositories []Repository
 }
 
-func (array RepositoriesArray) Count() int {
+func (array repositoriesArray) Count() int {
 	return len(array.Repositories)
 }
 
-func (array RepositoriesArray) LocalPaths() []string {
+func (array repositoriesArray) LocalPaths() []string {
 	localPaths := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		localPaths[i] = repository.LocalPath
+		localPaths[i] = repository.LocalPath()
 	}
 
 	return localPaths
 }
 
-func (array RepositoriesArray) RemoteHrefs() []string {
+func (array repositoriesArray) RemoteHrefs() []string {
 	remoteHrefs := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		remoteHrefs[i] = repository.RemoteUrl.String()
+		remoteHrefs[i] = repository.RemoteHref()
 	}
 
 	return remoteHrefs
 }
 
-func (array RepositoriesArray) RemoteUrls() []*url.URL {
+func (array repositoriesArray) RemoteUrls() []*url.URL {
 	remoteUrls := make([]*url.URL, len(array.Repositories))
 	for i, repository := range array.Repositories {
-		remoteUrls[i] = repository.RemoteUrl
+		remoteUrls[i] = repository.RemoteUrl()
 	}
 
 	return remoteUrls

@@ -13,34 +13,40 @@ func NewRemoteCommand() *remoteCommand {
 
 type remoteCommand struct{}
 
-func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *remoteCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (cliCmd *remoteCommand) toCobraCommand() *cobra.Command {
 	remoteCobraCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),
 		Long:    "Deal with repositories on remote hosts.",
-		RunE:    runRemote,
+		RunE:    runRemoteCobra,
 		Short:   "Deal with remote repositories",
 		Use:     "remote",
 	}
 
-	remoteCobraCmd.AddCommand(
-		cmdremote.NewListCommand().ToCobraCommand(),
-		cmdremote.NewRegisterCommand().ToCobraCommand(),
-	)
+	cmdremote.NewListCommand().AddToCobra(remoteCobraCmd)
+	cmdremote.NewRegisterCommand().AddToCobra(remoteCobraCmd)
 	return remoteCobraCmd
 }
 
-func runRemote(cobraCmd *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+func runRemoteCobra(cli *cobra.Command, args []string) error {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if len(args) == 0 {
-		return cobraCmd.Help()
+		return cli.Help()
 	} else {
+		// Run the sub-command named in the arguments
 		return nil
 	}
 }

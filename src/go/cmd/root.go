@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Configure the root command with the given I/O and version identifier, then return for use.
+// Construct a root CLI command with the given I/O and suite version identifier.
 func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *rootCliCommand {
 	return &rootCliCommand{
 		stderr:  stderr,
@@ -22,25 +22,26 @@ type rootCliCommand struct {
 	version string
 }
 
+/* Mapping to Cobra */
+
+// Map to a command that runs on Cobra.
 func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
-		RunE:    runRoot,
+		RunE:    runRootCobra,
 		Short:   "Meta Repo Management Tool",
 		Use:     "marmot",
 		Version: root.version,
 	}
 
-	cmdroot.RootFlagSet().AddTo(rootCmd)
+	cmdroot.FlagSet().AddTo(rootCmd)
 	for _, group := range commandGroups {
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
 
-	rootCmd.AddCommand(
-		NewInitCommand().ToCobraCommand(),
-		NewRemoteCommand().ToCobraCommand(),
-	)
+	NewInitCommand().AddToCobra(rootCmd)
+	NewRemoteCommand().AddToCobra(rootCmd)
 
 	rootCmd.SetOut(root.stdout)
 	rootCmd.SetErr(root.stderr)
@@ -48,17 +49,18 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	return rootCmd
 }
 
-func runRoot(cobraCmd *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+func runRootCobra(cli *cobra.Command, args []string) error {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if len(args) == 0 {
-		return cobraCmd.Help()
+		return cli.Help()
 	} else {
+		// Run the command named in the arguments
 		return nil
 	}
 }

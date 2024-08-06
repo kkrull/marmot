@@ -2,6 +2,7 @@ package cmdremote
 
 import (
 	"fmt"
+	"io"
 
 	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
@@ -14,30 +15,7 @@ func NewListCommand() *listCommand {
 
 type listCommand struct{}
 
-func (listCommand) ToCobraCommand() *cobra.Command {
-	return &cobra.Command{
-		Args:  cobra.NoArgs,
-		Long:  "List remote repositories registered with Marmot.",
-		RunE:  runList,
-		Short: "List remote repositories",
-		Use:   "list",
-	}
-}
-
-func runList(cobraCmd *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
-		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
-		return parseErr
-	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
-		return nil
-	} else {
-		return runListAppCmd(cobraCmd, config)
-	}
-}
-
-func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
+func runList(config cmdroot.CliConfig, stdout io.Writer) error {
 	queryFactory := config.QueryFactory()
 	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
 		return appErr
@@ -45,8 +23,38 @@ func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
 		return runErr
 	} else {
 		for _, repository := range repositories.RemoteHrefs() {
-			fmt.Fprintf(cobraCmd.OutOrStdout(), "%s\n", repository)
+			fmt.Fprintf(stdout, "%s\n", repository)
 		}
 		return nil
+	}
+}
+
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *listCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (listCommand) toCobraCommand() *cobra.Command {
+	return &cobra.Command{
+		Args:  cobra.NoArgs,
+		Long:  "List remote repositories registered with Marmot.",
+		RunE:  runListCobra,
+		Short: "List remote repositories",
+		Use:   "list",
+	}
+}
+
+func runListCobra(cli *cobra.Command, args []string) error {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
+		return newErr
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
+		return parseErr
+	} else if config.Debug() {
+		config.PrintDebug(cli.OutOrStdout())
+		return nil
+	} else {
+		return runList(config, cli.OutOrStdout())
 	}
 }

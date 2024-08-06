@@ -16,7 +16,26 @@ func NewRegisterCommand() *registerCommand {
 
 type registerCommand struct{}
 
-func (registerCommand) ToCobraCommand() *cobra.Command {
+func runRegister(config cmdroot.CliConfig) error {
+	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
+		return appErr
+	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
+		return argErr
+	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
+		return stdInErr
+	} else {
+		return appCmd.Run(append(urlsFromArgs, urlsFromInput...))
+	}
+}
+
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *registerCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (registerCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,
@@ -24,7 +43,7 @@ func (registerCommand) ToCobraCommand() *cobra.Command {
 gh repo list --json url | jq -r '.[].url' | marmot remote register -`,
 		Long: `Register Git repositories on remote hosts at each [URL].
 When URL is -, stop processing arguments and read newline-delimited URLs from standard input.`,
-		RunE:  runRegister,
+		RunE:  runRegisterCobra,
 		Short: "Register remote repositories",
 		Use:   "register [flags] [URL]... [-]",
 	}
@@ -45,33 +64,19 @@ func anyNotUrlOrBlank(inputs []string) error {
 	return nil
 }
 
-func runRegister(cobraCmd *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+func runRegisterCobra(cli *cobra.Command, args []string) error {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.ParseR(cobraCmd.Flags(), args, cobraCmd.InOrStdin()); parseErr != nil {
+	} else if config, parseErr := parser.ParseR(cli.Flags(), args, cli.InOrStdin()); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if argErr := anyNotUrlOrBlank(config.Args()); argErr != nil {
 		return argErr
 	} else if stdInErr := anyNotUrlOrBlank(config.InputLines()); stdInErr != nil {
 		return stdInErr
 	} else {
-		return runRegisterAppCmd(config)
-	}
-}
-
-func runRegisterAppCmd(config cmdroot.AppConfig) error {
-	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
-		return appErr
-	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
-		return argErr
-	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
-		return stdInErr
-	} else if runErr := appCmd.Run(append(urlsFromArgs, urlsFromInput...)); runErr != nil {
-		return runErr
-	} else {
-		return nil
+		return runRegister(config)
 	}
 }

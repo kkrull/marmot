@@ -24,13 +24,11 @@ func main() {
 func mainE() error {
 	if version, readErr := core.ExecutableVersion(); readErr != nil {
 		return readErr
-	} else if initErr := core.InitMarmotVersion(version); initErr != nil {
+	} else if initErr := core.SetMarmotVersion(version); initErr != nil {
 		return initErr
 	} else {
-		cliFactory := cmd.
-			NewCliFactory(version).
-			WithStdIO(stdout, stderr)
-		rootCmd := cliFactory.ToRootCobraCommand()
-		return rootCmd.Execute()
+		rootCmd := cmd.NewRootCommand(stdout, stderr, version)
+		rootCobraCmd := rootCmd.ToCobraCommand()
+		return rootCobraCmd.Execute()
 	}
 }
