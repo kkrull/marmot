@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Construct a root CLI command with the given I/O and version identifier.
+// Construct a root CLI command with the given I/O and suite version identifier.
 func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *rootCliCommand {
 	return &rootCliCommand{
 		stderr:  stderr,

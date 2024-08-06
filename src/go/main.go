@@ -27,10 +27,8 @@ func mainE() error {
 	} else if initErr := core.SetMarmotVersion(version); initErr != nil {
 		return initErr
 	} else {
-		cliFactory := cmd.
-			NewCliFactory(version).
-			WithStdIO(stdout, stderr)
-		rootCmd := cliFactory.ToRootCobraCommand()
-		return rootCmd.Execute()
+		rootCmd := cmd.NewRootCommand(stdout, stderr, version)
+		rootCobraCmd := rootCmd.ToCobraCommand()
+		return rootCobraCmd.Execute()
 	}
 }
