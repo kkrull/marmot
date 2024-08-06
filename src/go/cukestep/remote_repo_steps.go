@@ -30,9 +30,7 @@ func registerRemote(remoteHref string) error {
 		return fmt.Errorf("remote_repo_steps: failed to configure; %w", factoryErr)
 	} else if registerCmd, factoryErr := factory.NewRegisterRemoteRepositories(); factoryErr != nil {
 		return fmt.Errorf("remote_repo_steps: failed to initialize; %w", factoryErr)
-	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
-		return fmt.Errorf("remote_repo_steps: failed to register repositories; %w", runErr)
 	} else {
-		return nil
+		return registerCmd.Run([]*url.URL{remoteUrl})
 	}
 }
