@@ -28,6 +28,7 @@ func RemoteRepositoryS(remoteUrl string) (Repository, error) {
 	}
 }
 
+// Basic Repository implementation.
 type repository struct {
 	localPath string
 	remoteUrl *url.URL
