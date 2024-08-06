@@ -4,12 +4,12 @@ import "net/url"
 
 // Construct a container containing the given repositories.
 func SomeRepositories(repositories []Repository) Repositories {
-	return &RepositoriesArray{Repositories: repositories}
+	return &repositoriesArray{Repositories: repositories}
 }
 
 // Construct a container containing no repositories of any kind.
 func NoRepositories() Repositories {
-	return &RepositoriesArray{
+	return &repositoriesArray{
 		Repositories: make([]Repository, 0),
 	}
 }
@@ -30,15 +30,15 @@ type Repositories interface {
 }
 
 // Repositories backed by an array.
-type RepositoriesArray struct {
+type repositoriesArray struct {
 	Repositories []Repository
 }
 
-func (array RepositoriesArray) Count() int {
+func (array repositoriesArray) Count() int {
 	return len(array.Repositories)
 }
 
-func (array RepositoriesArray) LocalPaths() []string {
+func (array repositoriesArray) LocalPaths() []string {
 	localPaths := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
 		localPaths[i] = repository.LocalPath
@@ -47,7 +47,7 @@ func (array RepositoriesArray) LocalPaths() []string {
 	return localPaths
 }
 
-func (array RepositoriesArray) RemoteHrefs() []string {
+func (array repositoriesArray) RemoteHrefs() []string {
 	remoteHrefs := make([]string, len(array.Repositories))
 	for i, repository := range array.Repositories {
 		remoteHrefs[i] = repository.RemoteUrl.String()
@@ -56,7 +56,7 @@ func (array RepositoriesArray) RemoteHrefs() []string {
 	return remoteHrefs
 }
 
-func (array RepositoriesArray) RemoteUrls() []*url.URL {
+func (array repositoriesArray) RemoteUrls() []*url.URL {
 	remoteUrls := make([]*url.URL, len(array.Repositories))
 	for i, repository := range array.Repositories {
 		remoteUrls[i] = repository.RemoteUrl
