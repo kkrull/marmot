@@ -1,8 +1,6 @@
 package userepository
 
 import (
-	"errors"
-
 	core "github.com/kkrull/marmot/corerepository"
 )
 
@@ -11,5 +9,5 @@ type RegisterLocalRepositoriesCommand struct {
 }
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths ...string) error {
-	return errors.ErrUnsupported
+	return nil
 }

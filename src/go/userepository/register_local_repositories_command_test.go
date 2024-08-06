@@ -23,9 +23,17 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
-		It("passes local paths to the repository source", Pending, func() {
-			Expect(subject).NotTo(BeNil())
+		It("passes local paths to the repository source", func() {
 			subject.Run("/path/to/repo")
+			source.AddLocalExpected("/path/to/repo")
+		})
+
+		It("returns nil when everything succeeds", func() {
+			Expect(subject.Run(validPath())).To(Succeed())
 		})
 	})
 })
+
+func validPath() string {
+	return "/path/to/repo"
+}

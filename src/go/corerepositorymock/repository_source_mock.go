@@ -11,6 +11,7 @@ import (
 
 func NewRepositorySource() *RepositorySource {
 	return &RepositorySource{
+		AddLocalCalls:   make([]string, 0),
 		AddRemoteCalls:  make([]*url.URL, 0),
 		AddRemoteErrors: make(map[string]error),
 		ListRemoteUrls:  make([]*url.URL, 0),
@@ -19,10 +20,20 @@ func NewRepositorySource() *RepositorySource {
 
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
+	AddLocalCalls   []string
 	AddRemoteCalls  []*url.URL
 	AddRemoteErrors map[string]error
 	ListRemoteUrls  []*url.URL
 }
+
+/* Local repositories */
+
+func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
+	ginkgo.GinkgoHelper()
+	Expect(source.AddLocalCalls).To(ConsistOf(expectedPaths))
+}
+
+/* Remote repositories */
 
 func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
 	source.AddRemoteCalls = append(source.AddRemoteCalls, hostUrl)
