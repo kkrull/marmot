@@ -15,8 +15,25 @@ func NewInitCommand() *initCommand {
 
 type initCommand struct{}
 
-// Map to a command that runs on Cobra.
-func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
+func runInit(config cmdroot.CliConfig, stdout io.Writer) error {
+	if appCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
+		return initErr
+	} else if runErr := appCmd.Run(config.MetaRepoPath()); runErr != nil {
+		return runErr
+	} else {
+		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
+		return nil
+	}
+}
+
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *initCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (cliCmd *initCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: metaRepoGroup.id(),
@@ -37,16 +54,5 @@ func runInitCobra(cli *cobra.Command, args []string) error {
 		return nil
 	} else {
 		return runInit(config, cli.OutOrStdout())
-	}
-}
-
-func runInit(config cmdroot.CliConfig, stdout io.Writer) error {
-	if appCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
-		return initErr
-	} else if runErr := appCmd.Run(config.MetaRepoPath()); runErr != nil {
-		return runErr
-	} else {
-		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
-		return nil
 	}
 }

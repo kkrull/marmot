@@ -38,8 +38,9 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 		rootCmd.AddGroup(group.toCobraGroup())
 	}
 
+	NewInitCommand().AddToCobra(rootCmd)
 	rootCmd.AddCommand(
-		NewInitCommand().ToCobraCommand(),
+		NewInitCommand().toCobraCommand(),
 		NewRemoteCommand().ToCobraCommand(),
 	)
 
