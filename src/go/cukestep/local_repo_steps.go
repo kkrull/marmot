@@ -49,9 +49,9 @@ func createLocalRepo(repoDir string) error {
 
 func registerThoseLocals() error {
 	if factory, factoryErr := support.ThatCommandFactory(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
+		return fmt.Errorf("local_repo_steps: failed to configure; %w", factoryErr)
 	} else if registerCmd, factoryErr := factory.NewRegisterLocalRepositories(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+		return fmt.Errorf("local_repo_steps: failed to initialize; %w", factoryErr)
 	} else {
 		return registerCmd.Run(thoseLocalRepositories.LocalPaths()...)
 	}

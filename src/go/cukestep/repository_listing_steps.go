@@ -42,11 +42,11 @@ func thatListing() core.Repositories {
 
 func listLocal() error {
 	if factory, configErr := support.ThatQueryFactory(); configErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+		return fmt.Errorf("repository_listing_steps: failed to configure; %w", configErr)
 	} else if listRepositories, appErr := factory.NewListLocalRepositories(); appErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
+		return fmt.Errorf("repository_listing_steps: failed to initialize; %w", appErr)
 	} else if repositories, runErr := listRepositories(); runErr != nil {
-		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
+		return fmt.Errorf("repository_listing_steps: failed to run query; %w", runErr)
 	} else {
 		setThatListing(repositories)
 		return nil
@@ -55,11 +55,11 @@ func listLocal() error {
 
 func listRemote() error {
 	if factory, configErr := support.ThatQueryFactory(); configErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", configErr)
+		return fmt.Errorf("repository_listing_steps: failed to configure; %w", configErr)
 	} else if listRepositories, appErr := factory.NewListRemoteRepositories(); appErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", appErr)
+		return fmt.Errorf("repository_listing_steps: failed to initialize; %w", appErr)
 	} else if repositories, runErr := listRepositories(); runErr != nil {
-		return fmt.Errorf("repository_steps: failed to run query; %w", runErr)
+		return fmt.Errorf("repository_listing_steps: failed to run query; %w", runErr)
 	} else {
 		setThatListing(repositories)
 		return nil

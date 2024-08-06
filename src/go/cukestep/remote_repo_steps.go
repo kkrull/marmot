@@ -27,11 +27,11 @@ func registerRemote(remoteHref string) error {
 	if remoteUrl, parseErr := url.Parse(remoteHref); parseErr != nil {
 		return parseErr
 	} else if factory, factoryErr := support.ThatCommandFactory(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to configure; %w", factoryErr)
+		return fmt.Errorf("remote_repo_steps: failed to configure; %w", factoryErr)
 	} else if registerCmd, factoryErr := factory.NewRegisterRemoteRepositories(); factoryErr != nil {
-		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
+		return fmt.Errorf("remote_repo_steps: failed to initialize; %w", factoryErr)
 	} else if runErr := registerCmd.Run([]*url.URL{remoteUrl}); runErr != nil {
-		return fmt.Errorf("repository_steps: failed to register repositories; %w", runErr)
+		return fmt.Errorf("remote_repo_steps: failed to register repositories; %w", runErr)
 	} else {
 		return nil
 	}
