@@ -15,6 +15,7 @@ func NewRepositorySource() *RepositorySource {
 		addLocalErrors:  make(map[string]error),
 		addRemoteCalls:  make([]*url.URL, 0),
 		addRemoteErrors: make(map[string]error),
+		ListLocalPaths:  make([]string, 0),
 		ListRemoteUrls:  make([]*url.URL, 0),
 	}
 }
@@ -25,6 +26,7 @@ type RepositorySource struct {
 	addLocalErrors  map[string]error
 	addRemoteCalls  []*url.URL
 	addRemoteErrors map[string]error
+	ListLocalPaths  []string
 	ListRemoteUrls  []*url.URL
 }
 
@@ -42,6 +44,15 @@ func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
 
 func (source *RepositorySource) AddLocalFails(path string, err error) {
 	source.addLocalErrors[path] = err
+}
+
+func (source *RepositorySource) ListLocal() (core.Repositories, error) {
+	repositories := make([]core.Repository, len(source.ListLocalPaths))
+	for i, localPath := range source.ListLocalPaths {
+		repositories[i] = core.LocalRepository(localPath)
+	}
+
+	return &core.RepositoriesArray{Repositories: repositories}, nil
 }
 
 /* Remote repositories */

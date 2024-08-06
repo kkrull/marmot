@@ -22,6 +22,10 @@ func (repo *JsonMetaRepo) AddLocal(localPath string) error {
 	return nil
 }
 
+func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
+	return core.NoRepositories(), nil
+}
+
 /* Remote repositories */
 
 func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {

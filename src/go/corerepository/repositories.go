@@ -2,6 +2,13 @@ package corerepository
 
 import "net/url"
 
+// Construct a container containing no repositories of any kind.
+func NoRepositories() Repositories {
+	return &RepositoriesArray{
+		Repositories: make([]Repository, 0),
+	}
+}
+
 // Any number of Git repositories.
 type Repositories interface {
 	// How many repositories are in this collection

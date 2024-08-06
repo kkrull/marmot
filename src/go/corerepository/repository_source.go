@@ -6,5 +6,6 @@ import "net/url"
 type RepositorySource interface {
 	AddLocal(localPath string) error
 	AddRemote(hostUrl *url.URL) error
+	ListLocal() (Repositories, error)
 	ListRemote() (Repositories, error)
 }
