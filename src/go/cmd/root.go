@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Configure the root command with the given I/O and version identifier, then return for use.
+// Construct a root CLI command with the given I/O and version identifier.
 func NewRootCommand(stdout io.Writer, stderr io.Writer, version string) *rootCliCommand {
 	return &rootCliCommand{
 		stderr:  stderr,
@@ -22,6 +22,7 @@ type rootCliCommand struct {
 	version string
 }
 
+// Map to a command that runs on Cobra.
 func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
@@ -48,16 +49,16 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	return rootCmd
 }
 
-func runRoot(cobraCmd *cobra.Command, args []string) error {
+func runRoot(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if len(args) == 0 {
-		return cobraCmd.Help()
+		return cli.Help()
 	} else {
 		return nil
 	}

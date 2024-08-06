@@ -14,6 +14,7 @@ func NewListCommand() *listCommand {
 
 type listCommand struct{}
 
+// Map to a command that runs on Cobra.
 func (listCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:  cobra.NoArgs,
@@ -24,20 +25,20 @@ func (listCommand) ToCobraCommand() *cobra.Command {
 	}
 }
 
-func runList(cobraCmd *cobra.Command, args []string) error {
+func runList(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else {
-		return runListAppCmd(cobraCmd, config)
+		return runListAppCmd(cli, config)
 	}
 }
 
-func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
+func runListAppCmd(cli *cobra.Command, config cmdroot.AppConfig) error {
 	queryFactory := config.QueryFactory()
 	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
 		return appErr
@@ -45,7 +46,7 @@ func runListAppCmd(cobraCmd *cobra.Command, config cmdroot.AppConfig) error {
 		return runErr
 	} else {
 		for _, repository := range repositories.RemoteHrefs() {
-			fmt.Fprintf(cobraCmd.OutOrStdout(), "%s\n", repository)
+			fmt.Fprintf(cli.OutOrStdout(), "%s\n", repository)
 		}
 		return nil
 	}

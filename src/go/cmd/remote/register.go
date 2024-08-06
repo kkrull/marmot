@@ -16,6 +16,7 @@ func NewRegisterCommand() *registerCommand {
 
 type registerCommand struct{}
 
+// Map to a command that runs on Cobra.
 func (registerCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
@@ -45,13 +46,13 @@ func anyNotUrlOrBlank(inputs []string) error {
 	return nil
 }
 
-func runRegister(cobraCmd *cobra.Command, args []string) error {
+func runRegister(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.ParseR(cobraCmd.Flags(), args, cobraCmd.InOrStdin()); parseErr != nil {
+	} else if config, parseErr := parser.ParseR(cli.Flags(), args, cli.InOrStdin()); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if argErr := anyNotUrlOrBlank(config.Args()); argErr != nil {
 		return argErr

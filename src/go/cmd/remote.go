@@ -13,6 +13,7 @@ func NewRemoteCommand() *remoteCommand {
 
 type remoteCommand struct{}
 
+// Map to a command that runs on Cobra.
 func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 	remoteCobraCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
@@ -30,16 +31,16 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 	return remoteCobraCmd
 }
 
-func runRemote(cobraCmd *cobra.Command, args []string) error {
+func runRemote(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
-	} else if config, parseErr := parser.Parse(cobraCmd.Flags(), args); parseErr != nil {
+	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
 	} else if config.Debug() {
-		config.PrintDebug(cobraCmd.OutOrStdout())
+		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else if len(args) == 0 {
-		return cobraCmd.Help()
+		return cli.Help()
 	} else {
 		return nil
 	}
