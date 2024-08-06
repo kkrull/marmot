@@ -16,6 +16,7 @@ func NewCommandFactory() *cmdFactory {
 // Constructs application commands and queries with configurable services.
 type CommandFactory interface {
 	NewInitMetaRepo() (*metarepo.InitCommand, error)
+	NewRegisterLocalRepositories() (*repository.RegisterLocalRepositoriesCommand, error)
 	NewRegisterRemoteRepositories() (*repository.RegisterRemoteRepositoriesCommand, error)
 }
 
@@ -52,7 +53,17 @@ func (factory *cmdFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
 	}
 }
 
-/* Remote repositories */
+/* Repositories */
+
+func (factory *cmdFactory) NewRegisterLocalRepositories() (
+	*repository.RegisterLocalRepositoriesCommand, error,
+) {
+	if repositorySource, err := factory.repositorySource(); err != nil {
+		return nil, err
+	} else {
+		return &repository.RegisterLocalRepositoriesCommand{Source: repositorySource}, nil
+	}
+}
 
 func (factory *cmdFactory) NewRegisterRemoteRepositories() (
 	*repository.RegisterRemoteRepositoriesCommand, error,

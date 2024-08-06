@@ -12,7 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("RegisterRepositoriesCommand", func() {
+var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 	var (
 		factory use.CommandFactory
 		source  *mock.RepositorySource

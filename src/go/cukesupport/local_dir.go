@@ -19,14 +19,22 @@ const TagName = "@LocalDir"
 
 var testDir string
 
-// A temporary directory created for the current scenario, which will be deleted later.  Tag
-// scenarios or features with the tag in `TagName` to get started.
+// A temporary directory for scenarios tagged with `TagName`, to automatically delete afterwards.
 func TestDir() (string, error) {
 	if testDir == "" {
 		return "", fmt.Errorf("[%s] not initialized", TagName)
 	}
 
 	return testDir, nil
+}
+
+// The named subdirectory inside this scenario's temporary directory (which is deleted afterwards).
+func TestSubDir(subdir string) (string, error) {
+	if testDir == "" {
+		return "", fmt.Errorf("[%s] not initialized", TagName)
+	}
+
+	return filepath.Join(testDir, subdir), nil
 }
 
 func setTestDir(path string) {

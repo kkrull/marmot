@@ -11,22 +11,55 @@ import (
 
 func NewRepositorySource() *RepositorySource {
 	return &RepositorySource{
-		AddRemoteCalls:  make([]*url.URL, 0),
-		AddRemoteErrors: make(map[string]error),
+		addLocalCalls:   make([]string, 0),
+		addLocalErrors:  make(map[string]error),
+		addRemoteCalls:  make([]*url.URL, 0),
+		addRemoteErrors: make(map[string]error),
+		ListLocalPaths:  make([]string, 0),
 		ListRemoteUrls:  make([]*url.URL, 0),
 	}
 }
 
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
-	AddRemoteCalls  []*url.URL
-	AddRemoteErrors map[string]error
+	addLocalCalls   []string
+	addLocalErrors  map[string]error
+	addRemoteCalls  []*url.URL
+	addRemoteErrors map[string]error
+	ListLocalPaths  []string
 	ListRemoteUrls  []*url.URL
 }
 
+/* Local repositories */
+
+func (source *RepositorySource) AddLocal(localPath string) error {
+	source.addLocalCalls = append(source.addLocalCalls, localPath)
+	return source.addLocalErrors[localPath]
+}
+
+func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
+	ginkgo.GinkgoHelper()
+	Expect(source.addLocalCalls).To(ConsistOf(expectedPaths))
+}
+
+func (source *RepositorySource) AddLocalFails(path string, err error) {
+	source.addLocalErrors[path] = err
+}
+
+func (source *RepositorySource) ListLocal() (core.Repositories, error) {
+	repositories := make([]core.Repository, len(source.ListLocalPaths))
+	for i, localPath := range source.ListLocalPaths {
+		repositories[i] = core.LocalRepository(localPath)
+	}
+
+	return &core.RepositoriesArray{Repositories: repositories}, nil
+}
+
+/* Remote repositories */
+
 func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
-	source.AddRemoteCalls = append(source.AddRemoteCalls, hostUrl)
-	return source.AddRemoteErrors[hostUrl.String()]
+	source.addRemoteCalls = append(source.addRemoteCalls, hostUrl)
+	return source.addRemoteErrors[hostUrl.String()]
 }
 
 func (source *RepositorySource) AddRemoteExpected(expectedHref string) {
@@ -36,8 +69,7 @@ func (source *RepositorySource) AddRemoteExpected(expectedHref string) {
 }
 
 func (source *RepositorySource) AddRemoteFails(faultyHref string, errorMsg string) {
-	ginkgo.GinkgoHelper()
-	source.AddRemoteErrors[faultyHref] = errors.New(errorMsg)
+	source.addRemoteErrors[faultyHref] = errors.New(errorMsg)
 }
 
 func (source *RepositorySource) AddRemoteNotExpected(unexpectedHref string) {
@@ -47,8 +79,8 @@ func (source *RepositorySource) AddRemoteNotExpected(unexpectedHref string) {
 }
 
 func (source *RepositorySource) addRemoteHrefs() []string {
-	actualHrefs := make([]string, len(source.AddRemoteCalls))
-	for i, call := range source.AddRemoteCalls {
+	actualHrefs := make([]string, len(source.addRemoteCalls))
+	for i, call := range source.addRemoteCalls {
 		actualHrefs[i] = call.String()
 	}
 

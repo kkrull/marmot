@@ -5,8 +5,6 @@ import (
 
 	"github.com/cucumber/godog"
 	support "github.com/kkrull/marmot/cukesupport"
-	"github.com/kkrull/marmot/svcfs"
-	"github.com/kkrull/marmot/use"
 )
 
 // Add step definitions to manage the life cycle of a meta repo.
@@ -18,7 +16,7 @@ func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
 /* Steps */
 
 func initNewMetaRepo(ctx *godog.ScenarioContext) error {
-	factory := use.NewCommandFactory().WithMetaDataAdmin(svcfs.NewJsonMetaRepoAdmin("42"))
+	factory := support.ThatCommandFactoryS("42")
 	if initCmd, factoryErr := factory.NewInitMetaRepo(); factoryErr != nil {
 		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
 	} else if thatMetaRepo, initErr := support.InitThatMetaRepo(ctx); initErr != nil {
