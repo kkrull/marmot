@@ -15,8 +15,28 @@ func NewListCommand() *listCommand {
 
 type listCommand struct{}
 
-// Map to a command that runs on Cobra.
-func (listCommand) ToCobraCommand() *cobra.Command {
+func runList(config cmdroot.CliConfig, stdout io.Writer) error {
+	queryFactory := config.QueryFactory()
+	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
+		return appErr
+	} else if repositories, runErr := listRemoteRepositories(); runErr != nil {
+		return runErr
+	} else {
+		for _, repository := range repositories.RemoteHrefs() {
+			fmt.Fprintf(stdout, "%s\n", repository)
+		}
+		return nil
+	}
+}
+
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *listCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (listCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:  cobra.NoArgs,
 		Long:  "List remote repositories registered with Marmot.",
@@ -36,19 +56,5 @@ func runListCobra(cli *cobra.Command, args []string) error {
 		return nil
 	} else {
 		return runList(config, cli.OutOrStdout())
-	}
-}
-
-func runList(config cmdroot.CliConfig, stdout io.Writer) error {
-	queryFactory := config.QueryFactory()
-	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
-		return appErr
-	} else if repositories, runErr := listRemoteRepositories(); runErr != nil {
-		return runErr
-	} else {
-		for _, repository := range repositories.RemoteHrefs() {
-			fmt.Fprintf(stdout, "%s\n", repository)
-		}
-		return nil
 	}
 }

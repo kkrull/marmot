@@ -16,8 +16,26 @@ func NewRegisterCommand() *registerCommand {
 
 type registerCommand struct{}
 
-// Map to a command that runs on Cobra.
-func (registerCommand) ToCobraCommand() *cobra.Command {
+func runRegister(config cmdroot.CliConfig) error {
+	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
+		return appErr
+	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
+		return argErr
+	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
+		return stdInErr
+	} else {
+		return appCmd.Run(append(urlsFromArgs, urlsFromInput...))
+	}
+}
+
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *registerCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (registerCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,
@@ -60,17 +78,5 @@ func runRegisterCobra(cli *cobra.Command, args []string) error {
 		return stdInErr
 	} else {
 		return runRegister(config)
-	}
-}
-
-func runRegister(config cmdroot.CliConfig) error {
-	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
-		return appErr
-	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
-		return argErr
-	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
-		return stdInErr
-	} else {
-		return appCmd.Run(append(urlsFromArgs, urlsFromInput...))
 	}
 }

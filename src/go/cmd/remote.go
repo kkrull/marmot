@@ -30,10 +30,8 @@ func (cliCmd *remoteCommand) toCobraCommand() *cobra.Command {
 		Use:     "remote",
 	}
 
-	remoteCobraCmd.AddCommand(
-		cmdremote.NewListCommand().ToCobraCommand(),
-		cmdremote.NewRegisterCommand().ToCobraCommand(),
-	)
+	cmdremote.NewListCommand().AddToCobra(remoteCobraCmd)
+	cmdremote.NewRegisterCommand().AddToCobra(remoteCobraCmd)
 	return remoteCobraCmd
 }
 
