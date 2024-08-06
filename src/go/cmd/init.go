@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 
 	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
@@ -20,13 +21,13 @@ func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
 		Args:    cobra.NoArgs,
 		GroupID: metaRepoGroup.id(),
 		Long:    "Initialize a new Meta Repo, if none is already present.",
-		RunE:    runInit,
+		RunE:    runInitCobra,
 		Short:   "Initialize a meta repo",
 		Use:     "init",
 	}
 }
 
-func runInit(cli *cobra.Command, args []string) error {
+func runInitCobra(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
@@ -35,17 +36,17 @@ func runInit(cli *cobra.Command, args []string) error {
 		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else {
-		return runInitAppCmd(cli, config)
+		return runInitAppCmd(config, cli.OutOrStdout())
 	}
 }
 
-func runInitAppCmd(cli *cobra.Command, config cmdroot.AppConfig) error {
+func runInitAppCmd(config cmdroot.AppConfig, stdout io.Writer) error {
 	if initAppCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
 		return initErr
 	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
 	} else {
-		fmt.Fprintf(cli.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath())
+		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
 		return nil
 	}
 }

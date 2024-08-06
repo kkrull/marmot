@@ -19,13 +19,13 @@ func (listCommand) ToCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:  cobra.NoArgs,
 		Long:  "List remote repositories registered with Marmot.",
-		RunE:  runList,
+		RunE:  runListCobra,
 		Short: "List remote repositories",
 		Use:   "list",
 	}
 }
 
-func runList(cli *cobra.Command, args []string) error {
+func runListCobra(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {

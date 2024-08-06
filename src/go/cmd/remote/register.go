@@ -25,7 +25,7 @@ func (registerCommand) ToCobraCommand() *cobra.Command {
 gh repo list --json url | jq -r '.[].url' | marmot remote register -`,
 		Long: `Register Git repositories on remote hosts at each [URL].
 When URL is -, stop processing arguments and read newline-delimited URLs from standard input.`,
-		RunE:  runRegister,
+		RunE:  runRegisterCobra,
 		Short: "Register remote repositories",
 		Use:   "register [flags] [URL]... [-]",
 	}
@@ -46,7 +46,7 @@ func anyNotUrlOrBlank(inputs []string) error {
 	return nil
 }
 
-func runRegister(cli *cobra.Command, args []string) error {
+func runRegisterCobra(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.ParseR(cli.Flags(), args, cli.InOrStdin()); parseErr != nil {

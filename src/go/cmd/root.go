@@ -27,7 +27,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
-		RunE:    runRoot,
+		RunE:    runRootCobra,
 		Short:   "Meta Repo Management Tool",
 		Use:     "marmot",
 		Version: root.version,
@@ -49,7 +49,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	return rootCmd
 }
 
-func runRoot(cli *cobra.Command, args []string) error {
+func runRootCobra(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
@@ -60,6 +60,7 @@ func runRoot(cli *cobra.Command, args []string) error {
 	} else if len(args) == 0 {
 		return cli.Help()
 	} else {
+		// Run the command named in the arguments
 		return nil
 	}
 }

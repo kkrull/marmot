@@ -19,7 +19,7 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),
 		Long:    "Deal with repositories on remote hosts.",
-		RunE:    runRemote,
+		RunE:    runRemoteCobra,
 		Short:   "Deal with remote repositories",
 		Use:     "remote",
 	}
@@ -31,7 +31,7 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 	return remoteCobraCmd
 }
 
-func runRemote(cli *cobra.Command, args []string) error {
+func runRemoteCobra(cli *cobra.Command, args []string) error {
 	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
