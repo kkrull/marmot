@@ -42,6 +42,7 @@ func runRemoteCobra(cli *cobra.Command, args []string) error {
 	} else if len(args) == 0 {
 		return cli.Help()
 	} else {
+		// Run the sub-command named in the arguments
 		return nil
 	}
 }

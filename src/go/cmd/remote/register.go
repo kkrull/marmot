@@ -59,11 +59,11 @@ func runRegisterCobra(cli *cobra.Command, args []string) error {
 	} else if stdInErr := anyNotUrlOrBlank(config.InputLines()); stdInErr != nil {
 		return stdInErr
 	} else {
-		return runRegisterAppCmd(config)
+		return runRegister(config)
 	}
 }
 
-func runRegisterAppCmd(config cmdroot.AppConfig) error {
+func runRegister(config cmdroot.AppConfig) error {
 	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
 		return appErr
 	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {

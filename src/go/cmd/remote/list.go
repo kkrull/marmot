@@ -34,11 +34,11 @@ func runListCobra(cli *cobra.Command, args []string) error {
 		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else {
-		return runListAppCmd(cli, config)
+		return runList(cli, config)
 	}
 }
 
-func runListAppCmd(cli *cobra.Command, config cmdroot.AppConfig) error {
+func runList(cli *cobra.Command, config cmdroot.AppConfig) error {
 	queryFactory := config.QueryFactory()
 	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
 		return appErr

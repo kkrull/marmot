@@ -36,14 +36,14 @@ func runInitCobra(cli *cobra.Command, args []string) error {
 		config.PrintDebug(cli.OutOrStdout())
 		return nil
 	} else {
-		return runInitAppCmd(config, cli.OutOrStdout())
+		return runInit(config, cli.OutOrStdout())
 	}
 }
 
-func runInitAppCmd(config cmdroot.AppConfig, stdout io.Writer) error {
-	if initAppCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
+func runInit(config cmdroot.AppConfig, stdout io.Writer) error {
+	if appCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
 		return initErr
-	} else if runErr := initAppCmd.Run(config.MetaRepoPath()); runErr != nil {
+	} else if runErr := appCmd.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
 	} else {
 		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
