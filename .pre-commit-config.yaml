@@ -25,6 +25,7 @@ repos:
     rev: v4.6.0
     hooks:
       - id: check-json
+        exclude: .vscode/launch.json
       - id: check-yaml
       - id: trailing-whitespace
 
