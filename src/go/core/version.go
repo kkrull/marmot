@@ -23,6 +23,15 @@ func ExecutableVersion() (string, error) {
 	}
 }
 
+// Return the Marmot suite version, or an error if it is not been initialized yet.
+func MarmotVersion() (string, error) {
+	if _marmotVersion == "" {
+		return "", errors.New("marmot version not set")
+	} else {
+		return _marmotVersion, nil
+	}
+}
+
 // Set the Marmot suite version to the specified version, if it has not already been set.
 func SetMarmotVersion(version string) error {
 	if _marmotVersion != "" {
@@ -30,15 +39,6 @@ func SetMarmotVersion(version string) error {
 	} else {
 		_marmotVersion = version
 		return nil
-	}
-}
-
-// Return the Marmot suite version, or an error if it is not been initialized yet.
-func MarmotVersion() (string, error) {
-	if _marmotVersion == "" {
-		return "", errors.New("marmot version not set")
-	} else {
-		return _marmotVersion, nil
 	}
 }
 
