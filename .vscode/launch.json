@@ -18,10 +18,10 @@
       "args": [
         "local",
         "register",
-        "$(workspaceFolder)"
+        "."
       ],
       "mode": "auto",
-      "name": "marmot local register",
+      "name": "marmot local register .",
       "program": "${workspaceFolder}/src/go/main.go",
       "request": "launch",
       "type": "go"
