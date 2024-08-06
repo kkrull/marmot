@@ -13,8 +13,14 @@ func NewRemoteCommand() *remoteCommand {
 
 type remoteCommand struct{}
 
-// Map to a command that runs on Cobra.
-func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
+/* Mapping to Cobra */
+
+// Add this command as a sub-command of the given Cobra command.
+func (cliCmd *remoteCommand) AddToCobra(cobraCmd *cobra.Command) {
+	cobraCmd.AddCommand(cliCmd.toCobraCommand())
+}
+
+func (cliCmd *remoteCommand) toCobraCommand() *cobra.Command {
 	remoteCobraCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: repositoryGroup.id(),

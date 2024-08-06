@@ -22,6 +22,8 @@ type rootCliCommand struct {
 	version string
 }
 
+/* Mapping to Cobra */
+
 // Map to a command that runs on Cobra.
 func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
@@ -39,10 +41,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	}
 
 	NewInitCommand().AddToCobra(rootCmd)
-	rootCmd.AddCommand(
-		NewInitCommand().toCobraCommand(),
-		NewRemoteCommand().ToCobraCommand(),
-	)
+	NewRemoteCommand().AddToCobra(rootCmd)
 
 	rootCmd.SetOut(root.stdout)
 	rootCmd.SetErr(root.stderr)
