@@ -39,9 +39,9 @@ func (cliCmd *listLocalCommand) AddToCobra(cobraCmd *cobra.Command) {
 func (listLocalCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:  cobra.NoArgs,
-		Long:  "List remote repositories registered with Marmot.",
+		Long:  "List local repositories registered with Marmot.",
 		RunE:  runListCobra,
-		Short: "List remote repositories",
+		Short: "List local repositories",
 		Use:   "list",
 	}
 }
