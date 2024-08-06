@@ -28,6 +28,9 @@ type CliConfig interface {
 	// Positional arguments parsed as URLs.
 	ArgsAsUrls() ([]*url.URL, error)
 
+	// Positional arguments trimmed for whitespace.
+	ArgsTrimmed() []string
+
 	/* CLI debugging */
 
 	// Print information for debugging CLI parsing to the given writer.
@@ -46,8 +49,11 @@ type CliConfig interface {
 	// Lines of text input from another process–e.g. through a pipe to standard input–as raw text.
 	InputLines() []string
 
-	// Lines of text input from another process–e.g. through a pipe to standard input–parsed as URLs.
+	// Lines of text input from another process–e.g. read from standard input–parsed as URLs.
 	InputLinesAsUrls() ([]*url.URL, error)
+
+	// Lines of text input from another process–e.g. read from standard input–trimmed for whitespace.
+	InputLinesTrimmed() []string
 }
 
 // Application configuration derived from flags passed to the CLI.
@@ -70,16 +76,16 @@ type rootCliConfig struct {
 
 /* Application interface */
 
-func (params rootCliConfig) CommandFactory() use.CommandFactory { return params.cmdFactory }
-func (params rootCliConfig) QueryFactory() use.QueryFactory     { return params.queryFactory }
+func (config rootCliConfig) CommandFactory() use.CommandFactory { return config.cmdFactory }
+func (config rootCliConfig) QueryFactory() use.QueryFactory     { return config.queryFactory }
 
 /* CLI arguments */
 
-func (params rootCliConfig) Args() []string { return params.args }
+func (config rootCliConfig) Args() []string { return config.args }
 
-func (params rootCliConfig) ArgsAsUrls() ([]*url.URL, error) {
-	urls := make([]*url.URL, len(params.args))
-	for i, rawArg := range params.args {
+func (config rootCliConfig) ArgsAsUrls() ([]*url.URL, error) {
+	urls := make([]*url.URL, len(config.args))
+	for i, rawArg := range config.args {
 		if urlArg, parseErr := url.Parse(rawArg); parseErr != nil {
 			return nil, fmt.Errorf("url expected: <%s>; %w", rawArg, parseErr)
 		} else {
@@ -90,35 +96,44 @@ func (params rootCliConfig) ArgsAsUrls() ([]*url.URL, error) {
 	return urls, nil
 }
 
+func (config rootCliConfig) ArgsTrimmed() []string {
+	trimmed := make([]string, len(config.args))
+	for i, rawArg := range config.args {
+		trimmed[i] = strings.TrimSpace(rawArg)
+	}
+
+	return trimmed
+}
+
 /* CLI debugging */
 
-func (params rootCliConfig) Debug() bool { return params.debug }
+func (config rootCliConfig) Debug() bool { return config.debug }
 
-func (params rootCliConfig) PrintDebug(writer io.Writer) {
-	for i, arg := range params.args {
+func (config rootCliConfig) PrintDebug(writer io.Writer) {
+	for i, arg := range config.args {
 		fmt.Fprintf(writer, "arg [%d]: %s\n", i, arg)
 	}
 
 	for _, flag := range rootFlags {
-		fmt.Fprintf(writer, "flag --%s=%s\n", flag.LongName(), flag.Find(params.flagSet))
+		fmt.Fprintf(writer, "flag --%s=%s\n", flag.LongName(), flag.Find(config.flagSet))
 	}
 
-	for i, line := range params.inputLines {
+	for i, line := range config.inputLines {
 		fmt.Fprintf(writer, "stdin [%d]: %s\n", i, line)
 	}
 }
 
 /* CLI flags */
 
-func (params rootCliConfig) MetaRepoPath() string { return params.metaRepoPath }
+func (config rootCliConfig) MetaRepoPath() string { return config.metaRepoPath }
 
 /* CLI input */
 
-func (params rootCliConfig) InputLines() []string { return params.inputLines }
+func (config rootCliConfig) InputLines() []string { return config.inputLines }
 
-func (params rootCliConfig) InputLinesAsUrls() ([]*url.URL, error) {
+func (config rootCliConfig) InputLinesAsUrls() ([]*url.URL, error) {
 	urls := make([]*url.URL, 0)
-	for _, rawLine := range params.inputLines {
+	for _, rawLine := range config.inputLines {
 		trimmedLine := strings.TrimSpace(rawLine)
 		if trimmedLine == "" {
 			continue
@@ -130,4 +145,13 @@ func (params rootCliConfig) InputLinesAsUrls() ([]*url.URL, error) {
 	}
 
 	return urls, nil
+}
+
+func (config rootCliConfig) InputLinesTrimmed() []string {
+	trimmed := make([]string, len(config.inputLines))
+	for i, rawLine := range config.inputLines {
+		trimmed[i] = strings.TrimSpace(rawLine)
+	}
+
+	return trimmed
 }

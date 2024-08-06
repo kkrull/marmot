@@ -10,11 +10,11 @@ import (
 )
 
 // Construct a CLI command to register remote repositories.
-func NewRegisterCommand() *registerCommand {
-	return &registerCommand{}
+func NewRegisterCommand() *registerRemoteCommand {
+	return &registerRemoteCommand{}
 }
 
-type registerCommand struct{}
+type registerRemoteCommand struct{}
 
 func runRegister(config cmdroot.CliConfig) error {
 	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
@@ -31,11 +31,11 @@ func runRegister(config cmdroot.CliConfig) error {
 /* Mapping to Cobra */
 
 // Add this command as a sub-command of the given Cobra command.
-func (cliCmd *registerCommand) AddToCobra(cobraCmd *cobra.Command) {
+func (cliCmd *registerRemoteCommand) AddToCobra(cobraCmd *cobra.Command) {
 	cobraCmd.AddCommand(cliCmd.toCobraCommand())
 }
 
-func (registerCommand) toCobraCommand() *cobra.Command {
+func (registerRemoteCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,
