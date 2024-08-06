@@ -1,6 +1,8 @@
 package userepository_test
 
 import (
+	"errors"
+
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
 	"github.com/kkrull/marmot/use"
@@ -30,6 +32,11 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		It("returns nil when everything succeeds", func() {
 			Expect(subject.Run(validPath())).To(Succeed())
+		})
+
+		It("returns informative errors, when they occur", func() {
+			source.AddLocalFails("/path/to/faulty-repo", errors.New("bang!"))
+			Expect(subject.Run("/path/to/faulty-repo")).To(MatchError("failed to add local repository /path/to/faulty-repo: bang!"))
 		})
 	})
 })

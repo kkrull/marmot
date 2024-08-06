@@ -1,6 +1,8 @@
 package userepository
 
 import (
+	"fmt"
+
 	core "github.com/kkrull/marmot/corerepository"
 )
 
@@ -11,7 +13,9 @@ type RegisterLocalRepositoriesCommand struct {
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths ...string) error {
 	for _, localPath := range localPaths {
-		cmd.Source.AddLocal(localPath)
+		if addErr := cmd.Source.AddLocal(localPath); addErr != nil {
+			return fmt.Errorf("failed to add local repository %s: %w", localPath, addErr)
+		}
 	}
 
 	return nil
