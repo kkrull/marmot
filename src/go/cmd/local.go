@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	cmdlocal "github.com/kkrull/marmot/cmd/local"
 	cmdroot "github.com/kkrull/marmot/cmd/root"
 	"github.com/spf13/cobra"
 )
@@ -29,7 +30,7 @@ func (cliCmd *localCommand) toCobraCommand() *cobra.Command {
 		Use:     "local",
 	}
 
-	// cmdremote.NewListCommand().AddToCobra(remoteCobraCmd)
+	cmdlocal.NewListCommand().AddToCobra(remoteCobraCmd)
 	// cmdremote.NewRegisterCommand().AddToCobra(remoteCobraCmd)
 	return remoteCobraCmd
 }

@@ -1,4 +1,4 @@
-package cmdremote
+package cmdlocal
 
 import (
 	"fmt"
@@ -8,22 +8,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Construct a CLI command to list remote repositories.
-func NewListCommand() *listRemoteCommand {
-	return &listRemoteCommand{}
+// Construct a CLI command to list local repositories.
+func NewListCommand() *listLocalCommand {
+	return &listLocalCommand{}
 }
 
-type listRemoteCommand struct{}
+type listLocalCommand struct{}
 
 func runList(config cmdroot.CliConfig, stdout io.Writer) error {
 	queryFactory := config.QueryFactory()
-	if listRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
+	if listRepositories, appErr := queryFactory.NewListLocalRepositories(); appErr != nil {
 		return appErr
 	} else if repositories, runErr := listRepositories(); runErr != nil {
 		return runErr
 	} else {
-		for _, remoteHref := range repositories.RemoteHrefs() {
-			fmt.Fprintf(stdout, "%s\n", remoteHref)
+		for _, localPath := range repositories.LocalPaths() {
+			fmt.Fprintf(stdout, "%s\n", localPath)
 		}
 		return nil
 	}
@@ -32,11 +32,11 @@ func runList(config cmdroot.CliConfig, stdout io.Writer) error {
 /* Mapping to Cobra */
 
 // Add this command as a sub-command of the given Cobra command.
-func (cliCmd *listRemoteCommand) AddToCobra(cobraCmd *cobra.Command) {
+func (cliCmd *listLocalCommand) AddToCobra(cobraCmd *cobra.Command) {
 	cobraCmd.AddCommand(cliCmd.toCobraCommand())
 }
 
-func (listRemoteCommand) toCobraCommand() *cobra.Command {
+func (listLocalCommand) toCobraCommand() *cobra.Command {
 	return &cobra.Command{
 		Args:  cobra.NoArgs,
 		Long:  "List remote repositories registered with Marmot.",
