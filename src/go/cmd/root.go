@@ -41,6 +41,7 @@ func (root rootCliCommand) ToCobraCommand() *cobra.Command {
 	}
 
 	NewInitCommand().AddToCobra(rootCmd)
+	NewLocalCommand().AddToCobra(rootCmd)
 	NewRemoteCommand().AddToCobra(rootCmd)
 
 	rootCmd.SetOut(root.stdout)
