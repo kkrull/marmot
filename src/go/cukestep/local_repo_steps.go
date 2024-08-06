@@ -57,6 +57,6 @@ func registerThoseLocals() error {
 	} else if registerCmd, factoryErr := factory.NewRegisterLocalRepositories(); factoryErr != nil {
 		return fmt.Errorf("repository_steps: failed to initialize; %w", factoryErr)
 	} else {
-		return registerCmd.Run(thoseLocalRepositories.LocalPaths())
+		return registerCmd.Run(thoseLocalRepositories.LocalPaths()...)
 	}
 }

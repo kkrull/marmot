@@ -16,12 +16,16 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		subject *userepository.RegisterLocalRepositoriesCommand
 	)
 
+	BeforeEach(func() {
+		source = mock.NewRepositorySource()
+		factory = use.NewCommandFactory().WithRepositorySource(source)
+		subject = expect.NoError(factory.NewRegisterLocalRepositories())
+	})
+
 	Describe("#Run", func() {
-		It("exists", func() {
-			source = mock.NewRepositorySource()
-			factory = use.NewCommandFactory().WithRepositorySource(source)
-			subject = expect.NoError(factory.NewRegisterLocalRepositories())
+		It("passes local paths to the repository source", Pending, func() {
 			Expect(subject).NotTo(BeNil())
+			subject.Run("/path/to/repo")
 		})
 	})
 })
