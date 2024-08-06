@@ -70,9 +70,7 @@ func runRegister(config cmdroot.AppConfig) error {
 		return argErr
 	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
 		return stdInErr
-	} else if runErr := appCmd.Run(append(urlsFromArgs, urlsFromInput...)); runErr != nil {
-		return runErr
 	} else {
-		return nil
+		return appCmd.Run(append(urlsFromArgs, urlsFromInput...))
 	}
 }
