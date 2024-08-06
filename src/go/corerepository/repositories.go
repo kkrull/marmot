@@ -2,18 +2,6 @@ package corerepository
 
 import "net/url"
 
-// Construct a container containing the given repositories.
-func SomeRepositories(repositories []Repository) Repositories {
-	return &repositoriesArray{Repositories: repositories}
-}
-
-// Construct a container containing no repositories of any kind.
-func NoRepositories() Repositories {
-	return &repositoriesArray{
-		Repositories: make([]Repository, 0),
-	}
-}
-
 // Any number of Git repositories.
 type Repositories interface {
 	// How many repositories are in this collection
@@ -27,6 +15,18 @@ type Repositories interface {
 
 	// URL to each remote repository
 	RemoteUrls() []*url.URL
+}
+
+// Construct a container containing the given repositories.
+func SomeRepositories(repositories []Repository) Repositories {
+	return &repositoriesArray{Repositories: repositories}
+}
+
+// Construct a container containing no repositories of any kind.
+func NoRepositories() Repositories {
+	return &repositoriesArray{
+		Repositories: make([]Repository, 0),
+	}
 }
 
 // Repositories backed by an array.
