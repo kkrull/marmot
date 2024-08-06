@@ -68,8 +68,10 @@ func (parser rootConfigParser) ParseR(
 		return nil, pathErr
 	} else {
 		argsBeforeDash := make([]string, 0)
+		readFromStdin := false
 		for _, arg := range args {
 			if strings.TrimSpace(arg) == "-" {
+				readFromStdin = true
 				break
 			} else {
 				argsBeforeDash = append(argsBeforeDash, arg)
@@ -77,13 +79,15 @@ func (parser rootConfigParser) ParseR(
 		}
 
 		inputLines := make([]string, 0)
-		scanner := bufio.NewScanner(stdin)
-		for scanner.Scan() {
-			line := scanner.Text()
-			inputLines = append(inputLines, line)
-		}
-		if scanErr := scanner.Err(); scanErr != nil {
-			return nil, scanErr
+		if readFromStdin {
+			scanner := bufio.NewScanner(stdin)
+			for scanner.Scan() {
+				line := scanner.Text()
+				inputLines = append(inputLines, line)
+			}
+			if scanErr := scanner.Err(); scanErr != nil {
+				return nil, scanErr
+			}
 		}
 
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
