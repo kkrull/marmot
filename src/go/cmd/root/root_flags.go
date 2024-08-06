@@ -6,8 +6,29 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
+
+// Flag configuration for the root (e.g. top-level) command that dispatches to all other commands.
+func RootFlagSet() *rootFlagSet {
+	return &rootFlagSet{}
+}
+
+// Flags that can be passed to a CLI command.
+type rootFlagSet struct{}
+
+// Add the implemented flags to the given CLI command.
+func (rootFlagSet) AddTo(rootCmd *cobra.Command) error {
+	var errorAcc []error = make([]error, 0)
+	for _, f := range rootFlags {
+		errorAcc = append(errorAcc, f.AddTo(rootCmd.PersistentFlags()))
+	}
+
+	return errors.Join(errorAcc...)
+}
+
+/* Root Flag enum */
 
 var rootFlags = []rootFlag{debugFlag, metaRepoFlag}
 
