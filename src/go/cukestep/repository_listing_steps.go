@@ -75,11 +75,5 @@ func thatListingShouldHaveLocals(expectedPaths ...string) {
 }
 
 func thatListingShouldHaveRemotes(expectedHrefs ...string) {
-	remoteUrls := thatListing().RemoteUrls()
-	remoteHrefs := make([]string, len(remoteUrls))
-	for i, remoteUrl := range remoteUrls {
-		remoteHrefs[i] = remoteUrl.String()
-	}
-
-	Expect(remoteHrefs).To(ConsistOf(expectedHrefs))
+	Expect(thatListing().RemoteHrefs()).To(ConsistOf(expectedHrefs))
 }
