@@ -27,7 +27,7 @@ func (listCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runListCobra(cli *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
@@ -39,7 +39,7 @@ func runListCobra(cli *cobra.Command, args []string) error {
 	}
 }
 
-func runList(config cmdroot.AppConfig, stdout io.Writer) error {
+func runList(config cmdroot.CliConfig, stdout io.Writer) error {
 	queryFactory := config.QueryFactory()
 	if listRemoteRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
 		return appErr

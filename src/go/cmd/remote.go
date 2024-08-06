@@ -32,7 +32,7 @@ func (cliCmd *remoteCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runRemoteCobra(cli *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr

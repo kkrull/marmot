@@ -28,7 +28,7 @@ func (cliCmd *initCommand) ToCobraCommand() *cobra.Command {
 }
 
 func runInitCobra(cli *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 		return parseErr
@@ -40,7 +40,7 @@ func runInitCobra(cli *cobra.Command, args []string) error {
 	}
 }
 
-func runInit(config cmdroot.AppConfig, stdout io.Writer) error {
+func runInit(config cmdroot.CliConfig, stdout io.Writer) error {
 	if appCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
 		return initErr
 	} else if runErr := appCmd.Run(config.MetaRepoPath()); runErr != nil {

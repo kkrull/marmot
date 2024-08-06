@@ -13,26 +13,29 @@ import (
 	"github.com/spf13/pflag"
 )
 
-// Parameters passed to the root command
-func RootCommandParser() (CommandParser, error) {
+// Parses configuration from the arguments, environment, flags, and input available to the CLI.
+type CliConfigParser interface {
+	Parse(flags *pflag.FlagSet, args []string) (CliConfig, error)
+	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (CliConfig, error)
+}
+
+// Parses configuration from arguments, flags, and input to the root command.
+func RootConfigParser() (CliConfigParser, error) {
 	if version, versionErr := core.MarmotVersion(); versionErr != nil {
 		return nil, versionErr
 	} else {
-		return &rootParamParser{version: version}, nil
+		return &rootConfigParser{version: version}, nil
 	}
 }
 
-// Parses parameters passed to a CLI command through environment, flags, and positional arguments.
-type CommandParser interface {
-	Parse(flags *pflag.FlagSet, args []string) (AppConfig, error)
-	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (AppConfig, error)
-}
-
-type rootParamParser struct {
+// Parse configuration that applies to the root command and its descendant sub-commands.
+type rootConfigParser struct {
 	version string
 }
 
-func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppConfig, error) {
+func (parser rootConfigParser) Parse(
+	flags *pflag.FlagSet, args []string,
+) (CliConfig, error) {
 	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
@@ -40,7 +43,7 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 	} else {
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootParams{
+		config := &rootCliConfig{
 			args: args,
 			cmdFactory: use.NewCommandFactory().
 				WithMetaDataAdmin(metaRepoAdmin).
@@ -58,7 +61,9 @@ func (parser rootParamParser) Parse(flags *pflag.FlagSet, args []string) (AppCon
 	}
 }
 
-func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (AppConfig, error) {
+func (parser rootConfigParser) ParseR(
+	flags *pflag.FlagSet, args []string, stdin io.Reader,
+) (CliConfig, error) {
 	if debug, debugErr := debugFlag.GetBool(flags); debugErr != nil {
 		return nil, debugErr
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
@@ -85,7 +90,7 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootParams{
+		config := &rootCliConfig{
 			args: argsBeforeDash,
 			cmdFactory: use.NewCommandFactory().
 				WithMetaDataAdmin(metaRepoAdmin).
@@ -104,32 +109,33 @@ func (parser rootParamParser) ParseR(flags *pflag.FlagSet, args []string, stdin 
 }
 
 // Application configuration derived from flags passed to the CLI.
-type rootParams struct {
-	//Application interface
+type rootCliConfig struct {
+	// Application interface
 	cmdFactory   use.CommandFactory
 	queryFactory use.QueryFactory
 
-	//CLI arguments
+	// CLI arguments
 	args []string
 
-	//CLI flags
+	// CLI flags
 	debug        bool
 	flagSet      *pflag.FlagSet
 	metaRepoPath string
 
-	//CLI input
+	// CLI input
 	inputLines []string
 }
 
 /* Application interface */
 
-func (params rootParams) CommandFactory() use.CommandFactory { return params.cmdFactory }
-func (params rootParams) QueryFactory() use.QueryFactory     { return params.queryFactory }
+func (params rootCliConfig) CommandFactory() use.CommandFactory { return params.cmdFactory }
+func (params rootCliConfig) QueryFactory() use.QueryFactory     { return params.queryFactory }
 
 /* CLI arguments */
 
-func (params rootParams) Args() []string { return params.args }
-func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
+func (params rootCliConfig) Args() []string { return params.args }
+
+func (params rootCliConfig) ArgsAsUrls() ([]*url.URL, error) {
 	urls := make([]*url.URL, len(params.args))
 	for i, rawArg := range params.args {
 		if urlArg, parseErr := url.Parse(rawArg); parseErr != nil {
@@ -144,8 +150,9 @@ func (params rootParams) ArgsAsUrls() ([]*url.URL, error) {
 
 /* CLI debugging */
 
-func (params rootParams) Debug() bool { return params.debug }
-func (params rootParams) PrintDebug(writer io.Writer) {
+func (params rootCliConfig) Debug() bool { return params.debug }
+
+func (params rootCliConfig) PrintDebug(writer io.Writer) {
 	for i, arg := range params.args {
 		fmt.Fprintf(writer, "arg [%d]: %s\n", i, arg)
 	}
@@ -161,12 +168,13 @@ func (params rootParams) PrintDebug(writer io.Writer) {
 
 /* CLI flags */
 
-func (params rootParams) MetaRepoPath() string { return params.metaRepoPath }
+func (params rootCliConfig) MetaRepoPath() string { return params.metaRepoPath }
 
 /* CLI input */
 
-func (params rootParams) InputLines() []string { return params.inputLines }
-func (params rootParams) InputLinesAsUrls() ([]*url.URL, error) {
+func (params rootCliConfig) InputLines() []string { return params.inputLines }
+
+func (params rootCliConfig) InputLinesAsUrls() ([]*url.URL, error) {
 	urls := make([]*url.URL, 0)
 	for _, rawLine := range params.inputLines {
 		trimmedLine := strings.TrimSpace(rawLine)

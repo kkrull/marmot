@@ -47,7 +47,7 @@ func anyNotUrlOrBlank(inputs []string) error {
 }
 
 func runRegisterCobra(cli *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootCommandParser(); newErr != nil {
+	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
 		return newErr
 	} else if config, parseErr := parser.ParseR(cli.Flags(), args, cli.InOrStdin()); parseErr != nil {
 		return parseErr
@@ -63,7 +63,7 @@ func runRegisterCobra(cli *cobra.Command, args []string) error {
 	}
 }
 
-func runRegister(config cmdroot.AppConfig) error {
+func runRegister(config cmdroot.CliConfig) error {
 	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
 		return appErr
 	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
