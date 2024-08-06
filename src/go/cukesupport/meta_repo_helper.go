@@ -9,11 +9,11 @@ import (
 )
 
 // State to clear between scenarios
-var thatMetaRepo string
+var _thatMetaRepo string
 
 // Reset the meta repo so another scenario can make its own
 func clearThatMetaRepo() {
-	thatMetaRepo = ""
+	_thatMetaRepo = ""
 }
 
 // Set a standardized path to a meta repo in the local test directory, adding a hook to clear it
@@ -29,11 +29,11 @@ func InitThatMetaRepo(ctx *godog.ScenarioContext) (string, error) {
 }
 
 func peekThatMetaRepo() string {
-	return thatMetaRepo
+	return _thatMetaRepo
 }
 
 func setThatMetaRepo(ctx *godog.ScenarioContext, path string) {
-	thatMetaRepo = path
+	_thatMetaRepo = path
 	ctx.After(func(ctx context.Context, _ *godog.Scenario, err error) (context.Context, error) {
 		clearThatMetaRepo()
 		return ctx, err
@@ -42,9 +42,9 @@ func setThatMetaRepo(ctx *godog.ScenarioContext, path string) {
 
 // A path to a meta repo which has been set earlier in this scenario, or an error.
 func ThatMetaRepo() (string, error) {
-	if thatMetaRepo == "" {
+	if _thatMetaRepo == "" {
 		return "", fmt.Errorf("meta_repo_helper: no meta repo has been configured")
 	}
 
-	return thatMetaRepo, nil
+	return _thatMetaRepo, nil
 }

@@ -17,28 +17,28 @@ const TagName = "@LocalDir"
 
 /* State */
 
-var testDir string
+var _testDir string
 
 // A temporary directory for scenarios tagged with `TagName`, to automatically delete afterwards.
 func TestDir() (string, error) {
-	if testDir == "" {
+	if _testDir == "" {
 		return "", fmt.Errorf("[%s] not initialized", TagName)
 	}
 
-	return testDir, nil
+	return _testDir, nil
 }
 
 // The named subdirectory inside this scenario's temporary directory (which is deleted afterwards).
 func TestSubDir(subdir string) (string, error) {
-	if testDir == "" {
+	if _testDir == "" {
 		return "", fmt.Errorf("[%s] not initialized", TagName)
 	}
 
-	return filepath.Join(testDir, subdir), nil
+	return filepath.Join(_testDir, subdir), nil
 }
 
 func setTestDir(path string) {
-	testDir = path
+	_testDir = path
 }
 
 /* Hooks */
@@ -51,14 +51,14 @@ func AddTo(ctx *godog.ScenarioContext) {
 
 func afterHook(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
 	matchingTag := findTag(TagName, sc.Tags)
-	if nothingToDo := testDir == ""; nothingToDo {
+	if nothingToDo := _testDir == ""; nothingToDo {
 		return ctx, err
 	} else if notApplicable := matchingTag == nil; notApplicable {
 		return ctx, err
-	} else if rmErr := os.RemoveAll(testDir); rmErr != nil {
-		return ctx, errors.Join(err, fmt.Errorf("%s: failed to remove %s; %w", TagName, testDir, rmErr))
+	} else if rmErr := os.RemoveAll(_testDir); rmErr != nil {
+		return ctx, errors.Join(err, fmt.Errorf("%s: failed to remove %s; %w", TagName, _testDir, rmErr))
 	} else {
-		log.Printf("[%s] Removed test directory: %s\n", TagName, testDir)
+		log.Printf("[%s] Removed test directory: %s\n", TagName, _testDir)
 		setTestDir("")
 		return ctx, err
 	}
