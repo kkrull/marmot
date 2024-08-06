@@ -5,17 +5,29 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+// Construct a test double for MetaDataAdmin.
+func NewMetaDataAdmin() *MetaDataAdmin {
+	return &MetaDataAdmin{}
+}
+
+// Mock implementation for testing with MetaDataAdmin.
 type MetaDataAdmin struct {
-	CreateCalls []string
-	CreateError error
+	createCalls []string
+	createError error
 }
 
 func (admin *MetaDataAdmin) Create(metaRepoPath string) error {
-	admin.CreateCalls = append(admin.CreateCalls, metaRepoPath)
-	return admin.CreateError
+	admin.createCalls = append(admin.createCalls, metaRepoPath)
+	return admin.createError
 }
 
+// Assert that a meta repo was created at the specified path.
 func (admin *MetaDataAdmin) CreateExpected(expectedPath string) {
 	ginkgo.GinkgoHelper()
-	Expect(admin.CreateCalls).To(ContainElement(expectedPath))
+	Expect(admin.createCalls).To(ContainElement(expectedPath))
+}
+
+// Stub #Create to fail with the given error.
+func (admin *MetaDataAdmin) CreateFails(err error) {
+	admin.createError = err
 }

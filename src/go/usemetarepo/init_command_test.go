@@ -19,7 +19,7 @@ var _ = Describe("InitCommand", func() {
 	)
 
 	BeforeEach(func() {
-		metaDataAdmin = &mock.MetaDataAdmin{}
+		metaDataAdmin = mock.NewMetaDataAdmin()
 		factory := use.NewCommandFactory().WithMetaDataAdmin(metaDataAdmin)
 		subject = expect.NoError(factory.NewInitMetaRepo())
 	})
@@ -35,7 +35,7 @@ var _ = Describe("InitCommand", func() {
 		})
 
 		It("returns an error when failing to initialize the meta data source", func() {
-			metaDataAdmin.CreateError = errors.New("bang!")
+			metaDataAdmin.CreateFails(errors.New("bang!"))
 			Expect(subject.Run("/tmp")).To(MatchError("bang!"))
 		})
 	})
