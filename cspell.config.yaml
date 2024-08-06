@@ -20,6 +20,7 @@ version: "0.2"
 words:
   - cmdremote
   - cmdroot
+  - corerepository
   - fswatch
   - kkrull
   - Krull

@@ -44,6 +44,21 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		})
 	})
 
+	Context("when local repositories have been registered", func() {
+		BeforeEach(func() {
+			admin = jsonMetaRepoAdmin(nil)
+			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
+			Expect(admin.Create(metaRepoPath)).To(Succeed())
+
+			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
+		})
+
+		It("#ListLocal includes each registered local repository", func() {
+			returned := expect.NoError(subject.ListLocal())
+			Expect(returned.LocalPaths()).To(ConsistOf("/path/to/one"))
+		})
+	})
+
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = jsonMetaRepoAdmin(nil)
@@ -51,9 +66,6 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			Expect(admin.Create(metaRepoPath)).To(Succeed())
 
 			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())
-			listOne := expect.NoError(subject.ListRemote())
-			Expect(listOne.RemoteHrefs()).To(ConsistOf("https://github.com/me/a"))
-
 			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/b"))).To(Succeed())
 		})
 

@@ -21,7 +21,12 @@ type rootObjectData struct {
 }
 
 type metaRepoData struct {
+	LocalRepositories  []localRepositoryData  `json:"local_repositories"`
 	RemoteRepositories []remoteRepositoryData `json:"remote_repositories"`
+}
+
+type localRepositoryData struct {
+	Path string `json:"path"`
 }
 
 type remoteRepositoryData struct {
@@ -29,6 +34,10 @@ type remoteRepositoryData struct {
 }
 
 /* Updates */
+
+func (metaRepo *metaRepoData) AppendLocalRepository(localRepository localRepositoryData) {
+	metaRepo.LocalRepositories = append(metaRepo.LocalRepositories, localRepository)
+}
 
 func (metaRepo *metaRepoData) AppendRemoteRepository(remoteRepository remoteRepositoryData) {
 	metaRepo.RemoteRepositories = append(metaRepo.RemoteRepositories, remoteRepository)

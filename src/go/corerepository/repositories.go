@@ -2,6 +2,11 @@ package corerepository
 
 import "net/url"
 
+// Construct a container containing the given repositories.
+func SomeRepositories(repositories []Repository) Repositories {
+	return &RepositoriesArray{Repositories: repositories}
+}
+
 // Construct a container containing no repositories of any kind.
 func NoRepositories() Repositories {
 	return &RepositoriesArray{
