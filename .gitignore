@@ -1,5 +1,3 @@
-src/go/cukefeature/localDir
-
 # Manual
 man/groff/*
 #man/markdown/*
