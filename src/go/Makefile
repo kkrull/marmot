@@ -184,10 +184,9 @@ $(autocomplete): $(executable)
 coverage.html: coverage.out
 	go tool cover -html $< -o $@
 
-coveragepackages := $(shell go list -f '{{ .ImportPath }}' github.com/kkrull/marmot/... | jq -nR -r '[inputs] | join(",")')
+# Use `go test` instead of `ginkgo` to include packages that have no coverage
 coverage.out: $(sources)
-	$(info $(packages))
-	ginkgo run -coverpkg=$(coveragepackages) -coverprofile $@ ./...
+	go test -coverpkg=./... -coverprofile $@ ./...
 
 coverage-gaps.out: coverage.out
 	uncover $< > $@
