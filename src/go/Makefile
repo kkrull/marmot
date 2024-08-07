@@ -44,6 +44,8 @@ datadirpkg := $(datadir)/marmot
 # Autocomplete scripts
 # https://unix.stackexchange.com/a/607810/37734
 datadirzshfn := $(datadir)/zsh/site-functions
+$(datadirzshfn):
+	mkdir -p $(datadirzshfn)
 
 .PHONY: path-info
 path-info:
@@ -131,8 +133,7 @@ info: artifact-info path-info program-info source-info #> Show build information
 	@:
 
 .PHONY: install-autocomplete-zsh
-install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
-	mkdir -p $(datadirzshfn)
+install-autocomplete-zsh: $(autocomplete) | $(datadirzshfn) #> Install autocomplete script for zsh
 	install $(INSTALLFLAGS) -m 0644 $(autocomplete) $(datadirzshfn)
 	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
