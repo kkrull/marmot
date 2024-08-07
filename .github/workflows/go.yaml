@@ -24,7 +24,6 @@ jobs:
 
       - run: go version
       - run: go get -t -v .
-      - run: make install-tools
 
   go-build:
     defaults:

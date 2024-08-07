@@ -153,7 +153,7 @@ install-tools: #> Install Go development tools
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: test-coverage
-test-coverage: coverage.html coverage-gaps.out #> Run tests with code coverage
+test-coverage: coverage.html #> Run tests with code coverage
 	@:
 
 .PHONY: test-watch
