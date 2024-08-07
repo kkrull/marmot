@@ -155,12 +155,6 @@ install-tools: #> Install Go development tools
 test-coverage: coverage.html #> Run tests with code coverage
 	@:
 
-coverage.html: coverage.out
-	go tool cover -html $< -o $@
-
-coverage.out: $(sources)
-	ginkgo run -coverpkg github.com/kkrull/... -coverprofile $@ ./...
-
 .PHONY: test-watch
 test-watch: #> Run tests in watch mode
 	ginkgo watch -r
@@ -185,6 +179,12 @@ update: #> Update Go dependencies
 
 $(autocomplete): $(executable)
 	./$(executable) completion zsh > $(autocomplete)
+
+coverage.html: coverage.out
+	go tool cover -html $< -o $@
+
+coverage.out: $(sources)
+	ginkgo run -coverpkg github.com/kkrull/... -coverprofile $@ ./...
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)
