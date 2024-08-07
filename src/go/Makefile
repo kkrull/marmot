@@ -31,22 +31,21 @@ exec_prefix ?= $(prefix)
 
 # Executable programs that users can run (including symlinks)
 bindir := $(exec_prefix)/bin
-
 $(bindir):
 	mkdir -p $(bindir)
 
 # Executable programs to be run by other programs, in a subdirectory thereof
 libexecdir := $(exec_prefix)/libexec
-libexecdirpkg := $(libexecdir)/marmot
 
+libexecdirpkg := $(libexecdir)/marmot
 $(libexecdirpkg):
 	mkdir -p $(libexecdirpkg)
 
 # Read-only architecture-independent data files, in a subdirectory thereof
 datarootdir := $(prefix)/share
 datadir := $(datarootdir)
-datadirpkg := $(datadir)/marmot
 
+datadirpkg := $(datadir)/marmot
 $(datadirpkg):
 	mkdir -p $(datadirpkg)
 
@@ -109,7 +108,6 @@ clean: #> Remove local build files
 .PHONY: install
 install: $(executable) | $(bindir) $(datadirpkg) $(libexecdirpkg) #> Install program
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
-
 	install $(INSTALLFLAGS) -m 0644 $(versionfile) $(datadirpkg)
 	install $(INSTALLFLAGS) -m 0755 $(executable) $(libexecdirpkg)
 
