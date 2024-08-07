@@ -184,8 +184,10 @@ $(autocomplete): $(executable)
 coverage.html: coverage.out
 	go tool cover -html $< -o $@
 
+coveragepackages := $(shell go list -f '{{ .ImportPath }}' github.com/kkrull/marmot/... | jq -nR -r '[inputs] | join(",")')
 coverage.out: $(sources)
-	ginkgo run -coverpkg github.com/kkrull/... -coverprofile $@ ./...
+	$(info $(packages))
+	ginkgo run -coverpkg=$(coveragepackages) -coverprofile $@ ./...
 
 coverage-gaps.out: coverage.out
 	uncover $< > $@
