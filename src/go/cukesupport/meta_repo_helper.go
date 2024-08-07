@@ -26,7 +26,11 @@ func afterMetaRepo(ctx context.Context, sc *godog.Scenario, err error) (context.
 }
 
 func beforeMetaRepo(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-	return ctx, nil
+	if hookTag := findTag(MetaRepoTag, sc.Tags); hookTag == nil {
+		return ctx, nil
+	} else {
+		return ctx, InitNewMetaRepo("42")
+	}
 }
 
 /* State */
