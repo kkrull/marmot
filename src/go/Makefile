@@ -31,19 +31,29 @@ exec_prefix ?= $(prefix)
 
 # Executable programs that users can run (including symlinks)
 bindir := $(exec_prefix)/bin
+$(bindir):
+	mkdir -p $(bindir)
 
 # Executable programs to be run by other programs, in a subdirectory thereof
 libexecdir := $(exec_prefix)/libexec
+
 libexecdirpkg := $(libexecdir)/marmot
+$(libexecdirpkg):
+	mkdir -p $(libexecdirpkg)
 
 # Read-only architecture-independent data files, in a subdirectory thereof
 datarootdir := $(prefix)/share
 datadir := $(datarootdir)
+
 datadirpkg := $(datadir)/marmot
+$(datadirpkg):
+	mkdir -p $(datadirpkg)
 
 # Autocomplete scripts
 # https://unix.stackexchange.com/a/607810/37734
 datadirzshfn := $(datadir)/zsh/site-functions
+$(datadirzshfn):
+	mkdir -p $(datadirzshfn)
 
 .PHONY: path-info
 path-info:
@@ -93,13 +103,11 @@ all: $(executable) $(autocomplete) #> Build all sources
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(autocomplete) $(executable)
+	$(RM) $(autocomplete) coverage.html coverage.out coverage-gaps.out $(executable)
 
 .PHONY: install
-install: $(executable) #> Install program
-	mkdir -p $(bindir) $(datadirpkg) $(libexecdirpkg)
+install: $(executable) | $(bindir) $(datadirpkg) $(libexecdirpkg) #> Install program
 	ln -f -s $(libexecdirpkg)/$(executable) $(bindir)/marmot
-
 	install $(INSTALLFLAGS) -m 0644 $(versionfile) $(datadirpkg)
 	install $(INSTALLFLAGS) -m 0755 $(executable) $(libexecdirpkg)
 
@@ -131,18 +139,22 @@ info: artifact-info path-info program-info source-info #> Show build information
 	@:
 
 .PHONY: install-autocomplete-zsh
-install-autocomplete-zsh: $(autocomplete) #> Install autocomplete script for zsh
-	mkdir -p $(datadirzshfn)
+install-autocomplete-zsh: $(autocomplete) | $(datadirzshfn) #> Install autocomplete script for zsh
 	install $(INSTALLFLAGS) -m 0644 $(autocomplete) $(datadirzshfn)
 	@echo 'Run `source $(datadirzshfn)/$(autocomplete)` to enable auto-completion in zsh.'
 
 .PHONY: install-tools
 install-tools: #> Install Go development tools
 	go install github.com/go-delve/delve/cmd/dlv@latest
+	go install github.com/gregoryv/uncover/cmd/uncover@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go install github.com/spf13/cobra-cli@latest
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install mvdan.cc/gofumpt@latest
+
+.PHONY: test-coverage
+test-coverage: coverage.html #> Run tests with code coverage
+	@:
 
 .PHONY: test-watch
 test-watch: #> Run tests in watch mode
@@ -168,6 +180,16 @@ update: #> Update Go dependencies
 
 $(autocomplete): $(executable)
 	./$(executable) completion zsh > $(autocomplete)
+
+coverage.html: coverage.out
+	go tool cover -html $< -o $@
+
+# Use `go test` instead of `ginkgo` to include packages that have no coverage
+coverage.out: $(sources)
+	go test -coverpkg=./... -coverprofile $@ ./...
+
+coverage-gaps.out: coverage.out
+	uncover $< > $@
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)

@@ -9,7 +9,10 @@ default: all
 
 prefix ?= /usr/local
 exec_prefix ?= $(prefix)
+
 bindir := $(exec_prefix)/bin
+$(bindir):
+	mkdir -p $(bindir)
 
 .PHONY: path-info
 path-info:
@@ -42,8 +45,7 @@ clean:
 	@:
 
 .PHONY: install
-install: #> Install symlink to sources
-	mkdir -p $(bindir)
+install: | $(bindir) #> Install symlink to sources
 	ln -f -s $(srcdir)/marmot.zsh $(bindir)/marmot
 
 .PHONY: test

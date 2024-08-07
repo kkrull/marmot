@@ -4,4 +4,7 @@ marmot
 marmot.exe
 
 # Testing
+coverage.html
+coverage.out
+coverage-gaps.out
 cukefeature/localDir
