@@ -144,6 +144,10 @@ install-tools: #> Install Go development tools
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install mvdan.cc/gofumpt@latest
 
+.PHONY: test-coverage
+test-coverage: #> Run tests with code coverage
+	ginkgo run -coverpkg ./... -r
+
 .PHONY: test-watch
 test-watch: #> Run tests in watch mode
 	ginkgo watch -r
