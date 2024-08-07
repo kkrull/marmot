@@ -42,3 +42,20 @@ func initDirectory(metaDataFile string, rootObject *rootObjectData) error {
 		return nil
 	}
 }
+
+func (admin *JsonMetaRepoAdmin) IsMetaRepo(path string) bool {
+	pathStat, pathErr := os.Stat(path)
+	if errors.Is(pathErr, fs.ErrNotExist) || pathErr != nil {
+		return false
+	} else if pathStat.Mode().IsRegular() {
+		return false
+	}
+
+	marmotDir := metaDataDir(path)
+	_, marmotDirErr := os.Stat(marmotDir)
+	if errors.Is(marmotDirErr, fs.ErrNotExist) {
+		return false
+	} else {
+		return true
+	}
+}
