@@ -136,16 +136,22 @@ groff-manual-watch: #> Emit rendered man pages when Pandoc sources change
 		| xargs -I {} echo "$(PANDOC) {} $(PANDOCFLAGS) -s -t man | $(MANDOC)" \
 		| sh
 
-groff/%: pandoc/%.md
+groff:
+	mkdir -p $@
+
+groff/%: pandoc/%.md | groff
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t man
 
 #. MARKDOWN MANUAL TARGETS
 
-markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
-
 markdown_manual_objects_dir := markdown
 $(markdown_manual_objects_dir):
 	mkdir -p $@
+
+# Make sure directory exists before building targets, but directory update doesn't cause re-build
+# https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
+markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
+$(markdown_manual_objects): | $(markdown_manual_objects_dir)
 
 .PHONY: markdown-manual
 markdown-manual: $(markdown_manual_objects) #> Build Markdown manuals which are part of this repo
@@ -160,10 +166,6 @@ markdown-manual-info: #> Show build information for the markdown manual
 	$(info - markdown_manual_objects: $(markdown_manual_objects))
 	$(info - markdown_manual_objects_dir: $(markdown_manual_objects_dir))
 	@:
-
-# Make sure directory exists before building targets
-# https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
-$(markdown_manual_objects): | $(markdown_manual_objects_dir)
 
 markdown/%.md: pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t gfm
