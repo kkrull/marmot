@@ -4,4 +4,7 @@ package coremetarepo
 type MetaDataAdmin interface {
 	// Create a meta repository at the specified path on the local filesystem.
 	Create(metaRepoPath string) error
+
+	// Returns true if the specified path exists and is already a meta repository.
+	Exists(metaRepoPath string) bool
 }

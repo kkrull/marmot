@@ -1,6 +1,8 @@
 package usemetarepo
 
 import (
+	"fmt"
+
 	core "github.com/kkrull/marmot/coremetarepo"
 )
 
@@ -10,5 +12,11 @@ type InitCommand struct {
 }
 
 func (cmd InitCommand) Run(metaRepoPath string) error {
-	return cmd.MetaDataAdmin.Create(metaRepoPath)
+	if cmd.MetaDataAdmin.Exists(metaRepoPath) {
+		return fmt.Errorf("%s is already a meta repo", metaRepoPath)
+	} else if createErr := cmd.MetaDataAdmin.Create(metaRepoPath); createErr != nil {
+		return fmt.Errorf("failed to initialize meta repo; %w", createErr)
+	} else {
+		return nil
+	}
 }
