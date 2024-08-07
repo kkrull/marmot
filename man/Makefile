@@ -10,11 +10,16 @@ default: all
 ### Paths
 
 prefix ?= /usr/local
-
 datarootdir := $(prefix)/share
 mandir := $(datarootdir)/man
+
 man1dir := $(mandir)/man1
+$(man1dir):
+	mkdir -p $@
+
 man7dir := $(mandir)/man7
+$(man7dir):
+	mkdir -p $@
 
 .PHONY: path-info
 path-info:
@@ -112,8 +117,7 @@ groff-manual-info: #> Show build information for groff
 	@:
 
 .PHONY: groff-manual-install
-groff-manual-install: $(groff_man1_objects) $(groff_man7_objects) #> Install man pages
-	mkdir -p $(man1dir) $(man7dir)
+groff-manual-install: $(groff_man1_objects) $(groff_man7_objects) | $(man1dir) $(man7dir) #> Install man pages
 	install -g 0 -o 0 -m 0644 $(groff_man1_objects) $(man1dir)
 	install -g 0 -o 0 -m 0644 $(groff_man7_objects) $(man7dir)
 
@@ -138,7 +142,10 @@ groff/%: pandoc/%.md
 #. MARKDOWN MANUAL TARGETS
 
 markdown_manual_objects := $(patsubst pandoc/%.md,markdown/%.md,$(sources))
+
 markdown_manual_objects_dir := markdown
+$(markdown_manual_objects_dir):
+	mkdir -p $@
 
 .PHONY: markdown-manual
 markdown-manual: $(markdown_manual_objects) #> Build Markdown manuals which are part of this repo
@@ -157,9 +164,6 @@ markdown-manual-info: #> Show build information for the markdown manual
 # Make sure directory exists before building targets
 # https://www.gnu.org/savannah-checkouts/gnu/make/manual/html_node/Prerequisite-Types.html
 $(markdown_manual_objects): | $(markdown_manual_objects_dir)
-
-$(markdown_manual_objects_dir):
-	mkdir -p markdown
 
 markdown/%.md: pandoc/%.md
 	$(PANDOC) $< $(PANDOCFLAGS) -o $@ -s -t gfm
