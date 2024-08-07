@@ -7,13 +7,18 @@ import (
 
 // Construct a test double for MetaDataAdmin.
 func NewMetaDataAdmin() *MetaDataAdmin {
-	return &MetaDataAdmin{}
+	return &MetaDataAdmin{
+		isMetaRepoError:   make(map[string]error),
+		isMetaRepoReturns: make(map[string]bool),
+	}
 }
 
 // Mock implementation for testing with MetaDataAdmin.
 type MetaDataAdmin struct {
-	createCalls []string
-	createError error
+	createCalls       []string
+	createError       error
+	isMetaRepoError   map[string]error
+	isMetaRepoReturns map[string]bool
 }
 
 func (admin *MetaDataAdmin) Create(metaRepoPath string) error {
@@ -21,13 +26,20 @@ func (admin *MetaDataAdmin) Create(metaRepoPath string) error {
 	return admin.createError
 }
 
-// Assert that a meta repo was created at the specified path.
 func (admin *MetaDataAdmin) CreateExpected(expectedPath string) {
 	ginkgo.GinkgoHelper()
 	Expect(admin.createCalls).To(ContainElement(expectedPath))
 }
 
-// Stub #Create to fail with the given error.
 func (admin *MetaDataAdmin) CreateFails(err error) {
 	admin.createError = err
+}
+
+func (admin *MetaDataAdmin) IsMetaRepo(path string) (bool, error) {
+	return admin.isMetaRepoReturns[path], admin.isMetaRepoError[path]
+}
+
+func (admin *MetaDataAdmin) IsMetaRepoReturns(path string, value bool, err error) {
+	admin.isMetaRepoReturns[path] = value
+	admin.isMetaRepoError[path] = err
 }
