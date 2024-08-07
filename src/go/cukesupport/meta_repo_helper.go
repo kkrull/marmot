@@ -25,7 +25,7 @@ func clearThatMetaRepo() {
 }
 
 // Set a standardized path to a meta repo in the local test directory, adding a hook to clear it.
-func InitThatMetaRepo(ctx *godog.ScenarioContext) (string, error) {
+func InitThatMetaRepo() (string, error) {
 	if existing := peekThatMetaRepo(); existing != "" {
 		return "", fmt.Errorf("meta_repo_helper: meta repo path already configured: %s", existing)
 	} else if testDir, testDirErr := TestDir(); testDirErr != nil {
