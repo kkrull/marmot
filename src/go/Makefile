@@ -103,7 +103,7 @@ all: $(executable) $(autocomplete) #> Build all sources
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(autocomplete) $(executable)
+	$(RM) $(autocomplete) coverage.html coverage.out $(executable)
 
 .PHONY: install
 install: $(executable) | $(bindir) $(datadirpkg) $(libexecdirpkg) #> Install program
@@ -152,9 +152,14 @@ install-tools: #> Install Go development tools
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: test-coverage
-test-coverage: #> Run tests with code coverage
-	ginkgo run -coverpkg github.com/kkrull/... -coverprofile coverage.out ./...
-	go tool cover -html coverage.out -o coverage.html
+test-coverage: coverage.html #> Run tests with code coverage
+	@:
+
+coverage.html: coverage.out
+	go tool cover -html $< -o $@
+
+coverage.out: $(sources)
+	ginkgo run -coverpkg github.com/kkrull/... -coverprofile $@ ./...
 
 .PHONY: test-watch
 test-watch: #> Run tests in watch mode
