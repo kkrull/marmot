@@ -146,7 +146,8 @@ install-tools: #> Install Go development tools
 
 .PHONY: test-coverage
 test-coverage: #> Run tests with code coverage
-	ginkgo run -coverpkg ./... -r
+	ginkgo run -coverpkg github.com/kkrull/... -coverprofile coverage.out ./...
+	go tool cover -html coverage.out -o coverage.html
 
 .PHONY: test-watch
 test-watch: #> Run tests in watch mode

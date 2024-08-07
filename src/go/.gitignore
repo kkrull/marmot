@@ -4,5 +4,6 @@ marmot
 marmot.exe
 
 # Testing
-coverprofile.out
+coverage.html
+coverage.out
 cukefeature/localDir
