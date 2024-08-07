@@ -24,6 +24,7 @@ jobs:
 
       - run: go version
       - run: go get -t -v .
+      - run: make install-tools
 
   go-build:
     defaults:
@@ -57,7 +58,6 @@ jobs:
           cache-dependency-path: src/go/go.sum
           go-version-file: src/go/go.mod
 
-      - run: go test -v ./...
       - run: make test-coverage
       - uses: actions/upload-artifact@v4
         with:
