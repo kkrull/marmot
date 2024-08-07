@@ -31,3 +31,7 @@ func (admin *MetaDataAdmin) CreateExpected(expectedPath string) {
 func (admin *MetaDataAdmin) CreateFails(err error) {
 	admin.createError = err
 }
+
+func (admin *MetaDataAdmin) ExistsReturns(path string, value bool) {
+	//TODO KDK: Implement
+}

@@ -1,6 +1,8 @@
 package usemetarepo
 
-import core "github.com/kkrull/marmot/coremetarepo"
+import (
+	core "github.com/kkrull/marmot/coremetarepo"
+)
 
 // Initializes a new meta repo where none existed before.
 type InitCommand struct {

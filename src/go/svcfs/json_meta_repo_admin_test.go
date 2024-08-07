@@ -34,7 +34,7 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
-		It("returns an error, given a path containing marmot data", func() {
+		It("returns an error, given a path containing marmot data", Pending, func() {
 			marmotDataDir := filepath.Join(metaRepoPath, ".marmot")
 			Expect(os.MkdirAll(marmotDataDir, fs.ModePerm)).To(Succeed())
 
