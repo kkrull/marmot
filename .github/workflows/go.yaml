@@ -40,7 +40,6 @@ jobs:
           cache-dependency-path: src/go/go.sum
           go-version-file: src/go/go.mod
 
-      #      - run: go get -v .
       - run: go build -v ./...
 
   go-test:
@@ -58,5 +57,9 @@ jobs:
           cache-dependency-path: src/go/go.sum
           go-version-file: src/go/go.mod
 
-      #     - run: go get -v .
       - run: go test -v ./...
+      - run: make test-coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage-go
+          path: src/go/coverage.html
