@@ -34,13 +34,13 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
-		It("returns an error, given a path containing marmot data", Pending, func() {
+		It("leaves the existing directory, given a path that is already a meta repo", func() {
+			//TODO KDK: What about the files inside of .marmot/?  Should those be re-created?
 			marmotDataDir := filepath.Join(metaRepoPath, ".marmot")
 			Expect(os.MkdirAll(marmotDataDir, fs.ModePerm)).To(Succeed())
 
 			subject = jsonMetaRepoAdmin(nil)
-			Expect(subject.Create(metaRepoPath)).To(
-				MatchError(fmt.Sprintf("path already exists: %s", marmotDataDir)))
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
 		It("returns an error when unable to check if the path exists", func() {
@@ -67,6 +67,13 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
 			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
 		})
+	})
+
+	Describe("#IsMetaRepo", func() {
+		It("returns false, given a non-existent path", Pending)
+		It("returns false, given an existing path that is not a directory", Pending)
+		It("returns false, given a directory not containing a Marmot metadata", Pending)
+		It("returns true, given a directory containing Marmot metadata", Pending)
 	})
 })
 

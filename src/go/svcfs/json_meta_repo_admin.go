@@ -27,7 +27,7 @@ func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
 	} else if statErr != nil {
 		return fmt.Errorf("failed to check for existing meta repo %s; %w", repositoryDir, statErr)
 	} else {
-		return fmt.Errorf("path already exists: %s", marmotDataDir)
+		return nil
 	}
 }
 
