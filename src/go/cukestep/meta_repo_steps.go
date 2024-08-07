@@ -7,6 +7,6 @@ import (
 
 // Add step definitions to manage the life cycle of a meta repo.
 func AddMetaRepoSteps(ctx *godog.ScenarioContext) {
-	initWithArbitraryVersion := func() error { return support.InitNewMetaRepoS("42") }
+	initWithArbitraryVersion := func() error { return support.InitNewMetaRepo("42") }
 	ctx.Given(`^I have initialized a new meta repo$`, initWithArbitraryVersion)
 }
