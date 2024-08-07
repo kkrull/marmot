@@ -44,9 +44,9 @@ func forgetThatMetaRepo() {
 // Set a standardized path to a meta repo in the local test directory.
 func initMetaRepoPath() (string, error) {
 	if _thatMetaRepo != "" {
-		return "", fmt.Errorf("meta_repo_helper: meta repo path already configured: %s", _thatMetaRepo)
+		return "", fmt.Errorf("meta_repo_hook: meta repo path already configured: %s", _thatMetaRepo)
 	} else if testDir, testDirErr := TestDir(); testDirErr != nil {
-		return "", fmt.Errorf("meta_repo_helper: failed to access test directory; %w", testDirErr)
+		return "", fmt.Errorf("meta_repo_hook: failed to access test directory; %w", testDirErr)
 	} else {
 		_thatMetaRepo = filepath.Join(testDir, "meta")
 		return _thatMetaRepo, nil
@@ -56,7 +56,7 @@ func initMetaRepoPath() (string, error) {
 // A path to a meta repo which has been initialized earlier in this scenario.
 func ThatMetaRepo() (string, error) {
 	if _thatMetaRepo == "" {
-		return "", fmt.Errorf("meta_repo_helper: no meta repo has been configured")
+		return "", fmt.Errorf("meta_repo_hook: no meta repo has been configured")
 	}
 
 	return _thatMetaRepo, nil
@@ -68,11 +68,11 @@ func ThatMetaRepo() (string, error) {
 func InitNewMetaRepo(version string) error {
 	factory := ThatCommandFactoryS(version)
 	if initCmd, factoryErr := factory.NewInitMetaRepo(); factoryErr != nil {
-		return fmt.Errorf("meta_repo_steps: failed to initialize; %w", factoryErr)
+		return fmt.Errorf("meta_repo_hook: failed to initialize; %w", factoryErr)
 	} else if thatMetaRepo, initErr := initMetaRepoPath(); initErr != nil {
-		return fmt.Errorf("meta_repo_steps: failed to initialize path to meta repo; %w", initErr)
+		return fmt.Errorf("meta_repo_hook: failed to initialize path to meta repo; %w", initErr)
 	} else if runErr := initCmd.Run(thatMetaRepo); runErr != nil {
-		return fmt.Errorf("meta_repo_steps: failed to initialize repository; %w", runErr)
+		return fmt.Errorf("meta_repo_hook: failed to initialize repository; %w", runErr)
 	} else {
 		return nil
 	}
