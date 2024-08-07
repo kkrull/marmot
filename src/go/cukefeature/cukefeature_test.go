@@ -30,5 +30,5 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	step.AddMetaRepoSteps(ctx)
 	step.AddRemoteRepositorySteps(ctx)
 	step.AddRepositorySteps(ctx)
-	support.AddTo(ctx)
+	support.AddFixtures(ctx)
 }
