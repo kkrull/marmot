@@ -22,7 +22,10 @@ words:
   - cmdremote
   - cmdroot
   - corerepository
+  - cukestep
+  - cukesupport
   - fswatch
+  - godog
   - kkrull
   - Krull
   - NOTPARALLEL
