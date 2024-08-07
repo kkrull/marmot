@@ -13,8 +13,8 @@ import (
 // The name of the tag to identify in feature files.
 const MetaRepoTag = "@MetaRepo"
 
-// Add hook and fixtures to reset state between scenarios.
-func addMetaRepoFixture(ctx *godog.ScenarioContext) {
+// Add hook and fixtures to reset state between scenarios.  Depends on @LocalDir, so run after that.
+func addMetaRepoFixtureAfterLocalDir(ctx *godog.ScenarioContext) {
 	ctx.After(afterMetaRepo)
 	ctx.Before(beforeMetaRepo)
 }
@@ -64,7 +64,7 @@ func ThatMetaRepo() (string, error) {
 
 /* Initialization */
 
-// Convenience method to initialize a new meta repo with a specified version.
+// Convenience method to initialize a new meta repo with a specified version.  Needs @LocalDir.
 func InitNewMetaRepo(version string) error {
 	factory := ThatCommandFactoryS(version)
 	if initCmd, factoryErr := factory.NewInitMetaRepo(); factoryErr != nil {
