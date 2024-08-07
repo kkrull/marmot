@@ -1,7 +1,6 @@
 package svcfs_test
 
 import (
-	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -27,15 +26,30 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 	})
 
 	Describe("#Create", func() {
-		It("is cool with an existing path in which marmot has not been initialized", func() {
-			Expect(os.MkdirAll(metaRepoPath, fs.ModePerm)).To(Succeed())
+		It("creates files in the directory, given a valid, writable path", func() {
+			subject = jsonMetaRepoAdmin(nil)
+			subject.Create(metaRepoPath)
 
+			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
+			Expect(os.Stat(metaDataDir)).NotTo(BeNil())
+
+			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
+			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
+		})
+
+		It("returns no error, upon success", func() {
 			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
-		It("leaves the existing directory, given a path that is already a meta repo", func() {
-			//TODO KDK: What about the files inside of .marmot/?  Should those be re-created?
+		It("accepts an existing directory that is not a Marmot repo", func() {
+			Expect(os.MkdirAll(metaRepoPath, fs.ModePerm)).To(Succeed())
+			subject = jsonMetaRepoAdmin(nil)
+			Expect(subject.Create(metaRepoPath)).To(Succeed())
+		})
+
+		It("ignores an existing directory already containing Marmot data", func() {
+			//What about the files inside of .marmot/?  Should those be re-created or left alone?
 			marmotDataDir := filepath.Join(metaRepoPath, ".marmot")
 			Expect(os.MkdirAll(marmotDataDir, fs.ModePerm)).To(Succeed())
 
@@ -43,29 +57,17 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.Create(metaRepoPath)).To(Succeed())
 		})
 
-		It("returns an error when unable to check if the path exists", func() {
+		It("returns an error, given an invalid path", func() {
 			subject = jsonMetaRepoAdmin(nil)
-			invalidPathErr := subject.Create("\000x")
-			Expect(invalidPathErr).NotTo(BeNil())
+			Expect(subject.Create("\000x")).To(
+				MatchError(MatchRegexp("failed to check for existing meta repo")))
 		})
 
-		It("returns an error when creating files fails", func() {
+		It("returns an error, given a path in which files can not be created", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
-
 			subject = jsonMetaRepoAdmin(nil)
 			Expect(subject.Create(metaRepoPath)).To(
-				MatchError(ContainSubstring(fmt.Sprintf("failed to make directory %s", metaRepoPath))))
-		})
-
-		It("creates files in the meta repository and returns nil, otherwise", func() {
-			subject = jsonMetaRepoAdmin(nil)
-			Expect(subject.Create(metaRepoPath)).To(Succeed())
-
-			metaDataDir := filepath.Join(metaRepoPath, ".marmot")
-			Expect(os.Stat(metaDataDir)).NotTo(BeNil())
-
-			metaDataFile := filepath.Join(metaDataDir, "meta-repo.json")
-			Expect(os.Stat(metaDataFile)).NotTo(BeNil())
+				MatchError(MatchRegexp("failed to make directory")))
 		})
 	})
 

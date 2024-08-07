@@ -38,11 +38,11 @@ var _ = Describe("InitCommand", func() {
 	Describe("#Run", func() {
 		It("creates a meta repo in that path", func() {
 			givenPath := validPath()
-			Expect(subject.Run(givenPath)).To(Succeed())
+			subject.Run(givenPath)
 			metaDataAdmin.CreateExpected(givenPath)
 		})
 
-		It("returns a nil error, when that succeeds", func() {
+		It("returns no error, upon success", func() {
 			Expect(subject.Run(validPath())).To(Succeed())
 		})
 
