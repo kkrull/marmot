@@ -43,8 +43,8 @@ func setTestDir(path string) {
 
 /* Hooks */
 
-// Add hooks for this tag so that it runs on matching scenarios
-func AddTo(ctx *godog.ScenarioContext) {
+// Make this hook available to a scenario, if it is tagged with its name.
+func addLocalDirHook(ctx *godog.ScenarioContext) {
 	ctx.After(afterHook)
 	ctx.Before(beforeHook)
 }
