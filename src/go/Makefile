@@ -103,7 +103,7 @@ all: $(executable) $(autocomplete) #> Build all sources
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(autocomplete) coverage.html coverage.out $(executable)
+	$(RM) $(autocomplete) coverage.html coverage.out coverage-gaps.out $(executable)
 
 .PHONY: install
 install: $(executable) | $(bindir) $(datadirpkg) $(libexecdirpkg) #> Install program
@@ -146,13 +146,14 @@ install-autocomplete-zsh: $(autocomplete) | $(datadirzshfn) #> Install autocompl
 .PHONY: install-tools
 install-tools: #> Install Go development tools
 	go install github.com/go-delve/delve/cmd/dlv@latest
+	go install github.com/gregoryv/uncover/cmd/uncover@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go install github.com/spf13/cobra-cli@latest
 	go install golang.org/x/tools/cmd/godoc@latest
 	go install mvdan.cc/gofumpt@latest
 
 .PHONY: test-coverage
-test-coverage: coverage.html #> Run tests with code coverage
+test-coverage: coverage.html coverage-gaps.out #> Run tests with code coverage
 	@:
 
 .PHONY: test-watch
@@ -185,6 +186,9 @@ coverage.html: coverage.out
 
 coverage.out: $(sources)
 	ginkgo run -coverpkg github.com/kkrull/... -coverprofile $@ ./...
+
+coverage-gaps.out: coverage.out
+	uncover $< > $@
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)
