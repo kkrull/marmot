@@ -12,7 +12,7 @@ import (
 
 // Add step definitions related to remote repositories.
 func AddRemoteRepositorySteps(ctx *godog.ScenarioContext) {
-	ctx.Given(`^I have registered remote repositories$`, func() error {
+	ctx.Given(`^I have registered remote repositories with a meta repo$`, func() error {
 		return registerRemote("https://github.com/actions/checkout")
 	})
 
