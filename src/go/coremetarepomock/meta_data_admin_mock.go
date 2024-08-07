@@ -8,15 +8,15 @@ import (
 // Construct a test double for MetaDataAdmin.
 func NewMetaDataAdmin() *MetaDataAdmin {
 	return &MetaDataAdmin{
-		existsReturns: make(map[string]bool),
+		isMetaRepoReturns: make(map[string]bool),
 	}
 }
 
 // Mock implementation for testing with MetaDataAdmin.
 type MetaDataAdmin struct {
-	createCalls   []string
-	createError   error
-	existsReturns map[string]bool
+	createCalls       []string
+	createError       error
+	isMetaRepoReturns map[string]bool
 }
 
 func (admin *MetaDataAdmin) Create(metaRepoPath string) error {
@@ -33,10 +33,10 @@ func (admin *MetaDataAdmin) CreateFails(err error) {
 	admin.createError = err
 }
 
-func (admin *MetaDataAdmin) Exists(path string) bool {
-	return admin.existsReturns[path]
+func (admin *MetaDataAdmin) IsMetaRepo(path string) bool {
+	return admin.isMetaRepoReturns[path]
 }
 
-func (admin *MetaDataAdmin) ExistsReturns(path string, value bool) {
-	admin.existsReturns[path] = value
+func (admin *MetaDataAdmin) IsMetaRepoReturns(path string, value bool) {
+	admin.isMetaRepoReturns[path] = value
 }

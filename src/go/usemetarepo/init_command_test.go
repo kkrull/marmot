@@ -53,8 +53,7 @@ var _ = Describe("InitCommand", func() {
 
 		It("returns an error when the path is already a meta repo", func() {
 			existingMetaRepo := filepath.Join(testDir, "meta-already")
-			metaDataAdmin.ExistsReturns(existingMetaRepo, true)
-
+			metaDataAdmin.IsMetaRepoReturns(existingMetaRepo, true)
 			Expect(subject.Run(existingMetaRepo)).To(
 				MatchError(MatchRegexp("meta-already is already a meta repo$")))
 		})
