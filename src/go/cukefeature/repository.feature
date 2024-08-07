@@ -4,7 +4,7 @@ Feature: Repository
   I want to keep track of all repositories I have worked on
 
   @LocalDir
-  Scenario: Meta Repos have no repositories when initialized
+  Scenario: A Meta Repo has no repositories when initialized
     Given I have initialized a new meta repo
     When I list local repositories in that meta repo
     Then that repository listing should be empty
