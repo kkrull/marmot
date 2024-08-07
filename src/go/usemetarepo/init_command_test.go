@@ -51,11 +51,18 @@ var _ = Describe("InitCommand", func() {
 			Expect(subject.Run(nonExistentPath())).To(Succeed())
 		})
 
+		It("returns an error when unable to check the path", func() {
+			path := filepath.Join(testDir, "stealth")
+			metaDataAdmin.IsMetaRepoReturns(path, false, errors.New("bang!"))
+			Expect(subject.Run(path)).To(
+				MatchError(ContainSubstring("stealth: unable to check path; bang!")))
+		})
+
 		It("returns an error when the path is already a meta repo", func() {
 			existingMetaRepo := filepath.Join(testDir, "meta-already")
-			metaDataAdmin.IsMetaRepoReturns(existingMetaRepo, true)
+			metaDataAdmin.IsMetaRepoReturns(existingMetaRepo, true, nil)
 			Expect(subject.Run(existingMetaRepo)).To(
-				MatchError(MatchRegexp("meta-already is already a meta repo$")))
+				MatchError(MatchRegexp("meta-already: already a meta repo$")))
 		})
 
 		It("returns an error when creating a meta repo fails", func() {

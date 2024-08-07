@@ -8,6 +8,7 @@ import (
 // Construct a test double for MetaDataAdmin.
 func NewMetaDataAdmin() *MetaDataAdmin {
 	return &MetaDataAdmin{
+		isMetaRepoError:   make(map[string]error),
 		isMetaRepoReturns: make(map[string]bool),
 	}
 }
@@ -16,6 +17,7 @@ func NewMetaDataAdmin() *MetaDataAdmin {
 type MetaDataAdmin struct {
 	createCalls       []string
 	createError       error
+	isMetaRepoError   map[string]error
 	isMetaRepoReturns map[string]bool
 }
 
@@ -33,10 +35,11 @@ func (admin *MetaDataAdmin) CreateFails(err error) {
 	admin.createError = err
 }
 
-func (admin *MetaDataAdmin) IsMetaRepo(path string) bool {
-	return admin.isMetaRepoReturns[path]
+func (admin *MetaDataAdmin) IsMetaRepo(path string) (bool, error) {
+	return admin.isMetaRepoReturns[path], admin.isMetaRepoError[path]
 }
 
-func (admin *MetaDataAdmin) IsMetaRepoReturns(path string, value bool) {
+func (admin *MetaDataAdmin) IsMetaRepoReturns(path string, value bool, err error) {
 	admin.isMetaRepoReturns[path] = value
+	admin.isMetaRepoError[path] = err
 }

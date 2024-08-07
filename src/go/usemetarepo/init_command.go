@@ -12,8 +12,10 @@ type InitCommand struct {
 }
 
 func (cmd InitCommand) Run(metaRepoPath string) error {
-	if cmd.MetaDataAdmin.IsMetaRepo(metaRepoPath) {
-		return fmt.Errorf("%s is already a meta repo", metaRepoPath)
+	if isMetaRepo, isMetaRepoErr := cmd.MetaDataAdmin.IsMetaRepo(metaRepoPath); isMetaRepoErr != nil {
+		return fmt.Errorf("%s: unable to check path; %w", metaRepoPath, isMetaRepoErr)
+	} else if isMetaRepo {
+		return fmt.Errorf("%s: already a meta repo", metaRepoPath)
 	} else if createErr := cmd.MetaDataAdmin.Create(metaRepoPath); createErr != nil {
 		return fmt.Errorf("failed to initialize meta repo; %w", createErr)
 	} else {
