@@ -92,6 +92,11 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 
 			Expect(subject.IsMetaRepo(testFsRoot)).To(Equal(true))
 		})
+
+		It("returns an error, when checking that path fails", func() {
+			_, err := subject.IsMetaRepo("\000x")
+			Expect(err).To(MatchError(ContainSubstring("failed to stat meta repo path")))
+		})
 	})
 })
 
