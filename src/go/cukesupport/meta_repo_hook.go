@@ -20,7 +20,7 @@ func addMetaRepoFixtureAfterLocalDir(ctx *godog.ScenarioContext) {
 }
 
 func afterMetaRepo(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-	//Always clear state; it could have been initialized by a hook _or_ an explicit step
+	// Always clear state; it could have been initialized by a hook _or_ an explicit step
 	forgetThatMetaRepo()
 	return ctx, err
 }

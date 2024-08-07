@@ -46,7 +46,7 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		})
 
 		It("ignores an existing directory already containing Marmot data", func() {
-			//What about the files inside of .marmot/?  Should those be re-created or left alone?
+			// What about the files inside of .marmot/?  Should those be re-created or left alone?
 			marmotDataDir := filepath.Join(testFsRoot, ".marmot")
 			Expect(os.MkdirAll(marmotDataDir, fs.ModePerm)).To(Succeed())
 
@@ -123,6 +123,7 @@ func (args jsonMetaRepoAdminArgs) Version() string {
 /* Filesystem */
 
 func existingPath() string { return testFsRoot }
+
 func someFile() (string, error) {
 	path := filepath.Join(testFsRoot, "existing-file")
 	if aFile, createErr := os.Create(path); createErr != nil {
