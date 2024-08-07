@@ -40,7 +40,7 @@ jobs:
           cache-dependency-path: src/go/go.sum
           go-version-file: src/go/go.mod
 
-      - run: go build -v ./...
+      - run: make all
 
   go-test:
     defaults:
