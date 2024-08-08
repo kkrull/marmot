@@ -28,10 +28,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	})
 
 	Describe("#AddLocals", func() {
-		It("ignores duplicate paths, given 2 or more of the same exact path", Pending)
-		It("ignores duplicate paths, given distinct paths that resolve to the same absolute path", Pending)
-		It("accepts absolute paths", Pending)
-		It("rejects relative paths", Pending)
+		It("skips duplicate paths, given 2 or more of the same exact path", Pending)
 	})
 
 	Describe("#AddRemotes", func() {
@@ -79,7 +76,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
 		})
 
-		It("#AddLocal skips paths that have already been added", Pending, func() {})
+		It("#AddLocals skips paths that have already been added", Pending, func() {})
 
 		It("#ListLocal includes each registered local repository", func() {
 			returned := expect.NoError(subject.ListLocal())

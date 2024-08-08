@@ -39,9 +39,11 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 			Expect(subject.Run("/path/to/faulty-repo")).To(MatchError("failed to add local repository /path/to/faulty-repo: bang!"))
 		})
 
-		It("rejects invalid paths", Pending, func() {})
-		It("rejects paths that do not exist", Pending, func() {})
-		It("resolves relative paths", Pending, func() {})
+		It("accepts absolute paths", Pending)
+		It("resolves relative paths", Pending)
+		It("rejects invalid paths", Pending)
+		It("rejects paths that do not exist", Pending)
+		It("ignores duplicate paths, given distinct paths that resolve to the same absolute path", Pending)
 	})
 })
 
