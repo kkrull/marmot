@@ -43,10 +43,7 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
 
-		//duplicating URLs doesn't make sense (so it's a business rule), but the repository source will do this atomically anyway
-		It("skips hosts that have already been added?", Pending)
-
-		It("stops and returns an error, after when adding a repository fails", func() {
+		It("stops and returns an error, when adding a repository fails", func() {
 			registered := testdata.NewURLs(
 				"https://github.com/somebody/repo1",
 				"https://github.com/somebody/repo2",
