@@ -43,17 +43,15 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
 
-		It("stops and returns an error, when adding a repository fails", func() {
+		It("returns an error, when adding repositories fails", func() {
 			registered := testdata.NewURLs(
 				"https://github.com/somebody/repo1",
 				"https://github.com/somebody/repo2",
 			)
 
-			source.AddRemoteFails("https://github.com/somebody/repo1", "bang!")
+			source.AddRemotesFails("bang!")
 			Expect(subject.Run(registered)).To(
-				MatchError(ContainSubstring("failed to register https://github.com/somebody/repo1")))
-
-			source.AddRemotesExpected("https://github.com/somebody/repo1")
+				MatchError("failed to register remote repositories; bang!"))
 		})
 	})
 })
