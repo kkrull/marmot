@@ -25,19 +25,19 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
-		It("passes local paths to the repository source", func() {
+		It("adds local repositories to the source, for the given paths", func() {
 			subject.Run("/path/to/a", "/path/to/b")
 			source.AddLocalsExpected("/path/to/a", "/path/to/b")
 		})
 
-		It("returns nil when everything succeeds", func() {
+		It("returns no error, upon success", func() {
 			Expect(subject.Run(validPath())).To(Succeed())
 		})
 
-		It("returns informative errors, when they occur", func() {
+		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
 			Expect(subject.Run("/path/to/faulty-repo")).To(
-				MatchError(MatchRegexp("failed to add local repositories.*bang!")))
+				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 
 		It("accepts absolute paths", Pending)
