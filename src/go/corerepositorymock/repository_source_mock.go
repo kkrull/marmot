@@ -24,6 +24,7 @@ func NewRepositorySource() *RepositorySource {
 type RepositorySource struct {
 	addLocalCalls   []string
 	addLocalErrors  map[string]error
+	addLocalsError  error
 	addRemoteCalls  []*url.URL
 	addRemotesError error
 	ListLocalPaths  []string
@@ -44,6 +45,11 @@ func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
 
 func (source *RepositorySource) AddLocalFails(path string, err error) {
 	source.addLocalErrors[path] = err
+}
+
+func (source *RepositorySource) AddLocals(localPaths []string) error {
+	source.addLocalCalls = append(source.addLocalCalls, localPaths...)
+	return source.addLocalsError
 }
 
 func (source *RepositorySource) ListLocal() (core.Repositories, error) {

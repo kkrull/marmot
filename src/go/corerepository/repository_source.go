@@ -3,12 +3,19 @@ package corerepository
 import "net/url"
 
 // A source of Git repositories that a meta repo might care about.
-//   - Remote repository URLs are distinct.
+//
+// Repository sources are responsible for these invariants:
+//   - Local repository paths are distinct, by string comparison.  Clients decide whether to
+//     resolve relative paths or de-duplicate paths that resolve to the same filesystem entry.
+//   - Remote repository URLs are distinct, comparing hrefs.
 type RepositorySource interface {
 	// TODO KDK: Consider adding #Add(Repository)
 
 	// Add a repository located at the specified path on the filesystem.
 	AddLocal(localPath string) error
+
+	// Add repositories located at the specified paths, skipping known paths and exact duplicates.
+	AddLocals(localPaths []string) error
 
 	// Add repositories hosted at the specified URLs, skipping known remotes and duplicates.
 	AddRemotes(hostUrls []*url.URL) error

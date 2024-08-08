@@ -1,6 +1,7 @@
 package svcfs
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"slices"
@@ -18,6 +19,10 @@ type JsonMetaRepo struct {
 }
 
 /* Local repositories */
+
+func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
+	return errors.ErrUnsupported
+}
 
 func (repo *JsonMetaRepo) AddLocal(localPath string) error {
 	var rootObject *rootObjectData
