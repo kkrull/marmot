@@ -2,6 +2,8 @@ package userepository_test
 
 import (
 	"errors"
+	"os"
+	"path/filepath"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
@@ -50,12 +52,19 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 
-		It("normalizes paths", func() {
+		It("normalizes paths by replacing redundant/repeated parts with shorter equivalents", func() {
 			subject.Run([]string{"/path/to/a/../b"})
 			source.AddLocalsExpected("/path/to/b")
 		})
 
-		It("resolves relative paths", Pending)
+		It("resolves relative paths to absolute paths", func() {
+			Expect(os.Chdir(os.TempDir())).To(Succeed())
+			subject.Run([]string{"some-name-in-tmp"})
+
+			Expect(filepath.Abs("some-name-in-tmp")).To(HaveSuffix(string(os.PathSeparator) + "some-name-in-tmp"))
+			source.AddLocalExpectedM(HaveSuffix(string(os.PathSeparator) + "some-name-in-tmp"))
+		})
+
 		It("rejects invalid paths", Pending)
 		It("rejects paths that do not exist", Pending)
 		It("ignores duplicate paths, given distinct paths that resolve to the same absolute path", Pending)

@@ -23,7 +23,9 @@ func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
 func normalizePaths(rawPaths []string) []string {
 	normalized := make([]string, len(rawPaths))
 	for i, rawPath := range rawPaths {
-		normalized[i] = filepath.Clean(rawPath)
+		if normalPath, pathErr := filepath.Abs(rawPath); pathErr == nil {
+			normalized[i] = normalPath
+		}
 	}
 
 	return normalized

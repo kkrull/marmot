@@ -41,6 +41,11 @@ func (source *RepositorySource) AddLocalsExpected(expectedPaths ...string) {
 	Expect(source.addLocalCalls).To(ConsistOf(expectedPaths))
 }
 
+func (source *RepositorySource) AddLocalExpectedM(matcher OmegaMatcher) {
+	ginkgo.GinkgoHelper()
+	Expect(source.addLocalCalls).To(ContainElement(matcher))
+}
+
 func (source *RepositorySource) AddLocalsFails(err error) {
 	source.addLocalsError = err
 }
