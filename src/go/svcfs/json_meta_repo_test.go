@@ -14,7 +14,6 @@ import (
 var _ = Describe("JsonMetaDataRepo", func() {
 	var (
 		subject    *svcfs.JsonMetaRepo
-		admin      *svcfs.JsonMetaRepoAdmin
 		testFsRoot string
 	)
 
@@ -30,7 +29,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
-			admin = jsonMetaRepoAdmin(nil)
+			admin := jsonMetaRepoAdmin(nil)
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
 			Expect(admin.Create(testFsRoot)).To(Succeed())
 		})
@@ -48,7 +47,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when local repositories have been registered", func() {
 		BeforeEach(func() {
-			admin = jsonMetaRepoAdmin(nil)
+			admin := jsonMetaRepoAdmin(nil)
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
 			Expect(admin.Create(testFsRoot)).To(Succeed())
 
@@ -65,7 +64,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
-			admin = jsonMetaRepoAdmin(nil)
+			admin := jsonMetaRepoAdmin(nil)
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
 			Expect(admin.Create(testFsRoot)).To(Succeed())
 
