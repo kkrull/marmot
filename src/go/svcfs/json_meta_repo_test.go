@@ -27,9 +27,15 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
+	Describe("#AddLocals", func() {
+		It("ignores duplicate paths, given 2 or more of the same exact path", Pending)
+		It("ignores duplicate paths, given distinct paths that resolve to the same absolute path", Pending)
+		It("accepts absolute paths", Pending)
+		It("rejects relative paths", Pending)
+	})
+
 	Describe("#AddRemotes", func() {
-		It("adds only distinct URLs, instead of adding duplicates", Pending)
-		It("adds only new URLs that don't exist yet", Pending)
+		It("ignores duplicate URLs, given 2 or more of the same URL", Pending)
 	})
 
 	Context("when no repositories have been registered", func() {
@@ -72,6 +78,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			given := testdata.NewURLs("https://github.com/me/a", "https://github.com/me/b")
 			Expect(subject.AddRemotes(given)).To(Succeed())
 		})
+
+		It("#AddRemotes skips URLs that have already been added", Pending)
 
 		It("#ListRemote includes each registered remote", func() {
 			listTwo := expect.NoError(subject.ListRemote())
