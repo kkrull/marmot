@@ -3,7 +3,6 @@ package userepository_test
 import (
 	"errors"
 	"os"
-	"path/filepath"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
@@ -58,11 +57,8 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		})
 
 		It("resolves relative paths to absolute paths", func() {
-			Expect(os.Chdir(os.TempDir())).To(Succeed())
-			subject.Run([]string{"some-name-in-tmp"})
-
-			Expect(filepath.Abs("some-name-in-tmp")).To(HaveSuffix(string(os.PathSeparator) + "some-name-in-tmp"))
-			source.AddLocalExpectedM(HaveSuffix(string(os.PathSeparator) + "some-name-in-tmp"))
+			subject.Run([]string{"some-name-in-cwd"})
+			source.AddLocalExpectedM(HaveSuffix(string(os.PathSeparator) + "some-name-in-cwd"))
 		})
 
 		It("rejects invalid paths", Pending)
