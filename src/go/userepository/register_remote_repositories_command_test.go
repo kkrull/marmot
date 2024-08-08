@@ -14,25 +14,24 @@ import (
 
 var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 	var (
-		factory use.CommandFactory
-		source  *mock.RepositorySource
 		subject *userepository.RegisterRemoteRepositoriesCommand
+		source  *mock.RepositorySource
 	)
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = use.NewCommandFactory().WithRepositorySource(source)
+		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterRemoteRepositories())
 	})
 
 	Describe("#Run", func() {
 		It("registers remote repositories at the given URLs", func() {
-			registered := testdata.NewURLs(
+			given := testdata.NewURLs(
 				"https://github.com/actions/checkout",
 				"https://github.com/actions/setup-go",
 			)
 
-			subject.Run(registered)
+			subject.Run(given)
 			source.AddRemotesExpected(
 				"https://github.com/actions/checkout",
 				"https://github.com/actions/setup-go",
@@ -44,13 +43,8 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 		})
 
 		It("returns an error, when adding repositories fails", func() {
-			registered := testdata.NewURLs(
-				"https://github.com/somebody/repo1",
-				"https://github.com/somebody/repo2",
-			)
-
 			source.AddRemotesFails("bang!")
-			Expect(subject.Run(registered)).To(
+			Expect(subject.Run(validUrls())).To(
 				MatchError("failed to register remote repositories; bang!"))
 		})
 	})
