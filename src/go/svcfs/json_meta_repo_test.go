@@ -17,6 +17,11 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		testFsRoot string
 	)
 
+	var createMetaRepo = func(path string) error {
+		admin := jsonMetaRepoAdmin(nil)
+		return admin.Create(path)
+	}
+
 	BeforeEach(func() {
 		testFsRoot = expect.NoError(os.MkdirTemp("", "JsonMetaDataRepo-"))
 		DeferCleanup(os.RemoveAll, testFsRoot)
@@ -29,9 +34,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
-			admin := jsonMetaRepoAdmin(nil)
+			Expect(createMetaRepo(testFsRoot)).To(Succeed())
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
-			Expect(admin.Create(testFsRoot)).To(Succeed())
 		})
 
 		It("#ListLocal returns empty", func() {
@@ -47,10 +51,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when local repositories have been registered", func() {
 		BeforeEach(func() {
-			admin := jsonMetaRepoAdmin(nil)
+			Expect(createMetaRepo(testFsRoot)).To(Succeed())
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
-			Expect(admin.Create(testFsRoot)).To(Succeed())
-
 			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
 		})
 
@@ -64,15 +66,10 @@ var _ = Describe("JsonMetaDataRepo", func() {
 
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
-			admin := jsonMetaRepoAdmin(nil)
+			Expect(createMetaRepo(testFsRoot)).To(Succeed())
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
-			Expect(admin.Create(testFsRoot)).To(Succeed())
 
-			given := testdata.NewURLs(
-				"https://github.com/me/a",
-				"https://github.com/me/b",
-			)
-
+			given := testdata.NewURLs("https://github.com/me/a", "https://github.com/me/b")
 			Expect(subject.AddRemotes(given)).To(Succeed())
 		})
 
