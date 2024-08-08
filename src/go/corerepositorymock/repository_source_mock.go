@@ -27,6 +27,7 @@ type RepositorySource struct {
 	addLocalErrors  map[string]error
 	addRemoteCalls  []*url.URL
 	addRemoteErrors map[string]error
+	addRemotesError error
 	ListLocalPaths  []string
 	ListRemoteUrls  []*url.URL
 }
@@ -65,7 +66,7 @@ func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
 
 func (source *RepositorySource) AddRemotes(hostUrls []*url.URL) error {
 	source.addRemoteCalls = append(source.addRemoteCalls, hostUrls...)
-	return nil
+	return source.addRemotesError
 }
 
 func (source *RepositorySource) AddRemotesExpected(expectedHrefs ...string) {
@@ -76,6 +77,10 @@ func (source *RepositorySource) AddRemotesExpected(expectedHrefs ...string) {
 
 func (source *RepositorySource) AddRemoteFails(faultyHref string, errorMsg string) {
 	source.addRemoteErrors[faultyHref] = errors.New(errorMsg)
+}
+
+func (source *RepositorySource) AddRemotesFails(errorMsg string) {
+	source.addRemotesError = errors.New(errorMsg)
 }
 
 func (source *RepositorySource) addRemoteHrefs() []string {
