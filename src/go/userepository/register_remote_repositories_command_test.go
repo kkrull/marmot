@@ -39,7 +39,9 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			)
 		})
 
-		It("stops and returns an error, when failing to register a repository", func() {
+		It("skips hosts that have already been added", Pending, func() {})
+
+		It("stops and returns an error, after when adding a repository fails", func() {
 			registered := testdata.NewURLs(
 				"https://github.com/somebody/repo1",
 				"https://github.com/somebody/repo2",
@@ -52,11 +54,9 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			source.AddRemoteExpected("https://github.com/somebody/repo1")
 		})
 
-		It("returns nil, when there are no errors", func() {
+		It("returns no error, upon success", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
-
-		It("skips hosts that have already been added", Pending, func() {})
 	})
 })
 
