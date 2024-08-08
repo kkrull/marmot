@@ -54,6 +54,8 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 		It("returns nil, when there are no errors", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
+
+		It("skips hosts that have already been added", Pending, func() {})
 	})
 })
 

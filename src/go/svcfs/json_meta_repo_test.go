@@ -53,6 +53,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
 		})
 
+		It("#AddLocal skips paths that have already been added", Pending, func() {})
+
 		It("#ListLocal includes each registered local repository", func() {
 			returned := expect.NoError(subject.ListLocal())
 			Expect(returned.LocalPaths()).To(ConsistOf("/path/to/one"))
