@@ -72,8 +72,11 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
 			Expect(admin.Create(metaRepoPath)).To(Succeed())
 
-			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/a"))).To(Succeed())
-			Expect(subject.AddRemote(testdata.NewURL("https://github.com/me/b"))).To(Succeed())
+			given := testdata.NewURLs(
+				"https://github.com/me/a",
+				"https://github.com/me/b",
+			)
+			Expect(subject.AddRemotes(given)).To(Succeed())
 		})
 
 		It("#ListRemote includes each registered remote", func() {

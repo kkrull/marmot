@@ -1,7 +1,6 @@
 package svcfs
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 
@@ -46,7 +45,7 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 
 /* Remote repositories */
 
-func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {
+func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {
@@ -62,7 +61,13 @@ func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {
 }
 
 func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
-	return errors.ErrUnsupported
+	for _, hostUrl := range hostUrls {
+		if err := repo.addRemote(hostUrl); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {

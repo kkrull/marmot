@@ -10,9 +10,6 @@ type RepositorySource interface {
 	// Add a repository located at the specified path on the filesystem.
 	AddLocal(localPath string) error
 
-	// Add a repository hosted on the specified URL.
-	AddRemote(hostUrl *url.URL) error //TODO KDK: Remove
-
 	// Add repositories hosted at the specified URLs, skipping known remotes and duplicates.
 	AddRemotes(hostUrls []*url.URL) error
 
