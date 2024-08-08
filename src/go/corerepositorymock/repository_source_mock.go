@@ -13,7 +13,6 @@ import (
 func NewRepositorySource() *RepositorySource {
 	return &RepositorySource{
 		addLocalCalls:  make([]string, 0),
-		addLocalErrors: make(map[string]error),
 		addRemoteCalls: make([]*url.URL, 0),
 		ListLocalPaths: make([]string, 0),
 		ListRemoteUrls: make([]*url.URL, 0),
@@ -23,7 +22,6 @@ func NewRepositorySource() *RepositorySource {
 // Mock implementation for testing with RepositorySource.
 type RepositorySource struct {
 	addLocalCalls   []string
-	addLocalErrors  map[string]error
 	addLocalsError  error
 	addRemoteCalls  []*url.URL
 	addRemotesError error
@@ -35,7 +33,7 @@ type RepositorySource struct {
 
 func (source *RepositorySource) AddLocal(localPath string) error {
 	source.addLocalCalls = append(source.addLocalCalls, localPath)
-	return source.addLocalErrors[localPath]
+	return nil
 }
 
 func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
@@ -43,8 +41,8 @@ func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
 	Expect(source.addLocalCalls).To(ConsistOf(expectedPaths))
 }
 
-func (source *RepositorySource) AddLocalFails(path string, err error) {
-	source.addLocalErrors[path] = err
+func (source *RepositorySource) AddLocalsFails(err error) {
+	source.addLocalsError = err
 }
 
 func (source *RepositorySource) AddLocals(localPaths []string) error {

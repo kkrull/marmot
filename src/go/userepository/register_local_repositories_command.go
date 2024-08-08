@@ -12,11 +12,9 @@ type RegisterLocalRepositoriesCommand struct {
 }
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths ...string) error {
-	for _, localPath := range localPaths {
-		if addErr := cmd.Source.AddLocal(localPath); addErr != nil {
-			return fmt.Errorf("failed to add local repository %s: %w", localPath, addErr)
-		}
+	if addErr := cmd.Source.AddLocals(localPaths); addErr != nil {
+		return fmt.Errorf("failed to add local repositories: %w", addErr)
+	} else {
+		return nil
 	}
-
-	return nil
 }

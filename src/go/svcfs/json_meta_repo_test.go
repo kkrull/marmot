@@ -73,10 +73,10 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		BeforeEach(func() {
 			Expect(createMetaRepo(testFsRoot)).To(Succeed())
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
-			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
+			Expect(subject.AddLocals([]string{"/path/to/one"})).To(Succeed())
 		})
 
-		It("#AddLocals skips paths that have already been added", Pending, func() {})
+		It("#AddLocals skips paths that have already been added", Pending)
 
 		It("#ListLocal includes each registered local repository", func() {
 			returned := expect.NoError(subject.ListLocal())
