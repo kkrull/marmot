@@ -14,51 +14,42 @@ import (
 
 var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 	var (
-		factory use.CommandFactory
-		source  *mock.RepositorySource
 		subject *userepository.RegisterRemoteRepositoriesCommand
+		source  *mock.RepositorySource
 	)
+
+	validUrls := func() []*url.URL {
+		return testdata.NewURLs("https://github.com/actions/checkout")
+	}
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = use.NewCommandFactory().WithRepositorySource(source)
+		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterRemoteRepositories())
 	})
 
 	Describe("#Run", func() {
 		It("registers remote repositories at the given URLs", func() {
-			registered := testdata.NewURLs(
+			given := testdata.NewURLs(
 				"https://github.com/actions/checkout",
 				"https://github.com/actions/setup-go",
 			)
 
-			subject.Run(registered)
-			source.AddRemoteExpected("https://github.com/actions/checkout")
-			source.AddRemoteExpected("https://github.com/actions/setup-go")
-		})
-
-		It("stops and returns an error, when failing to register a repository", func() {
-			registered := testdata.NewURLs(
-				"https://github.com/somebody/repo1",
-				"https://github.com/somebody/repo2",
+			subject.Run(given)
+			source.AddRemotesExpected(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-go",
 			)
-
-			source.AddRemoteFails("https://github.com/somebody/repo1", "bang!")
-			Expect(subject.Run(registered)).To(
-				MatchError(ContainSubstring("failed to register https://github.com/somebody/repo1")))
-
-			source.AddRemoteExpected("https://github.com/somebody/repo1")
-			source.AddRemoteNotExpected("https://github.com/somebody/repo2")
 		})
 
-		It("returns nil, when there are no errors", func() {
+		It("returns no error, upon success", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
+		})
+
+		It("returns an error, when adding repositories fails", func() {
+			source.AddRemotesFails("bang!")
+			Expect(subject.Run(validUrls())).To(
+				MatchError("failed to register remote repositories; bang!"))
 		})
 	})
 })
-
-/* Test data */
-
-func validUrls() []*url.URL {
-	return testdata.NewURLs("https://github.com/actions/checkout")
-}

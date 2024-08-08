@@ -18,7 +18,7 @@ func runRegister(config cmdroot.CliConfig) error {
 	} else {
 		argsThenInputLines := config.ArgsTrimmed()
 		argsThenInputLines = append(argsThenInputLines, config.InputLinesTrimmed()...)
-		return appCmd.Run(argsThenInputLines...)
+		return appCmd.Run(argsThenInputLines)
 	}
 }
 

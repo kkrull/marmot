@@ -3,6 +3,7 @@ package svcfs
 import (
 	"fmt"
 	"net/url"
+	"slices"
 
 	core "github.com/kkrull/marmot/corerepository"
 )
@@ -18,7 +19,26 @@ type JsonMetaRepo struct {
 
 /* Local repositories */
 
-func (repo *JsonMetaRepo) AddLocal(localPath string) error {
+func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
+	knownPaths := make([]string, 0)
+	if alreadyRegistered, listErr := repo.ListLocal(); listErr == nil {
+		knownPaths = append(knownPaths, alreadyRegistered.LocalPaths()...)
+	}
+
+	for _, localPath := range localPaths {
+		if isDuplicate := slices.Contains(knownPaths, localPath); isDuplicate {
+			continue
+		} else if err := repo.addLocal(localPath); err != nil {
+			return err
+		} else {
+			knownPaths = append(knownPaths, localPath)
+		}
+	}
+
+	return nil
+}
+
+func (repo *JsonMetaRepo) addLocal(localPath string) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {
@@ -45,7 +65,26 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 
 /* Remote repositories */
 
-func (repo *JsonMetaRepo) AddRemote(hostUrl *url.URL) error {
+func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
+	knownHrefs := make([]string, 0)
+	if alreadyRegistered, listErr := repo.ListRemote(); listErr == nil {
+		knownHrefs = append(knownHrefs, alreadyRegistered.RemoteHrefs()...)
+	}
+
+	for _, hostUrl := range hostUrls {
+		if isDuplicate := slices.Contains(knownHrefs, hostUrl.String()); isDuplicate {
+			continue
+		} else if err := repo.addRemote(hostUrl); err != nil {
+			return err
+		} else {
+			knownHrefs = append(knownHrefs, hostUrl.String())
+		}
+	}
+
+	return nil
+}
+
+func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {

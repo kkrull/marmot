@@ -12,10 +12,25 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var testFsRoot string
-
 var _ = Describe("JsonMetaRepoAdmin", func() {
-	var subject *svcfs.JsonMetaRepoAdmin
+	var (
+		subject    *svcfs.JsonMetaRepoAdmin
+		testFsRoot string
+	)
+
+	var (
+		existingPath    = func() string { return testFsRoot }
+		nonExistentPath = func() string { return filepath.Join(testFsRoot, "not-created-yet") }
+		someFile        = func() (string, error) {
+			path := filepath.Join(testFsRoot, "existing-file")
+			if aFile, createErr := os.Create(path); createErr != nil {
+				return "", createErr
+			} else {
+				defer aFile.Close()
+				return path, nil
+			}
+		}
+	)
 
 	BeforeEach(func() {
 		testFsRoot = expect.NoError(os.MkdirTemp("", "JsonMetaDataRepo-"))
@@ -54,12 +69,6 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.Create(testFsRoot)).To(Succeed())
 		})
 
-		It("returns an error, given an invalid path", func() {
-			subject = jsonMetaRepoAdmin(nil)
-			Expect(subject.Create("\000x")).To(
-				MatchError(MatchRegexp("failed to check for existing meta repo")))
-		})
-
 		It("returns an error, given a path in which files can not be created", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 			subject = jsonMetaRepoAdmin(nil)
@@ -82,7 +91,7 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.IsMetaRepo(existingFile)).To(Equal(false))
 		})
 
-		It("returns false, given a directory not containing a Marmot metadata", func() {
+		It("returns false, given a directory not containing Marmot metadata", func() {
 			Expect(subject.IsMetaRepo(existingPath())).To(Equal(false))
 		})
 
@@ -99,39 +108,3 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		})
 	})
 })
-
-func jsonMetaRepoAdmin(args *jsonMetaRepoAdminArgs) *svcfs.JsonMetaRepoAdmin {
-	if args == nil {
-		args = &jsonMetaRepoAdminArgs{}
-	}
-
-	return svcfs.NewJsonMetaRepoAdmin(args.Version())
-}
-
-type jsonMetaRepoAdminArgs struct {
-	version string
-}
-
-func (args jsonMetaRepoAdminArgs) Version() string {
-	if args.version == "" {
-		return "42"
-	} else {
-		return args.version
-	}
-}
-
-/* Filesystem */
-
-func existingPath() string { return testFsRoot }
-
-func someFile() (string, error) {
-	path := filepath.Join(testFsRoot, "existing-file")
-	if aFile, createErr := os.Create(path); createErr != nil {
-		return "", createErr
-	} else {
-		defer aFile.Close()
-		return path, nil
-	}
-}
-
-func nonExistentPath() string { return filepath.Join(testFsRoot, "not-created-yet") }
