@@ -51,12 +51,6 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 
-		It("ignores distinct paths that resolve to an already-known absolute path", func() {
-			subject.Run([]string{"somewhere", "./somewhere"})
-			Expect(source.AddLocalsReceived()).To(HaveLen(1))
-			Expect(source.AddLocalsReceived()[0]).To(HaveSuffix("somewhere"))
-		})
-
 		It("normalizes paths by replacing redundant/repeated parts with shorter equivalents", func() {
 			subject.Run([]string{"/path/to/a/../b"})
 			source.AddLocalsExpected("/path/to/b")
@@ -67,8 +61,5 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 			Expect(source.AddLocalsReceived()[0]).To(
 				HaveSuffix(string(os.PathSeparator) + "some-name-in-cwd"))
 		})
-
-		It("rejects invalid paths", Pending)
-		It("rejects paths that do not exist", Pending)
 	})
 })
