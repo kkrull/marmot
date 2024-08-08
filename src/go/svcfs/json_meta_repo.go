@@ -45,6 +45,16 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 
 /* Remote repositories */
 
+func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
+	for _, hostUrl := range hostUrls {
+		if err := repo.addRemote(hostUrl); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
@@ -58,16 +68,6 @@ func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
 	} else {
 		return nil
 	}
-}
-
-func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
-	for _, hostUrl := range hostUrls {
-		if err := repo.addRemote(hostUrl); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
