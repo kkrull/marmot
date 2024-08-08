@@ -3,6 +3,7 @@ package userepository
 import (
 	"fmt"
 	"path/filepath"
+	"slices"
 
 	core "github.com/kkrull/marmot/corerepository"
 )
@@ -13,7 +14,18 @@ type RegisterLocalRepositoriesCommand struct {
 }
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
-	if addErr := cmd.Source.AddLocals(normalizePaths(localPaths)); addErr != nil {
+	distinctNormalizedPaths := make([]string, 0)
+	for _, rawPath := range localPaths {
+		if absPath, absErr := filepath.Abs(rawPath); absErr != nil {
+			return absErr
+		} else if isDuplicate := slices.Contains(distinctNormalizedPaths, absPath); isDuplicate {
+			continue
+		} else {
+			distinctNormalizedPaths = append(distinctNormalizedPaths, absPath)
+		}
+	}
+
+	if addErr := cmd.Source.AddLocals(distinctNormalizedPaths); addErr != nil {
 		return fmt.Errorf("failed to add local repositories; %w", addErr)
 	} else {
 		return nil

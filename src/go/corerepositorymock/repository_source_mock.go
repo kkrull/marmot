@@ -50,6 +50,12 @@ func (source *RepositorySource) AddLocalsFails(err error) {
 	source.addLocalsError = err
 }
 
+func (source RepositorySource) AddLocalsReceived() []string {
+	givenPaths := make([]string, len(source.addLocalCalls))
+	copy(givenPaths, source.addLocalCalls)
+	return givenPaths
+}
+
 func (source *RepositorySource) ListLocal() (core.Repositories, error) {
 	repositories := make([]core.Repository, len(source.ListLocalPaths))
 	for i, localPath := range source.ListLocalPaths {
