@@ -51,7 +51,7 @@ outer:
 	for _, hostUrl := range hostUrls {
 		for _, alreadyAdded := range added {
 			if alreadyAdded == hostUrl.String() {
-				break outer
+				continue outer
 			}
 		}
 

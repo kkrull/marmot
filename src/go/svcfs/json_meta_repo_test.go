@@ -44,10 +44,14 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			subject.AddRemotes(testdata.NewURLs(
 				"https://github.com/me/duplicate",
 				"https://github.com/me/duplicate",
+				"https://github.com/me/distinct",
 			))
 
 			listing := expect.NoError(subject.ListRemote())
-			Expect(listing.RemoteHrefs()).To(ConsistOf("https://github.com/me/duplicate"))
+			Expect(listing.RemoteHrefs()).To(ConsistOf(
+				"https://github.com/me/duplicate",
+				"https://github.com/me/distinct",
+			))
 		})
 	})
 
