@@ -12,10 +12,23 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var testFsRoot string
-
 var _ = Describe("JsonMetaRepoAdmin", func() {
 	var subject *svcfs.JsonMetaRepoAdmin
+	var testFsRoot string
+
+	var (
+		existingPath    = func() string { return testFsRoot }
+		nonExistentPath = func() string { return filepath.Join(testFsRoot, "not-created-yet") }
+		someFile        = func() (string, error) {
+			path := filepath.Join(testFsRoot, "existing-file")
+			if aFile, createErr := os.Create(path); createErr != nil {
+				return "", createErr
+			} else {
+				defer aFile.Close()
+				return path, nil
+			}
+		}
+	)
 
 	BeforeEach(func() {
 		testFsRoot = expect.NoError(os.MkdirTemp("", "JsonMetaDataRepo-"))
@@ -93,39 +106,3 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 		})
 	})
 })
-
-func jsonMetaRepoAdmin(args *jsonMetaRepoAdminArgs) *svcfs.JsonMetaRepoAdmin {
-	if args == nil {
-		args = &jsonMetaRepoAdminArgs{}
-	}
-
-	return svcfs.NewJsonMetaRepoAdmin(args.Version())
-}
-
-type jsonMetaRepoAdminArgs struct {
-	version string
-}
-
-func (args jsonMetaRepoAdminArgs) Version() string {
-	if args.version == "" {
-		return "42"
-	} else {
-		return args.version
-	}
-}
-
-/* Filesystem */
-
-func existingPath() string { return testFsRoot }
-
-func someFile() (string, error) {
-	path := filepath.Join(testFsRoot, "existing-file")
-	if aFile, createErr := os.Create(path); createErr != nil {
-		return "", createErr
-	} else {
-		defer aFile.Close()
-		return path, nil
-	}
-}
-
-func nonExistentPath() string { return filepath.Join(testFsRoot, "not-created-yet") }

@@ -2,7 +2,6 @@ package svcfs_test
 
 import (
 	"os"
-	"path/filepath"
 
 	"github.com/kkrull/marmot/svcfs"
 	testdata "github.com/kkrull/marmot/testsupportdata"
@@ -14,15 +13,13 @@ import (
 
 var _ = Describe("JsonMetaDataRepo", func() {
 	var (
-		subject      *svcfs.JsonMetaRepo
-		admin        *svcfs.JsonMetaRepoAdmin
-		metaRepoPath string
-		testFsRoot   string
+		subject    *svcfs.JsonMetaRepo
+		admin      *svcfs.JsonMetaRepoAdmin
+		testFsRoot string
 	)
 
 	BeforeEach(func() {
 		testFsRoot = expect.NoError(os.MkdirTemp("", "JsonMetaDataRepo-"))
-		metaRepoPath = filepath.Join(testFsRoot, "meta")
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
@@ -34,8 +31,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = jsonMetaRepoAdmin(nil)
-			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
-			Expect(admin.Create(metaRepoPath)).To(Succeed())
+			subject = svcfs.NewJsonMetaRepo(testFsRoot)
+			Expect(admin.Create(testFsRoot)).To(Succeed())
 		})
 
 		It("#ListLocal returns empty", func() {
@@ -52,8 +49,8 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when local repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = jsonMetaRepoAdmin(nil)
-			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
-			Expect(admin.Create(metaRepoPath)).To(Succeed())
+			subject = svcfs.NewJsonMetaRepo(testFsRoot)
+			Expect(admin.Create(testFsRoot)).To(Succeed())
 
 			Expect(subject.AddLocal("/path/to/one")).To(Succeed())
 		})
@@ -69,13 +66,14 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	Context("when remote repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = jsonMetaRepoAdmin(nil)
-			subject = svcfs.NewJsonMetaRepo(metaRepoPath)
-			Expect(admin.Create(metaRepoPath)).To(Succeed())
+			subject = svcfs.NewJsonMetaRepo(testFsRoot)
+			Expect(admin.Create(testFsRoot)).To(Succeed())
 
 			given := testdata.NewURLs(
 				"https://github.com/me/a",
 				"https://github.com/me/b",
 			)
+
 			Expect(subject.AddRemotes(given)).To(Succeed())
 		})
 
