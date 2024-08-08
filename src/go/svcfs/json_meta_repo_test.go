@@ -26,6 +26,11 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
+	Describe("#AddRemotes", func() {
+		It("adds only distinct URLs, instead of adding duplicates", Pending)
+		It("adds only new URLs that don't exist yet", Pending)
+	})
+
 	Context("when no repositories have been registered", func() {
 		BeforeEach(func() {
 			admin = jsonMetaRepoAdmin(nil)
