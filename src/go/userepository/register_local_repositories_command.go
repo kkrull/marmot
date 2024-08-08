@@ -11,7 +11,7 @@ type RegisterLocalRepositoriesCommand struct {
 	Source core.RepositorySource
 }
 
-func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths ...string) error {
+func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
 	if addErr := cmd.Source.AddLocals(localPaths); addErr != nil {
 		return fmt.Errorf("failed to add local repositories; %w", addErr)
 	} else {
