@@ -28,7 +28,21 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	})
 
 	Describe("#AddLocals", func() {
-		It("skips duplicate paths, given 2 or more of the same exact path", Pending)
+		It("skips duplicate paths, given 2 or more of the same exact path", func() {
+			Expect(createMetaRepo(testFsRoot)).To(Succeed())
+			subject = svcfs.NewJsonMetaRepo(testFsRoot)
+			subject.AddLocals([]string{
+				"/home/me/git/duplicate",
+				"/home/me/git/other",
+				"/home/me/git/duplicate",
+			})
+
+			listing := expect.NoError(subject.ListLocal())
+			Expect(listing.LocalPaths()).To(ConsistOf(
+				"/home/me/git/duplicate",
+				"/home/me/git/other",
+			))
+		})
 	})
 
 	Describe("#AddRemotes", func() {

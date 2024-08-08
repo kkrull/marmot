@@ -20,9 +20,14 @@ type JsonMetaRepo struct {
 /* Local repositories */
 
 func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
+	addedPaths := make([]string, 0)
 	for _, localPath := range localPaths {
-		if err := repo.addLocal(localPath); err != nil {
+		if slices.Contains(addedPaths, localPath) {
+			continue
+		} else if err := repo.addLocal(localPath); err != nil {
 			return err
+		} else {
+			addedPaths = append(addedPaths, localPath)
 		}
 	}
 
