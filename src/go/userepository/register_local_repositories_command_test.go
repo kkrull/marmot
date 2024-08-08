@@ -64,7 +64,8 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		It("resolves relative paths to absolute paths", func() {
 			subject.Run([]string{"some-name-in-cwd"})
-			source.AddLocalExpectedM(HaveSuffix(string(os.PathSeparator) + "some-name-in-cwd"))
+			Expect(source.AddLocalsReceived()[0]).To(
+				HaveSuffix(string(os.PathSeparator) + "some-name-in-cwd"))
 		})
 
 		It("rejects invalid paths", Pending)
