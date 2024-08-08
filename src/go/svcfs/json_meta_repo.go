@@ -3,6 +3,7 @@ package svcfs
 import (
 	"fmt"
 	"net/url"
+	"slices"
 
 	core "github.com/kkrull/marmot/corerepository"
 )
@@ -47,15 +48,10 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 
 func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 	added := make([]string, 0)
-outer:
 	for _, hostUrl := range hostUrls {
-		for _, alreadyAdded := range added {
-			if alreadyAdded == hostUrl.String() {
-				continue outer
-			}
-		}
-
-		if err := repo.addRemote(hostUrl); err != nil {
+		if isDuplicate := slices.Contains(added, hostUrl.String()); isDuplicate {
+			continue
+		} else if err := repo.addRemote(hostUrl); err != nil {
 			return err
 		} else {
 			added = append(added, hostUrl.String())
