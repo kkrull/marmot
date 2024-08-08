@@ -18,6 +18,10 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 		source  *mock.RepositorySource
 	)
 
+	validUrls := func() []*url.URL {
+		return testdata.NewURLs("https://github.com/actions/checkout")
+	}
+
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
 		factory := use.NewCommandFactory().WithRepositorySource(source)
@@ -49,9 +53,3 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 		})
 	})
 })
-
-/* Test data */
-
-func validUrls() []*url.URL {
-	return testdata.NewURLs("https://github.com/actions/checkout")
-}
