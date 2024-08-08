@@ -19,6 +19,7 @@ type JsonMetaRepoAdmin struct {
 
 /* MetaDataAdmin */
 
+// TODO KDK: remove excess checks and go for it
 func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
 	marmotDataDir := metaDataDir(repositoryDir)
 	_, statErr := os.Stat(marmotDataDir)
