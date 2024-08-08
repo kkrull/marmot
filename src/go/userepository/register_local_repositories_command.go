@@ -2,6 +2,7 @@ package userepository
 
 import (
 	"fmt"
+	"path/filepath"
 
 	core "github.com/kkrull/marmot/corerepository"
 )
@@ -12,9 +13,18 @@ type RegisterLocalRepositoriesCommand struct {
 }
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
-	if addErr := cmd.Source.AddLocals(localPaths); addErr != nil {
+	if addErr := cmd.Source.AddLocals(normalizePaths(localPaths)); addErr != nil {
 		return fmt.Errorf("failed to add local repositories; %w", addErr)
 	} else {
 		return nil
 	}
+}
+
+func normalizePaths(rawPaths []string) []string {
+	normalized := make([]string, len(rawPaths))
+	for i, rawPath := range rawPaths {
+		normalized[i] = filepath.Clean(rawPath)
+	}
+
+	return normalized
 }

@@ -28,6 +28,13 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
+		It("accepts absolute and relative paths", func() {
+			Expect(subject.Run([]string{
+				"/home/me/absolute",
+				"../git/relative",
+			})).To(Succeed())
+		})
+
 		It("adds local repositories to the source, for the given paths", func() {
 			subject.Run([]string{"/path/to/a", "/path/to/b"})
 			source.AddLocalsExpected("/path/to/a", "/path/to/b")
@@ -43,7 +50,11 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 
-		It("accepts absolute paths", Pending)
+		It("normalizes paths", func() {
+			subject.Run([]string{"/path/to/a/../b"})
+			source.AddLocalsExpected("/path/to/b")
+		})
+
 		It("resolves relative paths", Pending)
 		It("rejects invalid paths", Pending)
 		It("rejects paths that do not exist", Pending)
