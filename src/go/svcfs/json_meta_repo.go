@@ -48,6 +48,10 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 
 func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 	added := make([]string, 0)
+	if knownRemotes, listErr := repo.ListRemote(); listErr == nil {
+		added = append(added, knownRemotes.RemoteHrefs()...)
+	}
+
 	for _, hostUrl := range hostUrls {
 		if isDuplicate := slices.Contains(added, hostUrl.String()); isDuplicate {
 			continue

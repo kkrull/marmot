@@ -96,11 +96,19 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			Expect(subject.AddRemotes(given)).To(Succeed())
 		})
 
-		It("#AddRemotes skips URLs that have already been added", Pending)
+		It("#AddRemotes skips URLs that have already been added", func() {
+			subject.AddRemotes(testdata.NewURLs("https://github.com/me/a"))
+
+			listing := expect.NoError(subject.ListRemote())
+			Expect(listing.RemoteHrefs()).To(ConsistOf(
+				"https://github.com/me/a",
+				"https://github.com/me/b",
+			))
+		})
 
 		It("#ListRemote includes each registered remote", func() {
-			listTwo := expect.NoError(subject.ListRemote())
-			Expect(listTwo.RemoteHrefs()).To(ConsistOf(
+			listing := expect.NoError(subject.ListRemote())
+			Expect(listing.RemoteHrefs()).To(ConsistOf(
 				"https://github.com/me/a",
 				"https://github.com/me/b",
 			))
