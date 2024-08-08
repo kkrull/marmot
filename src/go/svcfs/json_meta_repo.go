@@ -46,9 +46,19 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 /* Remote repositories */
 
 func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
+	added := make([]string, 0)
+outer:
 	for _, hostUrl := range hostUrls {
+		for _, alreadyAdded := range added {
+			if alreadyAdded == hostUrl.String() {
+				break outer
+			}
+		}
+
 		if err := repo.addRemote(hostUrl); err != nil {
 			return err
+		} else {
+			added = append(added, hostUrl.String())
 		}
 	}
 

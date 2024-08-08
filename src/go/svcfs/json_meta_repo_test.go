@@ -35,7 +35,20 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	})
 
 	Describe("#AddRemotes", func() {
-		It("ignores duplicate URLs, given 2 or more of the same URL", Pending)
+		BeforeEach(func() {
+			Expect(createMetaRepo(testFsRoot)).To(Succeed())
+			subject = svcfs.NewJsonMetaRepo(testFsRoot)
+		})
+
+		It("skips duplicate URLs, given 2 or more of the same URL", func() {
+			subject.AddRemotes(testdata.NewURLs(
+				"https://github.com/me/duplicate",
+				"https://github.com/me/duplicate",
+			))
+
+			listing := expect.NoError(subject.ListRemote())
+			Expect(listing.RemoteHrefs()).To(ConsistOf("https://github.com/me/duplicate"))
+		})
 	})
 
 	Context("when no repositories have been registered", func() {
