@@ -54,12 +54,6 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.Create(testFsRoot)).To(Succeed())
 		})
 
-		It("returns an error, given an invalid path", func() {
-			subject = jsonMetaRepoAdmin(nil)
-			Expect(subject.Create("\000x")).To(
-				MatchError(MatchRegexp("failed to check for existing meta repo")))
-		})
-
 		It("returns an error, given a path in which files can not be created", func() {
 			Expect(os.Chmod(testFsRoot, 0o555)).To(Succeed())
 			subject = jsonMetaRepoAdmin(nil)
@@ -82,7 +76,7 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 			Expect(subject.IsMetaRepo(existingFile)).To(Equal(false))
 		})
 
-		It("returns false, given a directory not containing a Marmot metadata", func() {
+		It("returns false, given a directory not containing Marmot metadata", func() {
 			Expect(subject.IsMetaRepo(existingPath())).To(Equal(false))
 		})
 

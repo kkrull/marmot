@@ -19,28 +19,18 @@ type JsonMetaRepoAdmin struct {
 
 /* MetaDataAdmin */
 
-// TODO KDK: remove excess checks and go for it
 func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
-	marmotDataDir := metaDataDir(repositoryDir)
-	_, statErr := os.Stat(marmotDataDir)
-	if errors.Is(statErr, fs.ErrNotExist) {
-		return initDirectory(metaDataFile(repositoryDir), InitMetaRepoData(admin.version))
-	} else if statErr != nil {
-		return fmt.Errorf("failed to check for existing meta repo %s; %w", repositoryDir, statErr)
-	} else {
-		// Ignore an existing meta repo, for now
-		return nil
-	}
+	return initDirectory(
+		metaDataFile(repositoryDir),
+		InitMetaRepoData(admin.version))
 }
 
 func initDirectory(metaDataFile string, rootObject *rootObjectData) error {
 	metaDataDir := path.Dir(metaDataFile)
 	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", metaDataDir, dirErr)
-	} else if writeErr := rootObject.WriteTo(metaDataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", metaDataFile, writeErr)
 	} else {
-		return nil
+		return rootObject.WriteTo(metaDataFile)
 	}
 }
 
