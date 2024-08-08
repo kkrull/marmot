@@ -43,14 +43,8 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			Expect(subject.Run(validUrls())).To(Succeed())
 		})
 
-		//could be unreachable behind corporate firewall for now, but maybe that doesn't matter?
-		It("rejects URLs that are not Git repositories?", Pending)
-
 		//duplicating URLs doesn't make sense (so it's a business rule), but the repository source will do this atomically anyway
 		It("skips hosts that have already been added?", Pending)
-
-		//no news is good news on a CLI, but a web UI might show some sort of confirmation status.
-		It("reports the URLs that were actually added?", Pending)
 
 		It("stops and returns an error, after when adding a repository fails", func() {
 			registered := testdata.NewURLs(
