@@ -3,6 +3,7 @@ package corerepository
 import "net/url"
 
 // A source of Git repositories that a meta repo might care about.
+//   - Remote repository URLs are distinct.
 type RepositorySource interface {
 	// TODO KDK: Consider adding #Add(Repository)
 
@@ -10,7 +11,10 @@ type RepositorySource interface {
 	AddLocal(localPath string) error
 
 	// Add a repository hosted on the specified URL.
-	AddRemote(hostUrl *url.URL) error
+	AddRemote(hostUrl *url.URL) error //TODO KDK: Remove
+
+	// Add repositories hosted at the specified URLs, skipping known remotes and duplicates.
+	AddRemotes(hostUrls []*url.URL) error
 
 	// List all known repositories on the local file system, including remotes cloned to known paths.
 	ListLocal() (Repositories, error)

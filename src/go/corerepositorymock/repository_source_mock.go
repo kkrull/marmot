@@ -63,7 +63,12 @@ func (source *RepositorySource) AddRemote(hostUrl *url.URL) error {
 	return source.addRemoteErrors[hostUrl.String()]
 }
 
-func (source *RepositorySource) AddRemoteExpected(expectedHrefs ...string) {
+func (source *RepositorySource) AddRemotes(hostUrls []*url.URL) error {
+	source.addRemoteCalls = append(source.addRemoteCalls, hostUrls...)
+	return nil
+}
+
+func (source *RepositorySource) AddRemotesExpected(expectedHrefs ...string) {
 	ginkgo.GinkgoHelper()
 	actualHrefs := source.addRemoteHrefs()
 	Expect(actualHrefs).To(ConsistOf(expectedHrefs))
