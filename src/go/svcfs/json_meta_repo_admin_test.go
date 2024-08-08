@@ -13,8 +13,10 @@ import (
 )
 
 var _ = Describe("JsonMetaRepoAdmin", func() {
-	var subject *svcfs.JsonMetaRepoAdmin
-	var testFsRoot string
+	var (
+		subject    *svcfs.JsonMetaRepoAdmin
+		testFsRoot string
+	)
 
 	var (
 		existingPath    = func() string { return testFsRoot }
