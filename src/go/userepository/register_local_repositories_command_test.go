@@ -13,14 +13,17 @@ import (
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
-		factory use.CommandFactory
-		source  *mock.RepositorySource
 		subject *userepository.RegisterLocalRepositoriesCommand
+		source  *mock.RepositorySource
 	)
+
+	var validPaths = func() []string {
+		return []string{"/path/to/repo"}
+	}
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory = use.NewCommandFactory().WithRepositorySource(source)
+		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
 	})
 
@@ -31,12 +34,12 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		})
 
 		It("returns no error, upon success", func() {
-			Expect(subject.Run(validPath())).To(Succeed())
+			Expect(subject.Run(validPaths())).To(Succeed())
 		})
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
-			Expect(subject.Run([]string{"/path/to/faulty-repo"})).To(
+			Expect(subject.Run(validPaths())).To(
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 
@@ -47,7 +50,3 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		It("ignores duplicate paths, given distinct paths that resolve to the same absolute path", Pending)
 	})
 })
-
-func validPath() []string {
-	return []string{"/path/to/repo"}
-}
