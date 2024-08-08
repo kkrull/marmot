@@ -21,7 +21,7 @@ type JsonMetaRepo struct {
 
 func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 	for _, localPath := range localPaths {
-		if err := repo.AddLocal(localPath); err != nil {
+		if err := repo.addLocal(localPath); err != nil {
 			return err
 		}
 	}
@@ -29,7 +29,7 @@ func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 	return nil
 }
 
-func (repo *JsonMetaRepo) AddLocal(localPath string) error {
+func (repo *JsonMetaRepo) addLocal(localPath string) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {

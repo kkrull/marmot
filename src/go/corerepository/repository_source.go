@@ -11,9 +11,6 @@ import "net/url"
 type RepositorySource interface {
 	// TODO KDK: Consider adding #Add(Repository)
 
-	// Add a repository located at the specified path on the filesystem.
-	AddLocal(localPath string) error
-
 	// Add repositories located at the specified paths, skipping known paths and exact duplicates.
 	AddLocals(localPaths []string) error
 

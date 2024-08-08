@@ -31,23 +31,18 @@ type RepositorySource struct {
 
 /* Local repositories */
 
-func (source *RepositorySource) AddLocal(localPath string) error {
-	source.addLocalCalls = append(source.addLocalCalls, localPath)
-	return nil
+func (source *RepositorySource) AddLocals(localPaths []string) error {
+	source.addLocalCalls = append(source.addLocalCalls, localPaths...)
+	return source.addLocalsError
 }
 
-func (source *RepositorySource) AddLocalExpected(expectedPaths ...string) {
+func (source *RepositorySource) AddLocalsExpected(expectedPaths ...string) {
 	ginkgo.GinkgoHelper()
 	Expect(source.addLocalCalls).To(ConsistOf(expectedPaths))
 }
 
 func (source *RepositorySource) AddLocalsFails(err error) {
 	source.addLocalsError = err
-}
-
-func (source *RepositorySource) AddLocals(localPaths []string) error {
-	source.addLocalCalls = append(source.addLocalCalls, localPaths...)
-	return source.addLocalsError
 }
 
 func (source *RepositorySource) ListLocal() (core.Repositories, error) {
