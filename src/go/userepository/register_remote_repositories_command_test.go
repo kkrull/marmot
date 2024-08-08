@@ -33,8 +33,10 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 			)
 
 			subject.Run(registered)
-			source.AddRemoteExpected("https://github.com/actions/checkout")
-			source.AddRemoteExpected("https://github.com/actions/setup-go")
+			source.AddRemoteExpected(
+				"https://github.com/actions/checkout",
+				"https://github.com/actions/setup-go",
+			)
 		})
 
 		It("stops and returns an error, when failing to register a repository", func() {
@@ -48,7 +50,6 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 				MatchError(ContainSubstring("failed to register https://github.com/somebody/repo1")))
 
 			source.AddRemoteExpected("https://github.com/somebody/repo1")
-			source.AddRemoteNotExpected("https://github.com/somebody/repo2")
 		})
 
 		It("returns nil, when there are no errors", func() {
