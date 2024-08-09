@@ -37,7 +37,7 @@ func (factory *cmdFactory) WithRepositorySource(repositorySource corerepository.
 
 func (factory *cmdFactory) repositorySource() (corerepository.RepositorySource, error) {
 	if factory.RepositorySource == nil {
-		return nil, errors.New("AppFactory: missing RepositorySource")
+		return nil, errors.New("missing RepositorySource")
 	} else {
 		return factory.RepositorySource, nil
 	}
@@ -47,7 +47,7 @@ func (factory *cmdFactory) repositorySource() (corerepository.RepositorySource, 
 
 func (factory *cmdFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
 	if factory.MetaDataAdmin == nil {
-		return nil, errors.New("AppFactory: missing MetaDataAdmin")
+		return nil, errors.New("missing MetaDataAdmin")
 	} else {
 		return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
 	}
