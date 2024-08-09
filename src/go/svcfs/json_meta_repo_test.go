@@ -33,7 +33,11 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
+	It("uses a separate file for local, machine-specific metadata", Pending)
+
 	Describe("#AddLocals", func() {
+		It("associates a local repository with a known remote, given a remote with the same URL as the local repo's remotes")
+
 		It("skips duplicate paths, given 2 or more of the same exact path", func() {
 			Expect(createMetaRepo(testFsRoot)).To(Succeed())
 			subject = svcfs.NewJsonMetaRepo(testFsRoot)
