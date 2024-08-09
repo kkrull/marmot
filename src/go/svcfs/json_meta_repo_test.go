@@ -54,6 +54,10 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			))
 		})
 
+		//The cwd could disappear since this is a CLI program, which could cause os.Abs to fail.
+		//https://stackoverflow.com/a/75753434/112682
+		It("returns an error when the current working directory can not be obtained", Pending)
+
 		It("returns an error, given a meta repo path that does not exist", func() {
 			missingPath := filepath.Join(testFsRoot, "missing")
 			_, statErr := os.Stat(missingPath)
