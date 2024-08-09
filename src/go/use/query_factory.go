@@ -53,7 +53,7 @@ func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemo
 
 func (factory *queryFactory) repositorySource() (corerepository.RepositorySource, error) {
 	if factory.RepositorySource == nil {
-		return nil, errors.New("QueryFactory: missing RepositorySource")
+		return nil, errors.New("missing RepositorySource")
 	} else {
 		return factory.RepositorySource, nil
 	}

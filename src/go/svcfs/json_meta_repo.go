@@ -39,28 +39,18 @@ func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 }
 
 func (repo *JsonMetaRepo) addLocal(localPath string) error {
-	var rootObject *rootObjectData
-	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
-	if readErr != nil {
-		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
-	}
-
-	rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
-	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
-	} else {
-		return nil
-	}
+	return repo.updateFile(func(rootObject *rootObjectData) {
+		rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
+	})
 }
 
 func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
-	if rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile); readErr != nil {
-		return nil, fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
-	} else if repositories, mapErr := rootObject.MetaRepo.MapLocalRepositories(); mapErr != nil {
-		return nil, fmt.Errorf("failed to map to core model; %w", mapErr)
-	} else {
-		return repositories, nil
-	}
+	return queryFile(
+		repo.metaDataFile,
+		core.NoRepositories(),
+		func(rootObject *rootObjectData) (core.Repositories, error) {
+			return rootObject.MetaRepo.MapLocalRepositories()
+		})
 }
 
 /* Remote repositories */
@@ -85,26 +75,49 @@ func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 }
 
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
+	return repo.updateFile(func(rootObject *rootObjectData) {
+		rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
+	})
+}
+
+func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
+	return queryFile(
+		repo.metaDataFile,
+		core.NoRepositories(),
+		func(rootObject *rootObjectData) (core.Repositories, error) {
+			return rootObject.MetaRepo.MapRemoteRepositories()
+		})
+}
+
+/* I/O */
+
+func queryFile[V any](
+	metaDataFile string,
+	defaultValue V,
+	queryData func(*rootObjectData) (V, error),
+) (V, error) {
+	if rootObject, readErr := ReadMetaRepoFile(metaDataFile); readErr != nil {
+		return defaultValue, fmt.Errorf("failed to read file %s; %w", metaDataFile, readErr)
+	} else if result, queryErr := queryData(rootObject); queryErr != nil {
+		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
+	} else {
+		return result, nil
+	}
+}
+
+type updateDataFn = func(*rootObjectData)
+
+func (repo *JsonMetaRepo) updateFile(updateData updateDataFn) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
 	if readErr != nil {
 		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
 	}
 
-	rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
+	updateData(rootObject)
 	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
 		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
 	} else {
 		return nil
-	}
-}
-
-func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
-	if rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile); readErr != nil {
-		return nil, fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
-	} else if repositories, mapErr := rootObject.MetaRepo.MapRemoteRepositories(); mapErr != nil {
-		return nil, fmt.Errorf("failed to map to core model; %w", mapErr)
-	} else {
-		return repositories, nil
 	}
 }

@@ -1,7 +1,9 @@
 package svcfs_test
 
 import (
+	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/kkrull/marmot/svcfs"
 	testdata "github.com/kkrull/marmot/testsupportdata"
@@ -17,9 +19,13 @@ var _ = Describe("JsonMetaDataRepo", func() {
 		testFsRoot string
 	)
 
-	var createMetaRepo = func(path string) error {
+	createMetaRepo := func(path string) error {
 		admin := jsonMetaRepoAdmin(nil)
 		return admin.Create(path)
+	}
+
+	validPath := func() []string {
+		return []string{os.TempDir()}
 	}
 
 	BeforeEach(func() {
@@ -42,6 +48,16 @@ var _ = Describe("JsonMetaDataRepo", func() {
 				"/home/me/git/duplicate",
 				"/home/me/git/other",
 			))
+		})
+
+		It("returns an error, given a meta repo path that does not exist", func() {
+			missingPath := filepath.Join(testFsRoot, "missing")
+			_, statErr := os.Stat(missingPath)
+			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
+
+			subject = svcfs.NewJsonMetaRepo(missingPath)
+			Expect(subject.AddLocals(validPath())).To(
+				MatchError(ContainSubstring("failed to read file")))
 		})
 	})
 
