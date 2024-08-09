@@ -39,18 +39,9 @@ func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 }
 
 func (repo *JsonMetaRepo) addLocal(localPath string) error {
-	var rootObject *rootObjectData
-	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
-	if readErr != nil {
-		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
-	}
-
-	rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
-	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
-	} else {
-		return nil
-	}
+	return repo.updateFile(func(rootObject *rootObjectData) {
+		rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
+	})
 }
 
 func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
@@ -85,18 +76,9 @@ func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 }
 
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
-	var rootObject *rootObjectData
-	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
-	if readErr != nil {
-		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
-	}
-
-	rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
-	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
-	} else {
-		return nil
-	}
+	return repo.updateFile(func(rootObject *rootObjectData) {
+		rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
+	})
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
@@ -106,5 +88,24 @@ func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
 		return nil, fmt.Errorf("failed to map to core model; %w", mapErr)
 	} else {
 		return repositories, nil
+	}
+}
+
+/* I/O */
+
+type updateDataFn = func(*rootObjectData)
+
+func (repo *JsonMetaRepo) updateFile(updateData updateDataFn) error {
+	var rootObject *rootObjectData
+	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
+	if readErr != nil {
+		return fmt.Errorf("failed to read file %s; %w", repo.metaDataFile, readErr)
+	}
+
+	updateData(rootObject)
+	if writeErr := rootObject.WriteTo(repo.metaDataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", repo.metaDataFile, writeErr)
+	} else {
+		return nil
 	}
 }
