@@ -105,8 +105,6 @@ func queryFile[V any](
 	}
 }
 
-type updateDataFn = func(*rootObjectData)
-
 func (repo *JsonMetaRepo) updateFile(updateData updateDataFn) error {
 	var rootObject *rootObjectData
 	rootObject, readErr := ReadMetaRepoFile(repo.metaDataFile)
@@ -121,3 +119,5 @@ func (repo *JsonMetaRepo) updateFile(updateData updateDataFn) error {
 		return nil
 	}
 }
+
+type updateDataFn = func(*rootObjectData)
