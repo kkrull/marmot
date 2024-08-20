@@ -36,7 +36,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 	It("uses a separate file for local, machine-specific metadata", Pending)
 
 	Describe("#AddLocals", func() {
-		It("associates a local repository with a known remote, given a remote with the same URL as the local repo's remotes")
+		It("associates a local repository with a known remote, given a remote with the same URL as the local repo's remotes", Pending)
 
 		It("skips duplicate paths, given 2 or more of the same exact path", func() {
 			Expect(createMetaRepo(testFsRoot)).To(Succeed())
