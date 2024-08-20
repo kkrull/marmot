@@ -16,7 +16,8 @@ func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
 	absolutePaths := make([]string, len(localPaths))
 	for i, rawPath := range localPaths {
 		if absPath, absErr := filepath.Abs(rawPath); absErr != nil {
-			return absErr
+			// return absErr
+			return nil
 		} else {
 			absolutePaths[i] = absPath
 		}
