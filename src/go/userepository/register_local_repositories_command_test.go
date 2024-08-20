@@ -3,6 +3,7 @@ package userepository_test
 import (
 	"errors"
 	"os"
+	"path/filepath"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
@@ -65,7 +66,14 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 			Expect(subject.Run(validPaths())).To(Succeed())
 		})
 
-		It("returns an error, given a meta repo path that does not exist", Pending)
+		It("returns an error, given a local path that does not exist", func() {
+			missingPath := filepath.Join(testFsRoot, "missing")
+			_, statErr := os.Stat(missingPath)
+			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
+
+			Expect(subject.Run([]string{missingPath})).To(
+				MatchError(ContainSubstring("path does not exist")))
+		})
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))

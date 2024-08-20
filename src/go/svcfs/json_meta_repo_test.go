@@ -54,8 +54,7 @@ var _ = Describe("JsonMetaDataRepo", func() {
 			))
 		})
 
-		//TODO KDK: Move this to command since it's business logic
-		It("returns an error, given a meta repo path that does not exist", Pending, func() {
+		It("returns an error, given a meta repo path that does not exist", func() {
 			missingPath := filepath.Join(testFsRoot, "missing")
 			_, statErr := os.Stat(missingPath)
 			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
