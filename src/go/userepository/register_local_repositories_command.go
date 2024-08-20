@@ -16,8 +16,10 @@ func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
 	absolutePaths := make([]string, len(localPaths))
 	for i, rawPath := range localPaths {
 		if absPath, absErr := filepath.Abs(rawPath); absErr != nil {
-			// return absErr
-			return nil
+			//Happens when os.Getwd fails, such as if the current working directory no longer exists.
+			//However, this is difficult to test in a repeatable, platform-independent way.
+			//https://stackoverflow.com/a/75753434/112682
+			return absErr
 		} else {
 			absolutePaths[i] = absPath
 		}

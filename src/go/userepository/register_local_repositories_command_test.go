@@ -14,9 +14,10 @@ import (
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
-		subject    *userepository.RegisterLocalRepositoriesCommand
-		source     *mock.RepositorySource
-		testFsRoot string
+		subject     *userepository.RegisterLocalRepositoriesCommand
+		originalCwd string
+		source      *mock.RepositorySource
+		testFsRoot  string
 	)
 
 	var validPaths = func() []string {
@@ -30,6 +31,10 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		testFsRoot = expect.NoError(os.MkdirTemp("", "RegisterLocalRepositoriesCommand-"))
 		DeferCleanup(os.RemoveAll, testFsRoot)
+
+		originalCwd = expect.NoError(os.Getwd())
+		Expect(os.Chdir(testFsRoot)).To(Succeed())
+		DeferCleanup(func() error { return os.Chdir(originalCwd) })
 	})
 
 	Describe("#Run", func() {
@@ -58,13 +63,6 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		It("returns no error, upon success", func() {
 			Expect(subject.Run(validPaths())).To(Succeed())
-		})
-
-		It("returns an error when the current working directory can not be obtained", func() {
-			//The cwd could disappear since this is a CLI program, which could cause os.Abs to fail.
-			//https://stackoverflow.com/a/75753434/112682
-			Expect(os.RemoveAll(testFsRoot)).To(Succeed())
-			//TODO KDK: Run the command
 		})
 
 		It("returns an error, given a meta repo path that does not exist", Pending)
