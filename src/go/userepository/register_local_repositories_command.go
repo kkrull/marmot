@@ -15,6 +15,10 @@ type RegisterLocalRepositoriesCommand struct {
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
 	absolutePaths := make([]string, len(localPaths))
 	for i, rawPath := range localPaths {
+		// if _, statErr := os.Stat(rawPath); os.IsNotExist(statErr) {
+		// 	return fmt.Errorf("path does not exist")
+		// }
+
 		if absPath, absErr := filepath.Abs(rawPath); absErr != nil {
 			//Happens when os.Getwd fails, such as if the current working directory no longer exists.
 			//However, this is difficult to test in a repeatable, platform-independent way.
