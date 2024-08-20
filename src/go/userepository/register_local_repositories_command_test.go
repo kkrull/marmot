@@ -14,8 +14,9 @@ import (
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
-		subject *userepository.RegisterLocalRepositoriesCommand
-		source  *mock.RepositorySource
+		subject    *userepository.RegisterLocalRepositoriesCommand
+		source     *mock.RepositorySource
+		testFsRoot string
 	)
 
 	var validPaths = func() []string {
@@ -26,6 +27,9 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		source = mock.NewRepositorySource()
 		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
+
+		testFsRoot = expect.NoError(os.MkdirTemp("", "RegisterLocalRepositoriesCommand-"))
+		DeferCleanup(os.RemoveAll, testFsRoot)
 	})
 
 	Describe("#Run", func() {
@@ -59,6 +63,8 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		//The cwd could disappear since this is a CLI program, which could cause os.Abs to fail.
 		//https://stackoverflow.com/a/75753434/112682
 		It("returns an error when the current working directory can not be obtained", Pending)
+
+		It("returns an error, given a meta repo path that does not exist", Pending)
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
