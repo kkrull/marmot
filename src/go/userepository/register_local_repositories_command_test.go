@@ -21,8 +21,8 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		testFsRoot  string
 	)
 
-	var existingPath = func() []string {
-		return []string{testFsRoot}
+	var existingPath = func() string {
+		return testFsRoot
 	}
 
 	var runV = func(localPaths ...string) error {
@@ -67,7 +67,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		})
 
 		It("returns no error, upon success", func() {
-			Expect(subject.Run(existingPath())).To(Succeed())
+			Expect(runV(existingPath())).To(Succeed())
 		})
 
 		//TODO KDK: The paths for the other tests need to exist now
@@ -82,7 +82,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
-			Expect(runV(existingPath()...)).To(
+			Expect(runV(existingPath())).To(
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 	})
