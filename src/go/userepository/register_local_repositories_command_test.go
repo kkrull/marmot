@@ -25,6 +25,10 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		return []string{testFsRoot}
 	}
 
+	var runV = func(localPaths ...string) error {
+		return subject.Run(localPaths)
+	}
+
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
 		factory := use.NewCommandFactory().WithRepositorySource(source)
@@ -40,24 +44,24 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 	Describe("#Run", func() {
 		It("accepts absolute and relative paths", func() {
-			Expect(subject.Run([]string{
+			Expect(runV(
 				"/home/me/absolute",
 				"../git/relative",
-			})).To(Succeed())
+			)).To(Succeed())
 		})
 
 		It("adds local repositories to the source, for the given paths", func() {
-			subject.Run([]string{"/path/to/a", "/path/to/b"})
+			runV("/path/to/a", "/path/to/b")
 			source.AddLocalsExpected("/path/to/a", "/path/to/b")
 		})
 
 		It("normalizes paths by replacing redundant/repeated parts with shorter equivalents", func() {
-			subject.Run([]string{"/path/to/a/../b"})
+			runV("/path/to/a/../b")
 			source.AddLocalsExpected("/path/to/b")
 		})
 
 		It("resolves relative paths to absolute paths", func() {
-			subject.Run([]string{"some-name-in-cwd"})
+			runV("some-name-in-cwd")
 			Expect(source.AddLocalsReceived()[0]).To(
 				HaveSuffix(string(os.PathSeparator) + "some-name-in-cwd"))
 		})
@@ -72,13 +76,13 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 			_, statErr := os.Stat(missingPath)
 			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
 
-			Expect(subject.Run([]string{missingPath})).To(
+			Expect(runV(missingPath)).To(
 				MatchError(ContainSubstring("path does not exist")))
 		})
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
-			Expect(subject.Run(existingPath())).To(
+			Expect(runV(existingPath()...)).To(
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 	})
