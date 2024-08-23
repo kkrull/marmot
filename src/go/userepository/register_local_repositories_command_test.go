@@ -14,20 +14,34 @@ import (
 )
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
+	//Subject, dependencies, and convenience functions
 	var (
-		subject     *userepository.RegisterLocalRepositoriesCommand
+		source  *mock.RepositorySource
+		subject *userepository.RegisterLocalRepositoriesCommand
+		runV    = func(localPaths ...string) error {
+			return subject.Run(localPaths)
+		}
+	)
+
+	//Test fixture
+	var (
 		originalCwd string
-		source      *mock.RepositorySource
 		testFsRoot  string
 	)
 
-	var validPath = func() string {
-		return testFsRoot
-	}
+	//Paths
+	var (
+		missingPath = func() string {
+			path := filepath.Join(testFsRoot, "missing")
+			_, statErr := os.Stat(path)
+			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
+			return path
+		}
 
-	var runV = func(localPaths ...string) error {
-		return subject.Run(localPaths)
-	}
+		validPath = func() string {
+			return testFsRoot
+		}
+	)
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
@@ -43,11 +57,12 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
-		It("accepts absolute and relative paths", func() {
-			Expect(runV(
-				"/home/me/absolute",
-				"../git/relative",
-			)).To(Succeed())
+		It("accepts absolute paths", func() {
+			Expect(runV("/home/me/absolute")).To(Succeed())
+		})
+
+		It("accepts relative paths", func() {
+			Expect(runV("../git/relative")).To(Succeed())
 		})
 
 		It("adds local repositories to the source, for the given paths", func() {
@@ -72,11 +87,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		//TODO KDK: The paths for the other tests need to exist now
 		It("returns an error, given a local path that does not exist", Pending, func() {
-			missingPath := filepath.Join(testFsRoot, "missing")
-			_, statErr := os.Stat(missingPath)
-			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
-
-			Expect(runV(missingPath)).To(
+			Expect(runV(missingPath())).To(
 				MatchError(ContainSubstring("path does not exist")))
 		})
 
