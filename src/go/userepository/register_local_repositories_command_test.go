@@ -3,9 +3,9 @@ package userepository_test
 import (
 	"errors"
 	"os"
-	"path/filepath"
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
+	"github.com/kkrull/marmot/testsupportdata"
 	expect "github.com/kkrull/marmot/testsupportexpect"
 	"github.com/kkrull/marmot/use"
 	"github.com/kkrull/marmot/userepository"
@@ -27,20 +27,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
 		originalCwd string
 		testFsRoot  string
-	)
-
-	//Paths
-	var (
-		missingPath = func() string {
-			path := filepath.Join(testFsRoot, "missing")
-			_, statErr := os.Stat(path)
-			Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
-			return path
-		}
-
-		validPath = func() string {
-			return testFsRoot
-		}
+		pathFixture *testsupportdata.PathBuilder
 	)
 
 	BeforeEach(func() {
@@ -50,6 +37,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 
 		testFsRoot = expect.NoError(os.MkdirTemp("", "RegisterLocalRepositoriesCommand-"))
 		DeferCleanup(os.RemoveAll, testFsRoot)
+		pathFixture = testsupportdata.NewPathBuilder(testFsRoot)
 
 		originalCwd = expect.NoError(os.Getwd())
 		Expect(os.Chdir(testFsRoot)).To(Succeed())
@@ -57,6 +45,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
+		//TODO KDK: Start expending PathBuilder to take in properties like absolute/relative, existing/not, git repo/not
 		It("accepts absolute paths", func() {
 			Expect(runV("/home/me/absolute")).To(Succeed())
 		})
@@ -82,18 +71,18 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		})
 
 		It("returns no error, upon success", func() {
-			Expect(runV(validPath())).To(Succeed())
+			Expect(runV(pathFixture.Build())).To(Succeed())
 		})
 
 		//TODO KDK: The paths for the other tests need to exist now
 		It("returns an error, given a local path that does not exist", Pending, func() {
-			Expect(runV(missingPath())).To(
+			Expect(runV(pathFixture.MissingPath())).To(
 				MatchError(ContainSubstring("path does not exist")))
 		})
 
 		It("returns an error, when adding repositories fails", func() {
 			source.AddLocalsFails(errors.New("bang!"))
-			Expect(runV(validPath())).To(
+			Expect(runV(pathFixture.Build())).To(
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 	})
