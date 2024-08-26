@@ -1,29 +1,50 @@
 package testsupportdata
 
 import (
-	"errors"
+	"fmt"
 	"os"
-	"path/filepath"
 
-	. "github.com/onsi/gomega"
+	expect "github.com/kkrull/marmot/testsupportexpect"
 )
 
-func NewPathBuilder(testFsRoot string) *PathBuilder {
-	return &PathBuilder{testFsRoot: testFsRoot}
+// Create a fixture that manages a local file system rooted at a path with the given prefix.
+func NewPathBuilder(pathPrefix string) *PathBuilder {
+	return &PathBuilder{pathPrefix: pathPrefix}
 }
 
 // Builds paths on this filesystem, according to specifications.
 type PathBuilder struct {
-	testFsRoot string
+	originalCwd string
+	pathPrefix  string
+	testFsRoot  string
 }
 
-func (builder *PathBuilder) Build() string {
-	return builder.testFsRoot
+/* Builder */
+
+func (builder *PathBuilder) Build() (string, error) {
+	return "/home/user/bogus", nil
 }
 
-func (builder *PathBuilder) MissingPath() string {
-	path := filepath.Join(builder.testFsRoot, "missing")
-	_, statErr := os.Stat(path)
-	Expect(errors.Is(statErr, os.ErrNotExist)).To(BeTrue())
-	return path
+func (builder *PathBuilder) Missing() *PathBuilder {
+	return builder
+}
+
+/* Fixture */
+
+// TODO KDK: Extract states for the directory existing+set or not
+func (builder *PathBuilder) Setup() error {
+	testFsRoot = expect.NoError(os.MkdirTemp("", "RegisterLocalRepositoriesCommand-"))
+	originalCwd = expect.NoError(os.Getwd())
+	Expect(os.Chdir(testFsRoot)).To(Succeed())
+	return nil
+}
+
+func (fixture *PathBuilder) Teardown() error {
+	if chdirErr := os.Chdir(fixture.originalCwd); chdirErr != nil {
+		return fmt.Errorf("failed to pop back to directory %s; %w", fixture.originalCwd, chdirErr)
+	} else if removeErr := os.RemoveAll(fixture.testFsRoot); removeErr != nil {
+		return fmt.Errorf("failed to remove directory %s; %w", fixture.testFsRoot, removeErr)
+	} else {
+		return nil
+	}
 }

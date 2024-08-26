@@ -35,13 +35,9 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
 
-		testFsRoot = expect.NoError(os.MkdirTemp("", "RegisterLocalRepositoriesCommand-"))
-		DeferCleanup(os.RemoveAll, testFsRoot)
-		pathFixture = testsupportdata.NewPathBuilder(testFsRoot)
-
-		originalCwd = expect.NoError(os.Getwd())
-		Expect(os.Chdir(testFsRoot)).To(Succeed())
-		DeferCleanup(func() error { return os.Chdir(originalCwd) })
+		pathFixture = testsupportdata.NewPathBuilder("RegisterLocalRepositoriesCommand")
+		Expect(pathFixture.Setup()).To(Succeed())
+		DeferCleanup(pathFixture.Teardown())
 	})
 
 	Describe("#Run", func() {
@@ -71,18 +67,21 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		})
 
 		It("returns no error, upon success", func() {
-			Expect(runV(pathFixture.Build())).To(Succeed())
+			path := pathFixture.Build()
+			Expect(runV(path)).To(Succeed())
 		})
 
 		//TODO KDK: The paths for the other tests need to exist now
 		It("returns an error, given a local path that does not exist", Pending, func() {
-			Expect(runV(pathFixture.MissingPath())).To(
+			path := pathFixture.Missing().Build()
+			Expect(runV(path)).To(
 				MatchError(ContainSubstring("path does not exist")))
 		})
 
 		It("returns an error, when adding repositories fails", func() {
+			path := pathFixture.Build()
 			source.AddLocalsFails(errors.New("bang!"))
-			Expect(runV(pathFixture.Build())).To(
+			Expect(runV(path)).To(
 				MatchError(ContainSubstring("failed to add local repositories; bang!")))
 		})
 	})
