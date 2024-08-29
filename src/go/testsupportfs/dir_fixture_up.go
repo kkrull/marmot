@@ -24,3 +24,7 @@ func (up *dirFixtureUp) Destroy() (dirFixtureState, error) {
 
 	return &dirFixtureDown{prefix: up.createdWithPrefix}, nil
 }
+
+func (up *dirFixtureUp) PathBuilder() (*PathBuilder, error) {
+	return &PathBuilder{basePath: up.dirPath}, nil
+}

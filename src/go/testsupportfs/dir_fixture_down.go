@@ -27,3 +27,7 @@ func (down *dirFixtureDown) Create() (dirFixtureState, error) {
 func (down *dirFixtureDown) Destroy() (dirFixtureState, error) {
 	return down, nil
 }
+
+func (down *dirFixtureDown) PathBuilder() (*PathBuilder, error) {
+	return nil, fmt.Errorf("test directory starting with <%s> not created yet", down.prefix)
+}

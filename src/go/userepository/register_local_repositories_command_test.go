@@ -15,9 +15,17 @@ import (
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
-		dirFixture *testsupportfs.DirFixture
-		source     *mock.RepositorySource
-		subject    *userepository.RegisterLocalRepositoriesCommand
+		subject *userepository.RegisterLocalRepositoriesCommand
+		runV    = func(paths ...string) error {
+			return subject.Run(paths)
+		}
+	)
+
+	var source *mock.RepositorySource
+
+	var (
+		dirFixture  *testsupportfs.DirFixture
+		pathBuilder *testsupportfs.PathBuilder
 	)
 
 	var validPaths = func() []string {
@@ -28,6 +36,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		dirFixture = testsupportfs.NewDirFixture("RegisterLocalRepositoriesCommand")
 		Expect(dirFixture.Setup()).To(Succeed())
 		DeferCleanup(dirFixture.Teardown)
+		pathBuilder = expect.NoError(dirFixture.PathBuilder())
 
 		source = mock.NewRepositorySource()
 		factory := use.NewCommandFactory().WithRepositorySource(source)
@@ -35,11 +44,12 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	})
 
 	Describe("#Run", func() {
-		It("accepts absolute and relative paths", func() {
-			Expect(subject.Run([]string{
-				"/home/me/absolute",
-				"../git/relative",
-			})).To(Succeed())
+		It("accepts absolute paths", func() {
+			Expect(runV(pathBuilder.AsAbsolute())).To(Succeed())
+		})
+
+		It("accepts relative paths", func() {
+			Expect(subject.Run([]string{"../git/relative"})).To(Succeed())
 		})
 
 		It("adds local repositories to the source, for the given paths", func() {

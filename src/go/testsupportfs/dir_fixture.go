@@ -32,6 +32,7 @@ type dirFixtureState interface {
 	BasePath() (string, error)
 	Create() (dirFixtureState, error)
 	Destroy() (dirFixtureState, error)
+	PathBuilder() (*PathBuilder, error)
 }
 
 /* Use */
@@ -39,4 +40,9 @@ type dirFixtureState interface {
 // Get the path to the test directory, if it has been created.
 func (fixture *DirFixture) BasePath() (string, error) {
 	return fixture.state.BasePath()
+}
+
+// Get something to build paths inside of the test directory, provided it has been created.
+func (fixture *DirFixture) PathBuilder() (*PathBuilder, error) {
+	return fixture.state.PathBuilder()
 }
