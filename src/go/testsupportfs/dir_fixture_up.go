@@ -1,10 +1,12 @@
 package testsupportfs
 
-import "os"
+import (
+	"os"
+)
 
 type dirFixtureUp struct {
-	path   string
-	prefix string
+	createdWithPrefix string
+	dirPath           string
 }
 
 func (up *dirFixtureUp) Create() (dirFixtureState, error) {
@@ -12,9 +14,9 @@ func (up *dirFixtureUp) Create() (dirFixtureState, error) {
 }
 
 func (up *dirFixtureUp) Destroy() (dirFixtureState, error) {
-	if rmErr := os.RemoveAll(up.path); rmErr != nil {
+	if rmErr := os.RemoveAll(up.dirPath); rmErr != nil {
 		return up, rmErr
 	}
 
-	return &dirFixtureDown{prefix: up.prefix}, nil
+	return &dirFixtureDown{prefix: up.createdWithPrefix}, nil
 }
