@@ -6,6 +6,7 @@ import (
 
 	mock "github.com/kkrull/marmot/corerepositorymock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
+	"github.com/kkrull/marmot/testsupportfs"
 	"github.com/kkrull/marmot/use"
 	"github.com/kkrull/marmot/userepository"
 	. "github.com/onsi/ginkgo/v2"
@@ -14,8 +15,9 @@ import (
 
 var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	var (
-		subject *userepository.RegisterLocalRepositoriesCommand
-		source  *mock.RepositorySource
+		dirFixture *testsupportfs.DirFixture
+		source     *mock.RepositorySource
+		subject    *userepository.RegisterLocalRepositoriesCommand
 	)
 
 	var validPaths = func() []string {
@@ -23,6 +25,10 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	}
 
 	BeforeEach(func() {
+		dirFixture = testsupportfs.NewDirFixture("RegisterLocalRepositoriesCommand")
+		Expect(dirFixture.Setup()).To(Succeed())
+		DeferCleanup(dirFixture.Teardown)
+
 		source = mock.NewRepositorySource()
 		factory := use.NewCommandFactory().WithRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
