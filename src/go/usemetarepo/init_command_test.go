@@ -2,11 +2,11 @@ package usemetarepo_test
 
 import (
 	"errors"
-	"os"
 	"path/filepath"
 
 	mock "github.com/kkrull/marmot/coremetarepomock"
 	expect "github.com/kkrull/marmot/testsupportexpect"
+	"github.com/kkrull/marmot/testsupportfs"
 	"github.com/kkrull/marmot/use"
 	"github.com/kkrull/marmot/usemetarepo"
 
@@ -14,21 +14,24 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var testDir string
+var testFsRoot string
 
-func existingPath() string    { return testDir }
-func nonExistentPath() string { return filepath.Join(testDir, "not-created-yet") }
-func validPath() string       { return filepath.Join(testDir, "meta-default") }
+func existingPath() string    { return testFsRoot }
+func nonExistentPath() string { return filepath.Join(testFsRoot, "not-created-yet") }
+func validPath() string       { return filepath.Join(testFsRoot, "meta-default") }
 
 var _ = Describe("InitCommand", func() {
 	var (
 		subject       *usemetarepo.InitCommand
+		dirFixture    *testsupportfs.DirFixture
 		metaDataAdmin *mock.MetaDataAdmin
 	)
 
 	BeforeEach(func() {
-		testDir = expect.NoError(os.MkdirTemp("", "InitCommand-"))
-		DeferCleanup(os.RemoveAll, testDir)
+		dirFixture = testsupportfs.NewDirFixture("JsonMetaDataRepo-")
+		Expect(dirFixture.Setup()).To(Succeed())
+		DeferCleanup(dirFixture.Teardown)
+		testFsRoot = expect.NoError(dirFixture.BasePath())
 
 		metaDataAdmin = mock.NewMetaDataAdmin()
 		factory := use.NewCommandFactory().WithMetaDataAdmin(metaDataAdmin)
@@ -52,14 +55,14 @@ var _ = Describe("InitCommand", func() {
 		})
 
 		It("returns an error when unable to check the path", func() {
-			path := filepath.Join(testDir, "stealth")
+			path := filepath.Join(testFsRoot, "stealth")
 			metaDataAdmin.IsMetaRepoReturns(path, false, errors.New("bang!"))
 			Expect(subject.Run(path)).To(
 				MatchError(ContainSubstring("stealth: unable to check path; bang!")))
 		})
 
 		It("returns an error when the path is already a meta repo", func() {
-			existingMetaRepo := filepath.Join(testDir, "meta-already")
+			existingMetaRepo := filepath.Join(testFsRoot, "meta-already")
 			metaDataAdmin.IsMetaRepoReturns(existingMetaRepo, true, nil)
 			Expect(subject.Run(existingMetaRepo)).To(
 				MatchError(MatchRegexp("meta-already: already a meta repo$")))
