@@ -1,18 +1,32 @@
 package testsupportfs
 
-// A test fixture that makes a temporary test directory with a prefix and deletes it when done.
+// Make a fixture that manages a temporary directory to use for testing.
 func NewDirFixture(prefix string) *DirFixture {
-	return &DirFixture{prefix}
+	return &DirFixture{
+		state: &dirFixtureDown{prefix: prefix},
+	}
 }
 
+// Creates a temporary test directory and deletes it when done testing.
 type DirFixture struct {
-	prefix string
+	state dirFixtureState
 }
 
+// Ensure the test directory has been created; re-entrant.
 func (fixture *DirFixture) Setup() error {
-	return nil
+	up, createErr := fixture.state.Create()
+	fixture.state = up
+	return createErr
 }
 
+// Ensure any test directory that was created before has been deleted; re-entrant.
 func (fixture *DirFixture) Teardown() error {
-	return nil
+	down, destroyErr := fixture.state.Destroy()
+	fixture.state = down
+	return destroyErr
+}
+
+type dirFixtureState interface {
+	Create() (dirFixtureState, error)
+	Destroy() (dirFixtureState, error)
 }
