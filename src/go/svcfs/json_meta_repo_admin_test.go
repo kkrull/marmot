@@ -35,7 +35,7 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 	)
 
 	BeforeEach(func() {
-		dirFixture = testsupportfs.NewDirFixture("JsonMetaDataRepo-")
+		dirFixture = testsupportfs.NewDirFixture("JsonMetaRepoAdmin-")
 		Expect(dirFixture.Setup()).To(Succeed())
 		DeferCleanup(dirFixture.Teardown)
 		testFsRoot = expect.NoError(dirFixture.BasePath())
