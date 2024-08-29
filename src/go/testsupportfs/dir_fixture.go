@@ -12,6 +12,8 @@ type DirFixture struct {
 	state dirFixtureState
 }
 
+/* Life cycle */
+
 // Ensure the test directory has been created; re-entrant.
 func (fixture *DirFixture) Setup() error {
 	up, createErr := fixture.state.Create()
@@ -27,6 +29,14 @@ func (fixture *DirFixture) Teardown() error {
 }
 
 type dirFixtureState interface {
+	BasePath() (string, error)
 	Create() (dirFixtureState, error)
 	Destroy() (dirFixtureState, error)
+}
+
+/* Use */
+
+// Get the path to the test directory, if it has been created.
+func (fixture *DirFixture) BasePath() (string, error) {
+	return fixture.state.BasePath()
 }

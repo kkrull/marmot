@@ -1,11 +1,16 @@
 package testsupportfs
 
 import (
+	"fmt"
 	"os"
 )
 
 type dirFixtureDown struct {
 	prefix string
+}
+
+func (down *dirFixtureDown) BasePath() (string, error) {
+	return "", fmt.Errorf("test directory starting with <%s> not created yet", down.prefix)
 }
 
 func (down *dirFixtureDown) Create() (dirFixtureState, error) {

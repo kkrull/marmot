@@ -9,6 +9,10 @@ type dirFixtureUp struct {
 	dirPath           string
 }
 
+func (up *dirFixtureUp) BasePath() (string, error) {
+	return up.dirPath, nil
+}
+
 func (up *dirFixtureUp) Create() (dirFixtureState, error) {
 	return up, nil
 }
