@@ -1,7 +1,6 @@
 package testsupportfs
 
 import (
-	"fmt"
 	"os"
 )
 
