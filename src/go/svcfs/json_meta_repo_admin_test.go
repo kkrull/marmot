@@ -7,6 +7,7 @@ import (
 
 	"github.com/kkrull/marmot/svcfs"
 	expect "github.com/kkrull/marmot/testsupportexpect"
+	"github.com/kkrull/marmot/testsupportfs"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -15,6 +16,7 @@ import (
 var _ = Describe("JsonMetaRepoAdmin", func() {
 	var (
 		subject    *svcfs.JsonMetaRepoAdmin
+		dirFixture *testsupportfs.DirFixture
 		testFsRoot string
 	)
 
@@ -33,8 +35,10 @@ var _ = Describe("JsonMetaRepoAdmin", func() {
 	)
 
 	BeforeEach(func() {
-		testFsRoot = expect.NoError(os.MkdirTemp("", "JsonMetaDataRepo-"))
-		DeferCleanup(os.RemoveAll, testFsRoot)
+		dirFixture = testsupportfs.NewDirFixture("JsonMetaRepoAdmin-")
+		Expect(dirFixture.Setup()).To(Succeed())
+		DeferCleanup(dirFixture.Teardown)
+		testFsRoot = expect.NoError(dirFixture.BasePath())
 	})
 
 	Describe("#Create", func() {
