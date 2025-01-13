@@ -11,7 +11,7 @@ func ReadMetaRepoFile(filename string) (*rootObjectData, error) {
 	if file, openErr := os.Open(filename); openErr != nil {
 		return nil, fmt.Errorf("failed to open file %s; %w", filename, openErr)
 	} else {
-		// defer metaDataFd.Close() //TODO KDK: Test and restore
+		defer file.Close()
 		decoder = json.NewDecoder(file)
 	}
 
