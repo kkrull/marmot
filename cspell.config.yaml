@@ -21,6 +21,7 @@ words:
   - cmdlocal
   - cmdremote
   - cmdroot
+  - coremetarepo
   - corerepository
   - cukestep
   - cukesupport
@@ -28,6 +29,7 @@ words:
   - godog
   - kkrull
   - Krull
+  - metarepo
   - NOTPARALLEL
   - Pandoc
   - pflag
