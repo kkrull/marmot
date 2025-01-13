@@ -6,6 +6,7 @@ package svcfs
 func InitMetaRepoData(version string) *rootObjectData {
 	return &rootObjectData{
 		MetaRepo: &metaRepoData{
+			LocalRepositories:  make([]localRepositoryData, 0),
 			RemoteRepositories: make([]remoteRepositoryData, 0),
 		},
 		Version: version,
