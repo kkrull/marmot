@@ -9,8 +9,6 @@ import "net/url"
 //     resolve relative paths or de-duplicate paths that resolve to the same filesystem entry.
 //   - Remote repository URLs are distinct, comparing hrefs.
 type RepositorySource interface {
-	// TODO KDK: Consider adding #Add(Repository)
-
 	// Add repositories located at the specified paths, skipping known paths and exact duplicates.
 	AddLocals(localPaths []string) error
 
