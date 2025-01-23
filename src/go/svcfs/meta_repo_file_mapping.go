@@ -8,7 +8,7 @@ import (
 
 /* Local repositories */
 
-func (metaRepo *metaRepoData) MapLocalRepositories() (corerepository.Repositories, error) {
+func (metaRepo *localMetaRepoData) MapLocalRepositories() (corerepository.Repositories, error) {
 	repositories := make([]corerepository.Repository, len(metaRepo.LocalRepositories))
 	for i, localRepositoryData := range metaRepo.LocalRepositories {
 		repositories[i] = corerepository.LocalRepository(localRepositoryData.Path)
@@ -23,7 +23,7 @@ func (localRepo *localRepositoryData) ToCoreRepository() (corerepository.Reposit
 
 /* Remote repositories */
 
-func (metaRepo *metaRepoData) MapRemoteRepositories() (corerepository.Repositories, error) {
+func (metaRepo *sharedMetaRepoData) MapRemoteRepositories() (corerepository.Repositories, error) {
 	repositories := make([]corerepository.Repository, len(metaRepo.RemoteRepositories))
 	for i, remoteRepositoryData := range metaRepo.RemoteRepositories {
 		if repository, mapErr := remoteRepositoryData.ToCoreRepository(); mapErr != nil {

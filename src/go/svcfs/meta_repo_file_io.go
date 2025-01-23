@@ -6,24 +6,49 @@ import (
 	"os"
 )
 
-func ReadMetaRepoFile(filename string) (*rootObjectData, error) {
+func ReadLocalMetaRepoFile(filename string) (*localRootObjectData, error) {
+	root := &localRootObjectData{}
+	if err := readMetaRepoFile(filename, root); err != nil {
+		return nil, err
+	} else {
+		return root, nil
+	}
+}
+
+func ReadSharedMetaRepoFile(filename string) (*sharedRootObjectData, error) {
+	root := &sharedRootObjectData{}
+	if err := readMetaRepoFile(filename, root); err != nil {
+		return nil, err
+	} else {
+		return root, nil
+	}
+}
+
+func readMetaRepoFile(filename string, root any) error {
 	var decoder *json.Decoder
 	if file, openErr := os.Open(filename); openErr != nil {
-		return nil, fmt.Errorf("failed to open file %s; %w", filename, openErr)
+		return fmt.Errorf("failed to open file %s; %w", filename, openErr)
 	} else {
 		defer file.Close()
 		decoder = json.NewDecoder(file)
 	}
 
-	var root rootObjectData
 	if decodeErr := decoder.Decode(&root); decodeErr != nil {
-		return nil, fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
+		return fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
 	} else {
-		return &root, nil
+		return nil
 	}
 }
 
-func (root *rootObjectData) WriteTo(filename string) error {
+func (root *localRootObjectData) WriteTo(filename string) error {
+	return writeTo(root, filename)
+}
+
+func (root *sharedRootObjectData) WriteTo(filename string) error {
+	return writeTo(root, filename)
+}
+
+func writeTo(root any, filename string) error {
 	var encoder *json.Encoder
 	if file, fileErr := os.Create(filename); fileErr != nil {
 		return fmt.Errorf("failed to create file %s; %w", filename, fileErr)
