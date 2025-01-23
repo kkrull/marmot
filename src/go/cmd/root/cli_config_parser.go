@@ -40,7 +40,7 @@ func (parser rootConfigParser) Parse(
 		return nil, pathErr
 	} else {
 		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
-		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath) // TODO KDK: Work here - add another version that works on a .local file
+		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		config := &rootCliConfig{
 			args: args,
 			cmdFactory: use.NewCommandFactory().
