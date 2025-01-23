@@ -22,16 +22,16 @@ type JsonMetaRepoAdmin struct {
 func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
 	return initDirectory(
 		localDataFile(repositoryDir),
-		metaDataFile(repositoryDir),
+		sharedDataFile(repositoryDir),
 		InitMetaRepoData(admin.version))
 }
 
-func initDirectory(localDataFile string, metaDataFile string, rootObject *rootObjectData) error {
-	metaDataDir := path.Dir(metaDataFile)
+func initDirectory(localDataFile string, sharedDataFile string, rootObject *rootObjectData) error {
+	metaDataDir := path.Dir(sharedDataFile)
 	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", metaDataDir, dirErr)
-	} else if writeMetaDataErr := rootObject.WriteTo(metaDataFile); writeMetaDataErr != nil {
-		return fmt.Errorf("failed to write shared meta data file %s; %w", metaDataFile, writeMetaDataErr)
+	} else if writeMetaDataErr := rootObject.WriteTo(sharedDataFile); writeMetaDataErr != nil {
+		return fmt.Errorf("failed to write shared meta data file %s; %w", sharedDataFile, writeMetaDataErr)
 	} else {
 		return rootObject.WriteTo(localDataFile)
 	}

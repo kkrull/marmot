@@ -11,14 +11,14 @@ import (
 func NewJsonMetaRepo(repositoryPath string) *JsonMetaRepo {
 	return &JsonMetaRepo{
 		localDataFile: localDataFile(repositoryPath),
-		metaDataFile:  metaDataFile(repositoryPath),
+		sharedDataFile:  sharedDataFile(repositoryPath),
 	}
 }
 
 // A meta repo that stores meta data in JSON files in the specified directory.
 type JsonMetaRepo struct {
 	localDataFile string
-	metaDataFile  string
+	sharedDataFile  string
 }
 
 /* Local repositories */
@@ -79,14 +79,14 @@ func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 }
 
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
-	return updateFile(repo.metaDataFile, func(rootObject *rootObjectData) {
+	return updateFile(repo.sharedDataFile, func(rootObject *rootObjectData) {
 		rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
 	})
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
 	return queryFile(
-		repo.metaDataFile,
+		repo.sharedDataFile,
 		core.NoRepositories(),
 		func(rootObject *rootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapRemoteRepositories()

@@ -13,6 +13,6 @@ func localDataFile(metaRepoDir string) string {
 }
 
 // Path to the specific file where Marmot stores shared data.
-func metaDataFile(metaRepoDir string) string {
+func sharedDataFile(metaRepoDir string) string {
 	return filepath.Join(metaDataDir(metaRepoDir), "meta-repo.json")
 }
