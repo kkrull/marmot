@@ -49,26 +49,13 @@ func (repo *JsonMetaRepo) addLocal(localPath string) error {
 }
 
 func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
-	return queryLocalFile(
+	return queryFile(
 		repo.localDataFile,
 		core.NoRepositories(),
+		ReadLocalMetaRepoFile,
 		func(rootObject *localRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapLocalRepositories()
 		})
-}
-
-func queryLocalFile[V any](
-	dataFile string,
-	defaultValue V,
-	queryData func(*localRootObjectData) (V, error),
-) (V, error) {
-	if rootObject, readErr := ReadLocalMetaRepoFile(dataFile); readErr != nil {
-		return defaultValue, fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
-	} else if result, queryErr := queryData(rootObject); queryErr != nil {
-		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
-	} else {
-		return result, nil
-	}
 }
 
 type updateLocalDataFn = func(*localRootObjectData)
@@ -116,26 +103,13 @@ func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
-	return querySharedFile(
+	return queryFile(
 		repo.sharedDataFile,
 		core.NoRepositories(),
+		ReadSharedMetaRepoFile,
 		func(rootObject *sharedRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapRemoteRepositories()
 		})
-}
-
-func querySharedFile[V any](
-	dataFile string,
-	defaultValue V,
-	queryData func(*sharedRootObjectData) (V, error),
-) (V, error) {
-	if rootObject, readErr := ReadSharedMetaRepoFile(dataFile); readErr != nil {
-		return defaultValue, fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
-	} else if result, queryErr := queryData(rootObject); queryErr != nil {
-		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
-	} else {
-		return result, nil
-	}
 }
 
 type updateSharedDataFn = func(*sharedRootObjectData)
@@ -152,5 +126,22 @@ func updateSharedFile(dataFile string, updateData updateSharedDataFn) error {
 		return fmt.Errorf("failed to write file %s; %w", dataFile, writeErr)
 	} else {
 		return nil
+	}
+}
+
+/* I/O */
+
+func queryFile[RootObject any, Result any](
+	dataFile string,
+	defaultValue Result,
+	fetchData func(string) (RootObject, error),
+	queryData func(RootObject) (Result, error),
+) (Result, error) {
+	if rootObject, readErr := fetchData(dataFile); readErr != nil {
+		return defaultValue, fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
+	} else if result, queryErr := queryData(rootObject); queryErr != nil {
+		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
+	} else {
+		return result, nil
 	}
 }
