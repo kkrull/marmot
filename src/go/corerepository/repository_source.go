@@ -2,7 +2,7 @@ package corerepository
 
 import "net/url"
 
-// A source of Git repositories that a meta repo might care about.
+// A source of Git repositories on this machine that a meta repo might care about.
 //
 // Repository sources are responsible for these invariants:
 //   - Local repository paths are distinct, by string comparison.  Clients decide whether to
@@ -15,12 +15,10 @@ type LocalRepositorySource interface {
 	ListLocal() (Repositories, error)
 }
 
-// A source of Git repositories that a meta repo might care about.
+// A source of Git repositories on other machines that a meta repo might care about.
 //
 // Repository sources are responsible for these invariants:
-//
-//	  resolve relative paths or de-duplicate paths that resolve to the same filesystem entry.
-//	- Remote repository URLs are distinct, comparing hrefs.
+//   - Remote repository URLs are distinct, comparing hrefs.
 type RemoteRepositorySource interface {
 	// Add repositories hosted at the specified URLs, skipping known remotes and duplicates.
 	AddRemotes(hostUrls []*url.URL) error
