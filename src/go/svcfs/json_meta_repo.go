@@ -10,15 +10,15 @@ import (
 
 func NewJsonMetaRepo(repositoryPath string) *JsonMetaRepo {
 	return &JsonMetaRepo{
-		localDataFile: localDataFile(repositoryPath),
-		sharedDataFile:  sharedDataFile(repositoryPath),
+		localDataFile:  localDataFile(repositoryPath),
+		sharedDataFile: sharedDataFile(repositoryPath),
 	}
 }
 
 // A meta repo that stores meta data in JSON files in the specified directory.
 type JsonMetaRepo struct {
-	localDataFile string
-	sharedDataFile  string
+	localDataFile  string
+	sharedDataFile string
 }
 
 /* Local repositories */
@@ -43,16 +43,16 @@ func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 }
 
 func (repo *JsonMetaRepo) addLocal(localPath string) error {
-	return updateFile(repo.localDataFile, func(rootObject *rootObjectData) {
+	return updateLocalFile(repo.localDataFile, func(rootObject *localRootObjectData) {
 		rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
 	})
 }
 
 func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
-	return queryFile(
+	return queryLocalFile(
 		repo.localDataFile,
 		core.NoRepositories(),
-		func(rootObject *rootObjectData) (core.Repositories, error) {
+		func(rootObject *localRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapLocalRepositories()
 		})
 }
@@ -79,28 +79,28 @@ func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 }
 
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
-	return updateFile(repo.sharedDataFile, func(rootObject *rootObjectData) {
+	return updateFile(repo.sharedDataFile, func(rootObject *sharedRootObjectData) {
 		rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
 	})
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
-	return queryFile(
+	return querySharedFile(
 		repo.sharedDataFile,
 		core.NoRepositories(),
-		func(rootObject *rootObjectData) (core.Repositories, error) {
+		func(rootObject *sharedRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapRemoteRepositories()
 		})
 }
 
 /* I/O */
 
-func queryFile[V any](
+func queryLocalFile[V any](
 	dataFile string,
 	defaultValue V,
-	queryData func(*rootObjectData) (V, error),
+	queryData func(*localRootObjectData) (V, error),
 ) (V, error) {
-	if rootObject, readErr := ReadMetaRepoFile(dataFile); readErr != nil {
+	if rootObject, readErr := ReadLocalMetaRepoFile(dataFile); readErr != nil {
 		return defaultValue, fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
 	} else if result, queryErr := queryData(rootObject); queryErr != nil {
 		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
@@ -109,11 +109,42 @@ func queryFile[V any](
 	}
 }
 
-type updateDataFn = func(*rootObjectData)
+func querySharedFile[V any](
+	dataFile string,
+	defaultValue V,
+	queryData func(*sharedRootObjectData) (V, error),
+) (V, error) {
+	if rootObject, readErr := ReadSharedMetaRepoFile(dataFile); readErr != nil {
+		return defaultValue, fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
+	} else if result, queryErr := queryData(rootObject); queryErr != nil {
+		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
+	} else {
+		return result, nil
+	}
+}
 
-func updateFile(dataFile string, updateData updateDataFn) error {
-	var rootObject *rootObjectData
-	rootObject, readErr := ReadMetaRepoFile(dataFile)
+type updateLocalDataFn = func(*localRootObjectData)
+
+func updateLocalFile(dataFile string, updateData updateLocalDataFn) error {
+	var rootObject *localRootObjectData
+	rootObject, readErr := ReadLocalMetaRepoFile(dataFile)
+	if readErr != nil {
+		return fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
+	}
+
+	updateData(rootObject)
+	if writeErr := rootObject.WriteTo(dataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", dataFile, writeErr)
+	} else {
+		return nil
+	}
+}
+
+type updateSharedDataFn = func(*sharedRootObjectData)
+
+func updateFile(dataFile string, updateData updateSharedDataFn) error {
+	var rootObject *sharedRootObjectData
+	rootObject, readErr := ReadSharedMetaRepoFile(dataFile)
 	if readErr != nil {
 		return fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
 	}

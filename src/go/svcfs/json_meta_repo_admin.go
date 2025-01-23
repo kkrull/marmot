@@ -23,17 +23,18 @@ func (admin *JsonMetaRepoAdmin) Create(repositoryDir string) error {
 	return initDirectory(
 		localDataFile(repositoryDir),
 		sharedDataFile(repositoryDir),
-		InitMetaRepoData(admin.version))
+		InitLocalMetaRepoData(admin.version),
+		InitSharedMetaRepoData(admin.version))
 }
 
-func initDirectory(localDataFile string, sharedDataFile string, rootObject *rootObjectData) error {
+func initDirectory(localDataFile string, sharedDataFile string, localRootObject *localRootObjectData, sharedRootObject *sharedRootObjectData) error {
 	metaDataDir := path.Dir(sharedDataFile)
 	if dirErr := os.MkdirAll(metaDataDir, fs.ModePerm); dirErr != nil {
 		return fmt.Errorf("failed to make directory %s; %w", metaDataDir, dirErr)
-	} else if writeMetaDataErr := rootObject.WriteTo(sharedDataFile); writeMetaDataErr != nil {
+	} else if writeMetaDataErr := sharedRootObject.WriteTo(sharedDataFile); writeMetaDataErr != nil {
 		return fmt.Errorf("failed to write shared meta data file %s; %w", sharedDataFile, writeMetaDataErr)
 	} else {
-		return rootObject.WriteTo(localDataFile)
+		return localRootObject.WriteTo(localDataFile)
 	}
 }
 
