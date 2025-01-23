@@ -41,23 +41,14 @@ func readMetaRepoFile(filename string, root any) error {
 }
 
 func (root *localRootObjectData) WriteTo(filename string) error {
-	var encoder *json.Encoder
-	if file, fileErr := os.Create(filename); fileErr != nil {
-		return fmt.Errorf("failed to create file %s; %w", filename, fileErr)
-	} else {
-		defer file.Close()
-		encoder = json.NewEncoder(file)
-		encoder.SetIndent("", "  ")
-	}
-
-	if encodeErr := encoder.Encode(root); encodeErr != nil {
-		return fmt.Errorf("failed to encode JSON data; %w", encodeErr)
-	} else {
-		return nil
-	}
+	return writeTo(root, filename)
 }
 
 func (root *sharedRootObjectData) WriteTo(filename string) error {
+	return writeTo(root, filename)
+}
+
+func writeTo(root any, filename string) error {
 	var encoder *json.Encoder
 	if file, fileErr := os.Create(filename); fileErr != nil {
 		return fmt.Errorf("failed to create file %s; %w", filename, fileErr)
