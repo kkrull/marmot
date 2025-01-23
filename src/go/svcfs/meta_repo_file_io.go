@@ -7,36 +7,36 @@ import (
 )
 
 func ReadLocalMetaRepoFile(filename string) (*localRootObjectData, error) {
-	var decoder *json.Decoder
-	if file, openErr := os.Open(filename); openErr != nil {
-		return nil, fmt.Errorf("failed to open file %s; %w", filename, openErr)
+	root := &localRootObjectData{}
+	if err := readMetaRepoFile(filename, root); err != nil {
+		return nil, err
 	} else {
-		defer file.Close()
-		decoder = json.NewDecoder(file)
-	}
-
-	var root localRootObjectData
-	if decodeErr := decoder.Decode(&root); decodeErr != nil {
-		return nil, fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
-	} else {
-		return &root, nil
+		return root, nil
 	}
 }
 
 func ReadSharedMetaRepoFile(filename string) (*sharedRootObjectData, error) {
+	root := &sharedRootObjectData{}
+	if err := readMetaRepoFile(filename, root); err != nil {
+		return nil, err
+	} else {
+		return root, nil
+	}
+}
+
+func readMetaRepoFile(filename string, root any) error {
 	var decoder *json.Decoder
 	if file, openErr := os.Open(filename); openErr != nil {
-		return nil, fmt.Errorf("failed to open file %s; %w", filename, openErr)
+		return fmt.Errorf("failed to open file %s; %w", filename, openErr)
 	} else {
 		defer file.Close()
 		decoder = json.NewDecoder(file)
 	}
 
-	var root sharedRootObjectData
 	if decodeErr := decoder.Decode(&root); decodeErr != nil {
-		return nil, fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
+		return fmt.Errorf("failed to decode %s; %w", filename, decodeErr)
 	} else {
-		return &root, nil
+		return nil
 	}
 }
 
