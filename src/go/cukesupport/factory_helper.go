@@ -11,7 +11,10 @@ func ThatCommandFactory() (use.CommandFactory, error) {
 		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		return use.NewCommandFactory().WithRepositorySource(jsonMetaRepo), nil
+		return use.NewCommandFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
+				WithRemoteRepositorySource(jsonMetaRepo),
+			nil
 	}
 }
 

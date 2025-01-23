@@ -9,7 +9,7 @@ import (
 
 // Registers Git repositories with the meta repo, based upon their paths on the local filesystem.
 type RegisterLocalRepositoriesCommand struct {
-	Source core.RepositorySource
+	Source core.LocalRepositorySource
 }
 
 func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {

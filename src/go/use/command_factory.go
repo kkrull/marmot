@@ -21,25 +21,39 @@ type CommandFactory interface {
 }
 
 type cmdFactory struct {
-	MetaDataAdmin    coremetarepo.MetaDataAdmin
-	RepositorySource corerepository.RepositorySource
+	LocalRepositorySource  corerepository.LocalRepositorySource
+	MetaDataAdmin          coremetarepo.MetaDataAdmin
+	RemoteRepositorySource corerepository.RemoteRepositorySource
 }
 
-func (factory *cmdFactory) WithMetaDataAdmin(metadataAdmin coremetarepo.MetaDataAdmin) *cmdFactory {
-	factory.MetaDataAdmin = metadataAdmin
+func (factory *cmdFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *cmdFactory {
+	factory.LocalRepositorySource = source
 	return factory
 }
 
-func (factory *cmdFactory) WithRepositorySource(repositorySource corerepository.RepositorySource) *cmdFactory {
-	factory.RepositorySource = repositorySource
+func (factory *cmdFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin) *cmdFactory {
+	factory.MetaDataAdmin = admin
 	return factory
 }
 
-func (factory *cmdFactory) repositorySource() (corerepository.RepositorySource, error) {
-	if factory.RepositorySource == nil {
-		return nil, errors.New("missing RepositorySource")
+func (factory *cmdFactory) WithRemoteRepositorySource(source corerepository.RemoteRepositorySource) *cmdFactory {
+	factory.RemoteRepositorySource = source
+	return factory
+}
+
+func (factory *cmdFactory) localRepositorySource() (corerepository.LocalRepositorySource, error) {
+	if factory.LocalRepositorySource == nil {
+		return nil, errors.New("missing LocalRepositorySource")
 	} else {
-		return factory.RepositorySource, nil
+		return factory.LocalRepositorySource, nil
+	}
+}
+
+func (factory *cmdFactory) remoteRepositorySource() (corerepository.RemoteRepositorySource, error) {
+	if factory.RemoteRepositorySource == nil {
+		return nil, errors.New("missing RemoteRepositorySource")
+	} else {
+		return factory.RemoteRepositorySource, nil
 	}
 }
 
@@ -58,19 +72,19 @@ func (factory *cmdFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
 func (factory *cmdFactory) NewRegisterLocalRepositories() (
 	*repository.RegisterLocalRepositoriesCommand, error,
 ) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+	if source, err := factory.localRepositorySource(); err != nil {
 		return nil, err
 	} else {
-		return &repository.RegisterLocalRepositoriesCommand{Source: repositorySource}, nil
+		return &repository.RegisterLocalRepositoriesCommand{Source: source}, nil
 	}
 }
 
 func (factory *cmdFactory) NewRegisterRemoteRepositories() (
 	*repository.RegisterRemoteRepositoriesCommand, error,
 ) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+	if source, err := factory.remoteRepositorySource(); err != nil {
 		return nil, err
 	} else {
-		return &repository.RegisterRemoteRepositoriesCommand{Source: repositorySource}, nil
+		return &repository.RegisterRemoteRepositoriesCommand{Source: source}, nil
 	}
 }
