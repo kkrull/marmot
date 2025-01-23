@@ -9,7 +9,7 @@ import (
 
 // Registers Git repositories with the meta repo, based upon the address(es) of their remote hosts.
 type RegisterRemoteRepositoriesCommand struct {
-	Source core.RepositorySource
+	Source core.RemoteRepositorySource
 }
 
 func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {

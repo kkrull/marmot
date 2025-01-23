@@ -7,7 +7,12 @@ func metaDataDir(metaRepoDir string) string {
 	return filepath.Join(metaRepoDir, ".marmot")
 }
 
-// Path to the specific file where Marmot store its data.
+// Path to the specific file where Marmot stores machine-specific data.
+func localDataFile(metaRepoDir string) string {
+	return filepath.Join(metaDataDir(metaRepoDir), "meta-repo-local.json")
+}
+
+// Path to the specific file where Marmot stores shared data.
 func metaDataFile(metaRepoDir string) string {
 	return filepath.Join(metaDataDir(metaRepoDir), "meta-repo.json")
 }

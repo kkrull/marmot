@@ -44,15 +44,17 @@ func (parser rootConfigParser) Parse(
 		config := &rootCliConfig{
 			args: args,
 			cmdFactory: use.NewCommandFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   make([]string, 0),
 			metaRepoPath: metaRepoPath,
 			queryFactory: use.NewQueryFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -95,15 +97,17 @@ func (parser rootConfigParser) ParseR(
 		config := &rootCliConfig{
 			args: argsBeforeDash,
 			cmdFactory: use.NewCommandFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 			debug:        debug,
 			flagSet:      flags,
 			inputLines:   inputLines,
 			metaRepoPath: metaRepoPath,
 			queryFactory: use.NewQueryFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil

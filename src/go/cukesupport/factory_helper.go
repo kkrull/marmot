@@ -11,7 +11,10 @@ func ThatCommandFactory() (use.CommandFactory, error) {
 		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		return use.NewCommandFactory().WithRepositorySource(jsonMetaRepo), nil
+		return use.NewCommandFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
+				WithRemoteRepositorySource(jsonMetaRepo),
+			nil
 	}
 }
 
@@ -27,6 +30,8 @@ func ThatQueryFactory() (use.QueryFactory, error) {
 		return nil, pathErr
 	} else {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		return use.NewQueryFactory().WithRepositorySource(jsonMetaRepo), nil
+		return use.NewQueryFactory().
+			WithLocalRepositorySource(jsonMetaRepo).
+			WithRemoteRepositorySource(jsonMetaRepo), nil
 	}
 }

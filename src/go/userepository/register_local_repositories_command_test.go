@@ -38,7 +38,7 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 		pathBuilder = expect.NoError(dirFixture.PathBuilder())
 
 		source = mock.NewRepositorySource()
-		factory := use.NewCommandFactory().WithRepositorySource(source)
+		factory := use.NewCommandFactory().WithLocalRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
 	})
 

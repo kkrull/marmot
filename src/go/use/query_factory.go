@@ -14,13 +14,19 @@ func NewQueryFactory() *queryFactory {
 
 // Constructs application queries with configurable services.
 type QueryFactory interface {
-	NewListLocalRepositories() (userepository.ListRemoteRepositoriesQuery, error)
+	NewListLocalRepositories() (userepository.ListLocalRepositoriesQuery, error)
 	NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error)
 }
 
 type queryFactory struct {
-	MetaDataAdmin    coremetarepo.MetaDataAdmin
-	RepositorySource corerepository.RepositorySource
+	LocalRepositorySource  corerepository.LocalRepositorySource
+	MetaDataAdmin          coremetarepo.MetaDataAdmin
+	RemoteRepositorySource corerepository.RemoteRepositorySource
+}
+
+func (factory *queryFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *queryFactory {
+	factory.LocalRepositorySource = source
+	return factory
 }
 
 func (factory *queryFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin) *queryFactory {
@@ -28,15 +34,15 @@ func (factory *queryFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin)
 	return factory
 }
 
-func (factory *queryFactory) WithRepositorySource(source corerepository.RepositorySource) *queryFactory {
-	factory.RepositorySource = source
+func (factory *queryFactory) WithRemoteRepositorySource(source corerepository.RemoteRepositorySource) *queryFactory {
+	factory.RemoteRepositorySource = source
 	return factory
 }
 
 /* Repositories */
 
-func (factory *queryFactory) NewListLocalRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+func (factory *queryFactory) NewListLocalRepositories() (userepository.ListLocalRepositoriesQuery, error) {
+	if repositorySource, err := factory.localRepositorySource(); err != nil {
 		return nil, err
 	} else {
 		return repositorySource.ListLocal, nil
@@ -44,17 +50,25 @@ func (factory *queryFactory) NewListLocalRepositories() (userepository.ListRemot
 }
 
 func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+	if repositorySource, err := factory.remoteRepositorySource(); err != nil {
 		return nil, err
 	} else {
 		return repositorySource.ListRemote, nil
 	}
 }
 
-func (factory *queryFactory) repositorySource() (corerepository.RepositorySource, error) {
-	if factory.RepositorySource == nil {
-		return nil, errors.New("missing RepositorySource")
+func (factory *queryFactory) localRepositorySource() (corerepository.LocalRepositorySource, error) {
+	if factory.LocalRepositorySource == nil {
+		return nil, errors.New("missing LocalRepositorySource")
 	} else {
-		return factory.RepositorySource, nil
+		return factory.LocalRepositorySource, nil
+	}
+}
+
+func (factory *queryFactory) remoteRepositorySource() (corerepository.RemoteRepositorySource, error) {
+	if factory.RemoteRepositorySource == nil {
+		return nil, errors.New("missing RemoteRepositorySource")
+	} else {
+		return factory.RemoteRepositorySource, nil
 	}
 }
