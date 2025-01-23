@@ -43,9 +43,16 @@ func (repo *JsonMetaRepo) AddLocals(localPaths []string) error {
 }
 
 func (repo *JsonMetaRepo) addLocal(localPath string) error {
-	return updateLocalFile(repo.localDataFile, func(rootObject *localRootObjectData) {
-		rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
-	})
+	return updateFile(
+		repo.localDataFile,
+		ReadLocalMetaRepoFile,
+		func(rootObject *localRootObjectData) {
+			rootObject.MetaRepo.AppendLocalRepository(localRepositoryData{Path: localPath})
+		},
+		func(rootObject *localRootObjectData, dataFile string) error {
+			return rootObject.WriteTo(dataFile)
+		},
+	)
 }
 
 func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
@@ -55,24 +62,8 @@ func (repo *JsonMetaRepo) ListLocal() (core.Repositories, error) {
 		ReadLocalMetaRepoFile,
 		func(rootObject *localRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapLocalRepositories()
-		})
-}
-
-type updateLocalDataFn = func(*localRootObjectData)
-
-func updateLocalFile(dataFile string, updateData updateLocalDataFn) error {
-	var rootObject *localRootObjectData
-	rootObject, readErr := ReadLocalMetaRepoFile(dataFile)
-	if readErr != nil {
-		return fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
-	}
-
-	updateData(rootObject)
-	if writeErr := rootObject.WriteTo(dataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", dataFile, writeErr)
-	} else {
-		return nil
-	}
+		},
+	)
 }
 
 /* Remote repositories */
@@ -97,9 +88,16 @@ func (repo *JsonMetaRepo) AddRemotes(hostUrls []*url.URL) error {
 }
 
 func (repo *JsonMetaRepo) addRemote(hostUrl *url.URL) error {
-	return updateSharedFile(repo.sharedDataFile, func(rootObject *sharedRootObjectData) {
-		rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
-	})
+	return updateFile(
+		repo.sharedDataFile,
+		ReadSharedMetaRepoFile,
+		func(rootObject *sharedRootObjectData) {
+			rootObject.MetaRepo.AppendRemoteRepository(remoteRepositoryData{Url: hostUrl.String()})
+		},
+		func(rootObject *sharedRootObjectData, dataFile string) error {
+			return rootObject.WriteTo(dataFile)
+		},
+	)
 }
 
 func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
@@ -110,23 +108,6 @@ func (repo *JsonMetaRepo) ListRemote() (core.Repositories, error) {
 		func(rootObject *sharedRootObjectData) (core.Repositories, error) {
 			return rootObject.MetaRepo.MapRemoteRepositories()
 		})
-}
-
-type updateSharedDataFn = func(*sharedRootObjectData)
-
-func updateSharedFile(dataFile string, updateData updateSharedDataFn) error {
-	var rootObject *sharedRootObjectData
-	rootObject, readErr := ReadSharedMetaRepoFile(dataFile)
-	if readErr != nil {
-		return fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
-	}
-
-	updateData(rootObject)
-	if writeErr := rootObject.WriteTo(dataFile); writeErr != nil {
-		return fmt.Errorf("failed to write file %s; %w", dataFile, writeErr)
-	} else {
-		return nil
-	}
 }
 
 /* I/O */
@@ -143,5 +124,25 @@ func queryFile[RootObject any, Result any](
 		return defaultValue, fmt.Errorf("failed to query data; %w", queryErr)
 	} else {
 		return result, nil
+	}
+}
+
+func updateFile[RootObject any](
+	dataFile string,
+	fetchData func(string) (RootObject, error),
+	updateData func(RootObject),
+	writeData func(RootObject, string) error,
+) error {
+	var rootObject RootObject
+	rootObject, readErr := fetchData(dataFile)
+	if readErr != nil {
+		return fmt.Errorf("failed to read file %s; %w", dataFile, readErr)
+	}
+
+	updateData(rootObject)
+	if writeErr := writeData(rootObject, dataFile); writeErr != nil {
+		return fmt.Errorf("failed to write file %s; %w", dataFile, writeErr)
+	} else {
+		return nil
 	}
 }
