@@ -22,6 +22,11 @@ Manuals are written in Markdown.  This project uses Pandoc to generate `groff` m
 Markdown manuals in `man/groff/` and `man/markdown/`, respectively.  The Markdown manuals are
 included in the repository, for ease of reading on GitHub.
 
+### Targets in `src/go/`
+
+There are a number of tasks to build the Golang code and to assist with development.  Try `make
+help` to see what is available.
+
 ### Targets in `src/zsh`
 
 There isn't anything to build, since the programs are all scripts.  However, there are conventional

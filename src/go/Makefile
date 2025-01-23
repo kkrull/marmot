@@ -103,7 +103,7 @@ all: $(executable) $(autocomplete) #> Build all sources
 
 .PHONY: clean
 clean: #> Remove local build files
-	$(RM) $(autocomplete) coverage.html coverage.out coverage-gaps.out $(executable)
+	$(RM) $(autocomplete) coverage.html coverage.out coverage-gaps.out dependencies.png $(executable)
 
 .PHONY: install
 install: $(executable) | $(bindir) $(datadirpkg) $(libexecdirpkg) #> Install program
@@ -145,6 +145,7 @@ install-autocomplete-zsh: $(autocomplete) | $(datadirzshfn) #> Install autocompl
 
 .PHONY: install-tools
 install-tools: #> Install Go development tools
+	go install github.com/kisielk/godepgraph@latest
 	go install github.com/go-delve/delve/cmd/dlv@latest
 	go install github.com/gregoryv/uncover/cmd/uncover@latest
 	go install github.com/onsi/ginkgo/v2/ginkgo
@@ -161,6 +162,10 @@ test-watch: #> Run tests in watch mode
 	ginkgo watch -r
 
 #. GO TARGETS
+
+.PHONY: dependency-graph
+dependency-graph: dependencies.png #> Make a dependency graph of packages in this module
+	@:
 
 .PHONY: format
 format: #> Format sources
@@ -190,6 +195,10 @@ coverage.out: $(sources)
 
 coverage-gaps.out: coverage.out
 	uncover $< > $@
+
+dependencies.png: $(sources)
+	godepgraph -s github.com/kkrull/marmot | dot -Tpng -o $@
+	@echo "Wrote $@"
 
 $(executable): $(sources)
 	go build -o $(executable) $(source_main)
