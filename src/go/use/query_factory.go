@@ -19,8 +19,14 @@ type QueryFactory interface {
 }
 
 type queryFactory struct {
-	MetaDataAdmin    coremetarepo.MetaDataAdmin
-	RepositorySource corerepository.RepositorySource
+	LocalRepositorySource corerepository.LocalRepositorySource
+	MetaDataAdmin         coremetarepo.MetaDataAdmin
+	RepositorySource      corerepository.RepositorySource
+}
+
+func (factory *queryFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *queryFactory {
+	factory.LocalRepositorySource = source
+	return factory
 }
 
 func (factory *queryFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin) *queryFactory {
@@ -36,7 +42,7 @@ func (factory *queryFactory) WithRepositorySource(source corerepository.Reposito
 /* Repositories */
 
 func (factory *queryFactory) NewListLocalRepositories() (userepository.ListLocalRepositoriesQuery, error) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+	if repositorySource, err := factory.localRepositorySource(); err != nil {
 		return nil, err
 	} else {
 		return repositorySource.ListLocal, nil
@@ -48,6 +54,14 @@ func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemo
 		return nil, err
 	} else {
 		return repositorySource.ListRemote, nil
+	}
+}
+
+func (factory *queryFactory) localRepositorySource() (corerepository.LocalRepositorySource, error) {
+	if factory.LocalRepositorySource == nil {
+		return nil, errors.New("missing LocalRepositorySource")
+	} else {
+		return factory.LocalRepositorySource, nil
 	}
 }
 

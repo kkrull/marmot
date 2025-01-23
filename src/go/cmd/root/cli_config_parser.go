@@ -51,6 +51,7 @@ func (parser rootConfigParser) Parse(
 			inputLines:   make([]string, 0),
 			metaRepoPath: metaRepoPath,
 			queryFactory: use.NewQueryFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
 				WithRepositorySource(jsonMetaRepo),
 		}
