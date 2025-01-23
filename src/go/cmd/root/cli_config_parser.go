@@ -53,7 +53,7 @@ func (parser rootConfigParser) Parse(
 			queryFactory: use.NewQueryFactory().
 				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil
@@ -103,8 +103,9 @@ func (parser rootConfigParser) ParseR(
 			inputLines:   inputLines,
 			metaRepoPath: metaRepoPath,
 			queryFactory: use.NewQueryFactory().
+				WithLocalRepositorySource(jsonMetaRepo).
 				WithMetaDataAdmin(metaRepoAdmin).
-				WithRepositorySource(jsonMetaRepo),
+				WithRemoteRepositorySource(jsonMetaRepo),
 		}
 
 		return config, nil

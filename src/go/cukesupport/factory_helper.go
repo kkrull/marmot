@@ -29,6 +29,6 @@ func ThatQueryFactory() (use.QueryFactory, error) {
 		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 		return use.NewQueryFactory().
 			WithLocalRepositorySource(jsonMetaRepo).
-			WithRepositorySource(jsonMetaRepo), nil
+			WithRemoteRepositorySource(jsonMetaRepo), nil
 	}
 }

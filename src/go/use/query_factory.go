@@ -19,9 +19,9 @@ type QueryFactory interface {
 }
 
 type queryFactory struct {
-	LocalRepositorySource corerepository.LocalRepositorySource
-	MetaDataAdmin         coremetarepo.MetaDataAdmin
-	RepositorySource      corerepository.RepositorySource
+	LocalRepositorySource  corerepository.LocalRepositorySource
+	MetaDataAdmin          coremetarepo.MetaDataAdmin
+	RemoteRepositorySource corerepository.RemoteRepositorySource
 }
 
 func (factory *queryFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *queryFactory {
@@ -34,8 +34,8 @@ func (factory *queryFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin)
 	return factory
 }
 
-func (factory *queryFactory) WithRepositorySource(source corerepository.RepositorySource) *queryFactory {
-	factory.RepositorySource = source
+func (factory *queryFactory) WithRemoteRepositorySource(source corerepository.RemoteRepositorySource) *queryFactory {
+	factory.RemoteRepositorySource = source
 	return factory
 }
 
@@ -50,7 +50,7 @@ func (factory *queryFactory) NewListLocalRepositories() (userepository.ListLocal
 }
 
 func (factory *queryFactory) NewListRemoteRepositories() (userepository.ListRemoteRepositoriesQuery, error) {
-	if repositorySource, err := factory.repositorySource(); err != nil {
+	if repositorySource, err := factory.remoteRepositorySource(); err != nil {
 		return nil, err
 	} else {
 		return repositorySource.ListRemote, nil
@@ -65,10 +65,10 @@ func (factory *queryFactory) localRepositorySource() (corerepository.LocalReposi
 	}
 }
 
-func (factory *queryFactory) repositorySource() (corerepository.RepositorySource, error) {
-	if factory.RepositorySource == nil {
-		return nil, errors.New("missing RepositorySource")
+func (factory *queryFactory) remoteRepositorySource() (corerepository.RemoteRepositorySource, error) {
+	if factory.RemoteRepositorySource == nil {
+		return nil, errors.New("missing RemoteRepositorySource")
 	} else {
-		return factory.RepositorySource, nil
+		return factory.RemoteRepositorySource, nil
 	}
 }
