@@ -30,7 +30,6 @@ func (cliCmd *localCommand) toCobraCommand() *cobra.Command {
 		Use:     "local",
 	}
 
-	// TODO KDK: Use a separate .marmot/meta-repo-local.json file
 	cmdlocal.NewListCommand().AddToCobra(localCobraCmd)
 	cmdlocal.NewRegisterCommand().AddToCobra(localCobraCmd)
 	return localCobraCmd
