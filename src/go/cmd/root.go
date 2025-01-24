@@ -11,13 +11,13 @@ import (
 // TODO KDK: See for example https://github.com/cli/cli/blob/trunk/pkg/cmd/root/root.go
 // https://github.com/cli/cli/blob/trunk/pkg/cmd/pr/pr.go
 
-func NewRootCmd() *cobra.Command {
+func NewRootCmd(version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 		Use:     "marmot",
 		Short:   "Meta Repo Management Tool",
-		Version: "0.0.1",
+		Version: version,
 	}
 
 	rootCmd.AddCommand(cmdinit.NewInitCmd())

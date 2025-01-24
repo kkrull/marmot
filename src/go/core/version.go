@@ -63,9 +63,12 @@ func versionFilePath() (string, error) {
 		return "", executableErr
 	} else if executablePath, linkErr := filepath.EvalSymlinks(maybeSymlinkPath); linkErr != nil {
 		return "", linkErr
+	} else if searchPaths, pathErr := versionFileSearchPaths(executablePath); pathErr != nil {
+		return "", pathErr
 	} else {
-		searchPaths := versionFileSearchPaths(executablePath)
+		fmt.Printf("executablePath: %s\n", executablePath)
 		for _, maybeVersionPath := range searchPaths {
+			fmt.Printf("maybeVersionPath: %s\n", maybeVersionPath)
 			if _, statErr := os.Stat(maybeVersionPath); statErr == nil {
 				return maybeVersionPath, nil
 			}
@@ -75,11 +78,17 @@ func versionFilePath() (string, error) {
 	}
 }
 
-func versionFileSearchPaths(executablePath string) []string {
+func versionFileSearchPaths(executablePath string) ([]string, error) {
 	// https://stackoverflow.com/questions/2444618/how-do-executables-on-linux-know-where-to-get-data-files
 	executableDir := filepath.Dir(executablePath)
-	return []string{
-		filepath.Join(executableDir, "version"),
-		filepath.Join(executableDir, "..", "..", "share", "marmot", "version"),
+
+	if cwd, cwdErr := os.Getwd(); cwdErr != nil {
+		return make([]string, 0), cwdErr
+	} else {
+		return []string{
+			filepath.Join(cwd, "version"),
+			filepath.Join(executableDir, "version"),
+			filepath.Join(executableDir, "..", "..", "share", "marmot", "version"),
+		}, nil
 	}
 }
