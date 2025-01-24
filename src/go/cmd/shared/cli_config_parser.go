@@ -90,7 +90,7 @@ func (parser rootConfigParser) assemble(
 	inputLines []string,
 	metaRepoPath string,
 ) CliConfig {
-	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version) //TODO KDK: Pull svcfs dependency up to main so the cmd package doesn't depend on it
 	jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 	return &rootCliConfig{
 		actionFactory: use.NewActionFactory().

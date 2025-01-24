@@ -15,10 +15,10 @@ type CliConfig interface {
 	/* Application interface */
 
 	// Constructs application actions.
-	ActionFactory() use.ActionFactory
+	ActionFactory() use.ActionFactory //TODO KDK: This doesn't seem to belong here.  Can it be created (or a template function provided) in main and passed down?
 
 	// Constructs application queries.
-	QueryFactory() use.QueryFactory
+	QueryFactory() use.QueryFactory //TODO KDK: This also doesn't seem to belong with everything else.
 
 	/* CLI arguments */
 
