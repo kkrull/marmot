@@ -1,4 +1,4 @@
-package cmdroot
+package cmdshared
 
 import (
 	"errors"

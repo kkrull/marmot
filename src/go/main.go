@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/kkrull/marmot/cmd"
 	"github.com/kkrull/marmot/core"
@@ -26,9 +27,15 @@ func mainE() error {
 		return readErr
 	} else if initErr := core.SetMarmotVersion(version); initErr != nil {
 		return initErr
+	} else if homeDir, homeErr := os.UserHomeDir(); homeErr != nil {
+		return homeErr
 	} else {
-		rootCmd := cmd.NewRootCommand(stdout, stderr, version)
-		rootCobraCmd := rootCmd.ToCobraCommand()
-		return rootCobraCmd.Execute()
+		metaRepoDefault := filepath.Join(homeDir, "meta")
+
+		cmd := cmd.NewRootCmd(metaRepoDefault, version)
+		cmd.SetOut(stdout)
+		cmd.SetErr(stderr)
+
+		return cmd.Execute()
 	}
 }

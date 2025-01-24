@@ -7,11 +7,11 @@ import (
 )
 
 // Initializes a new meta repo where none existed before.
-type InitCommand struct {
+type InitAction struct {
 	MetaDataAdmin core.MetaDataAdmin
 }
 
-func (cmd InitCommand) Run(metaRepoPath string) error {
+func (cmd InitAction) Run(metaRepoPath string) error {
 	if isMetaRepo, isMetaRepoErr := cmd.MetaDataAdmin.IsMetaRepo(metaRepoPath); isMetaRepoErr != nil {
 		return fmt.Errorf("%s: unable to check path; %w", metaRepoPath, isMetaRepoErr)
 	} else if isMetaRepo {

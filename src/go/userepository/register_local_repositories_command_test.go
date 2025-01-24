@@ -13,9 +13,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("RegisterLocalRepositoriesCommand", func() {
+var _ = Describe("RegisterLocalRepositoriesAction", func() {
 	var (
-		subject *userepository.RegisterLocalRepositoriesCommand
+		subject *userepository.RegisterLocalRepositoriesAction
 		runV    = func(paths ...string) error {
 			return subject.Run(paths)
 		}
@@ -32,13 +32,13 @@ var _ = Describe("RegisterLocalRepositoriesCommand", func() {
 	)
 
 	BeforeEach(func() {
-		dirFixture = testsupportfs.NewDirFixture("RegisterLocalRepositoriesCommand")
+		dirFixture = testsupportfs.NewDirFixture("RegisterLocalRepositoriesAction")
 		Expect(dirFixture.Setup()).To(Succeed())
 		DeferCleanup(dirFixture.Teardown)
 		pathBuilder = expect.NoError(dirFixture.PathBuilder())
 
 		source = mock.NewRepositorySource()
-		factory := use.NewCommandFactory().WithLocalRepositorySource(source)
+		factory := use.NewActionFactory().WithLocalRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterLocalRepositories())
 	})
 

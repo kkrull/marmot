@@ -8,11 +8,11 @@ import (
 )
 
 // Registers Git repositories with the meta repo, based upon the address(es) of their remote hosts.
-type RegisterRemoteRepositoriesCommand struct {
+type RegisterRemoteRepositoriesAction struct {
 	Source core.RemoteRepositorySource
 }
 
-func (cmd *RegisterRemoteRepositoriesCommand) Run(remoteUrls []*url.URL) error {
+func (cmd *RegisterRemoteRepositoriesAction) Run(remoteUrls []*url.URL) error {
 	if addErr := cmd.Source.AddRemotes(remoteUrls); addErr != nil {
 		return fmt.Errorf("failed to register remote repositories; %w", addErr)
 	} else {

@@ -8,11 +8,11 @@ import (
 )
 
 // Registers Git repositories with the meta repo, based upon their paths on the local filesystem.
-type RegisterLocalRepositoriesCommand struct {
+type RegisterLocalRepositoriesAction struct {
 	Source core.LocalRepositorySource
 }
 
-func (cmd *RegisterLocalRepositoriesCommand) Run(localPaths []string) error {
+func (cmd *RegisterLocalRepositoriesAction) Run(localPaths []string) error {
 	absolutePaths := make([]string, len(localPaths))
 	for i, rawPath := range localPaths {
 		if absPath, absErr := filepath.Abs(rawPath); absErr != nil {

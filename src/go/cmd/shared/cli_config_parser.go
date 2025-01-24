@@ -1,4 +1,4 @@
-package cmdroot
+package cmdshared
 
 import (
 	"bufio"
@@ -8,12 +8,14 @@ import (
 	"github.com/kkrull/marmot/core"
 	"github.com/kkrull/marmot/svcfs"
 	"github.com/kkrull/marmot/use"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
 // Parses configuration from the arguments, environment, flags, and input available to the CLI.
 type CliConfigParser interface {
 	Parse(flags *pflag.FlagSet, args []string) (CliConfig, error)
+	ParseC(cmd *cobra.Command, args []string) (CliConfig, error)
 	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (CliConfig, error)
 }
 
@@ -24,6 +26,11 @@ func RootConfigParser() (CliConfigParser, error) {
 	} else {
 		return &rootConfigParser{version: version}, nil
 	}
+}
+
+// Parses configuration from arguments, flags, and input to the root command.
+func RootConfigParserS(version string) CliConfigParser {
+	return &rootConfigParser{version: version}
 }
 
 // Parse configuration that applies to the root command and its descendant sub-commands.
@@ -41,6 +48,10 @@ func (parser rootConfigParser) Parse(
 	} else {
 		return parser.assemble(args, debug, flags, make([]string, 0), metaRepoPath), nil
 	}
+}
+
+func (parser rootConfigParser) ParseC(cmd *cobra.Command, args []string) (CliConfig, error) {
+	return parser.Parse(cmd.Flags(), args)
 }
 
 func (parser rootConfigParser) ParseR(
@@ -82,11 +93,11 @@ func (parser rootConfigParser) assemble(
 	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 	jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 	return &rootCliConfig{
-		args: args,
-		cmdFactory: use.NewCommandFactory().
+		actionFactory: use.NewActionFactory().
 			WithLocalRepositorySource(jsonMetaRepo).
 			WithMetaDataAdmin(metaRepoAdmin).
 			WithRemoteRepositorySource(jsonMetaRepo),
+		args:         args,
 		debug:        debug,
 		flagSet:      flags,
 		inputLines:   inputLines,

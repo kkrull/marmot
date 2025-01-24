@@ -4,57 +4,48 @@ import (
 	"fmt"
 	"io"
 
-	cmdroot "github.com/kkrull/marmot/cmd/root"
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-// Construct a CLI command to list remote repositories.
-func NewListCommand() *listRemoteCommand {
-	return &listRemoteCommand{}
-}
-
-type listRemoteCommand struct{}
-
-func runList(config cmdroot.CliConfig, stdout io.Writer) error {
-	queryFactory := config.QueryFactory()
-	if listRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
-		return appErr
-	} else if repositories, runErr := listRepositories(); runErr != nil {
-		return runErr
-	} else {
-		for _, remoteHref := range repositories.RemoteHrefs() {
-			fmt.Fprintf(stdout, "%s\n", remoteHref)
-		}
-		return nil
-	}
-}
-
-/* Mapping to Cobra */
-
-// Add this command as a sub-command of the given Cobra command.
-func (cliCmd *listRemoteCommand) AddToCobra(cobraCmd *cobra.Command) {
-	cobraCmd.AddCommand(cliCmd.toCobraCommand())
-}
-
-func (listRemoteCommand) toCobraCommand() *cobra.Command {
-	return &cobra.Command{
-		Args:  cobra.NoArgs,
-		Long:  "List remote repositories registered with Marmot.",
-		RunE:  runListCobra,
+func NewListRemoteCmd(parser cmdshared.CliConfigParser) *cobra.Command {
+	listRemoteCmd := &cobra.Command{
+		Args: cobra.NoArgs,
+		Long: "List remote repositories registered with Marmot.",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("remote list called")
+		},
+		RunE: cmdshared.CobraCommandAdapter(
+			parser.ParseC,
+			makeListRemotesFn(),
+		),
 		Short: "List remote repositories",
 		Use:   "list",
 	}
+
+	return listRemoteCmd
 }
 
-func runListCobra(cli *cobra.Command, args []string) error {
-	if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
-		return newErr
-	} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
-		return parseErr
-	} else if config.Debug() {
-		config.PrintDebug(cli.OutOrStdout())
-		return nil
-	} else {
-		return runList(config, cli.OutOrStdout())
+type listRemotesAction = func(cmdshared.CliConfig, io.Writer) error
+
+func makeListRemotesFn() listRemotesAction {
+	return func(config cmdshared.CliConfig, stdout io.Writer) error {
+		if config.Debug() {
+			config.PrintDebug(stdout)
+			return nil
+		}
+
+		queryFactory := config.QueryFactory()
+		if listRepositories, appErr := queryFactory.NewListRemoteRepositories(); appErr != nil {
+			return appErr
+		} else if repositories, runErr := listRepositories(); runErr != nil {
+			return runErr
+		} else {
+			for _, remoteHref := range repositories.RemoteHrefs() {
+				fmt.Fprintf(stdout, "%s\n", remoteHref)
+			}
+
+			return nil
+		}
 	}
 }

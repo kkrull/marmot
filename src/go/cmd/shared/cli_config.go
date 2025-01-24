@@ -1,4 +1,4 @@
-package cmdroot
+package cmdshared
 
 import (
 	"fmt"
@@ -14,8 +14,8 @@ import (
 type CliConfig interface {
 	/* Application interface */
 
-	// Constructs application commands.
-	CommandFactory() use.CommandFactory
+	// Constructs application actions.
+	ActionFactory() use.ActionFactory
 
 	// Constructs application queries.
 	QueryFactory() use.QueryFactory
@@ -41,7 +41,7 @@ type CliConfig interface {
 	// Persistent flag to show debugging information instead of parsing and executing commands.
 	Debug() bool
 
-	// Persistent flag for the path to the meta repo to use in any parsed commands or queries.
+	// Persistent flag for the path to the meta repo to use in any parsed actions or queries.
 	MetaRepoPath() string
 
 	/* CLI input */
@@ -59,8 +59,8 @@ type CliConfig interface {
 // Application configuration derived from flags passed to the CLI.
 type rootCliConfig struct {
 	// Application interface
-	cmdFactory   use.CommandFactory
-	queryFactory use.QueryFactory
+	actionFactory use.ActionFactory
+	queryFactory  use.QueryFactory
 
 	// CLI arguments
 	args []string
@@ -76,8 +76,8 @@ type rootCliConfig struct {
 
 /* Application interface */
 
-func (config rootCliConfig) CommandFactory() use.CommandFactory { return config.cmdFactory }
-func (config rootCliConfig) QueryFactory() use.QueryFactory     { return config.queryFactory }
+func (config rootCliConfig) ActionFactory() use.ActionFactory { return config.actionFactory }
+func (config rootCliConfig) QueryFactory() use.QueryFactory   { return config.queryFactory }
 
 /* CLI arguments */
 
