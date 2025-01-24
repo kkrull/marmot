@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// TODO KDK: See for example https://github.com/cli/cli/blob/trunk/pkg/cmd/root/root.go
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Args: cobra.NoArgs,
@@ -28,7 +30,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(InitCmd)
+	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(localCmd)
 	rootCmd.AddCommand(remoteCmd)
 
