@@ -39,25 +39,7 @@ func (parser rootConfigParser) Parse(
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
-		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
-		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootCliConfig{
-			args: args,
-			cmdFactory: use.NewCommandFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-			debug:        debug,
-			flagSet:      flags,
-			inputLines:   make([]string, 0),
-			metaRepoPath: metaRepoPath,
-			queryFactory: use.NewQueryFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-		}
-
-		return config, nil
+		return parser.makeRootCliConfig(args, debug, flags, make([]string, 0), metaRepoPath), nil
 	}
 }
 
@@ -92,24 +74,32 @@ func (parser rootConfigParser) ParseR(
 			}
 		}
 
-		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
-		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootCliConfig{
-			args: argsBeforeDash,
-			cmdFactory: use.NewCommandFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-			debug:        debug,
-			flagSet:      flags,
-			inputLines:   inputLines,
-			metaRepoPath: metaRepoPath,
-			queryFactory: use.NewQueryFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-		}
+		return parser.makeRootCliConfig(argsBeforeDash, debug, flags, inputLines, metaRepoPath), nil
+	}
+}
 
-		return config, nil
+func (parser rootConfigParser) makeRootCliConfig(
+	args []string,
+	debug bool,
+	flags *pflag.FlagSet,
+	inputLines []string,
+	metaRepoPath string,
+) CliConfig {
+	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+	jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
+	return &rootCliConfig{
+		args: args,
+		cmdFactory: use.NewCommandFactory().
+			WithLocalRepositorySource(jsonMetaRepo).
+			WithMetaDataAdmin(metaRepoAdmin).
+			WithRemoteRepositorySource(jsonMetaRepo),
+		debug:        debug,
+		flagSet:      flags,
+		inputLines:   inputLines,
+		metaRepoPath: metaRepoPath,
+		queryFactory: use.NewQueryFactory().
+			WithLocalRepositorySource(jsonMetaRepo).
+			WithMetaDataAdmin(metaRepoAdmin).
+			WithRemoteRepositorySource(jsonMetaRepo),
 	}
 }
