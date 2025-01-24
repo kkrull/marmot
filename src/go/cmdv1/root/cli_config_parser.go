@@ -82,11 +82,11 @@ func (parser rootConfigParser) assemble(
 	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
 	jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
 	return &rootCliConfig{
-		args: args,
-		cmdFactory: use.NewActionFactory().
+		actionFactory: use.NewActionFactory().
 			WithLocalRepositorySource(jsonMetaRepo).
 			WithMetaDataAdmin(metaRepoAdmin).
 			WithRemoteRepositorySource(jsonMetaRepo),
+		args:         args,
 		debug:        debug,
 		flagSet:      flags,
 		inputLines:   inputLines,

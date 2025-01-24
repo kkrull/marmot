@@ -59,8 +59,8 @@ type CliConfig interface {
 // Application configuration derived from flags passed to the CLI.
 type rootCliConfig struct {
 	// Application interface
-	cmdFactory   use.ActionFactory
-	queryFactory use.QueryFactory
+	actionFactory use.ActionFactory
+	queryFactory  use.QueryFactory
 
 	// CLI arguments
 	args []string
@@ -76,7 +76,7 @@ type rootCliConfig struct {
 
 /* Application interface */
 
-func (config rootCliConfig) ActionFactory() use.ActionFactory { return config.cmdFactory }
+func (config rootCliConfig) ActionFactory() use.ActionFactory { return config.actionFactory }
 func (config rootCliConfig) QueryFactory() use.QueryFactory   { return config.queryFactory }
 
 /* CLI arguments */
