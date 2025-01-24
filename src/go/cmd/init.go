@@ -7,6 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func NewInitCmd() *cobra.Command {
+	return initCmd
+}
+
 var initCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
 	GroupID: cmdshared.MetaRepoGroup.Id(),

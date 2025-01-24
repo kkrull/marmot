@@ -7,6 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func NewRemoteCmd() *cobra.Command {
+	return remoteCmd
+}
+
 var remoteCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
 	GroupID: cmdshared.RepositoryGroup.Id(),

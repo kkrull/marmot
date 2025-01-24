@@ -9,7 +9,10 @@ import (
 
 // TODO KDK: See for example https://github.com/cli/cli/blob/trunk/pkg/cmd/root/root.go
 
-// rootCmd represents the base command when called without any subcommands
+func NewRootCmd() *cobra.Command {
+	return rootCmd
+}
+
 var rootCmd = &cobra.Command{
 	Args: cobra.NoArgs,
 	Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
@@ -30,9 +33,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(initCmd)
-	rootCmd.AddCommand(localCmd)
-	rootCmd.AddCommand(remoteCmd)
+	rootCmd.AddCommand(NewInitCmd())
+	rootCmd.AddCommand(NewLocalCmd())
+	rootCmd.AddCommand(NewRemoteCmd())
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

@@ -7,6 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func NewLocalCmd() *cobra.Command {
+	return localCmd
+}
+
 var localCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
 	GroupID: cmdshared.RepositoryGroup.Id(),
