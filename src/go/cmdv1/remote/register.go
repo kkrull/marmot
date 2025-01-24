@@ -17,14 +17,14 @@ func NewRegisterCommand() *registerRemoteCommand {
 type registerRemoteCommand struct{}
 
 func runRegister(config cmdroot.CliConfig) error {
-	if appCmd, appErr := config.CommandFactory().NewRegisterRemoteRepositories(); appErr != nil {
-		return appErr
+	if action, actErr := config.ActionFactory().NewRegisterRemoteRepositories(); actErr != nil {
+		return actErr
 	} else if urlsFromArgs, argErr := config.ArgsAsUrls(); argErr != nil {
 		return argErr
 	} else if urlsFromInput, stdInErr := config.InputLinesAsUrls(); stdInErr != nil {
 		return stdInErr
 	} else {
-		return appCmd.Run(append(urlsFromArgs, urlsFromInput...))
+		return action.Run(append(urlsFromArgs, urlsFromInput...))
 	}
 }
 

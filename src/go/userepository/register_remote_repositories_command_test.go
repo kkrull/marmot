@@ -12,9 +12,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
+var _ = Describe("RegisterRemoteRepositoriesAction", func() {
 	var (
-		subject *userepository.RegisterRemoteRepositoriesCommand
+		subject *userepository.RegisterRemoteRepositoriesAction
 		source  *mock.RepositorySource
 	)
 
@@ -24,7 +24,7 @@ var _ = Describe("RegisterRemoteRepositoriesCommand", func() {
 
 	BeforeEach(func() {
 		source = mock.NewRepositorySource()
-		factory := use.NewCommandFactory().WithRemoteRepositorySource(source)
+		factory := use.NewActionFactory().WithRemoteRepositorySource(source)
 		subject = expect.NoError(factory.NewRegisterRemoteRepositories())
 	})
 

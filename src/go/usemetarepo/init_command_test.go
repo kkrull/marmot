@@ -20,9 +20,9 @@ func existingPath() string    { return testFsRoot }
 func nonExistentPath() string { return filepath.Join(testFsRoot, "not-created-yet") }
 func validPath() string       { return filepath.Join(testFsRoot, "meta-default") }
 
-var _ = Describe("InitCommand", func() {
+var _ = Describe("InitAction", func() {
 	var (
-		subject       *usemetarepo.InitCommand
+		subject       *usemetarepo.InitAction
 		dirFixture    *testsupportfs.DirFixture
 		metaDataAdmin *mock.MetaDataAdmin
 	)
@@ -34,7 +34,7 @@ var _ = Describe("InitCommand", func() {
 		testFsRoot = expect.NoError(dirFixture.BasePath())
 
 		metaDataAdmin = mock.NewMetaDataAdmin()
-		factory := use.NewCommandFactory().WithMetaDataAdmin(metaDataAdmin)
+		factory := use.NewActionFactory().WithMetaDataAdmin(metaDataAdmin)
 		subject = expect.NoError(factory.NewInitMetaRepo())
 	})
 

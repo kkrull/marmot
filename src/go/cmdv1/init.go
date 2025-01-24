@@ -16,9 +16,9 @@ func NewInitCommand() *initCommand {
 type initCommand struct{}
 
 func runInit(config cmdroot.CliConfig, stdout io.Writer) error {
-	if appCmd, initErr := config.CommandFactory().NewInitMetaRepo(); initErr != nil {
-		return initErr
-	} else if runErr := appCmd.Run(config.MetaRepoPath()); runErr != nil {
+	if action, actErr := config.ActionFactory().NewInitMetaRepo(); actErr != nil {
+		return actErr
+	} else if runErr := action.Run(config.MetaRepoPath()); runErr != nil {
 		return runErr
 	} else {
 		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())

@@ -13,12 +13,12 @@ func NewRegisterCommand() *registerLocalCommand {
 type registerLocalCommand struct{}
 
 func runRegister(config cmdroot.CliConfig) error {
-	if appCmd, appErr := config.CommandFactory().NewRegisterLocalRepositories(); appErr != nil {
-		return appErr
+	if action, actErr := config.ActionFactory().NewRegisterLocalRepositories(); actErr != nil {
+		return actErr
 	} else {
 		argsThenInputLines := config.ArgsTrimmed()
 		argsThenInputLines = append(argsThenInputLines, config.InputLinesTrimmed()...)
-		return appCmd.Run(argsThenInputLines)
+		return action.Run(argsThenInputLines)
 	}
 }
 

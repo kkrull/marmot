@@ -9,39 +9,39 @@ import (
 	repository "github.com/kkrull/marmot/userepository"
 )
 
-func NewCommandFactory() *cmdFactory {
-	return &cmdFactory{}
+func NewActionFactory() *actionFactory {
+	return &actionFactory{}
 }
 
-// Constructs application commands and queries with configurable services.
-type CommandFactory interface {
-	NewInitMetaRepo() (*metarepo.InitCommand, error)
-	NewRegisterLocalRepositories() (*repository.RegisterLocalRepositoriesCommand, error)
-	NewRegisterRemoteRepositories() (*repository.RegisterRemoteRepositoriesCommand, error)
+// Constructs application actions and queries with configurable services.
+type ActionFactory interface {
+	NewInitMetaRepo() (*metarepo.InitAction, error)
+	NewRegisterLocalRepositories() (*repository.RegisterLocalRepositoriesAction, error)
+	NewRegisterRemoteRepositories() (*repository.RegisterRemoteRepositoriesAction, error)
 }
 
-type cmdFactory struct {
+type actionFactory struct {
 	LocalRepositorySource  corerepository.LocalRepositorySource
 	MetaDataAdmin          coremetarepo.MetaDataAdmin
 	RemoteRepositorySource corerepository.RemoteRepositorySource
 }
 
-func (factory *cmdFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *cmdFactory {
+func (factory *actionFactory) WithLocalRepositorySource(source corerepository.LocalRepositorySource) *actionFactory {
 	factory.LocalRepositorySource = source
 	return factory
 }
 
-func (factory *cmdFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin) *cmdFactory {
+func (factory *actionFactory) WithMetaDataAdmin(admin coremetarepo.MetaDataAdmin) *actionFactory {
 	factory.MetaDataAdmin = admin
 	return factory
 }
 
-func (factory *cmdFactory) WithRemoteRepositorySource(source corerepository.RemoteRepositorySource) *cmdFactory {
+func (factory *actionFactory) WithRemoteRepositorySource(source corerepository.RemoteRepositorySource) *actionFactory {
 	factory.RemoteRepositorySource = source
 	return factory
 }
 
-func (factory *cmdFactory) localRepositorySource() (corerepository.LocalRepositorySource, error) {
+func (factory *actionFactory) localRepositorySource() (corerepository.LocalRepositorySource, error) {
 	if factory.LocalRepositorySource == nil {
 		return nil, errors.New("missing LocalRepositorySource")
 	} else {
@@ -49,7 +49,7 @@ func (factory *cmdFactory) localRepositorySource() (corerepository.LocalReposito
 	}
 }
 
-func (factory *cmdFactory) remoteRepositorySource() (corerepository.RemoteRepositorySource, error) {
+func (factory *actionFactory) remoteRepositorySource() (corerepository.RemoteRepositorySource, error) {
 	if factory.RemoteRepositorySource == nil {
 		return nil, errors.New("missing RemoteRepositorySource")
 	} else {
@@ -59,32 +59,32 @@ func (factory *cmdFactory) remoteRepositorySource() (corerepository.RemoteReposi
 
 /* Administration */
 
-func (factory *cmdFactory) NewInitMetaRepo() (*metarepo.InitCommand, error) {
+func (factory *actionFactory) NewInitMetaRepo() (*metarepo.InitAction, error) {
 	if factory.MetaDataAdmin == nil {
 		return nil, errors.New("missing MetaDataAdmin")
 	} else {
-		return &metarepo.InitCommand{MetaDataAdmin: factory.MetaDataAdmin}, nil
+		return &metarepo.InitAction{MetaDataAdmin: factory.MetaDataAdmin}, nil
 	}
 }
 
 /* Repositories */
 
-func (factory *cmdFactory) NewRegisterLocalRepositories() (
-	*repository.RegisterLocalRepositoriesCommand, error,
+func (factory *actionFactory) NewRegisterLocalRepositories() (
+	*repository.RegisterLocalRepositoriesAction, error,
 ) {
 	if source, err := factory.localRepositorySource(); err != nil {
 		return nil, err
 	} else {
-		return &repository.RegisterLocalRepositoriesCommand{Source: source}, nil
+		return &repository.RegisterLocalRepositoriesAction{Source: source}, nil
 	}
 }
 
-func (factory *cmdFactory) NewRegisterRemoteRepositories() (
-	*repository.RegisterRemoteRepositoriesCommand, error,
+func (factory *actionFactory) NewRegisterRemoteRepositories() (
+	*repository.RegisterRemoteRepositoriesAction, error,
 ) {
 	if source, err := factory.remoteRepositorySource(); err != nil {
 		return nil, err
 	} else {
-		return &repository.RegisterRemoteRepositoriesCommand{Source: source}, nil
+		return &repository.RegisterRemoteRepositoriesAction{Source: source}, nil
 	}
 }
