@@ -8,11 +8,12 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "marmot",
-	Short: "A brief description of your application",
-	Long:  ``,
+	Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
+	Use:  "marmot",
 	// Uncomment the following line if your bare application has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+	Short:   "Meta Repo Management Tool",
+	Version: "0.0.1",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
