@@ -8,6 +8,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
+	Args: cobra.NoArgs,
 	Long: "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
 	Use:  "marmot",
 	// Uncomment the following line if your bare application has an action associated with it:
@@ -33,5 +34,8 @@ func init() {
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.marmot.yaml)")
 
 	// Cobra also supports local flags, which will only run when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	for _, group := range commandGroups {
+		rootCmd.AddGroup(group.toCobraGroup())
+	}
 }
