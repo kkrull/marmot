@@ -66,9 +66,7 @@ func versionFilePath() (string, error) {
 	} else if searchPaths, pathErr := versionFileSearchPaths(executablePath); pathErr != nil {
 		return "", pathErr
 	} else {
-		fmt.Printf("executablePath: %s\n", executablePath)
 		for _, maybeVersionPath := range searchPaths {
-			fmt.Printf("maybeVersionPath: %s\n", maybeVersionPath)
 			if _, statErr := os.Stat(maybeVersionPath); statErr == nil {
 				return maybeVersionPath, nil
 			}
