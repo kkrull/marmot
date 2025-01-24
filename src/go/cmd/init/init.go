@@ -7,10 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewInitCmd(groupId string) *cobra.Command {
+func NewInitCmd(group cmdshared.CommandGroup) *cobra.Command {
 	initCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
-		GroupID: groupId,
+		GroupID: group.Id,
 		Long:    "Initialize a new Meta Repo, if none is already present.",
 		RunE:    newCobraCommandRunE(),
 		Short:   "Initialize a meta repo",
