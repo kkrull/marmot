@@ -16,11 +16,9 @@ func NewInitCmd(
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
 		Long:    "Initialize a new Meta Repo, if none is already present.",
-		RunE: parseThen(
-			func(cmd *cobra.Command, args []string) (cmdshared.CliConfig, error) {
-				return parser.Parse(cmd.Flags(), args)
-			},
-			runInitAction(),
+		RunE: cobraCmdAdapter(
+			parser.ParseC,
+			makeInitFn(),
 		),
 		Short: "Initialize a meta repo",
 		Use:   "init",
@@ -29,7 +27,9 @@ func NewInitCmd(
 	return initCmd
 }
 
-func runInitAction() useFn {
+type initAction = func(cmdshared.CliConfig, io.Writer) error
+
+func makeInitFn() initAction {
 	return func(config cmdshared.CliConfig, stdout io.Writer) error {
 		if config.Debug() {
 			config.PrintDebug(stdout)
@@ -45,23 +45,19 @@ func runInitAction() useFn {
 	}
 }
 
-/* General purpose */
+/* Cobra general purpose */
 
-type cobraRunEFn = func(cli *cobra.Command, args []string) error
+type cobraCommandRunFn = func(cli *cobra.Command, args []string) error
 
-func parseThen[TConfig any](
+func cobraCmdAdapter[TConfig any](
 	parseConfig func(*cobra.Command, []string) (TConfig, error),
-	useConfig func(TConfig, io.Writer) error,
-) cobraRunEFn {
+	useConfig func(config TConfig, stdout io.Writer) error,
+) cobraCommandRunFn {
 	return func(cli *cobra.Command, args []string) error {
 		if config, parseErr := parseConfig(cli, args); parseErr != nil {
 			return parseErr
-		} else if useErr := useConfig(config, cli.OutOrStdout()); useErr != nil {
-			return useErr
 		} else {
-			return nil
+			return useConfig(config, cli.OutOrStdout())
 		}
 	}
 }
-
-type useFn = func(cmdshared.CliConfig, io.Writer) error

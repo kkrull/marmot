@@ -8,12 +8,14 @@ import (
 	"github.com/kkrull/marmot/core"
 	"github.com/kkrull/marmot/svcfs"
 	"github.com/kkrull/marmot/use"
+	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
 // Parses configuration from the arguments, environment, flags, and input available to the CLI.
 type CliConfigParser interface {
 	Parse(flags *pflag.FlagSet, args []string) (CliConfig, error)
+	ParseC(cmd *cobra.Command, args []string) (CliConfig, error)
 	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (CliConfig, error)
 }
 
@@ -46,6 +48,10 @@ func (parser rootConfigParser) Parse(
 	} else {
 		return parser.assemble(args, debug, flags, make([]string, 0), metaRepoPath), nil
 	}
+}
+
+func (parser rootConfigParser) ParseC(cmd *cobra.Command, args []string) (CliConfig, error) {
+	return parser.Parse(cmd.Flags(), args)
 }
 
 func (parser rootConfigParser) ParseR(
