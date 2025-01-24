@@ -39,25 +39,7 @@ func (parser rootConfigParser) Parse(
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
-		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
-		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootCliConfig{
-			args: args,
-			cmdFactory: use.NewCommandFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-			debug:        debug,
-			flagSet:      flags,
-			inputLines:   make([]string, 0),
-			metaRepoPath: metaRepoPath,
-			queryFactory: use.NewQueryFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-		}
-
-		return config, nil
+		return parser.assemble(args, debug, flags, make([]string, 0), metaRepoPath), nil
 	}
 }
 
@@ -80,36 +62,53 @@ func (parser rootConfigParser) ParseR(
 			}
 		}
 
-		inputLines := make([]string, 0)
-		if readFromStdin {
-			scanner := bufio.NewScanner(stdin)
-			for scanner.Scan() {
-				line := scanner.Text()
-				inputLines = append(inputLines, line)
-			}
-			if scanErr := scanner.Err(); scanErr != nil {
-				return nil, scanErr
-			}
+		if !readFromStdin {
+			return parser.assemble(argsBeforeDash, debug, flags, make([]string, 0), metaRepoPath), nil
+		} else if inputLines, scanErr := readLines(stdin); scanErr != nil {
+			return nil, scanErr
+		} else {
+			return parser.assemble(argsBeforeDash, debug, flags, inputLines, metaRepoPath), nil
 		}
+	}
+}
 
-		metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
-		jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
-		config := &rootCliConfig{
-			args: argsBeforeDash,
-			cmdFactory: use.NewCommandFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-			debug:        debug,
-			flagSet:      flags,
-			inputLines:   inputLines,
-			metaRepoPath: metaRepoPath,
-			queryFactory: use.NewQueryFactory().
-				WithLocalRepositorySource(jsonMetaRepo).
-				WithMetaDataAdmin(metaRepoAdmin).
-				WithRemoteRepositorySource(jsonMetaRepo),
-		}
+func (parser rootConfigParser) assemble(
+	args []string,
+	debug bool,
+	flags *pflag.FlagSet,
+	inputLines []string,
+	metaRepoPath string,
+) CliConfig {
+	metaRepoAdmin := svcfs.NewJsonMetaRepoAdmin(parser.version)
+	jsonMetaRepo := svcfs.NewJsonMetaRepo(metaRepoPath)
+	return &rootCliConfig{
+		args: args,
+		cmdFactory: use.NewCommandFactory().
+			WithLocalRepositorySource(jsonMetaRepo).
+			WithMetaDataAdmin(metaRepoAdmin).
+			WithRemoteRepositorySource(jsonMetaRepo),
+		debug:        debug,
+		flagSet:      flags,
+		inputLines:   inputLines,
+		metaRepoPath: metaRepoPath,
+		queryFactory: use.NewQueryFactory().
+			WithLocalRepositorySource(jsonMetaRepo).
+			WithMetaDataAdmin(metaRepoAdmin).
+			WithRemoteRepositorySource(jsonMetaRepo),
+	}
+}
 
-		return config, nil
+func readLines(stdin io.Reader) ([]string, error) {
+	inputLines := make([]string, 0)
+	scanner := bufio.NewScanner(stdin)
+	for scanner.Scan() {
+		line := scanner.Text()
+		inputLines = append(inputLines, line)
+	}
+
+	if scanErr := scanner.Err(); scanErr != nil {
+		return nil, scanErr
+	} else {
+		return inputLines, nil
 	}
 }

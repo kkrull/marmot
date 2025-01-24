@@ -3,6 +3,9 @@ _marmot
 marmot
 marmot.exe
 
+# Dependencies
+dependencies.png
+
 # Testing
 coverage.html
 coverage.out
