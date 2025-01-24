@@ -9,7 +9,6 @@ func NewLocalCmd(
 	group cmdshared.CommandGroup,
 	parser cmdshared.CliConfigParser,
 ) *cobra.Command {
-	//TODO KDK: Add run command that shows debug if requested or shows help if no further arguments are given
 	localCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
