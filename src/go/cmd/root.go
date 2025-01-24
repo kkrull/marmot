@@ -3,6 +3,9 @@ package cmd
 import (
 	"os"
 
+	cmdinit "github.com/kkrull/marmot/cmd/init"
+	cmdlocal "github.com/kkrull/marmot/cmd/local"
+	cmdremote "github.com/kkrull/marmot/cmd/remote"
 	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
@@ -33,9 +36,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(NewInitCmd())
-	rootCmd.AddCommand(NewLocalCmd())
-	rootCmd.AddCommand(NewRemoteCmd())
+	rootCmd.AddCommand(cmdinit.NewInitCmd())
+	rootCmd.AddCommand(cmdlocal.NewLocalCmd())
+	rootCmd.AddCommand(cmdremote.NewRemoteCmd())
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
