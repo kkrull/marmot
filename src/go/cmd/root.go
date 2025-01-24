@@ -8,6 +8,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	metaRepoGroup   cmdshared.CommandGroup   = cmdshared.NewCommandGroup("meta-repo-group", "Meta Repo Commands")
+	repositoryGroup cmdshared.CommandGroup   = cmdshared.NewCommandGroup("repository-group", "Repository Commands")
+	groups          []cmdshared.CommandGroup = []cmdshared.CommandGroup{
+		metaRepoGroup,
+		repositoryGroup,
+	}
+)
+
 func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
@@ -17,11 +26,14 @@ func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 		Version: version,
 	}
 
-	rootCmd.AddCommand(cmdinit.NewInitCmd(cmdshared.MetaRepoGroup.Id()))
-	rootCmd.AddCommand(cmdlocal.NewLocalCmd(cmdshared.RepositoryGroup.Id()))
-	rootCmd.AddCommand(cmdremote.NewRemoteCmd(cmdshared.RepositoryGroup.Id()))
+	rootCmd.AddCommand(cmdinit.NewInitCmd(metaRepoGroup.Id))
+	rootCmd.AddCommand(cmdlocal.NewLocalCmd(repositoryGroup.Id))
+	rootCmd.AddCommand(cmdremote.NewRemoteCmd(repositoryGroup.Id))
 
 	cmdshared.FlagSet().AddTo(rootCmd)
-	cmdshared.AddGroups(rootCmd)
+	for _, group := range groups {
+		rootCmd.AddGroup(group.ToCobraGroup())
+	}
+
 	return rootCmd
 }
