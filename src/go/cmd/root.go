@@ -26,9 +26,11 @@ func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 		Version: version,
 	}
 
-	rootCmd.AddCommand(cmdinit.NewInitCmd(metaRepoGroup))
-	rootCmd.AddCommand(cmdlocal.NewLocalCmd(repositoryGroup))
-	rootCmd.AddCommand(cmdremote.NewRemoteCmd(repositoryGroup))
+	rootCmd.AddCommand(
+		cmdinit.NewInitCmd(metaRepoGroup),
+		cmdlocal.NewLocalCmd(repositoryGroup),
+		cmdremote.NewRemoteCmd(repositoryGroup),
+	)
 
 	cmdshared.FlagSet().AddTo(rootCmd)
 	for _, group := range groups {
