@@ -2,7 +2,6 @@ package cmdinit
 
 import (
 	"fmt"
-	"io"
 
 	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	cmdroot "github.com/kkrull/marmot/cmdv1/root"
@@ -33,19 +32,13 @@ func newCobraCommandRunE() cobraRunner {
 		} else if config.Debug() {
 			config.PrintDebug(cli.OutOrStdout())
 			return nil
+		} else if action, actErr := config.ActionFactory().NewInitMetaRepo(); actErr != nil {
+			return actErr
+		} else if runErr := action.Run(config.MetaRepoPath()); runErr != nil {
+			return runErr
 		} else {
-			return runInit(config, cli.OutOrStdout())
+			fmt.Fprintf(cli.OutOrStdout(), "Initialized meta repo at %s\n", config.MetaRepoPath())
+			return nil
 		}
-	}
-}
-
-func runInit(config cmdroot.CliConfig, stdout io.Writer) error {
-	if action, actErr := config.ActionFactory().NewInitMetaRepo(); actErr != nil {
-		return actErr
-	} else if runErr := action.Run(config.MetaRepoPath()); runErr != nil {
-		return runErr
-	} else {
-		fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
-		return nil
 	}
 }
