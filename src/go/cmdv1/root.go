@@ -1,9 +1,9 @@
-package cmd
+package cmdv1
 
 import (
 	"io"
 
-	cmdroot "github.com/kkrull/marmot/cmd/root"
+	cmdroot "github.com/kkrull/marmot/cmdv1/root"
 	"github.com/spf13/cobra"
 )
 

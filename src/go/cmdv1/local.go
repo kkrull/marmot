@@ -1,8 +1,8 @@
-package cmd
+package cmdv1
 
 import (
-	cmdlocal "github.com/kkrull/marmot/cmd/local"
-	cmdroot "github.com/kkrull/marmot/cmd/root"
+	cmdlocal "github.com/kkrull/marmot/cmdv1/local"
+	cmdroot "github.com/kkrull/marmot/cmdv1/root"
 	"github.com/spf13/cobra"
 )
 

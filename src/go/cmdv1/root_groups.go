@@ -1,4 +1,4 @@
-package cmd
+package cmdv1
 
 import (
 	"fmt"

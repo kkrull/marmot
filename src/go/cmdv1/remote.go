@@ -1,8 +1,8 @@
-package cmd
+package cmdv1
 
 import (
-	cmdremote "github.com/kkrull/marmot/cmd/remote"
-	cmdroot "github.com/kkrull/marmot/cmd/root"
+	cmdremote "github.com/kkrull/marmot/cmdv1/remote"
+	cmdroot "github.com/kkrull/marmot/cmdv1/root"
 	"github.com/spf13/cobra"
 )
 
