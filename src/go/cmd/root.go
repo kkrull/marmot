@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCmd(version string) *cobra.Command {
+func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		Long:    "marmot manages a Meta Repository that organizes content in other (Git) repositories.",
@@ -20,6 +20,10 @@ func NewRootCmd(version string) *cobra.Command {
 	rootCmd.AddCommand(cmdinit.NewInitCmd())
 	rootCmd.AddCommand(cmdlocal.NewLocalCmd())
 	rootCmd.AddCommand(cmdremote.NewRemoteCmd())
+
+	rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
+	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
+	rootCmd.PersistentFlags().String("meta-repo", metaRepoDefault, "Meta repo to use")
 
 	cmdshared.AddGroups(rootCmd)
 	return rootCmd
