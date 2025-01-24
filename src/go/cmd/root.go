@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +41,7 @@ func init() {
 	// Cobra also supports local flags, which will only run when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	for _, group := range commandGroups {
-		rootCmd.AddGroup(group.toCobraGroup())
+	for _, group := range cmdshared.CommandGroups {
+		rootCmd.AddGroup(group.ToCobraGroup())
 	}
 }

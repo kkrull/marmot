@@ -3,12 +3,13 @@ package cmd
 import (
 	"fmt"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
 var remoteCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
-	GroupID: repositoryGroup.id(),
+	GroupID: cmdshared.RepositoryGroup.Id(),
 	Long:    "Deal with repositories on remote hosts.",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remote called")
