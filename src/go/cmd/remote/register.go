@@ -3,10 +3,11 @@ package cmdremote
 import (
 	"fmt"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-func NewRegisterRemoteCmd() *cobra.Command {
+func NewRegisterRemoteCmd(parser cmdshared.CliConfigParser) *cobra.Command {
 	registerRemoteCmd := &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,

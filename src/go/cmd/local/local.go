@@ -5,7 +5,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewLocalCmd(group cmdshared.CommandGroup) *cobra.Command {
+func NewLocalCmd(
+	group cmdshared.CommandGroup,
+	parser cmdshared.CliConfigParser,
+) *cobra.Command {
+	//TODO KDK: Add help from CLI
 	localCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
@@ -14,7 +18,7 @@ func NewLocalCmd(group cmdshared.CommandGroup) *cobra.Command {
 		Use:     "local",
 	}
 
-	localCmd.AddCommand(NewListLocalCmd()) // TODO KDK: Wire up and run this command
-	localCmd.AddCommand(NewRegisterLocalCmd())
+	localCmd.AddCommand(NewListLocalCmd(parser))
+	localCmd.AddCommand(NewRegisterLocalCmd(parser))
 	return localCmd
 }

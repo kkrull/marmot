@@ -3,10 +3,11 @@ package cmdlocal
 import (
 	"fmt"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-func NewRegisterLocalCmd() *cobra.Command {
+func NewRegisterLocalCmd(parser cmdshared.CliConfigParser) *cobra.Command {
 	registerLocalCmd := &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,

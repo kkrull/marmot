@@ -3,10 +3,11 @@ package cmdlocal
 import (
 	"fmt"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-func NewListLocalCmd() *cobra.Command {
+func NewListLocalCmd(parser cmdshared.CliConfigParser) *cobra.Command {
 	listLocalCmd := &cobra.Command{
 		Args: cobra.NoArgs,
 		Long: "List local repositories registered with Marmot.",

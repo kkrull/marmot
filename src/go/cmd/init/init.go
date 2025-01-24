@@ -16,7 +16,7 @@ func NewInitCmd(
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
 		Long:    "Initialize a new Meta Repo, if none is already present.",
-		RunE: cobraCmdAdapter(
+		RunE: cmdshared.CobraCommandAdapter(
 			parser.ParseC,
 			makeInitFn(),
 		),
@@ -41,23 +41,6 @@ func makeInitFn() initAction {
 		} else {
 			fmt.Fprintf(stdout, "Initialized meta repo at %s\n", config.MetaRepoPath())
 			return nil
-		}
-	}
-}
-
-/* Cobra general purpose */
-
-type cobraCommandRunFn = func(cli *cobra.Command, args []string) error
-
-func cobraCmdAdapter[TConfig any](
-	parseConfig func(*cobra.Command, []string) (TConfig, error),
-	useConfig func(config TConfig, stdout io.Writer) error,
-) cobraCommandRunFn {
-	return func(cli *cobra.Command, args []string) error {
-		if config, parseErr := parseConfig(cli, args); parseErr != nil {
-			return parseErr
-		} else {
-			return useConfig(config, cli.OutOrStdout())
 		}
 	}
 }

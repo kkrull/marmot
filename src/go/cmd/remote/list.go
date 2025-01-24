@@ -3,10 +3,11 @@ package cmdremote
 import (
 	"fmt"
 
+	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-func NewListRemoteCmd() *cobra.Command {
+func NewListRemoteCmd(parser cmdshared.CliConfigParser) *cobra.Command {
 	listRemoteCmd := &cobra.Command{
 		Args: cobra.NoArgs,
 		Long: "List remote repositories registered with Marmot.",

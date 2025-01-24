@@ -5,7 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRemoteCmd(group cmdshared.CommandGroup) *cobra.Command {
+func NewRemoteCmd(
+	group cmdshared.CommandGroup,
+	parser cmdshared.CliConfigParser,
+) *cobra.Command {
 	remoteCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
@@ -14,7 +17,7 @@ func NewRemoteCmd(group cmdshared.CommandGroup) *cobra.Command {
 		Use:     "remote",
 	}
 
-	remoteCmd.AddCommand(NewListRemoteCmd())
-	remoteCmd.AddCommand(NewRegisterRemoteCmd())
+	remoteCmd.AddCommand(NewListRemoteCmd(parser))
+	remoteCmd.AddCommand(NewRegisterRemoteCmd(parser))
 	return remoteCmd
 }
