@@ -11,6 +11,7 @@ import (
 )
 
 // TODO KDK: See for example https://github.com/cli/cli/blob/trunk/pkg/cmd/root/root.go
+// https://github.com/cli/cli/blob/trunk/pkg/cmd/pr/pr.go
 
 func NewRootCmd() *cobra.Command {
 	return rootCmd
