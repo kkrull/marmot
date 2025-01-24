@@ -21,10 +21,7 @@ func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 	rootCmd.AddCommand(cmdlocal.NewLocalCmd())
 	rootCmd.AddCommand(cmdremote.NewRemoteCmd())
 
-	rootCmd.PersistentFlags().Bool("debug", false, "print CLI debugging information")
-	rootCmd.PersistentFlags().Lookup("debug").Hidden = true
-	rootCmd.PersistentFlags().String("meta-repo", metaRepoDefault, "Meta repo to use")
-
+	cmdshared.FlagSet().AddTo(rootCmd)
 	cmdshared.AddGroups(rootCmd)
 	return rootCmd
 }
