@@ -8,9 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// TODO KDK: See for example https://github.com/cli/cli/blob/trunk/pkg/cmd/root/root.go
-// https://github.com/cli/cli/blob/trunk/pkg/cmd/pr/pr.go
-
 func NewRootCmd(version string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
@@ -24,12 +21,6 @@ func NewRootCmd(version string) *cobra.Command {
 	rootCmd.AddCommand(cmdlocal.NewLocalCmd())
 	rootCmd.AddCommand(cmdremote.NewRemoteCmd())
 
-	// Cobra supports persistent flags, which, if defined here, will be global for your application.
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.marmot.yaml)")
-
-	for _, group := range cmdshared.CommandGroups {
-		rootCmd.AddGroup(group.ToCobraGroup())
-	}
-
+	cmdshared.AddGroups(rootCmd)
 	return rootCmd
 }

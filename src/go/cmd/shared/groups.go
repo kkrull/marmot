@@ -6,7 +6,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var CommandGroups = []commandGroup{MetaRepoGroup, RepositoryGroup}
+func AddGroups(rootCmd *cobra.Command) {
+	for _, group := range commandGroups {
+		rootCmd.AddGroup(group.toCobraGroup())
+	}
+}
+
+var commandGroups = []commandGroup{MetaRepoGroup, RepositoryGroup}
 
 // A group to which a top-level command may optionally belong.
 type commandGroup string
@@ -31,6 +37,6 @@ func (group commandGroup) title() string {
 	}
 }
 
-func (group commandGroup) ToCobraGroup() *cobra.Group {
+func (group commandGroup) toCobraGroup() *cobra.Group {
 	return &cobra.Group{ID: group.Id(), Title: group.title()}
 }
