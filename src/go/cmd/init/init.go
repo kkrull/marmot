@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	cmdshared "github.com/kkrull/marmot/cmd/shared"
-	cmdroot "github.com/kkrull/marmot/cmdv1/root"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +24,7 @@ type cobraRunner = func(cmd *cobra.Command, args []string) error
 
 func newCobraCommandRunE() cobraRunner {
 	return func(cli *cobra.Command, args []string) error {
-		if parser, newErr := cmdroot.RootConfigParser(); newErr != nil {
+		if parser, newErr := cmdshared.RootConfigParser(); newErr != nil {
 			return newErr
 		} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 			return parseErr
