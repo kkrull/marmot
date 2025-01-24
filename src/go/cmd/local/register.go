@@ -7,7 +7,7 @@ import (
 )
 
 func NewRegisterLocalCmd() *cobra.Command {
-	listLocalCmd := &cobra.Command{
+	registerLocalCmd := &cobra.Command{
 		Args:                  cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,
 		Example: `marmot local register ~/git/drwily.github.com/skull-fortress
@@ -21,5 +21,5 @@ When PATH is -, stop processing arguments and read newline-delimited paths from 
 		Use:   "register [flags] [URL]... [-]",
 	}
 
-	return listLocalCmd
+	return registerLocalCmd
 }
