@@ -1,14 +1,13 @@
 package cmdremote
 
 import (
-	cmdshared "github.com/kkrull/marmot/cmd/shared"
 	"github.com/spf13/cobra"
 )
 
-func NewRemoteCmd() *cobra.Command {
+func NewRemoteCmd(groupId string) *cobra.Command {
 	remoteCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
-		GroupID: cmdshared.RepositoryGroup.Id(),
+		GroupID: groupId,
 		Long:    "Deal with repositories on remote hosts.",
 		Short:   "Deal with remote repositories",
 		Use:     "remote",
