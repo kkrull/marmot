@@ -9,12 +9,8 @@ import (
 )
 
 var (
-	metaRepoGroup   cmdshared.CommandGroup   = cmdshared.NewCommandGroup("meta-repo-group", "Meta Repo Commands")
-	repositoryGroup cmdshared.CommandGroup   = cmdshared.NewCommandGroup("repository-group", "Repository Commands")
-	groups          []cmdshared.CommandGroup = []cmdshared.CommandGroup{
-		metaRepoGroup,
-		repositoryGroup,
-	}
+	metaRepoGroup   cmdshared.CommandGroup = cmdshared.NewCommandGroup("meta-repo-group", "Meta Repo Commands")
+	repositoryGroup cmdshared.CommandGroup = cmdshared.NewCommandGroup("repository-group", "Repository Commands")
 )
 
 func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
@@ -26,16 +22,17 @@ func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 		Version: version,
 	}
 
+	cmdshared.FlagSet().AddTo(rootCmd)
+	rootCmd.AddGroup(
+		metaRepoGroup.ToCobraGroup(),
+		repositoryGroup.ToCobraGroup(),
+	)
+
 	rootCmd.AddCommand(
 		cmdinit.NewInitCmd(metaRepoGroup),
 		cmdlocal.NewLocalCmd(repositoryGroup),
 		cmdremote.NewRemoteCmd(repositoryGroup),
 	)
-
-	cmdshared.FlagSet().AddTo(rootCmd)
-	for _, group := range groups {
-		rootCmd.AddGroup(group.ToCobraGroup())
-	}
 
 	return rootCmd
 }
