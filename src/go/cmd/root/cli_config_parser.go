@@ -17,7 +17,6 @@ type CliConfigParser interface {
 	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (CliConfig, error)
 }
 
-// TODO KDK: Why is this called from so many places?  Wouldn't it be better to pass CliConfig around to other commands?
 // Parses configuration from arguments, flags, and input to the root command.
 func RootConfigParser() (CliConfigParser, error) {
 	if version, versionErr := core.MarmotVersion(); versionErr != nil {
