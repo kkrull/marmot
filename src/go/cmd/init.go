@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var initCmd = &cobra.Command{
+var InitCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
 	GroupID: cmdshared.MetaRepoGroup.Id(),
 	Long:    "Initialize a new Meta Repo, if none is already present.",

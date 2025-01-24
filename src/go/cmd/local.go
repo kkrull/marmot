@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	cmdshared "github.com/kkrull/marmot/cmd/shared"
-
 	"github.com/spf13/cobra"
 )
 
