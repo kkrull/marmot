@@ -28,8 +28,9 @@ func NewRootCmd(metaRepoDefault string, version string) *cobra.Command {
 		repositoryGroup.ToCobraGroup(),
 	)
 
+	parser := cmdshared.RootConfigParserS(version)
 	rootCmd.AddCommand(
-		cmdinit.NewInitCmd(metaRepoGroup),
+		cmdinit.NewInitCmd(metaRepoGroup, parser),
 		cmdlocal.NewLocalCmd(repositoryGroup),
 		cmdremote.NewRemoteCmd(repositoryGroup),
 	)

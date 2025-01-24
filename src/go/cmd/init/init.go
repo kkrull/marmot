@@ -7,12 +7,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewInitCmd(group cmdshared.CommandGroup) *cobra.Command {
+func NewInitCmd(group cmdshared.CommandGroup, parser cmdshared.CliConfigParser) *cobra.Command {
 	initCmd := &cobra.Command{
 		Args:    cobra.NoArgs,
 		GroupID: group.Id,
 		Long:    "Initialize a new Meta Repo, if none is already present.",
-		RunE:    newCobraCommandRunE(),
+		RunE:    newCobraCommandRunE(parser),
 		Short:   "Initialize a meta repo",
 		Use:     "init",
 	}
@@ -22,11 +22,9 @@ func NewInitCmd(group cmdshared.CommandGroup) *cobra.Command {
 
 type cobraRunner = func(cmd *cobra.Command, args []string) error
 
-func newCobraCommandRunE() cobraRunner {
+func newCobraCommandRunE(parser cmdshared.CliConfigParser) cobraRunner {
 	return func(cli *cobra.Command, args []string) error {
-		if parser, newErr := cmdshared.RootConfigParser(); newErr != nil {
-			return newErr
-		} else if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
+		if config, parseErr := parser.Parse(cli.Flags(), args); parseErr != nil {
 			return parseErr
 		} else if config.Debug() {
 			config.PrintDebug(cli.OutOrStdout())

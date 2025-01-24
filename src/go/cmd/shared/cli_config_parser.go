@@ -26,6 +26,11 @@ func RootConfigParser() (CliConfigParser, error) {
 	}
 }
 
+// Parses configuration from arguments, flags, and input to the root command.
+func RootConfigParserS(version string) CliConfigParser {
+	return &rootConfigParser{version: version}
+}
+
 // Parse configuration that applies to the root command and its descendant sub-commands.
 type rootConfigParser struct {
 	version string
