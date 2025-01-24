@@ -17,6 +17,7 @@ type CliConfigParser interface {
 	ParseR(flags *pflag.FlagSet, args []string, stdin io.Reader) (CliConfig, error)
 }
 
+// TODO KDK: Why is this called from so many places?  Wouldn't it be better to pass CliConfig around to other commands?
 // Parses configuration from arguments, flags, and input to the root command.
 func RootConfigParser() (CliConfigParser, error) {
 	if version, versionErr := core.MarmotVersion(); versionErr != nil {
@@ -39,7 +40,7 @@ func (parser rootConfigParser) Parse(
 	} else if metaRepoPath, pathErr := metaRepoFlag.GetString(flags); pathErr != nil {
 		return nil, pathErr
 	} else {
-		return parser.makeRootCliConfig(args, debug, flags, make([]string, 0), metaRepoPath), nil
+		return parser.assemble(args, debug, flags, make([]string, 0), metaRepoPath), nil
 	}
 }
 
@@ -62,23 +63,17 @@ func (parser rootConfigParser) ParseR(
 			}
 		}
 
-		inputLines := make([]string, 0)
-		if readFromStdin {
-			scanner := bufio.NewScanner(stdin)
-			for scanner.Scan() {
-				line := scanner.Text()
-				inputLines = append(inputLines, line)
-			}
-			if scanErr := scanner.Err(); scanErr != nil {
-				return nil, scanErr
-			}
+		if !readFromStdin {
+			return parser.assemble(argsBeforeDash, debug, flags, make([]string, 0), metaRepoPath), nil
+		} else if inputLines, scanErr := readLines(stdin); scanErr != nil {
+			return nil, scanErr
+		} else {
+			return parser.assemble(argsBeforeDash, debug, flags, inputLines, metaRepoPath), nil
 		}
-
-		return parser.makeRootCliConfig(argsBeforeDash, debug, flags, inputLines, metaRepoPath), nil
 	}
 }
 
-func (parser rootConfigParser) makeRootCliConfig(
+func (parser rootConfigParser) assemble(
 	args []string,
 	debug bool,
 	flags *pflag.FlagSet,
@@ -101,5 +96,20 @@ func (parser rootConfigParser) makeRootCliConfig(
 			WithLocalRepositorySource(jsonMetaRepo).
 			WithMetaDataAdmin(metaRepoAdmin).
 			WithRemoteRepositorySource(jsonMetaRepo),
+	}
+}
+
+func readLines(stdin io.Reader) ([]string, error) {
+	inputLines := make([]string, 0)
+	scanner := bufio.NewScanner(stdin)
+	for scanner.Scan() {
+		line := scanner.Text()
+		inputLines = append(inputLines, line)
+	}
+
+	if scanErr := scanner.Err(); scanErr != nil {
+		return nil, scanErr
+	} else {
+		return inputLines, nil
 	}
 }
